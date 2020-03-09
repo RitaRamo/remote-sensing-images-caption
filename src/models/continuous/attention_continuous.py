@@ -105,8 +105,10 @@ class AttentionContinuousModel(AttentionModel):
             target_embeddings = torch.cat(
                 (target_embeddings, embedding_target), 0)
 
-        loss = self.criterion(scores.data, target_embeddings,
-                              torch.ones(target_embeddings.shape[0]))
+        target_embeddings = target_embeddings.to(self.device)
+        y = torch.ones(target_embeddings.shape[0]).to(self.device)
+
+        loss = self.criterion(scores.data, target_embeddings, y)
 
         return loss
 
