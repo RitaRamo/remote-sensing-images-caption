@@ -23,6 +23,9 @@ def get_args():
     parser.add_argument('--fine_tune_encoder', action='store_true', default=False,
                         help='Set a switch to true')
 
+    parser.add_argument('--set_cpu_device', action='store_true', default=False,
+                        help='Set a switch to true')
+
     parser.add_argument('--encoder_lr', type=float, default=1e-4)
 
     parser.add_argument('--decoder_lr', type=float, default=4e-4)

@@ -37,7 +37,10 @@ if __name__ == "__main__":
     args = get_args()
     logging.info(args.__dict__)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    if args.set_cpu_device:
+        device = torch.device("cpu")
+    else:
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
