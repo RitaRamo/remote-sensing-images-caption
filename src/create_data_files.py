@@ -7,11 +7,11 @@ import pandas as pd
 from sklearn.utils import shuffle
 from collections import defaultdict
 from preprocess_data.tokens import END_TOKEN, START_TOKEN, preprocess_tokens
-#(END_TOKEN, START_TOKEN, preprocess_tokens)
 import re
 
 
 PATH_RSICD = "src/data/RSICD/"
+PATH_DATASETS_RSICD = PATH_RSICD+"datasets/"
 
 
 def _get_images_and_captions(dataset):
@@ -131,6 +131,6 @@ if __name__ == "__main__":
     tokenizer = nltk.tokenize.WordPunctTokenizer()
 
     raw_dataset = pd.read_json(PATH_RSICD + "raw_dataset/dataset_rsicd.json")
-    _save_dataset(raw_dataset, PATH_RSICD + "datasets/")
+    _save_dataset(raw_dataset, PATH_DATASETS_RSICD)
 
     logging.info("saved datasets and vocab")
