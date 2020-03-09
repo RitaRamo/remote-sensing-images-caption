@@ -50,7 +50,7 @@ class BasicContinuousModel(BasicModel):
         self.decoder = ContinuousDecoder(
             decoder_dim=self.args.decoder_dim,
             embedding_type=EmbeddingsType.GLOVE_FOR_CONTINUOUS_MODELS.value,
-            embed_dim=50+1,  # to consider embedding dim
+            embed_dim=50+1,   # +1 to consider end token TODO:change
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
             dropout=self.args.dropout
