@@ -1,7 +1,7 @@
 --file_name
 basic_model.txt
 --model_class_str
-BasicModel
+BasicContinuousModel
 --batch_size
 8
 --num_workers
@@ -10,3 +10,4 @@ BasicModel
 40
 --dropout
 0.5
+--disable_steps
