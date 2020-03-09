@@ -11,8 +11,8 @@ from create_data_files import (PATH_DATASETS_RSICD, PATH_RSICD, get_dataset,
                                get_vocab_info)
 from datasets import CaptionDataset, TrialDataset
 from models.attention.attention_model import AttentionModel
-from models.attention.attention_model2 import DecoderWithAttention, Encoder
-from models.attention.attention_model_old import AttentionOldModel
+#from models.attention.attention_model2 import DecoderWithAttention, Encoder
+#from models.attention.attention_model_old import AttentionOldModel
 from models.basic_model import BasicModel
 from models.continuous.basic_continuous import BasicContinuousModel
 from models.continuous.attention_continuous import AttentionContinuousModel
