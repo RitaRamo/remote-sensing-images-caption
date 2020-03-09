@@ -2,7 +2,6 @@ import os
 import numpy as np
 from collections import OrderedDict
 from toolz.itertoolz import unique
-from collections import Counter
 
 START_TOKEN = "<start_seq>"
 END_TOKEN = "<end_seq>"
@@ -34,29 +33,20 @@ def preprocess_tokens(train_captions):
 
 
 def convert_captions_to_Y(captions_of_tokens, max_len, token_to_id):
-    print("this is caption of tokens1", captions_of_tokens[0])
-    print("end token", token_to_id[END_TOKEN])
-
     len_captions = []
 
     input_captions = np.zeros(
-        (len(captions_of_tokens), max_len-1)) + token_to_id[PAD_TOKEN]
-    target_captions = np.zeros(
-        (len(captions_of_tokens), max_len-1)) + token_to_id[PAD_TOKEN]
+        (len(captions_of_tokens), max_len)) + token_to_id[PAD_TOKEN]
 
     for i in range(len(captions_of_tokens)):
 
         tokens_to_integer = [token_to_id.get(
             token, token_to_id[OOV_TOKEN]) for token in captions_of_tokens[i]]
 
-        # [:-1] to remove end_token | [:max_len-1] have all tokens until max_len-1
-        input_caption = tokens_to_integer[:max_len-1]
-        # [1:] to remove start_token | [:max_len-1] have all tokens until max_len-1
-        target_caption = tokens_to_integer[1:][:max_len-1]
+        caption = tokens_to_integer[:max_len]
 
-        input_captions[i, :len(input_caption)] = input_caption
-        target_captions[i, :len(target_caption)] = target_caption
+        input_captions[i, :len(caption)] = caption
 
-        len_captions.append(len(input_caption))
+        len_captions.append(len(caption))
 
-    return input_captions, target_captions, len_captions
+    return input_captions, len_captions

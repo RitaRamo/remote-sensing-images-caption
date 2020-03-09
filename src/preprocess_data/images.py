@@ -1,4 +1,3 @@
-import torchvision.transforms.functional as TF
 from torchvision import transforms
 import numpy as np
 from enum import Enum
@@ -26,7 +25,6 @@ class MyRotationTransform:
 
 def augment_image():
     mode = np.random.randint(len(FlipsAndRotations))
-    print("this is my mode", mode)
 
     if mode == FlipsAndRotations.FLIP_HORIZONTAL.value:
         return transforms.RandomHorizontalFlip(p=1)
