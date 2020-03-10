@@ -292,7 +292,7 @@ class AbstractEncoderDecoderModel(ABC):
             all_scores = nlgeval.compute_individual_metrics(
                 references, text_generated)
 
-            if n_comparations % args.print_freq == 0:
+            if n_comparations % self.args.print_freq == 0:
                 logging.info("this are dic metrics %s", all_scores)
 
             predicted[img_name] = {
