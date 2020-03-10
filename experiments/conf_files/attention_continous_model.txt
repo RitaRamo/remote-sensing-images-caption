@@ -1,5 +1,5 @@
 --file_name
-basic_model.txt
+attention_continous_model.txt
 --model_class_str
 AttentionContinuousModel
 --batch_size
@@ -10,3 +10,4 @@ AttentionContinuousModel
 40
 --dropout
 0.5
+--disable_steps
