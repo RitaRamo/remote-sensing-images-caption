@@ -264,7 +264,7 @@ class AbstractEncoderDecoderModel(ABC):
         else:
             nlgeval = NLGEval()  # loads the models
 
-        # n_comparations = 0
+        n_comparations = 0
         transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
@@ -291,6 +291,9 @@ class AbstractEncoderDecoderModel(ABC):
             # TODO:remove metrics that you will not use...
             all_scores = nlgeval.compute_individual_metrics(
                 references, text_generated)
+
+            if n_comparations % args.print_freq == 0:
+                logging.info("this are dic metrics %s", all_scores)
 
             predicted[img_name] = {
                 "value": text_generated,
