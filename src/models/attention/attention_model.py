@@ -153,7 +153,7 @@ class AttentionModel(BasicModel):
 
     def _initialize_encoder_and_decoder(self):
 
-        self.encoder = Encoder(self.args.model_type,
+        self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
 
         self.decoder = Decoder(
