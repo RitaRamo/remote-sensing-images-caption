@@ -46,12 +46,10 @@ class Encoder(nn.Module):
         """
         out = self.model(
             images)  # (batch_size, 2048, image_size/32, image_size/32)
-        print("this shape images", out.size())
         # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
         # (batch_size, encoded_image_size, encoded_image_size, 2048)
         out = out.permute(0, 2, 3, 1)
-        print("this shape images", out.size())
 
         return out
 
@@ -82,7 +80,6 @@ class Decoder(nn.Module):
         """
         super(Decoder, self).__init__()
         self.encoder_dim = encoder_dim
-        print("this is encoder dim", self.encoder_dim)
 
         self.embed_dim = embed_dim
         self.decoder_dim = decoder_dim
@@ -135,8 +132,6 @@ class Decoder(nn.Module):
         decoder_hidden_state, decoder_cell_state = self.decode_step(
             embeddings, (decoder_hidden_state, decoder_cell_state)
         )
-
-        print("entrei no outro no basc model")
 
         scores = self.fc(self.dropout(decoder_hidden_state))
 
