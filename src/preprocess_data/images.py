@@ -1,6 +1,38 @@
-from torchvision import transforms
+from torchvision import transforms, models
 import numpy as np
 from enum import Enum
+import logging
+import torch.nn as nn
+
+
+class ImageNetModelsPretrained(Enum):
+    RESNET = "resnet"
+    DENSENET = "densenet"
+    VGG16 = "vgg16"
+
+
+def get_image_model(model_type):
+    if model_type == ImageNetModelsPretrained.RESNET.value:
+        logging.info("image model with resnet model")
+        image_model = models.resnet101(pretrained=True)
+        modules = list(image_model.children())[:-2]
+        encoder_dim = 2048
+        print("res module -1", list(image_model.children())[:-2])
+
+    elif model_type == ImageNetModelsPretrained.VGG16.value:
+        logging.info("image model with vgg16 model")
+        image_model = models.vgg16(pretrained=True)
+        modules = list(image_model.children())[:-1]
+        print("module -1", list(image_model.children())[-2])
+        encoder_dim = 512
+
+    else:
+        logging.info("image model with densenet model")
+        image_model = models.densenet201(pretrained=True)
+        modules = list(image_model.children())[:-1]
+        encoder_dim = 1920
+
+    return nn.Sequential(*modules), encoder_dim
 
 
 class FlipsAndRotations(Enum):
