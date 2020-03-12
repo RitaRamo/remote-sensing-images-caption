@@ -16,3 +16,5 @@ AttentionModel
 512
 --dropout
 0.5
+--image_model_type
+vgg16
