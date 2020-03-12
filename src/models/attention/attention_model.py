@@ -153,7 +153,11 @@ class AttentionModel(BasicModel):
 
     def _initialize_encoder_and_decoder(self):
 
+        self.encoder = Encoder(self.args.model_type,
+                               enable_fine_tuning=self.args.fine_tune_encoder)
+
         self.decoder = Decoder(
+            encoder_dim=self.encoder.encoder_dim,
             attention_dim=self.args.attention_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=self.args.embedding_type,
@@ -163,10 +167,9 @@ class AttentionModel(BasicModel):
             dropout=self.args.dropout
         )
 
-        self.encoder = Encoder(enable_fine_tuning=self.args.fine_tune_encoder)
+        self.encoder = self.encoder.to(self.device)
 
         self.decoder = self.decoder.to(self.device)
-        self.encoder = self.encoder.to(self.device)
 
     def _calculate_loss(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
