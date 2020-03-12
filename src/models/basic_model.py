@@ -5,6 +5,7 @@ from torch.nn.utils.rnn import pack_padded_sequence
 from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
+from preprocess_data.images import get_image_model
 
 
 class Encoder(nn.Module):
@@ -12,18 +13,19 @@ class Encoder(nn.Module):
     Encoder.
     """
 
-    def __init__(self, encoded_image_size=14, enable_fine_tuning=False):
+    def __init__(self, model_type, encoded_image_size=14, enable_fine_tuning=False):
         super(Encoder, self).__init__()
         self.enc_image_size = encoded_image_size
 
-        # TODO: mudar isto
-        resnet = torchvision.models.resnet101(
-            pretrained=True)  # pretrained ImageNet ResNet-101
+        self.model, self.encoder_dim = get_image_model(model_type)
 
-        # Remove linear and pool layers (since we're not doing classification)
-        modules = list(resnet.children())[:-2]
+        # resnet = torchvision.models.resnet101(
+        #     pretrained=True)  # pretrained ImageNet ResNet-101
 
-        self.model = nn.Sequential(*modules)
+        # # Remove linear and pool layers (since we're not doing classification)
+        # modules = list(resnet.children())[:-2]
+        # self.model = nn.Sequential(*modules)
+        # self.encoder_dim = 2048
 
         # Resize image to fixed size to allow input images of variable size
         self.adaptive_pool = nn.AdaptiveAvgPool2d(
@@ -44,10 +46,13 @@ class Encoder(nn.Module):
         """
         out = self.model(
             images)  # (batch_size, 2048, image_size/32, image_size/32)
+        print("this shape images", out.size())
         # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
         # (batch_size, encoded_image_size, encoded_image_size, 2048)
         out = out.permute(0, 2, 3, 1)
+        print("this shape images", out.size())
+
         return out
 
     def fine_tune(self, enable_fine_tuning):
@@ -76,8 +81,9 @@ class Decoder(nn.Module):
         :param dropout: dropout
         """
         super(Decoder, self).__init__()
-
         self.encoder_dim = encoder_dim
+        print("this is encoder dim", self.encoder_dim)
+
         self.embed_dim = embed_dim
         self.decoder_dim = decoder_dim
         self.vocab_size = vocab_size
@@ -130,6 +136,8 @@ class Decoder(nn.Module):
             embeddings, (decoder_hidden_state, decoder_cell_state)
         )
 
+        print("entrei no outro no basc model")
+
         scores = self.fc(self.dropout(decoder_hidden_state))
 
         return scores, decoder_hidden_state, decoder_cell_state
@@ -151,7 +159,11 @@ class BasicModel(AbstractEncoderDecoderModel):
 
     def _initialize_encoder_and_decoder(self):
 
+        self.encoder = Encoder(self.args.image_model_type,
+                               enable_fine_tuning=self.args.fine_tune_encoder)
+
         self.decoder = Decoder(
+            encoder_dim=self.encoder.encoder_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=self.args.embedding_type,
             embed_dim=self.args.embed_dim,
@@ -160,9 +172,8 @@ class BasicModel(AbstractEncoderDecoderModel):
             dropout=self.args.dropout
         )
 
-        self.encoder = Encoder(enable_fine_tuning=self.args.fine_tune_encoder)
-        self.decoder = self.decoder.to(self.device)
         self.encoder = self.encoder.to(self.device)
+        self.decoder = self.decoder.to(self.device)
 
     def _define_loss_criteria(self):
         self.criterion = nn.CrossEntropyLoss().to(self.device)

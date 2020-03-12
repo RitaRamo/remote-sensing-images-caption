@@ -1,5 +1,6 @@
 import argparse
 from embeddings.embeddings import EmbeddingsType
+from preprocess_data.images import ImageNetModelsPretrained
 
 
 def get_args():
@@ -38,6 +39,9 @@ def get_args():
 
     parser.add_argument('--disable_steps', action='store_true', default=False,
                         help='Conf just for testing: make the model run only 1 steps instead of the steps that was supposed')
+
+    parser.add_argument('--image_model_type', type=str, default=ImageNetModelsPretrained.VGG16.value,
+                        choices=[model.value for model in ImageNetModelsPretrained])
 
     parser.add_argument('--attention_dim', type=int,
                         default=512, help='define units of attention')
