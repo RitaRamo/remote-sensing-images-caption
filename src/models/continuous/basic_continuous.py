@@ -47,18 +47,21 @@ class BasicContinuousModel(BasicModel):
 
     def _initialize_encoder_and_decoder(self):
 
+        self.encoder = Encoder(self.args.image_model_type,
+                               enable_fine_tuning=self.args.fine_tune_encoder)
+
         self.decoder = ContinuousDecoder(
+            encoder_dim=self.encoder.encoder_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=EmbeddingsType.GLOVE_FOR_CONTINUOUS_MODELS.value,
-            embed_dim=50+1,   # +1 to consider end token TODO:change
+            embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
             dropout=self.args.dropout
         )
 
-        self.encoder = Encoder(enable_fine_tuning=self.args.fine_tune_encoder)
-        self.decoder = self.decoder.to(self.device)
         self.encoder = self.encoder.to(self.device)
+        self.decoder = self.decoder.to(self.device)
 
     def _define_loss_criteria(self):
         self.criterion = nn.CosineEmbeddingLoss().to(self.device)
