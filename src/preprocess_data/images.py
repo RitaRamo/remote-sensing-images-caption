@@ -17,13 +17,11 @@ def get_image_model(model_type):
         image_model = models.resnet101(pretrained=True)
         modules = list(image_model.children())[:-2]
         encoder_dim = 2048
-        print("res module -1", list(image_model.children())[:-2])
 
     elif model_type == ImageNetModelsPretrained.VGG16.value:
         logging.info("image model with vgg16 model")
         image_model = models.vgg16(pretrained=True)
         modules = list(image_model.children())[:-1]
-        print("module -1", list(image_model.children())[-2])
         encoder_dim = 512
 
     else:

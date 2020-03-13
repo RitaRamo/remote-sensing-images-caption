@@ -10,3 +10,5 @@ BasicContinuousModel
 40
 --dropout
 0.5
+--embed_dim
+100
