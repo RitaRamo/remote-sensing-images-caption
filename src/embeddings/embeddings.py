@@ -12,24 +12,27 @@ class EmbeddingsType(Enum):
 
 
 def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
-    embedding = nn.Embedding(vocab_size, embed_dim)  # embedding layer
+    embedding_layer = nn.Embedding(vocab_size, embed_dim)  # embedding layer
 
     if embedding_type == None:
-        embedding.weight.data.uniform_(-0.1, 0.1)
+        embedding_layer.weight.data.uniform_(-0.1, 0.1)
     else:
         if embedding_type == EmbeddingsType.GLOVE.value:
 
-            embeddings = _get_glove_embeddings_matrix(
+            pretrained_embeddings = _get_glove_embeddings_matrix(
                 vocab_size, embed_dim, token_to_id)
 
         elif embedding_type == EmbeddingsType.GLOVE_FOR_CONTINUOUS_MODELS.value:
             # embed_dim - 1 since it is considering end_token
-            embeddings = _get_glove_embeddings_matrix_for_continuous(
-                vocab_size, embed_dim-1, token_to_id)
+            pretrained_embeddings = _get_glove_embeddings_matrix_for_continuous(
+                vocab_size, embed_dim, token_to_id)
 
-        embedding.weight = nn.Parameter(embeddings)
+            # embedding.weight = nn.Parameter(torch.from_numpy(embeddings))
 
-    return embedding
+        embedding_layer.weight.data.copy_(
+            torch.from_numpy(pretrained_embeddings))
+
+    return embedding_layer
 
 
 def _read_glove_vectors(path, lenght):
@@ -58,8 +61,10 @@ def _get_glove_embeddings_matrix(vocab_size, embedding_size, token_to_id):
 
     words_unknow = []
     # Init the embeddings layer
-    embeddings_matrix = torch.zeros(
+    embeddings_matrix = np.zeros(
         (vocab_size, embedding_size))
+
+    #
     for word, id in token_to_id.items():
         try:
             embeddings_matrix[id] = glove_embeddings[word]
@@ -69,6 +74,15 @@ def _get_glove_embeddings_matrix(vocab_size, embedding_size, token_to_id):
 
     return embeddings_matrix
 
+# truncate do vocabulary ->dados de treino unk
+# na loss smp se a palavra de referencia é 0-> é unknow...
+# durante a inferencia nnca gero unknowns...
+
+# embeddings fixos...
+# layer de embeddings
+# #ignore unknown (loss=0)
+# depois qd vou gerar -> matrix toda do pre-trained glove (isto...)
+
 
 def _get_glove_embeddings_matrix_for_continuous(vocab_size, embedding_size, token_to_id):
     glove_path = _get_glove_path(embedding_size)
@@ -76,21 +90,28 @@ def _get_glove_embeddings_matrix_for_continuous(vocab_size, embedding_size, toke
     glove_embeddings = _read_glove_vectors(
         glove_path, embedding_size)
 
-    embedding_size = embedding_size+1  # add one dim for the END_TOKEN
+    glove_unused_words = list(
+        set(glove_embeddings.keys()) - set(token_to_id.keys()))
 
-    # Init the embeddings layer
-    embeddings_matrix = torch.zeros(
+    glove_embeddings_unknown = []
+    for word in glove_unused_words:
+        glove_embeddings_unknown.append(glove_embeddings[word])
+    numpy_glove_embeddings_unknown = np.asarray(
+        glove_embeddings_unknown, dtype=np.float32)
+    mean_glove_embeddings_unknown = np.mean(
+        numpy_glove_embeddings_unknown, axis=0)
+
+    # Init the embeddings layer with unk words having mean of embeddings unused with glove.
+    embeddings_matrix = np.zeros(
         (vocab_size, embedding_size))
-
-    print("np size of emebedding", np.shape(glove_embeddings))
-    # print("this is np mean", np.mean(glove_embeddings,dim=1)
-
-    embeddings_matrix[token_to_id[END_TOKEN], -1] = 1
 
     for word, id in token_to_id.items():
         try:
-            embeddings_matrix[id, :-1] = glove_embeddings[word]
+            embeddings_matrix[id] = glove_embeddings[word]
         except:
-            pass
+            embeddings_matrix[id] = mean_glove_embeddings_unknown
+
+    pont_word = "."
+    embeddings_matrix[token_to_id[END_TOKEN]] = glove_embeddings[pont_word]
 
     return embeddings_matrix
