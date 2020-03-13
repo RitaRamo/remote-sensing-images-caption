@@ -16,6 +16,7 @@ from models.attention.attention_model import AttentionModel
 from models.basic_model import BasicModel
 from models.continuous.basic_continuous import BasicContinuousModel
 from models.continuous.attention_continuous import AttentionContinuousModel
+from models.attention.sat_model import ShowAttendAndTellModel
 from preprocess_data.images import augment_image
 
 torch.manual_seed(0)

@@ -145,7 +145,7 @@ class Decoder(nn.Module):
         return scores, decoder_hidden_state, decoder_cell_state, alpha
 
 
-class AttentionModel(BasicModel):
+class ShowAttendAndTellModel(BasicModel):
 
     MODEL_DIRECTORY = "experiments/results/attention_model/"
 

@@ -6,6 +6,7 @@ from models.basic_model import BasicModel
 #from models.attention.attention_model_old import AttentionOldModel
 from models.continuous.basic_continuous import BasicContinuousModel
 from models.continuous.attention_continuous import AttentionContinuousModel
+from models.attention.sat_model import ShowAttendAndTellModel
 
 import torch
 
