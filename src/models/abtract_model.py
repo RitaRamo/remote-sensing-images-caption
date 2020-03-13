@@ -57,7 +57,6 @@ class AbstractEncoderDecoderModel(ABC):
         self.decoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, self.decoder.parameters()),
                                                   lr=self.args.decoder_lr)
 
-        print("what is encoder fine tuned", self.args.fine_tune_encoder)
         self.encoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, self.encoder.parameters()),
                                                   lr=self.args.encoder_lr) if self.args.fine_tune_encoder else None
 
