@@ -54,7 +54,7 @@ class AttentionContinuousModel(AttentionModel):
             encoder_dim=self.encoder.encoder_dim,
             attention_dim=self.args.attention_dim,
             decoder_dim=self.args.decoder_dim,
-            embedding_type=EmbeddingsType.GLOVE_FOR_CONTINUOUS_MODELS.value,
+            embedding_type=EmbeddingsType.GLOVE.value,
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
