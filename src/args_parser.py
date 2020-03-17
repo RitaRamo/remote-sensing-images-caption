@@ -62,7 +62,7 @@ def get_args():
                         default=5, help='define print freq of loss')
 
     opts, _ = parser.parse_known_args()
-    if opts.embedding_type == EmbeddingsType.GLOVE.value or opts.embedding_type == EmbeddingsType.GLOVE_FOR_CONTINUOUS_MODELS.value:
+    if opts.embedding_type == EmbeddingsType.GLOVE.value:
         parser.add_argument('--embed_dim', help='define dims of embeddings for words',
                             choices=(50, 100, 200, 300), default=50, type=int)
     else:
