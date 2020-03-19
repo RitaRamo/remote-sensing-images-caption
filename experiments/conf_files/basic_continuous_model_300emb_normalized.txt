@@ -1,7 +1,7 @@
 --file_name
 basic_continuous_model_300emb.txt
 --model_class_str
-BasicContinuousModel
+ContinuousEncoderDecoderModel
 --batch_size
 8
 --num_workers
