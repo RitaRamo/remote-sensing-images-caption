@@ -2,13 +2,14 @@ import torchvision
 from torch import nn
 import torch
 from torch.nn.utils.rnn import pack_padded_sequence
-from models.attention.attention_model import AttentionModel, Encoder, Decoder
+from models.basic_encoder_decoder_models.encoder_decoder import Encoder, Decoder
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
+from models.abtract_model import AbstractEncoderDecoderModel
 
 
 class ContinuousDecoder(Decoder):
@@ -16,7 +17,7 @@ class ContinuousDecoder(Decoder):
     Decoder.
     """
 
-    def __init__(self,  attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
+    def __init__(self, decoder_dim,  embed_dim, embedding_type, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
         """
         :param attention_dim: size of attention network
         :param embed_dim: embedding size
@@ -25,15 +26,15 @@ class ContinuousDecoder(Decoder):
         :param encoder_dim: feature size of encoded images
         :param dropout: dropout
         """
-        super(ContinuousDecoder, self).__init__(attention_dim, embedding_type,
-                                                embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
+        super(ContinuousDecoder, self).__init__(decoder_dim,  embed_dim,
+                                                embedding_type, vocab_size, token_to_id, encoder_dim, dropout)
         # instead of being bla bla
         self.fc = nn.Linear(decoder_dim, embed_dim)
 
 
-class AttentionContinuousModel(AttentionModel):
+class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
-    MODEL_DIRECTORY = "experiments/results/continuous_model/"
+    MODEL_DIRECTORY = "experiments/results/continuous_models/"
 
     def __init__(self,
                  args,
@@ -52,7 +53,6 @@ class AttentionContinuousModel(AttentionModel):
 
         self.decoder = ContinuousDecoder(
             encoder_dim=self.encoder.encoder_dim,
-            attention_dim=self.args.attention_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=EmbeddingsType.GLOVE.value,
             embed_dim=self.args.embed_dim,
@@ -61,41 +61,42 @@ class AttentionContinuousModel(AttentionModel):
             dropout=self.args.dropout
         )
 
+        self.decoder.normalize_embeddings()
+
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
 
-    def _define_loss_criteria(self):
-        self.criterion = nn.CosineEmbeddingLoss().to(self.device)
-
-    def _calculate_loss(self, encoder_out, caps, caption_lengths):
+    def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
-        num_pixels = encoder_out.size(1)
 
-        # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        # Create tensors to hold word predicion scores
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
-        all_alphas = torch.zeros(batch_size, max(
-            caption_lengths), num_pixels).to(self.device)
 
         h, c = self.decoder.init_hidden_state(encoder_out)
 
         # Predict
-        for t in range(max(
-                caption_lengths)):
+        for t in range(max(caption_lengths)):
             # batchsizes of current time_step are the ones with lenght bigger than time-step (i.e have not fineshed yet)
             batch_size_t = sum([l > t for l in caption_lengths])
 
-            predictions, h, c, alpha = self.decoder(
+            predictions, h, c = self.decoder(
                 caps[:batch_size_t, t], encoder_out[:batch_size_t], h[:batch_size_t], c[:batch_size_t])
 
             all_predictions[:batch_size_t, t, :] = predictions
-            all_alphas[:batch_size_t, t, :] = alpha
 
-        # Calculate loss
+        # return is a dict, since for other models additional things maybe be return: ex attention model-> add alphas
+        return {"predictions": all_predictions}
+
+    def _define_loss_criteria(self):
+        self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
+    def _calculate_loss(self, predict_output, caps, caption_lengths):
+        predictions = predict_output["predictions"]
         targets = caps[:, 1:]  # targets doesnt have stark token
 
-        scores = pack_padded_sequence(
-            all_predictions, caption_lengths, batch_first=True)
+        predictions = pack_padded_sequence(
+            predictions, caption_lengths, batch_first=True)
         targets = pack_padded_sequence(
             targets, caption_lengths, batch_first=True)
 
@@ -111,14 +112,15 @@ class AttentionContinuousModel(AttentionModel):
         target_embeddings = target_embeddings.to(self.device)
         y = torch.ones(target_embeddings.shape[0]).to(self.device)
 
-        loss = self.criterion(scores.data, target_embeddings, y)
+        loss = self.criterion(predictions.data, target_embeddings, y)
 
         return loss
 
     def generate_output_index(self, input_word, encoder_out, h, c):
-        predicted_embedding_output, h, c, _ = self.decoder(
+        predicted_embedding_output, h, c = self.decoder(
             input_word, encoder_out, h, c)
-
+        # our vocab ;
+        #normalizer o vector dos embddings...!!!! #
         output_similarity_to_embeddings = cosine_similarity(
             self.decoder.embedding.weight.data, predicted_embedding_output)
 

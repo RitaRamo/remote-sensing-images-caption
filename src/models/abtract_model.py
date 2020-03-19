@@ -141,10 +141,13 @@ class AbstractEncoderDecoderModel(ABC):
                 epoch, self.args.epochs, epoch_loss, epoch_val_loss))
 
     def train_step(self, imgs, caps_input, cap_len):
-        imgs, caps_input, cap_len = self._prepare_inputs_to_forward_pass(
+        encoder_out, caps_sorted, caption_lengths = self._prepare_inputs_to_forward_pass(
             imgs, caps_input, cap_len)
+
+        predict_output = self._predict(
+            encoder_out, caps_sorted, caption_lengths)
         loss = self._calculate_loss(
-            imgs, caps_input, cap_len)
+            predict_output, caps_sorted, caption_lengths)
 
         self.decoder_optimizer.zero_grad()
         if self.encoder_optimizer is not None:
@@ -165,14 +168,23 @@ class AbstractEncoderDecoderModel(ABC):
         return loss
 
     def val_step(self, imgs, caps_input, cap_len):
-        imgs, caps_input, cap_len = self._prepare_inputs_to_forward_pass(
+        encoder_out, caps_sorted, caption_lengths = self._prepare_inputs_to_forward_pass(
             imgs, caps_input, cap_len)
-        loss = self._calculate_loss(imgs, caps_input, cap_len)
+
+        predict_output = self._predict(
+            encoder_out, caps_sorted, caption_lengths)
+
+        loss = self._calculate_loss(
+            predict_output, caps_sorted, caption_lengths)
 
         return loss
 
     @abstractmethod
-    def _calculate_loss(self, imgs, caps_input, cap_len):
+    def _predict(self, predict_output, caps_sorted, caption_lengths):
+        pass  # depends on the model
+
+    @abstractmethod
+    def _calculate_loss(self, predict_output, caps_sorted, caption_lengths):
         pass  # depends on the model
 
     def _prepare_inputs_to_forward_pass(self, imgs, caps, caption_lengths):
@@ -189,12 +201,12 @@ class AbstractEncoderDecoderModel(ABC):
         caption_lengths, sort_ind = caption_lengths.squeeze(
             1).sort(dim=0, descending=True)
         encoder_out = encoder_out[sort_ind]
-        caps = caps[sort_ind]
+        caps_sorted = caps[sort_ind]
 
         # input captions must not have "end_token"
         caption_lengths = (caption_lengths - 1).tolist()
 
-        return encoder_out, caps, caption_lengths
+        return encoder_out, caps_sorted, caption_lengths
 
     def _log_status(self, train_or_val, epoch, batch_i, dataloader, loss, print_freq):
         if batch_i % print_freq == 0:
@@ -253,7 +265,7 @@ class AbstractEncoderDecoderModel(ABC):
 
     def test(self, test_dataset):
 
-        predicted = {}
+        predicted = {"args": [self.args.__dict__]}
         metrics = {}
 
         if self.args.disable_metrics:

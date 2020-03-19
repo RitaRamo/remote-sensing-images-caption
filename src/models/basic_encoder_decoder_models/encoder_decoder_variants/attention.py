@@ -2,9 +2,10 @@ import torchvision
 from torch import nn
 import torch
 from torch.nn.utils.rnn import pack_padded_sequence
-from models.basic_model import BasicModel, Encoder
+from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel, Encoder
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
+from models.abtract_model import AbstractEncoderDecoderModel
 
 
 class Attention(nn.Module):
@@ -47,7 +48,7 @@ class Attention(nn.Module):
         return attention_weighted_encoding, alpha
 
 
-class Decoder(nn.Module):
+class DecoderWithAttention(nn.Module):
     """
     Decoder.
     """
@@ -61,7 +62,7 @@ class Decoder(nn.Module):
         :param encoder_dim: feature size of encoded images
         :param dropout: dropout
         """
-        super(Decoder, self).__init__()
+        super(DecoderWithAttention, self).__init__()
 
         self.encoder_dim = encoder_dim
         self.attention_dim = attention_dim
@@ -85,10 +86,6 @@ class Decoder(nn.Module):
         # linear layer to find initial cell state of LSTMCell
         self.init_c = nn.Linear(encoder_dim, decoder_dim)
 
-        # linear layer to create a sigmoid-activated gate
-        self.f_beta = nn.Linear(decoder_dim, encoder_dim)
-        self.sigmoid = nn.Sigmoid()
-
         self.fc = nn.Linear(decoder_dim, vocab_size)
         self.init_weights()  # initialize some layers with the uniform distribution
 
@@ -110,6 +107,16 @@ class Decoder(nn.Module):
         for p in self.embedding.parameters():
             p.requires_grad = fine_tune
 
+    def normalize_embeddings(self):
+        """
+        Normalize values of embbedings (ex: makes sense for pretrained embeddings)
+        """
+
+        embeddings_values = self.embedding.weight.data
+        norm = embeddings_values.norm(
+            p=2, dim=1, keepdim=True).clamp(min=1e-12)
+        self.embedding.weight.data.copy_(embeddings_values.div(norm))
+
     def init_hidden_state(self, encoder_out):
         """
         Creates the initial hidden and cell states for the decoder's LSTM based on the encoded images.
@@ -126,10 +133,6 @@ class Decoder(nn.Module):
         attention_weighted_encoding, alpha = self.attention(encoder_out,
                                                             decoder_hidden_state)
 
-        # gating scalar, (batch_size_t, encoder_dim)
-        gate = self.sigmoid(self.f_beta(decoder_hidden_state))
-        attention_weighted_encoding = gate * attention_weighted_encoding
-
         embeddings = self.embedding(word)
 
         decoder_input = torch.cat(
@@ -145,9 +148,7 @@ class Decoder(nn.Module):
         return scores, decoder_hidden_state, decoder_cell_state, alpha
 
 
-class ShowAttendAndTellModel(BasicModel):
-
-    MODEL_DIRECTORY = "experiments/results/attention_model/"
+class BasicAttentionModel(BasicEncoderDecoderModel):
 
     def __init__(self,
                  args,
@@ -164,7 +165,7 @@ class ShowAttendAndTellModel(BasicModel):
         self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
 
-        self.decoder = Decoder(
+        self.decoder = DecoderWithAttention(
             encoder_dim=self.encoder.encoder_dim,
             attention_dim=self.args.attention_dim,
             decoder_dim=self.args.decoder_dim,
@@ -176,10 +177,9 @@ class ShowAttendAndTellModel(BasicModel):
         )
 
         self.encoder = self.encoder.to(self.device)
-
         self.decoder = self.decoder.to(self.device)
 
-    def _calculate_loss(self, encoder_out, caps, caption_lengths):
+    def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
         num_pixels = encoder_out.size(1)
 
@@ -191,7 +191,6 @@ class ShowAttendAndTellModel(BasicModel):
 
         h, c = self.decoder.init_hidden_state(encoder_out)
 
-        # Predict
         for t in range(max(
                 caption_lengths)):
             # batchsizes of current time_step are the ones with lenght bigger than time-step (i.e have not fineshed yet)
@@ -203,19 +202,7 @@ class ShowAttendAndTellModel(BasicModel):
             all_predictions[:batch_size_t, t, :] = predictions
             all_alphas[:batch_size_t, t, :] = alpha
 
-        # Calculate loss
-        targets = caps[:, 1:]  # targets doesnt have stark token
-
-        scores = pack_padded_sequence(
-            all_predictions, caption_lengths, batch_first=True)
-        targets = pack_padded_sequence(
-            targets, caption_lengths, batch_first=True)
-
-        loss = self.criterion(scores.data, targets.data)
-        # 1* is the alpha_c = 1. # regularization parameter for 'doubly stochastic attention
-        loss += 1. * ((1. - all_alphas.sum(dim=1)) ** 2).mean()
-
-        return loss
+        return {"predictions": all_predictions, "alphas": all_alphas}
 
     def generate_output_index(self, input_word, encoder_out, h, c):
         predictions, h, c, _ = self.decoder(
