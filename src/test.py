@@ -1,12 +1,11 @@
 import logging
 from args_parser import get_args
 from create_data_files import PATH_RSICD, PATH_DATASETS_RSICD, get_vocab_info, get_dataset
-from models.attention.attention_model import AttentionModel
-from models.basic_model import BasicModel
-#from models.attention.attention_model_old import AttentionOldModel
-from models.continuous.basic_continuous import BasicContinuousModel
-from models.continuous.attention_continuous import AttentionContinuousModel
-from models.attention.sat_model import ShowAttendAndTellModel
+from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
+from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicEncoderDecoderModel
+from models.basic_encoder_decoder_models.encoder_decoder_variants.sat import BasicShowAttendAndTellModel
+from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 
 import torch
 

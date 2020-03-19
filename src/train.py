@@ -10,13 +10,13 @@ from args_parser import get_args
 from create_data_files import (PATH_DATASETS_RSICD, PATH_RSICD, get_dataset,
                                get_vocab_info)
 from datasets import CaptionDataset, TrialDataset
-from models.attention.attention_model import AttentionModel
-#from models.attention.attention_model2 import DecoderWithAttention, Encoder
-#from models.attention.attention_model_old import AttentionOldModel
-from models.basic_model import BasicModel
-from models.continuous.basic_continuous import BasicContinuousModel
-from models.continuous.attention_continuous import AttentionContinuousModel
-from models.attention.sat_model import ShowAttendAndTellModel
+
+from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
+from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
+from models.basic_encoder_decoder_models.encoder_decoder_variants.sat import BasicShowAttendAndTellModel
+from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
+
 from preprocess_data.images import augment_image
 
 torch.manual_seed(0)
