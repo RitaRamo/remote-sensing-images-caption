@@ -10,7 +10,7 @@ def get_args():
         '--file_name', help='name of file that was used to fill the all other arguments', default="terminal")
 
     parser.add_argument(
-        '--model_class_str', help='class name of the model to train', default="BasicModel")
+        '--model_class_str', help='class name of the model to train', default="BasicEncoderDecoderModel")
 
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
