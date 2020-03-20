@@ -10,4 +10,3 @@ AttentionModel
 40
 --dropout
 0.5
---set_cpu_device
