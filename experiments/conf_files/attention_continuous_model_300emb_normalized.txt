@@ -1,0 +1,14 @@
+--file_name
+attention_continuous_model_300emb_normalized.txt
+--model_class_str
+ContinuousAttentionModel
+--batch_size
+8
+--num_workers
+0
+--epochs
+50
+--dropout
+0.5
+--embed_dim
+300
