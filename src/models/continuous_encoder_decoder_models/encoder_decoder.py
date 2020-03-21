@@ -66,6 +66,9 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
 
+    def _define_loss_criteria(self):
+        self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
     def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
 
@@ -87,9 +90,6 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         # return is a dict, since for other models additional things maybe be return: ex attention model-> add alphas
         return {"predictions": all_predictions}
-
-    def _define_loss_criteria(self):
-        self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
     def _calculate_loss(self, predict_output, caps, caption_lengths):
         predictions = predict_output["predictions"]
@@ -117,13 +117,17 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         return loss
 
     def generate_output_index(self, input_word, encoder_out, h, c):
-        predicted_embedding_output, h, c = self.decoder(
+        predictions, h, c = self.decoder(
             input_word, encoder_out, h, c)
-        # our vocab ;
-        #normalizer o vector dos embddings...!!!! #
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        return current_output_index, h, c
+
+    def _convert_prediction_to_output(self, predictions):
         output_similarity_to_embeddings = cosine_similarity(
-            self.decoder.embedding.weight.data, predicted_embedding_output)
+            self.decoder.embedding.weight.data, predictions)
 
         current_output_index = np.argmax(output_similarity_to_embeddings)
 
-        return current_output_index, h, c
+        return current_output_index

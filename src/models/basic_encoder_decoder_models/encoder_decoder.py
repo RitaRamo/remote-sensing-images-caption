@@ -223,7 +223,11 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         predictions, h, c = self.decoder(
             input_word, encoder_out, h, c)
 
-        scores = F.log_softmax(predictions, dim=1)
-        current_output_index = torch.argmax(scores, dim=1)
+        current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c
+
+    def _convert_prediction_to_output(self, predictions):
+        scores = F.log_softmax(predictions, dim=1)
+        current_output_index = torch.argmax(scores, dim=1)
+        return current_output_index

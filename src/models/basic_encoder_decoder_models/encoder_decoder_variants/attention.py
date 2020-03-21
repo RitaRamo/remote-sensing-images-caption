@@ -208,7 +208,6 @@ class BasicAttentionModel(BasicEncoderDecoderModel):
         predictions, h, c, _ = self.decoder(
             input_word, encoder_out, h, c)
 
-        scores = F.log_softmax(predictions, dim=1)
-        current_output_index = torch.argmax(scores, dim=1)
+        current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c

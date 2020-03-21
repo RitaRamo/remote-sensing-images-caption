@@ -91,3 +91,11 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
             all_alphas[:batch_size_t, t, :] = alpha
 
         return {"predictions": all_predictions, "alphas": all_alphas}
+
+    def generate_output_index(self, input_word, encoder_out, h, c):
+        predictions, h, c, _ = self.decoder(
+            input_word, encoder_out, h, c)
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        return current_output_index, h, c
