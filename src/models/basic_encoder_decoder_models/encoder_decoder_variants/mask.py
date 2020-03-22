@@ -147,7 +147,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
         self.decoder = self.decoder.to(self.device)
 
     def train(self, train_dataloader, val_dataloader, print_freq):
-
+        min_number_of_epochs_at_each_phase = 10
         list_of_n_token_to_mask = [0, 2, 4, 8, 16, self.max_len-1]
 
         for n_tokens_to_mask in list_of_n_token_to_mask:
@@ -177,7 +177,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
                     )
 
                     self._log_status("TRAIN", epoch, batch_i,
-                                     train_dataloader, train_loss, print_freq)
+                                     train_dataloader, train_loss, print_freq, n_tokens_to_mask)
 
                     train_total_loss += train_loss
 
@@ -204,7 +204,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
                             imgs, caps, caplens, n_tokens_to_mask)
 
                         self._log_status("VAL", epoch, batch_i,
-                                         val_dataloader, val_loss, print_freq)
+                                         val_dataloader, val_loss, print_freq, n_tokens_to_mask)
 
                         val_total_loss += val_loss
 
@@ -215,15 +215,27 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
                 # End validation
                 epoch_val_loss = val_total_loss/(batch_i+1)
 
-                early_stopping.check_improvement(epoch_val_loss)
+                if epoch > min_number_of_epochs_at_each_phase:
+                    # only consider early stop after min number of epoch at each phase
 
-                self._save_checkpoint(early_stopping.is_current_val_best(),
-                                      epoch,
-                                      early_stopping.get_number_of_epochs_without_improvement(),
-                                      epoch_val_loss)
+                    early_stopping.check_improvement(epoch_val_loss)
+
+                    self._save_checkpoint(early_stopping.is_current_val_best(),
+                                          epoch,
+                                          early_stopping.get_number_of_epochs_without_improvement(),
+                                          epoch_val_loss)
 
                 logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f} -------------\n'.format(
                     epoch, self.args.epochs, epoch_loss, epoch_val_loss))
+
+    def _log_status(self, train_or_val, epoch, batch_i, dataloader, loss, print_freq, n_tokens_to_mask):
+        if batch_i % print_freq == 0:
+            logging.info(
+                "{} - Phase {} Epoch: [{}/{}]; Batch: [{}/{}]\t Loss: {:.4f}\t".format(
+                    train_or_val, n_tokens_to_mask, epoch, self.args.epochs, batch_i,
+                    len(dataloader), loss
+                )
+            )
 
     def train_step(self, imgs, caps_input, cap_len, n_tokens_to_mask):
         encoder_out, caps_sorted, caption_lengths = self._prepare_inputs_to_forward_pass(
