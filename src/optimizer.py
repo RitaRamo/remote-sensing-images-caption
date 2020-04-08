@@ -37,3 +37,10 @@ def adjust_learning_rate(optimizer, shrink_factor):
 
     for param_group in optimizer.param_groups:
         param_group['lr'] = param_group['lr'] * shrink_factor
+
+
+def clip_gradient(optimizer, grad_clip):
+    for group in optimizer.param_groups:
+        for param in group['params']:
+            if param.grad is not None:
+                param.grad.data.clamp_(-grad_clip, grad_clip)
