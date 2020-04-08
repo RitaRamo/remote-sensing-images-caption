@@ -12,6 +12,7 @@ import numpy as np
 import time
 from utils.early_stop import EarlyStopping
 from nlgeval import NLGEval
+from optimizer import get_optimizer
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -54,11 +55,14 @@ class AbstractEncoderDecoderModel(ABC):
         pass
 
     def _define_optimizers(self):
-        self.decoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, self.decoder.parameters()),
-                                                  lr=self.args.decoder_lr)
+        self.decoder_optimizer = get_optimizer(
+            self.args.optimizer_type, self.decoder.parameters(), self.args.decoder_lr)
 
-        self.encoder_optimizer = torch.optim.Adam(params=filter(lambda p: p.requires_grad, self.encoder.parameters()),
-                                                  lr=self.args.encoder_lr) if self.args.fine_tune_encoder else None
+        self.encoder_optimizer = get_optimizer(
+            self.args.optimizer_type,
+            self.encoder.parameters(),
+            self.args.decoder_lr
+        ) if self.args.fine_tune_encoder else None
 
     @abstractmethod
     def _define_loss_criteria(self):
@@ -69,6 +73,8 @@ class AbstractEncoderDecoderModel(ABC):
             epochs_limit_without_improvement=self.args.epochs_limit_without_improvement,
             epochs_since_last_improvement=self.checkpoint_epochs_since_last_improvement if self.checkpoint_exists else 0,
             baseline=self.checkpoint_val_loss if self.checkpoint_exists else np.Inf,
+            encoder_optimizer=self.encoder_optimizer,
+            decoder_optimizer=self.decoder_optimizer
         )
 
         start_epoch = self.checkpoint_start_epoch if self.checkpoint_exists else 0
@@ -156,9 +162,9 @@ class AbstractEncoderDecoderModel(ABC):
 
         # Clip gradients
         # if grad_clip is not None:
-        #     clip_gradient(decoder_optimizer, grad_clip)
-        #     if encoder_optimizer is not None:
-        #         clip_gradient(encoder_optimizer, grad_clip)
+        #     clip_gradient(self.decoder_optimizer, grad_clip)
+        #     if self.encoder_optimizer is not None:
+        #         clip_gradient(self.encoder_optimizer, grad_clip)
 
         # Update weights
         self.decoder_optimizer.step()

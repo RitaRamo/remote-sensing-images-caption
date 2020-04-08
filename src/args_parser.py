@@ -1,6 +1,7 @@
 import argparse
 from embeddings.embeddings import EmbeddingsType
 from preprocess_data.images import ImageNetModelsPretrained
+from optimizer import OptimizerType
 
 
 def get_args():
@@ -26,6 +27,9 @@ def get_args():
 
     parser.add_argument('--set_cpu_device', action='store_true', default=False,
                         help='Set a switch to true')
+
+    parser.add_argument('--optimizer_type', type=str, default=OptimizerType.ADAM.value,
+                        choices=[optimizer.value for optimizer in OptimizerType])
 
     parser.add_argument('--encoder_lr', type=float, default=1e-4)
 
