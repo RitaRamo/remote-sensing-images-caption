@@ -12,7 +12,7 @@ import numpy as np
 import time
 from utils.early_stop import EarlyStopping
 from nlgeval import NLGEval
-from optimizer import get_optimizer
+from optimizer import get_optimizer, clip_gradient
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -161,10 +161,9 @@ class AbstractEncoderDecoderModel(ABC):
         loss.backward()
 
         # Clip gradients
-        # if grad_clip is not None:
-        #     clip_gradient(self.decoder_optimizer, grad_clip)
-        #     if self.encoder_optimizer is not None:
-        #         clip_gradient(self.encoder_optimizer, grad_clip)
+        clip_gradient(self.decoder_optimizer, 5.)
+        if self.encoder_optimizer is not None:
+            clip_gradient(self.encoder_optimizer, 5.)
 
         # Update weights
         self.decoder_optimizer.step()
