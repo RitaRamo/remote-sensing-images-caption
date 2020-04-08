@@ -38,7 +38,7 @@ def get_args():
     parser.add_argument('--epochs', type=int, default=40,
                         help='define epochs to train the model')
 
-    parser.add_argument('--epochs_limit_without_improvement', type=int, default=5,
+    parser.add_argument('--epochs_limit_without_improvement', type=int, default=12,
                         help='define the limit epoch of for early_stop')
 
     parser.add_argument('--disable_steps', action='store_true', default=False,
