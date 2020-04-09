@@ -120,7 +120,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         target_embeddings = target_embeddings.to(self.device)
 
         loss_args = self.get_loss_args(
-            predictions.data, target_embeddings, self.decoder.embedding.weight.data.to(self.device), self.device)
+            predictions.data, target_embeddings, self.decoder.embedding.weight.data, self.device)
 
         loss = self.criterion(*loss_args)
 

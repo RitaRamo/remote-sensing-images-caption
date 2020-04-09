@@ -2,6 +2,7 @@ from enum import Enum
 import torch
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
+from torch.nn import functional
 
 
 class ContinuousLossesType(Enum):
@@ -16,11 +17,18 @@ def margin_args(predictions, target_embeddings, pretrained_embedding_matrix, dev
 
     for i in range(len(target_embeddings)):
 
-        target_similarity_to_embeddings = cosine_similarity(target_embeddings[i].unsqueeze_(0).data.numpy(),
-                                                            pretrained_embedding_matrix.data.numpy())[0]
+        target_similarity_to_embeddings = functional.cosine_similarity(target_embeddings[i].unsqueeze_(0),
+                                                                       pretrained_embedding_matrix)
 
-        id_of_most_similar_embedding_except_itself = np.argsort(
-            target_similarity_to_embeddings)[::-1][1]
+        print("this is target sim", target_similarity_to_embeddings)
+
+        top_scores, top_indices = torch.topk(
+            target_similarity_to_embeddings, k=2, dim=0)
+        print("this is top scores", top_scores)
+        print("this is top top_indices", top_indices)
+
+        # second id to be the nearest neighbour and not itself
+        id_of_most_similar_embedding_except_itself = top_indices[1]
 
         nearest_neighbour_embedding = pretrained_embedding_matrix[
             id_of_most_similar_embedding_except_itself]
