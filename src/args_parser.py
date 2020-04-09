@@ -2,6 +2,7 @@ import argparse
 from embeddings.embeddings import EmbeddingsType
 from preprocess_data.images import ImageNetModelsPretrained
 from optimizer import OptimizerType
+from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType
 
 
 def get_args():
@@ -58,6 +59,9 @@ def get_args():
 
     parser.add_argument('--disable_metrics', action='store_true', default=False,
                         help='Conf just for testing: make the model does not run the metrics')
+
+    parser.add_argument('--continuous_loss_type', type=str, default=ContinuousLossesType.COSINE.value,
+                        choices=[loss.value for loss in ContinuousLossesType])
 
     parser.add_argument('--embedding_type', type=str, default=None,
                         choices=[model.value for model in EmbeddingsType])

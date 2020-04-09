@@ -10,6 +10,7 @@ import numpy as np
 from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.abtract_model import AbstractEncoderDecoderModel
+from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, margin_args, cosine_args
 
 
 class ContinuousDecoder(Decoder):
@@ -67,7 +68,15 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         self.decoder = self.decoder.to(self.device)
 
     def _define_loss_criteria(self):
-        self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+        if self.args.continuous_loss_type == ContinuousLossesType.COSINE.value:
+            self.get_loss_args = cosine_args
+            self.criterion = nn.CosineEmbeddingLoss()
+
+        elif self.args.continuous_loss_type == ContinuousLossesType.MARGIN.value:
+            self.get_loss_args = margin_args
+            self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
+
+        self.criterion = self.criterion.to(self.device)
 
     def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
@@ -100,19 +109,20 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         targets = pack_padded_sequence(
             targets, caption_lengths, batch_first=True)
 
-        target_embeddings = self.decoder.embedding(
-            torch.tensor(targets.data[0])).unsqueeze_(0)
+        target_embeddings = torch.zeros(
+            predictions.data.size()[0], predictions.data.size()[1])
 
-        for index_word in targets.data[1:]:
-            embedding_target = self.decoder.embedding(
-                torch.tensor(index_word)).unsqueeze_(0)
-            target_embeddings = torch.cat(
-                (target_embeddings, embedding_target), 0)
+        for i in range(targets.data.size()[0]):
+            index_word = targets.data[i]
+            embedding_target = self.decoder.embedding(index_word)
+            target_embeddings[i, :] = embedding_target
 
         target_embeddings = target_embeddings.to(self.device)
-        y = torch.ones(target_embeddings.shape[0]).to(self.device)
 
-        loss = self.criterion(predictions.data, target_embeddings, y)
+        loss_args = self.get_loss_args(
+            predictions.data, target_embeddings, self.decoder.embedding.weight.data, self.device)
+
+        loss = self.criterion(*loss_args)
 
         return loss
 
