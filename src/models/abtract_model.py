@@ -160,10 +160,10 @@ class AbstractEncoderDecoderModel(ABC):
             self.encoder_optimizer.zero_grad()
         loss.backward()
 
-        # Clip gradients
-        clip_gradient(self.decoder_optimizer, 5.)
-        if self.encoder_optimizer is not None:
-            clip_gradient(self.encoder_optimizer, 5.)
+        # # Clip gradients
+        # clip_gradient(self.decoder_optimizer, 5.)
+        # if self.encoder_optimizer is not None:
+        #     clip_gradient(self.encoder_optimizer, 5.)
 
         # Update weights
         self.decoder_optimizer.step()
