@@ -17,7 +17,7 @@ def margin_args(predictions, target_embeddings, pretrained_embedding_matrix, dev
     for i in range(len(target_embeddings)):
 
         target_similarity_to_embeddings = cosine_similarity(target_embeddings[i].unsqueeze_(0),
-                                                            pretrained_embedding_matrix)[0]
+                                                            pretrained_embedding_matrix)[0].to(device)
 
         id_of_most_similar_embedding_except_itself = np.argsort(
             target_similarity_to_embeddings)[::-1][1]
