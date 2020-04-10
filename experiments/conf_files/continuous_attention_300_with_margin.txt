@@ -1,5 +1,5 @@
 --file_name
-continuous_model_300_with_margin.txt
+continuous_attention_300_with_margin.txt
 --model_class_str
 ContinuousAttentionModel
 --batch_size
