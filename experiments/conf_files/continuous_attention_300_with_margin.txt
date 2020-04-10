@@ -13,4 +13,4 @@ ContinuousAttentionModel
 --embed_dim
 300
 --continuous_loss_type
-margins
+margin
