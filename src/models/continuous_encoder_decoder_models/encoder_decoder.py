@@ -10,7 +10,7 @@ import numpy as np
 from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.abtract_model import AbstractEncoderDecoderModel
-from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, margin_args, cosine_args
+from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, margin_args, cosine_args, synmargin_args, margininf_args
 
 
 class ContinuousDecoder(Decoder):
@@ -76,6 +76,14 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
             self.get_loss_args = margin_args
             self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
 
+        elif self.args.continuous_loss_type == ContinuousLossesType.SYNMARGIN.value:
+            self.get_loss_args = synmargin_args
+            self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
+
+        elif self.args.continuous_loss_type == ContinuousLossesType.MARGININF.value:
+            self.get_loss_args = margininf_args
+            self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
+
         self.criterion = self.criterion.to(self.device)
 
     def _predict(self, encoder_out, caps, caption_lengths):
@@ -108,6 +116,8 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
             predictions, caption_lengths, batch_first=True)
         targets = pack_padded_sequence(
             targets, caption_lengths, batch_first=True)
+
+        #print("this is targets", targets.data)
 
         target_embeddings = torch.zeros(
             predictions.data.size()[0], predictions.data.size()[1])
