@@ -8,6 +8,8 @@ from torch.nn import functional
 class ContinuousLossesType(Enum):
     COSINE = "cosine"
     MARGIN = "margin"
+    MARGININF = "margininf"
+    SYNMARGIN = "synmargin"
 
 
 def margin_args(predictions, target_embeddings, pretrained_embedding_matrix, device):
@@ -31,7 +33,64 @@ def margin_args(predictions, target_embeddings, pretrained_embedding_matrix, dev
 
         negative_examples[i, :] = nearest_neighbour_embedding
 
-    #print("negative examples", negative_examples)
+    # print("negative examples", negative_examples)
+
+    return predictions, target_embeddings, negative_examples.to(device)
+
+
+def margininf_args(predictions, target_embeddings, pretrained_embedding_matrix, device):
+    predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+    negative_examples = torch.zeros(target_embeddings.size()[
+                                    0], target_embeddings.size()[1])
+
+    for i in range(len(target_embeddings)):
+
+        diff = predictions[i] - target_embeddings[i]
+
+        target_similarity_to_embeddings = functional.cosine_similarity(diff.unsqueeze_(0),
+                                                                       pretrained_embedding_matrix)
+
+        top_scores, top_indices = torch.topk(
+            target_similarity_to_embeddings, k=1, dim=0)
+
+        id_most_informative_negative = top_indices[0]
+
+        informative_negative_embedding = pretrained_embedding_matrix[
+            id_most_informative_negative]
+
+        negative_examples[i, :] = informative_negative_embedding
+
+    return predictions, target_embeddings, negative_examples.to(device)
+
+
+def synmargin_args(predictions, target_embeddings, pretrained_embedding_matrix, device):
+
+    negative_examples = torch.zeros(target_embeddings.size()[
+                                    0], target_embeddings.size()[1])
+
+    predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+    for i in range(len(target_embeddings)):
+
+        ortogonal = predictions[i].dot(
+            target_embeddings[i]) * target_embeddings[i]
+
+        print("this is ortogonal vector", ortogonal)
+        print("shape of  ortogonal vector", ortogonal.size())
+
+        print("what is cosine", functional.cosine_similarity(
+            target_embeddings[i].unsqueeze_(0), ortogonal.unsqueeze_(0)))
+
+        print("what is dot prod",
+              target_embeddings[i].dot(ortogonal))
+
+        print("what is cosine with predictions", functional.cosine_similarity(
+            predictions[i], ortogonal))
+
+        negative_examples[i, :] = ortogonal
+
+    # print("negative examples", negative_examples)
 
     return predictions, target_embeddings, negative_examples.to(device)
 
