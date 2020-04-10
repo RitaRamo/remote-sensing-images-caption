@@ -73,20 +73,11 @@ def synmargin_args(predictions, target_embeddings, pretrained_embedding_matrix, 
 
     for i in range(len(target_embeddings)):
 
-        ortogonal = predictions[i].dot(
+        ortogonal = predictions[i] - predictions[i].dot(
             target_embeddings[i]) * target_embeddings[i]
 
-        print("this is ortogonal vector", ortogonal)
-        print("shape of  ortogonal vector", ortogonal.size())
-
-        print("what is cosine", functional.cosine_similarity(
-            target_embeddings[i].unsqueeze_(0), ortogonal.unsqueeze_(0)))
-
-        print("what is dot prod",
-              target_embeddings[i].dot(ortogonal))
-
-        print("what is cosine with predictions", functional.cosine_similarity(
-            predictions[i], ortogonal))
+        # print("what is cosine", functional.cosine_similarity(
+        #     target_embeddings[i].unsqueeze_(0), ortogonal.unsqueeze_(0)))
 
         negative_examples[i, :] = ortogonal
 
