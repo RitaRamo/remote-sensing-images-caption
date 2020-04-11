@@ -10,7 +10,7 @@ import numpy as np
 from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.abtract_model import AbstractEncoderDecoderModel
-from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, margin_args, cosine_args, synmargin_args, margininf_args
+from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, ContinuousLoss
 
 
 class ContinuousDecoder(Decoder):
@@ -68,23 +68,8 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         self.decoder = self.decoder.to(self.device)
 
     def _define_loss_criteria(self):
-        if self.args.continuous_loss_type == ContinuousLossesType.COSINE.value:
-            self.get_loss_args = cosine_args
-            self.criterion = nn.CosineEmbeddingLoss()
-
-        elif self.args.continuous_loss_type == ContinuousLossesType.MARGIN.value:
-            self.get_loss_args = margin_args
-            self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
-
-        elif self.args.continuous_loss_type == ContinuousLossesType.SYNMARGIN.value:
-            self.get_loss_args = synmargin_args
-            self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
-
-        elif self.args.continuous_loss_type == ContinuousLossesType.MARGININF.value:
-            self.get_loss_args = margininf_args
-            self.criterion = nn.TripletMarginLoss(margin=1.0, p=2)
-
-        self.criterion = self.criterion.to(self.device)
+        self.criteria = ContinuousLoss(
+            self.args.continuous_loss_type, self.device)
 
     def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
@@ -117,8 +102,6 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         targets = pack_padded_sequence(
             targets, caption_lengths, batch_first=True)
 
-        #print("this is targets", targets.data)
-
         target_embeddings = torch.zeros(
             predictions.data.size()[0], predictions.data.size()[1])
 
@@ -129,10 +112,8 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         target_embeddings = target_embeddings.to(self.device)
 
-        loss_args = self.get_loss_args(
-            predictions.data, target_embeddings, self.decoder.embedding.weight.data, self.device)
-
-        loss = self.criterion(*loss_args)
+        loss = self.criteria.compute_loss(
+            predictions.data, target_embeddings, self.decoder.embedding.weight.data)
 
         return loss
 
