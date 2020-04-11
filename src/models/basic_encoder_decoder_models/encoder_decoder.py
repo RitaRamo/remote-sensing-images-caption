@@ -187,8 +187,10 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         batch_size = encoder_out.size(0)
 
         # Create tensors to hold word predicion scores
-        all_predictions = torch.zeros(batch_size, max(
-            caption_lengths), self.vocab_size).to(self.device)
+        # all_predictions = torch.zeros(batch_size, max(
+        #     caption_lengths), self.vocab_size).to(self.device)
+        all_predictions = torch.zeros(
+            batch_size, self.max_len-1, self.vocab_size).to(self.device)
 
         h, c = self.decoder.init_hidden_state(encoder_out)
 
@@ -216,6 +218,14 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
             targets, caption_lengths, batch_first=True)
 
         loss = self.criterion(predictions.data, targets.data)
+
+        loss_per_sentece = 0
+
+        for i in range(predictions.size()[0]):
+            loss_per_sentece += self.criterion(
+                predictions[i], targets[i])
+
+        loss = loss_per_sentece/predictions.size()[0]
 
         return loss
 
