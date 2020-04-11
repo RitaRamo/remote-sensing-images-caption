@@ -211,13 +211,13 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         predictions = predict_output["predictions"]
         targets = caps_sorted[:, 1:]  # targets doesnt have stark token
 
-        # pack scores and target
-        predictions = pack_padded_sequence(
-            predictions, caption_lengths, batch_first=True)
-        targets = pack_padded_sequence(
-            targets, caption_lengths, batch_first=True)
+        # # pack scores and target
+        # predictions = pack_padded_sequence(
+        #     predictions, caption_lengths, batch_first=True)
+        # targets = pack_padded_sequence(
+        #     targets, caption_lengths, batch_first=True)
 
-        loss = self.criterion(predictions.data, targets.data)
+        # loss = self.criterion(predictions.data, targets.data)
 
         loss_per_sentece = 0
 
