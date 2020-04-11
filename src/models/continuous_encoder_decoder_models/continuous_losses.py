@@ -39,8 +39,7 @@ class ContinuousLoss():
 
         elif loss_type == ContinuousLossesType.SMOOTHL1.value:
             self.loss_method = self.smoothl1_loss
-            self.criterion = nn.SmoothL1Loss(
-                margin=1.0, p=2).to(self.device)
+            self.criterion = nn.SmoothL1Loss().to(self.device)
 
     def compute_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
         return self.loss_method(predictions, target_embeddings, pretrained_embedding_matrix)
@@ -101,8 +100,7 @@ class ContinuousLoss():
 
         return self.criterion(predictions, target_embeddings, negative_examples.to(self.device))
 
-
-  def smoothl1_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
+    def smoothl1_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         return self.criterion(predictions, target_embeddings)
