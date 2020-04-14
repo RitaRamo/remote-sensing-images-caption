@@ -1,5 +1,5 @@
 --file_name
-continuous_model_fastext.txt
+continuous_model_concate_fastext_glove.txt
 --model_class_str
 ContinuousEncoderDecoderModel
 --batch_size
