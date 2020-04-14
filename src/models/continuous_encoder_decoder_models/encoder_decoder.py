@@ -49,7 +49,9 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
     def _initialize_encoder_and_decoder(self):
 
-        if self.args.embedding_type != EmbeddingsType.GLOVE.value and self.args.embedding_type != EmbeddingsType.FASTTEXT.value:
+        if (self.args.embedding_type != EmbeddingsType.GLOVE.value) and (
+                self.args.embedding_type != EmbeddingsType.FASTTEXT.value) and (
+                    self.args.embedding_type != EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value):
             raise ValueError(
                 "Continuous model should use pretrained embeddings...")
 

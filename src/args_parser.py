@@ -73,6 +73,12 @@ def get_args():
     if opts.embedding_type == EmbeddingsType.GLOVE.value:
         parser.add_argument('--embed_dim', help='define dims of embeddings for words',
                             choices=(50, 100, 200, 300), default=50, type=int)
+    elif opts.embedding_type == EmbeddingsType.FASTTEXT.value:
+        parser.add_argument('--embed_dim', help='define dims of embeddings for words',
+                            choices=(300,), default=300, type=int)
+    elif opts.embedding_type == EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value:
+        parser.add_argument('--embed_dim', help='define dims of embeddings for words',
+                            choices=(300,), default=300, type=int)
     else:
         parser.add_argument('--embed_dim', type=int, default=512,
                             help='define dims of embeddings for words')

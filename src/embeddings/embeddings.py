@@ -12,6 +12,7 @@ import fasttext
 class EmbeddingsType(Enum):
     GLOVE = "glove"
     FASTTEXT = "fasttext"
+    CONCATENATE_GLOVE_FASTTEXT = "concatenate_glove_fasttext"
 
 
 def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
@@ -52,6 +53,26 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
 
             pretrained_embeddings = _get_fasttext_embeddings_matrix(
                 fasttext_embeddings, vocab_size, embed_dim, token_to_id)
+
+        elif embedding_type == EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value:
+
+            glove_path = _get_glove_path(embed_dim)
+
+            glove_embeddings = _read_glove_vectors(
+                glove_path, embed_dim)
+
+            glove_pretrained_embeddings = _get_embeddings_matrix(
+                glove_embeddings, vocab_size, embed_dim, token_to_id)
+
+            fasttext_path = _get_fasttext_path(embed_dim)
+
+            fasttext_embeddings = fasttext.load_model(fasttext_path)
+
+            fasttext_pretrained_embeddings = _get_fasttext_embeddings_matrix(
+                fasttext_embeddings, vocab_size, embed_dim, token_to_id)
+
+            np.concatenate((glove_pretrained_embeddings,
+                            fasttext_pretrained_embeddings), axis=1)
 
         embedding_layer.weight.data.copy_(
             torch.from_numpy(pretrained_embeddings))
@@ -141,6 +162,7 @@ def _get_fasttext_embeddings_matrix(embeddings, vocab_size, embedding_size, toke
             pass
 
     return embeddings_matrix
+
 
 # def _get_glove_embeddings_matrix(vocab_size, embedding_size, token_to_id):
 #     glove_path = _get_glove_path(embedding_size)
