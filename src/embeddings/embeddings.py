@@ -128,6 +128,7 @@ def _get_embeddings_matrix(embeddings, vocab_size, embedding_size, token_to_id):
 
 def _get_fasttext_embeddings_matrix(embeddings, vocab_size, embedding_size, token_to_id):
     # reduce the matrix of pretrained:embeddings according to dataset vocab
+    print("eheh entrei aqui")
 
     embeddings_matrix = np.zeros(
         (vocab_size, embedding_size))
