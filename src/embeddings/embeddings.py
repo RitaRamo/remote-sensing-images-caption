@@ -56,7 +56,7 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
 
         elif embedding_type == EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value:
 
-            glove_path = _get_glove_path(embed_dim)
+            glove_path = _get_glove_path(int(embed_dim/2))
 
             glove_embeddings = _read_glove_vectors(
                 glove_path, embed_dim)
@@ -64,15 +64,16 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
             glove_pretrained_embeddings = _get_embeddings_matrix(
                 glove_embeddings, vocab_size, embed_dim, token_to_id)
 
-            fasttext_path = _get_fasttext_path(embed_dim)
+            fasttext_path = _get_fasttext_path(int(embed_dim/2))
 
             fasttext_embeddings = fasttext.load_model(fasttext_path)
 
             fasttext_pretrained_embeddings = _get_fasttext_embeddings_matrix(
                 fasttext_embeddings, vocab_size, embed_dim, token_to_id)
 
-            np.concatenate((glove_pretrained_embeddings,
-                            fasttext_pretrained_embeddings), axis=1)
+            pretrained_embeddings = np.concatenate((glove_pretrained_embeddings,
+                                                    fasttext_pretrained_embeddings), axis=1)
+            print("embedding dim shape", np.shape(pretrained_embeddings))
 
         embedding_layer.weight.data.copy_(
             torch.from_numpy(pretrained_embeddings))
