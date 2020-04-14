@@ -13,4 +13,4 @@ ContinuousEncoderDecoderModel
 --embedding_type
 concatenate_glove_fasttext
 --embed_dim
-300
+600
