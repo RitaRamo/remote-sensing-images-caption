@@ -1,0 +1,16 @@
+--file_name
+continuous_attention_model_concatenate_fastext_glove.txt
+--model_class_str
+ContinuousAttentionModel
+--batch_size
+8
+--num_workers
+0
+--epochs
+50
+--dropout
+0.5
+--embedding_type
+concatenate_glove_fasttext
+--embed_dim
+600

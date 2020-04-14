@@ -1,0 +1,17 @@
+--file_name
+continuous_attention_model_fastext_finetune_encoder.txt
+--model_class_str
+ContinuousAttentionModel
+--batch_size
+8
+--num_workers
+0
+--epochs
+100
+--dropout
+0.5
+--embedding_type
+fasttext
+--embed_dim
+300
+--fine_tune_encoder
