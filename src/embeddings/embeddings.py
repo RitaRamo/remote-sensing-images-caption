@@ -92,7 +92,7 @@ def _get_glove_path(embedding_size):
 
 def _get_fasttext_path(embedding_size):
     # source: https://github.com/facebookresearch/fastText/blob/master/docs/pretrained-vectors.md
-    return 'src/embeddings/faxttext/wiki.en.bin'
+    return 'src/embeddings/fasttext/wiki.en.bin'
 
 
 def _get_embeddings_matrix(embeddings, vocab_size, embedding_size, token_to_id):
