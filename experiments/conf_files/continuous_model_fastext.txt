@@ -10,5 +10,7 @@ ContinuousEncoderDecoderModel
 50
 --dropout
 0.5
+--embedding_type
+fasttext
 --embed_dim
 300
