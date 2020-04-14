@@ -49,13 +49,17 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
     def _initialize_encoder_and_decoder(self):
 
+        if self.args.embedding_type != EmbeddingsType.GLOVE.value and self.args.embedding_type != EmbeddingsType.FASTTEXT.value:
+            raise ValueError(
+                "Continuous model should use pretrained embeddings...")
+
         self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
 
         self.decoder = ContinuousDecoder(
             encoder_dim=self.encoder.encoder_dim,
             decoder_dim=self.args.decoder_dim,
-            embedding_type=EmbeddingsType.GLOVE.value,
+            embedding_type=self.args.embedding_type,
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
