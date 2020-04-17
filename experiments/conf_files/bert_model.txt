@@ -1,0 +1,12 @@
+--file_name
+bert_model.txt
+--model_class_str
+ContinuousBertModel
+--batch_size
+8
+--num_workers
+0
+--epochs
+100
+--dropout
+0.5
