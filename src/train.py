@@ -19,6 +19,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousE
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_relu import ContinuousAttentionReluModel
 #from models.continuous_encoder_decoder_models.encoder_decoder_variants.diff_loss import ContinuousMarginModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.bert import ContinuousBertModel
 
 from preprocess_data.images import augment_image
 
