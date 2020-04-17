@@ -13,6 +13,7 @@ class EmbeddingsType(Enum):
     GLOVE = "glove"
     FASTTEXT = "fasttext"
     CONCATENATE_GLOVE_FASTTEXT = "concatenate_glove_fasttext"
+    BERT = "bert"
 
 
 def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
@@ -75,6 +76,11 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
             pretrained_embeddings = np.concatenate((glove_pretrained_embeddings,
                                                     fasttext_pretrained_embeddings), axis=1)
             print("embedding dim shape", np.shape(pretrained_embeddings))
+
+        elif embedding_type == EmbeddingsType.BERT.value:
+            pretrained_embeddings = torch.load(
+                "/Users/RitaRamos/Documents/INESC-ID/remote-sensing-images-caption/bert_matrix.pth.tar")[
+                "pretrained_embeddings_matrix"].data.numpy()
 
         embedding_layer.weight.data.copy_(
             torch.from_numpy(pretrained_embeddings))
