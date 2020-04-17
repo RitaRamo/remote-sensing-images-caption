@@ -11,6 +11,7 @@ from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.abtract_model import AbstractEncoderDecoderModel
 from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, ContinuousLoss
+from embeddings.embeddings import EmbeddingsType
 
 
 class ContinuousDecoder(Decoder):
@@ -49,9 +50,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
     def _initialize_encoder_and_decoder(self):
 
-        if (self.args.embedding_type != EmbeddingsType.GLOVE.value) and (
-                self.args.embedding_type != EmbeddingsType.FASTTEXT.value) and (
-                    self.args.embedding_type != EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value):
+        if (self.args.embedding_type not in [embedding.value for embedding in EmbeddingsType]):
             raise ValueError(
                 "Continuous model should use pretrained embeddings...")
 

@@ -11,6 +11,7 @@ import numpy as np
 from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
+from embeddings.embeddings import EmbeddingsType
 
 
 class ContinuousDecoderWithAttention(DecoderWithAttention):
@@ -18,7 +19,9 @@ class ContinuousDecoderWithAttention(DecoderWithAttention):
     Decoder.
     """
 
-    def __init__(self,  attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
+    def __init__(
+            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048,
+            dropout=0.5):
         """
         :param attention_dim: size of attention network
         :param embed_dim: embedding size
@@ -47,9 +50,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
 
     def _initialize_encoder_and_decoder(self):
 
-        if (self.args.embedding_type != EmbeddingsType.GLOVE.value) and (
-                self.args.embedding_type != EmbeddingsType.FASTTEXT.value) and (
-                    self.args.embedding_type != EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value):
+        if (self.args.embedding_type not in [embedding.value for embedding in EmbeddingsType]):
             raise ValueError(
                 "Continuous model should use pretrained embeddings...")
 
