@@ -5,6 +5,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.bert impo
 from preprocess_data.tokens import START_TOKEN, END_TOKEN
 from transformers import BertTokenizer, BertModel
 from collections import OrderedDict
+from embeddings.embeddings import get_bert_path
 
 if __name__ == "__main__":
     train_dataset = get_dataset(PATH_DATASETS_RSICD+"train.json")
@@ -64,4 +65,4 @@ if __name__ == "__main__":
 
     state = {'pretrained_embeddings_matrix': pretrained_embeddings_matrix}
 
-    torch.save(state, "src/embeddings/bert/bert_matrix_final.pth.tar")
+    torch.save(state, get_bert_path())

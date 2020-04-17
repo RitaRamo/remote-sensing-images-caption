@@ -11,7 +11,6 @@ from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.abtract_model import AbstractEncoderDecoderModel
 from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType, ContinuousLoss
-from embeddings.embeddings import EmbeddingsType
 
 
 class ContinuousDecoder(Decoder):

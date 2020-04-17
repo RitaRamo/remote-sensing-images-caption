@@ -42,8 +42,9 @@ def get_args():
     parser.add_argument('--epochs_limit_without_improvement', type=int, default=12,
                         help='define the limit epoch of for early_stop')
 
-    parser.add_argument('--disable_steps', action='store_true', default=False,
-                        help='Conf just for testing: make the model run only 1 steps instead of the steps that was supposed')
+    parser.add_argument(
+        '--disable_steps', action='store_true', default=False,
+        help='Conf just for testing: make the model run only 1 steps instead of the steps that was supposed')
 
     parser.add_argument('--image_model_type', type=str, default=ImageNetModelsPretrained.RESNET.value,
                         choices=[model.value for model in ImageNetModelsPretrained])
@@ -79,6 +80,9 @@ def get_args():
     elif opts.embedding_type == EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value:
         parser.add_argument('--embed_dim', help='define dims of embeddings for words',
                             choices=(600,), default=600, type=int)
+    elif opts.embedding_type == EmbeddingsType.BERT.value:
+        parser.add_argument('--embed_dim', help='define dims of embeddings for words',
+                            choices=(768,), default=768, type=int)
     else:
         parser.add_argument('--embed_dim', type=int, default=512,
                             help='define dims of embeddings for words')

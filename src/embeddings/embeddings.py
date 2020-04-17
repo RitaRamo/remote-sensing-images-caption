@@ -78,9 +78,7 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
             print("embedding dim shape", np.shape(pretrained_embeddings))
 
         elif embedding_type == EmbeddingsType.BERT.value:
-            pretrained_embeddings = torch.load(
-                "/Users/RitaRamos/Documents/INESC-ID/remote-sensing-images-caption/bert_matrix.pth.tar")[
-                "pretrained_embeddings_matrix"].data.numpy()
+            pretrained_embeddings = torch.load(get_bert_path())["pretrained_embeddings_matrix"].data.numpy()
 
         embedding_layer.weight.data.copy_(
             torch.from_numpy(pretrained_embeddings))
@@ -122,6 +120,10 @@ def _get_glove_path(embedding_size):
 def _get_fasttext_path(embedding_size):
     # source: https://github.com/facebookresearch/fastText/blob/master/docs/pretrained-vectors.md
     return 'src/embeddings/fasttext/wiki.en.bin'
+
+
+def get_bert_path():
+    return 'src/embeddings/bert/bert_matrix.pth.tar'
 
 
 def _get_embeddings_matrix(embeddings, vocab_size, embedding_size, token_to_id):

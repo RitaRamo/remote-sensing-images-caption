@@ -9,7 +9,7 @@ from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from preprocess_data.tokens import OOV_TOKEN, END_TOKEN, START_TOKEN
-from embeddings.embeddings import EmbeddingsType
+from embeddings.embeddings import EmbeddingsType, get_bert_path
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from transformers import BertModel, BertTokenizer
 
@@ -42,9 +42,6 @@ class BertDecoder(nn.Module):
 
         self.bert_tokenizer = bert_tokenizer
         self.bert_model = bert_model
-
-        self.bert_matrix_embedding = torch.load("bert_matrix.pth.tar")[
-            "pretrained_embeddings_matrix"]
 
     def init_weights(self):
         """
@@ -157,6 +154,9 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
             id_to_token=self.id_to_token,
             dropout=self.args.dropout
         )
+
+        self.bert_matrix_embedding = torch.load(get_bert_path())[
+            "pretrained_embeddings_matrix"]
 
         # self.decoder.normalize_embeddings()
 
@@ -286,7 +286,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
 
         predictions = predictions.repeat(self.vocab_size, 1)
 
-        output_similarity_to_embeddings = torch.cosine_similarity(self.decoder.bert_matrix_embedding, predictions)
+        output_similarity_to_embeddings = torch.cosine_similarity(self.bert_matrix_embedding, predictions)
 
         top_scores, top_indices = torch.topk(output_similarity_to_embeddings, k=1, dim=0)
 
