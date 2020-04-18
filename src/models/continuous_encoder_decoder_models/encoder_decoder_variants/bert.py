@@ -86,7 +86,7 @@ class BertDecoder(nn.Module):
         embedding_of_current_word = torch.mean(
             embeddings_of_current_word, dim=0)
 
-        return embedding_of_current_word
+        return embedding_of_current_word.to(self.device)
 
     def get_inputs_contextualized_embeddings(self, batch_words):
 
@@ -103,12 +103,12 @@ class BertDecoder(nn.Module):
             current_word_and_previous_ones = " ".join(
                 [caption[0]] +
                 [self.id_to_token[id_word.item()] for id_word in caption[1:]]
-            )
+            ).to(self.device)
 
             batch_embeddings[i, :] = self.get_contextualize_embedding(
                 current_word_and_previous_ones)
 
-        return batch_embeddings
+        return batch_embeddings.to(self.device)
 
     def forward(self, batch_words, encoder_out, decoder_hidden_state, decoder_cell_state):
 
