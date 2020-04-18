@@ -103,7 +103,7 @@ class BertDecoder(nn.Module):
             current_word_and_previous_ones = " ".join(
                 [caption[0]] +
                 [self.id_to_token[id_word.item()] for id_word in caption[1:]]
-            ).to(self.device)
+            )
 
             batch_embeddings[i, :] = self.get_contextualize_embedding(
                 current_word_and_previous_ones)
