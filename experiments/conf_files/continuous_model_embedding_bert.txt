@@ -1,0 +1,16 @@
+--file_name
+continuous_model_embedding_bert.txt
+--model_class_str
+ContinuousAttentionModel
+--batch_size
+8
+--num_workers
+0
+--epochs
+50
+--dropout
+0.5
+--embedding_type
+bert
+--embed_dim
+768
