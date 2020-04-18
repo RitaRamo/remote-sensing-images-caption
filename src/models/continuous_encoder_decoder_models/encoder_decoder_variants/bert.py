@@ -16,9 +16,9 @@ from transformers import BertModel, BertTokenizer
 
 class BertDecoder(nn.Module):
 
-    def __init__(
-            self, bert_tokenizer, bert_model, decoder_dim, vocab_size, token_to_id, id_to_token, encoder_dim=2048,
-            dropout=0.5):
+    def __init__(self, bert_tokenizer, bert_model, decoder_dim, vocab_size, token_to_id, id_to_token,
+                 device=torch.device("cpu"),
+                 encoder_dim=2048, dropout=0.5):
 
         super(BertDecoder, self).__init__()
         self.encoder_dim = encoder_dim
@@ -42,6 +42,7 @@ class BertDecoder(nn.Module):
 
         self.bert_tokenizer = bert_tokenizer
         self.bert_model = bert_model
+        self.device = device
 
     def init_weights(self):
         """
@@ -67,8 +68,8 @@ class BertDecoder(nn.Module):
         # Mark each of the inputs belonging to sentence "1".
         segments_ids = [1] * len(input_ids)
 
-        tokens_tensor = torch.tensor([input_ids])
-        segments_tensors = torch.tensor([segments_ids])
+        tokens_tensor = torch.tensor([input_ids]).to(self.device)
+        segments_tensors = torch.tensor([segments_ids]).to(self.device)
 
         with torch.no_grad():
             last_hidden_states = self.bert_model(
@@ -152,6 +153,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
             id_to_token=self.id_to_token,
+            device=self.device,
             dropout=self.args.dropout
         )
 
