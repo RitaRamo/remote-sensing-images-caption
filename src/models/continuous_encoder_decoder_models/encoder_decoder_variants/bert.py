@@ -11,7 +11,7 @@ import numpy as np
 from preprocess_data.tokens import OOV_TOKEN, END_TOKEN, START_TOKEN
 from embeddings.embeddings import EmbeddingsType, get_bert_path
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
-from transformers import BertModel, BertTokenizer
+# from transformers import BertModel, BertTokenizer
 
 
 class BertDecoder(nn.Module):
