@@ -12,6 +12,7 @@ class ContinuousLossesType(Enum):
     MARGIN_SYN_DISTANCE = "margin_syn_distance"
     MARGIN_SYN_SIMILARITY = "margin_syn_similarity"
     SMOOTHL1 = "smoothl1"
+    SMOOTHL1_TRIPLET = "smoothl1_triplet"
 
 
 class ContinuousLoss():
@@ -41,6 +42,11 @@ class ContinuousLoss():
             self.loss_method = self.smoothl1_loss
             self.criterion = nn.SmoothL1Loss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.SMOOTHL1_TRIPLET.value:
+            self.loss_method = self.smoothl1_triplet_loss
+            self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
+            self.margin = 1.0
+
     def compute_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
         return self.loss_method(predictions, target_embeddings, pretrained_embedding_matrix)
 
@@ -60,26 +66,21 @@ class ContinuousLoss():
         return self.criterion(predictions, target_embeddings, orthogonal_negative_examples.to(self.device))
 
     def margin_syn_similarity_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
-
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         orthogonal_negative_examples = (predictions - torch.sum(predictions*target_embeddings,
                                                                 dim=1).unsqueeze(1) * target_embeddings).to(self.device)
 
-        sim_to_negative = torch.sum(
-            predictions*orthogonal_negative_examples, dim=1)
+        sim_to_negative = torch.sum(predictions*orthogonal_negative_examples, dim=1)
         sim_to_target = torch.sum(predictions*target_embeddings, dim=1)
 
-        loss = torch.clamp(self.margin + sim_to_negative -
-                           sim_to_target, min=0).mean()
-
+        loss = torch.clamp(self.margin + sim_to_negative - sim_to_target, min=0).mean()
         return loss
 
     def margin_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
-        negative_examples = torch.zeros(target_embeddings.size()[
-                                        0], target_embeddings.size()[1])
+        negative_examples = torch.zeros(target_embeddings.size()[0], target_embeddings.size()[1])
 
         for i in range(len(target_embeddings)):
 
@@ -88,13 +89,11 @@ class ContinuousLoss():
             target_similarity_to_embeddings = functional.cosine_similarity(diff.unsqueeze_(0),
                                                                            pretrained_embedding_matrix)
 
-            top_scores, top_indices = torch.topk(
-                target_similarity_to_embeddings, k=1, dim=0)
+            top_scores, top_indices = torch.topk(target_similarity_to_embeddings, k=1, dim=0)
 
             id_most_informative_negative = top_indices[0]
 
-            informative_negative_embedding = pretrained_embedding_matrix[
-                id_most_informative_negative]
+            informative_negative_embedding = pretrained_embedding_matrix[id_most_informative_negative]
 
             negative_examples[i, :] = informative_negative_embedding
 
@@ -104,3 +103,16 @@ class ContinuousLoss():
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         return self.criterion(predictions, target_embeddings)
+
+    def smoothl1_triplet_loss(self, predictions, target_embeddings, pretrained_embedding_matrix):
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+        orthogonal_negative_examples = (predictions - torch.sum(predictions*target_embeddings,
+                                                                dim=1).unsqueeze(1) * target_embeddings).to(self.device)
+
+        # apply distance of smoothl1
+        dist_to_negative = self.criterion(predictions, orthogonal_negative_examples)
+        dist_to_target = self.criterion(predictions, target_embeddings)
+
+        loss = torch.clamp(self.margin + dist_to_target - dist_to_negative, min=0).mean()
+        return loss
