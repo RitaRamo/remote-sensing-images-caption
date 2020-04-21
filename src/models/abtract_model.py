@@ -39,6 +39,7 @@ class AbstractEncoderDecoderModel(ABC):
         self.decoder = None
         self.checkpoint_exists = False
         self.device = device
+        self.current_epoch = None
 
     def setup_to_train(self):
         self._initialize_encoder_and_decoder()
@@ -71,7 +72,8 @@ class AbstractEncoderDecoderModel(ABC):
     def train(self, train_dataloader, val_dataloader, print_freq):
         early_stopping = EarlyStopping(
             epochs_limit_without_improvement=self.args.epochs_limit_without_improvement,
-            epochs_since_last_improvement=self.checkpoint_epochs_since_last_improvement if self.checkpoint_exists else 0,
+            epochs_since_last_improvement=self.checkpoint_epochs_since_last_improvement
+            if self.checkpoint_exists else 0,
             baseline=self.checkpoint_val_loss if self.checkpoint_exists else np.Inf,
             encoder_optimizer=self.encoder_optimizer,
             decoder_optimizer=self.decoder_optimizer
@@ -81,6 +83,8 @@ class AbstractEncoderDecoderModel(ABC):
 
         # Iterate by epoch
         for epoch in range(start_epoch, self.args.epochs):
+            self.current_epoch = epoch
+
             if early_stopping.is_to_stop_training_early():
                 break
 
