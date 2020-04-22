@@ -1,0 +1,16 @@
+--file_name
+continuous_attention_model_smoothl1.txt
+--model_class_str
+ContinuousAttentionModel
+--batch_size
+8
+--num_workers
+0
+--epochs
+100
+--dropout
+0.5
+--embed_dim
+300
+--continuous_loss_type
+smoothl1
