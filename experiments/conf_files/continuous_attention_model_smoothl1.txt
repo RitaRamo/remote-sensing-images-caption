@@ -10,6 +10,8 @@ ContinuousAttentionModel
 100
 --dropout
 0.5
+--embedding_type
+glove
 --embed_dim
 300
 --continuous_loss_type
