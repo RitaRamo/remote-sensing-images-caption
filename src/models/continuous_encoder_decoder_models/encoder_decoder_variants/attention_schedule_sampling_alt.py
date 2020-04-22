@@ -182,6 +182,7 @@ class ContinuousAttentionWithScheduleSamplingAltModel(ContinuousEncoderDecoderMo
                      'rate': self.rate_step
                      }
 
-            self.rate_step += 1
+            if self.rate_step < 50:
+                self.rate_step += 1
 
             torch.save(state, self.get_checkpoint_path())
