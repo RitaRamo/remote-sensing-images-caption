@@ -101,23 +101,10 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         predictions = predict_output["predictions"]
         targets = caps[:, 1:]  # targets doesnt have stark token
 
-        predictions = pack_padded_sequence(
-            predictions, caption_lengths, batch_first=True)
-        targets = pack_padded_sequence(
-            targets, caption_lengths, batch_first=True)
+        target_embeddings = self.decoder.embedding(targets).to(self.device)
 
-        target_embeddings = torch.zeros(
-            predictions.data.size()[0], predictions.data.size()[1])
-
-        for i in range(targets.data.size()[0]):
-            index_word = targets.data[i]
-            embedding_target = self.decoder.embedding(index_word)
-            target_embeddings[i, :] = embedding_target
-
-        target_embeddings = target_embeddings.to(self.device)
-
-        loss = self.criteria.compute_loss(
-            predictions.data, target_embeddings, self.decoder.embedding.weight.data)
+        loss = self.criteria.compute_loss(predictions, target_embeddings,
+                                          caption_lengths, self.decoder.embedding.weight.data)
 
         return loss
 
