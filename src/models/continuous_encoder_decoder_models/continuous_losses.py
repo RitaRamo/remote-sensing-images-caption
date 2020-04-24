@@ -18,6 +18,7 @@ class ContinuousLossesType(Enum):
     SMOOTHL1_AVG_SENTENCE = "smoothl1_avg_sentence"
     SMOOTHL1_TRIPLET_AVG_SENTENCE = "smoothl1_triplet_avg_sentence"
     SMOOTHL1_AVG_SENTENCE_AND_INPUT = "smoothl1_avg_sentence_and_input_loss"
+    SMOOTHL1_AVG_SENTENCE_AND_INPUTS = "smoothl1_avg_sentence_and_inputs_loss"
 
 
 class ContinuousLoss():
@@ -58,10 +59,6 @@ class ContinuousLoss():
             self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
             self.margin = 1.0
 
-        # elif loss_type == ContinuousLossesType.SENTENCE.value:
-        #     self.loss_method = self.sentence_loss
-        #     self.criterion = nn.CosineEmbeddingLoss().to(self.device)
-
         elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE.value:
             self.loss_method = self.smoothl1_avg_sentence_loss
             self.criterion = nn.SmoothL1Loss().to(self.device)
@@ -73,6 +70,10 @@ class ContinuousLoss():
 
         elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUT.value:
             self.loss_method = self.smoothl1_avg_sentence_and_input_loss
+            self.criterion = nn.SmoothL1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUTS.value:
+            self.loss_method = self.smoothl1_avg_sentence_and_inputs_loss
             self.criterion = nn.SmoothL1Loss().to(self.device)
 
     def compute_loss(
@@ -361,56 +362,67 @@ class ContinuousLoss():
 
         return loss
 
-    # def smoothl1_avg_sentence_and_inputs_loss(
-    #     self,
-    #     predictions,
-    #     target_embeddings,
-    #     caption_lengths
-    # ):
-    #     word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
-    #     sentence_losses = 0.0
-    #     input_losses = 0.0
-    #     predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+    def smoothl1_avg_sentence_and_inputs_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input_losses = 0.0
 
-    #     n_sentences = predictions.size()[0]
-    #     for i in range(n_sentences):  # iterate by sentence
-    #         preds_without_padd = predictions[i, :caption_lengths[i], :]
-    #         targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        images_embedding = self.decoder.image_embedding
 
-    #         # word-level loss   (each prediction against each target)
-    #         word_losses += self.criterion(
-    #             preds_without_padd,
-    #             targets_without_padd
-    #         )
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
 
-    #         # sentence-level loss (sentence predicted agains target sentence)
-    #         sentence_mean_pred = torch.mean(preds_without_padd, dim=0)  # ver a dim
-    #         sentece_mean_target = torch.mean(targets_without_padd, dim=0)
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd
+            )
 
-    #         # sentence_losses += self.criterion(
-    #         #     sentence_mean_pred,
-    #         #     sentece_mean_target
-    #         # )
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0)
 
-    #         # 1º input loss (sentence predicted against input image)
-    #         input_image_embedding = torch.mean(targets_without_padd, dim=0)
+            sentence_losses += self.criterion(
+                sentence_mean_pred,
+                sentece_mean_target
+            )
 
-    #         input_losses += self.criterion(
-    #             sentence_mean_pred,
-    #             input_image_embedding
-    #         )
+            # 1º input loss (sentence predicted against input image)
+            input_losses += self.criterion(
+                sentence_mean_pred,
+                images_embedding[i]
+            )
 
-    #         # 2º input loss (sentence predicted against input image)
-    #         input_image_embedding = torch.mean(targets_without_padd, dim=0)
+            # 2º input loss (sentence predicted against input image)
+            self.criterion(
+                images_embedding[i],
+                sentece_mean_target
+            )
 
-    #         self.criterion(
-    #             input_image_embedding
-    #             sentece_mean_target
-    #         )
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
 
-    #     word_loss = word_losses/n_sentences
-    #     sentence_loss = sentence_losses/n_sentences
+        loss = word_loss + sentence_loss
 
-    #     loss = word_loss + sentence_loss
+        return loss
 
-    #     return loss
+# def dmat(x,y):
+#     mmp1 = torch.stack([x] * x.size()[0])
+#     mmp2 = torch.stack([y] * y.size()[0]).transpose(0, 1)
+
+
+# 	# eps = 1e-6
+# 	# error = mmp1 - mmp2
+# 	# error = torch.sqrt( error * error + eps )
+# 	# return torch.sum(error, 2).squeeze()
+#     return torch.sum((mmp1 - mmp2) ** 2, 2).squeeze()x = # sequência de embeddings para previsoes
+# y = # sequência de embeddings para ground-truth
+# loss = sink(dmat(x,y), reg=10)
