@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from torch.nn import functional
 from torch import nn
-from utils.utils import get_pack_padded_sequences
+from utils.utils import get_pack_padded_sequences, sink
 
 
 class ContinuousLossesType(Enum):
@@ -19,6 +19,7 @@ class ContinuousLossesType(Enum):
     SMOOTHL1_TRIPLET_AVG_SENTENCE = "smoothl1_triplet_avg_sentence"
     SMOOTHL1_AVG_SENTENCE_AND_INPUT = "smoothl1_avg_sentence_and_input_loss"
     SMOOTHL1_AVG_SENTENCE_AND_INPUTS = "smoothl1_avg_sentence_and_inputs_loss"
+    SMOOTHL1_SINK_SENTENCE = "smoothl1_sink_sentence"
 
 
 class ContinuousLoss():
@@ -74,6 +75,10 @@ class ContinuousLoss():
 
         elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUTS.value:
             self.loss_method = self.smoothl1_avg_sentence_and_inputs_loss
+            self.criterion = nn.SmoothL1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_SINK_SENTENCE.value:
+            self.loss_method = self.smoothl1_sink_sentence_loss
             self.criterion = nn.SmoothL1Loss().to(self.device)
 
     def compute_loss(
@@ -356,9 +361,9 @@ class ContinuousLoss():
 
         word_loss = word_losses/n_sentences
         sentence_loss = sentence_losses/n_sentences
-        input_losses = input_losses/n_sentences
+        input_loss = input_losses/n_sentences
 
-        loss = word_loss + sentence_loss + input_losses
+        loss = word_loss + sentence_loss + input_loss
 
         return loss
 
@@ -396,16 +401,55 @@ class ContinuousLoss():
             )
 
             # 1º input loss (sentence predicted against input image)
-            input_losses += self.criterion(
+            input1_losses += self.criterion(
                 sentence_mean_pred,
                 images_embedding[i]
             )
 
             # 2º input loss (sentence predicted against input image)
-            self.criterion(
+            input2_losses += self.criterion(
                 images_embedding[i],
                 sentece_mean_target
             )
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+        input1_loss = input1_losses/n_sentences
+        input2_loss = input2_losses/n_sentences
+        loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss
+
+    def smoothl1_sink_sentence_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+
+        def dmat(x, y):
+            mmp1 = torch.stack([x] * x.size()[0])
+            mmp2 = torch.stack([y] * y.size()[0]).transpose(0, 1)
+
+            return torch.sum((mmp1 - mmp2) ** 2, 2).squeeze()
+
+        word_losses = 0.0
+        sentence_losses = 0.0
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+
+            # word-level loss
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd
+            )
+
+            # sentence-level loss
+            sentence_losses += sink(dmat(preds_without_padd, targets_without_padd), reg=10, cuda=False)
 
         word_loss = word_losses/n_sentences
         sentence_loss = sentence_losses/n_sentences
@@ -413,16 +457,3 @@ class ContinuousLoss():
         loss = word_loss + sentence_loss
 
         return loss
-
-# def dmat(x,y):
-#     mmp1 = torch.stack([x] * x.size()[0])
-#     mmp2 = torch.stack([y] * y.size()[0]).transpose(0, 1)
-
-
-# 	# eps = 1e-6
-# 	# error = mmp1 - mmp2
-# 	# error = torch.sqrt( error * error + eps )
-# 	# return torch.sum(error, 2).squeeze()
-#     return torch.sum((mmp1 - mmp2) ** 2, 2).squeeze()x = # sequência de embeddings para previsoes
-# y = # sequência de embeddings para ground-truth
-# loss = sink(dmat(x,y), reg=10)
