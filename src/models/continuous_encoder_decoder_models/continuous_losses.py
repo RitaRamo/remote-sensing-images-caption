@@ -375,7 +375,8 @@ class ContinuousLoss():
     ):
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         sentence_losses = 0.0
-        input_losses = 0.0
+        input1_losses = 0.0
+        input2_losses = 0.0
 
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
