@@ -1,5 +1,5 @@
 --file_name
-continous_attention_model_300_smothl1_sentavag_image.txt
+continous_attention_model_300_smothl1_sentavag_images.txt
 --model_class_str
 ContinuousAttentionImageModel
 --batch_size
