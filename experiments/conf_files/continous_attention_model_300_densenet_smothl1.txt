@@ -11,7 +11,7 @@ ContinuousAttentionModel
 --dropout
 0.5
 --embedding_type
-fasttext
+glove
 --embed_dim
 300
 --continuous_loss_type
