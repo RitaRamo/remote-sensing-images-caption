@@ -1,5 +1,5 @@
 --file_name
-continous_attention_model_fasttext_smothl1.txt
+continous_attention_model_300_densenet_smothl1.txt
 --model_class_str
 ContinuousAttentionModel
 --batch_size
