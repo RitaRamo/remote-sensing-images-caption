@@ -19,18 +19,22 @@ class ContinuousDecoder(Decoder):
     """
 
     def __init__(self, decoder_dim,  embed_dim, embedding_type, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
-        """
-        :param attention_dim: size of attention network
-        :param embed_dim: embedding size
-        :param decoder_dim: size of decoder's RNN
-        :param vocab_size: size of vocabulary
-        :param encoder_dim: feature size of encoded images
-        :param dropout: dropout
-        """
+
         super(ContinuousDecoder, self).__init__(decoder_dim,  embed_dim,
                                                 embedding_type, vocab_size, token_to_id, encoder_dim, dropout)
-        # instead of being bla bla
+
+        self.image_embedding = None
+
+        # replace softmax with a embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
+
+    def init_hidden_state(self, encoder_out):
+        mean_encoder_out = encoder_out.mean(dim=1)
+        h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
+        c = self.init_c(mean_encoder_out)
+
+        self.image_embedding = h
+        return h, c
 
 
 class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
@@ -73,7 +77,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
     def _define_loss_criteria(self):
         self.criteria = ContinuousLoss(
-            self.args.continuous_loss_type, self.device)
+            self.args.continuous_loss_type, self.device, self.decoder)
 
     def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
@@ -103,8 +107,11 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         target_embeddings = self.decoder.embedding(targets).to(self.device)
 
-        loss = self.criteria.compute_loss(predictions, target_embeddings,
-                                          caption_lengths, self.decoder.embedding.weight.data)
+        loss = self.criteria.compute_loss(
+            predictions,
+            target_embeddings,
+            caption_lengths,
+        )
 
         return loss
 
