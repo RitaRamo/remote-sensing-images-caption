@@ -19,23 +19,15 @@ def sink(M, reg, numItermax=1000, stopThr=1e-9, cuda=True):
     # we assume that no distances are null except those of the diagonal of
     # distances
 
-    if cuda:
-        a = Variable(torch.ones((M.size()[0],)) / M.size()[0]).cuda()
-        b = Variable(torch.ones((M.size()[1],)) / M.size()[1]).cuda()
-    else:
-        a = Variable(torch.ones((M.size()[0],)) / M.size()[0])
-        b = Variable(torch.ones((M.size()[1],)) / M.size()[1])
+    a = Variable(torch.ones((M.size()[0],)) / M.size()[0]).cuda()
+    b = Variable(torch.ones((M.size()[1],)) / M.size()[1]).cuda()
 
     # init data
     Nini = len(a)
     Nfin = len(b)
 
-    if cuda:
-        u = Variable(torch.ones(Nini) / Nini).cuda()
-        v = Variable(torch.ones(Nfin) / Nfin).cuda()
-    else:
-        u = Variable(torch.ones(Nini) / Nini)
-        v = Variable(torch.ones(Nfin) / Nfin)
+    u = Variable(torch.ones(Nini) / Nini).cuda()
+    v = Variable(torch.ones(Nfin) / Nfin).cuda()
 
     # print(reg)
 
