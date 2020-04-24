@@ -450,7 +450,7 @@ class ContinuousLoss():
             )
 
             # sentence-level loss
-            sentence_losses += sink(dmat(preds_without_padd, targets_without_padd), reg=10, cuda=False)
+            sentence_losses += sink(dmat(preds_without_padd, targets_without_padd), reg=10, cuda=True)
 
         word_loss = word_losses/n_sentences
         sentence_loss = sentence_losses/n_sentences
