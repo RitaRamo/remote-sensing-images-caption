@@ -13,7 +13,7 @@ ContinuousAttentionImageModel
 --embedding_type
 glove
 --embed_dim
-400
+300
 --continuous_loss_type
 smoothl1_avg_sentence_and_inputs_loss
 --image_model_type
