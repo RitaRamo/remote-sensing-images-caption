@@ -3,6 +3,7 @@ import numpy as np
 from enum import Enum
 import logging
 import torch.nn as nn
+import albumentations as A
 
 
 class ImageNetModelsPretrained(Enum):
@@ -53,7 +54,51 @@ class MyRotationTransform:
         return transforms.functional.rotate(x, self.angle)
 
 
-def augment_image():
+class ColorsAugmentation(Enum):
+    LIGHT = 0
+    CLACHE = 1
+    RANDOM_CONSTRACT = 2
+    RANDOM_GAMMA = 3
+    RANDOM_BRIGHTNESS = 4
+    GRAY = 5
+    JPEG_COMPREENSION = 6
+    NO_AUGMENTATION = 7
+
+
+def apply_no_transformation(image):
+    return {"image": image}
+
+
+def augment_image_with_color():
+    mode = np.random.randint(len(ColorsAugmentation))
+    mode = 7
+
+    if mode == ColorsAugmentation.LIGHT.value:
+        return A.Compose([
+            A.RandomBrightnessContrast(p=1),
+            A.RandomGamma(p=1),
+            A.CLAHE(p=1),
+        ], p=1)
+    elif mode == ColorsAugmentation.CLACHE.value:
+        return A.CLAHE(p=1)
+    elif mode == ColorsAugmentation.RANDOM_CONSTRACT.value:
+        return A.RandomContrast(p=1)
+    elif mode == ColorsAugmentation.RANDOM_GAMMA.value:
+        return A.RandomGamma(p=1)
+    elif mode == ColorsAugmentation.RANDOM_BRIGHTNESS.value:
+        return A.RandomBrightness(p=1)
+    elif mode == ColorsAugmentation.GRAY.value:
+        return A.ToGray(p=1)
+    elif mode == ColorsAugmentation.JPEG_COMPREENSION.value:
+        return A.JpegCompression(p=1)
+    elif mode == ColorsAugmentation.NO_AUGMENTATION.value:
+        return apply_no_transformation
+    else:
+        raise ValueError(
+            "Mode should be equal to 0-6 (see ENUM ColorsAugmentation).")
+
+
+def augment_image_with_rotations_and_flips():
     mode = np.random.randint(len(FlipsAndRotations))
 
     if mode == FlipsAndRotations.FLIP_HORIZONTAL.value:
@@ -74,3 +119,11 @@ def augment_image():
     else:
         raise ValueError(
             "Mode should be equal to 0-6 (see ENUM FlipsAndRotations).")
+
+
+def augment_image():
+    mode = np.random.randint(2)
+    if mode == 0:
+        return augment_image_with_color()
+    else:
+        return augment_image_with_rotations_and_flips()
