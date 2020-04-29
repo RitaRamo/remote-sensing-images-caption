@@ -4,7 +4,6 @@ import logging
 import numpy as np
 import torch
 from torch.utils.data import DataLoader
-from torchvision import transforms
 
 from args_parser import get_args
 from create_data_files import (PATH_DATASETS_RSICD, PATH_RSICD, get_dataset,
@@ -69,30 +68,29 @@ if __name__ == "__main__":
                         max_len,
                         token_to_id)
 
-    if args.augment_data:
-        transform = transforms.Compose([
-            augment_image(),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-                                 std=[0.229, 0.224, 0.225])
-        ])
+    # if args.augment_data:
+    #     transform = transforms.Compose([
+    #         # augment_image(),
+    #         transforms.ToTensor(),
+    #         transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
+    #                              std=[0.229, 0.224, 0.225])
+    #     ])
 
-    else:
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-                                 std=[0.229, 0.224, 0.225])
-        ])
+    # transform = transforms.Compose([
+    #     transforms.ToTensor(),
+    #     transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
+    #                             std=[0.229, 0.224, 0.225])
+    # ])
 
     train_dataloader = DataLoader(
-        CaptionDataset(*train_dataset_args, transform),
+        CaptionDataset(*train_dataset_args, args.augment_data),
         batch_size=args.batch_size,
         shuffle=True,
         num_workers=args.num_workers
     )
 
     val_dataloader = DataLoader(
-        CaptionDataset(*val_dataset_args, transform),
+        CaptionDataset(*val_dataset_args, args.augment_data),
         batch_size=args.batch_size,
         shuffle=False,
         num_workers=args.num_workers
