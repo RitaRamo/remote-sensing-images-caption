@@ -59,7 +59,7 @@ class Encoder(nn.Module):
         :param fine_tune: Allow?
         """
         # If fine-tuning, only fine-tune convolutional blocks 2 through 4
-        for c in list(self.model.children())[5:]:
+        for c in list(self.model.children()):  # [5:]:#toda!!!
             for p in c.parameters():
                 p.requires_grad = enable_fine_tuning
 
@@ -217,13 +217,16 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         # targets = pack_padded_sequence(
         #     targets, caption_lengths, batch_first=True)
 
-        # loss = self.criterion(predictions.data, targets.data)
+        #loss = self.criterion(predictions.data, targets.data)
 
         loss_per_sentece = 0
 
         for i in range(predictions.size()[0]):
+
             loss_per_sentece += self.criterion(
-                predictions[i], targets[i])
+                predictions[i][:caption_lengths[i]],
+                targets[i][:caption_lengths[i]]
+            )
 
         loss = loss_per_sentece/predictions.size()[0]
 
