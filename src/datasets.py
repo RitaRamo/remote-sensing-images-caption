@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import Dataset
 from PIL import Image
 from preprocess_data.tokens import convert_captions_to_Y
-from preprocess_data.images import augment_image_with_color
+from preprocess_data.images import augment_image_with_color, augment_image_with_rotations_and_flips
 from create_data_files import get_dataset
 import albumentations as A
 import cv2
@@ -41,14 +41,13 @@ class CaptionDataset(Dataset):
         ])
 
         if augmentation:
-            self.aug = augment_image_with_color()
             self.get_transformed_image = self.get_image_augmented
 
         else:
             self.get_transformed_image = self.get_torch_image
 
     def get_image_augmented(self, image):
-        image = self.aug(image=image)["image"]
+        image = augment_image_with_color()(image=image)["image"]
         return self.get_torch_image(image)
 
     def get_torch_image(self, image):

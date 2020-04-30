@@ -87,15 +87,14 @@ class FlipsAndRotations(Enum):
     NO_AUGMENTATION = 6
 
 
-def augment_image_with_rotations_and_flips(image):
+def augment_image_with_rotations_and_flips():
     mode = np.random.randint(len(FlipsAndRotations))
-    mode = 0
 
     if mode == FlipsAndRotations.FLIP_HORIZONTAL.value:
         return A.HorizontalFlip(p=1)
     elif mode == FlipsAndRotations.FLIP_VERTICAL.value:
         return A.VerticalFlip(p=1)
-    elif mode == FlipsAndRotations.FLIP_DIAGONAL.value:
+    elif mode == FlipsAndRotations.TRANSPOSE.value:
         return A.Transpose(p=1)
     elif mode == FlipsAndRotations.ROT_90.value:
         return A.Rotate(limit=90, p=1)
