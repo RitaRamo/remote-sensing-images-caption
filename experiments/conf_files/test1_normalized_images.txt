@@ -15,6 +15,6 @@ glove
 --embed_dim
 300
 --continuous_loss_type
-smoothl1_avg_sentence_and_inputs_normalized_loss
+smoothl1_avg_sentence_and_inputs_normalized
 --image_model_type
 densenet
