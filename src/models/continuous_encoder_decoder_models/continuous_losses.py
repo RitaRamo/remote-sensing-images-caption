@@ -19,6 +19,8 @@ class ContinuousLossesType(Enum):
     SMOOTHL1_TRIPLET_AVG_SENTENCE = "smoothl1_triplet_avg_sentence"
     SMOOTHL1_AVG_SENTENCE_AND_INPUT = "smoothl1_avg_sentence_and_input_loss"
     SMOOTHL1_AVG_SENTENCE_AND_INPUTS = "smoothl1_avg_sentence_and_inputs_loss"
+    SMOOTHL1_AVG_SENTENCE_AND_INPUTS_NORMALIZED = "smoothl1_avg_sentence_and_inputs_normalized"
+    SMOOTHL1_TRIPLET_AVG_SENTENCE_AND_INPUTS = "smoothl1_triplet_avg_sentence_and_inputs"
     SMOOTHL1_SINK_SENTENCE = "smoothl1_sink_sentence"
 
 
@@ -76,6 +78,15 @@ class ContinuousLoss():
         elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUTS.value:
             self.loss_method = self.smoothl1_avg_sentence_and_inputs_loss
             self.criterion = nn.SmoothL1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUTS_NORMALIZED.value:
+            self.loss_method = self.smoothl1_avg_sentence_and_inputs_normalized_loss
+            self.criterion = nn.SmoothL1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_TRIPLET_AVG_SENTENCE_AND_INPUTS.value:
+            self.loss_method = self.smoothl1_triplet_avg_sentence_and_inputs_loss
+            self.criterion = nn.SmoothL1Loss().to(self.device)
+            self.margin = 1.0
 
         elif loss_type == ContinuousLossesType.SMOOTHL1_SINK_SENTENCE.value:
             self.loss_method = self.smoothl1_sink_sentence_loss
@@ -417,6 +428,143 @@ class ContinuousLoss():
         sentence_loss = sentence_losses/n_sentences
         input1_loss = input1_losses/n_sentences
         input2_loss = input2_losses/n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss
+
+    def smoothl1_avg_sentence_and_inputs_normalized_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input1_losses = 0.0
+        input2_losses = 0.0
+
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        images_embedding = self.decoder.image_embedding
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0)
+
+            sentence_losses += self.criterion(
+                sentence_mean_pred,
+                sentece_mean_target
+            )
+
+            image_embedding = torch.nn.functional.normalize(images_embedding[i], p=2, dim=-1)
+
+            # 1º input loss (sentence predicted against input image)
+            input1_losses += self.criterion(
+                sentence_mean_pred,
+                image_embedding
+            )
+
+            # 2º input loss (sentence predicted against input image)
+            input2_losses += self.criterion(
+                image_embedding,
+                sentece_mean_target
+            )
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+        input1_loss = input1_losses/n_sentences
+        input2_loss = input2_losses/n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss
+
+    def smoothl1_triplet_avg_sentence_and_inputs_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        word_losses = 0.0
+        sentence_losses = 0.0
+        input1_losses = 0.0
+        input2_losses = 0.0
+
+        n_sentences = predictions.size()[0]
+        images_embedding = self.decoder.image_embedding
+        parameter = 10
+
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+
+            orthogonal_component = (preds_without_padd - torch.sum(preds_without_padd*targets_without_padd,
+                                                                   dim=1).unsqueeze(1) * targets_without_padd)
+            orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
+
+            dist_to_negative = self.criterion(preds_without_padd, orthogonal_negative_examples)
+            dist_to_target = self.criterion(preds_without_padd, targets_without_padd)
+
+            word_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+
+            # sentence-level loss
+            sentence_mean_pred = torch.nn.functional.normalize(
+                torch.mean(preds_without_padd, dim=0), p=2, dim=-1)  # ver a dim
+            sentece_mean_target = torch.nn.functional.normalize(torch.mean(targets_without_padd, dim=0), p=2, dim=-1)
+
+            sentence_mean_ortogonal = (sentence_mean_pred - torch.sum(sentence_mean_pred.unsqueeze(0)
+                                                                      * sentece_mean_target.unsqueeze(0), dim=1) * sentece_mean_target)
+            orthogonal_negative_examples = torch.nn.functional.normalize(sentence_mean_ortogonal, p=2, dim=-1)
+
+            dist_to_negative = self.criterion(sentence_mean_pred, sentence_mean_ortogonal)
+            dist_to_target = self.criterion(sentence_mean_pred, sentece_mean_target)
+
+            sentence_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+
+            # 1º input loss (sentence predicted against input image)
+            # input1_losses += self.criterion(
+            #     sentence_mean_pred,
+            #     images_embedding[i]
+            # )
+
+            image_embedding = torch.nn.functional.normalize(images_embedding[i], p=2, dim=-1)
+
+            orthogonal_component = (sentence_mean_pred - torch.sum(sentence_mean_pred.unsqueeze(0)
+                                                                   * image_embedding.unsqueeze(0), dim=1) * image_embedding)
+            image_negative_example = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
+
+            dist_to_negative = self.criterion(sentence_mean_pred, image_negative_example)
+            dist_to_target = self.criterion(sentence_mean_pred, image_embedding)
+
+            input1_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+
+            # 2º input loss (sentence predicted against input image)
+            # input2_losses += self.criterion(
+            #     images_embedding[i],
+            #     sentece_mean_target
+            # )
+            dist_to_negative = self.criterion(image_embedding, sentence_mean_ortogonal)
+            dist_to_target = self.criterion(image_embedding, sentece_mean_target)
+
+            input2_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+        input1_loss = input1_losses/n_sentences
+        input2_loss = input2_losses/n_sentences
+
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
         return loss
