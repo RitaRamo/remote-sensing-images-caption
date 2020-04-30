@@ -34,26 +34,6 @@ def get_image_model(model_type):
     return nn.Sequential(*modules), encoder_dim
 
 
-class FlipsAndRotations(Enum):
-    FLIP_HORIZONTAL = 0
-    FLIP_VERTICAL = 1
-    FLIP_DIAGONAL = 2
-    ROT_90 = 3
-    ROT_180 = 4
-    ROT_270 = 5
-    ROT_360 = 6
-
-
-class MyRotationTransform:
-    """Rotate by a given angle."""
-
-    def __init__(self, angle):
-        self.angle = angle
-
-    def __call__(self, x):
-        return transforms.functional.rotate(x, self.angle)
-
-
 class ColorsAugmentation(Enum):
     LIGHT = 0
     CLACHE = 1
@@ -71,7 +51,6 @@ def apply_no_transformation(image):
 
 def augment_image_with_color():
     mode = np.random.randint(len(ColorsAugmentation))
-    mode = 7
 
     if mode == ColorsAugmentation.LIGHT.value:
         return A.Compose([
@@ -98,24 +77,34 @@ def augment_image_with_color():
             "Mode should be equal to 0-6 (see ENUM ColorsAugmentation).")
 
 
-def augment_image_with_rotations_and_flips():
+class FlipsAndRotations(Enum):
+    FLIP_HORIZONTAL = 0
+    FLIP_VERTICAL = 1
+    TRANSPOSE = 2
+    ROT_90 = 3
+    ROT_180 = 4
+    ROT_270 = 5
+    NO_AUGMENTATION = 6
+
+
+def augment_image_with_rotations_and_flips(image):
     mode = np.random.randint(len(FlipsAndRotations))
+    mode = 0
 
     if mode == FlipsAndRotations.FLIP_HORIZONTAL.value:
-        return transforms.RandomHorizontalFlip(p=1)
+        return A.HorizontalFlip(p=1)
     elif mode == FlipsAndRotations.FLIP_VERTICAL.value:
-        return transforms.RandomVerticalFlip(p=1)
+        return A.VerticalFlip(p=1)
     elif mode == FlipsAndRotations.FLIP_DIAGONAL.value:
-        return transforms.Compose([transforms.RandomHorizontalFlip(p=1),
-                                   transforms.RandomVerticalFlip(p=1)])
+        return A.Transpose(p=1)
     elif mode == FlipsAndRotations.ROT_90.value:
-        return MyRotationTransform(angle=90)
+        return A.Rotate(limit=90, p=1)
     elif mode == FlipsAndRotations.ROT_180.value:
-        return MyRotationTransform(angle=180)
+        return A.Rotate(limit=180, p=1)
     elif mode == FlipsAndRotations.ROT_270.value:
-        return MyRotationTransform(angle=270)
-    elif mode == FlipsAndRotations.ROT_360.value:
-        return MyRotationTransform(angle=360)
+        return A.Rotate(limit=270, p=1)
+    elif mode == ColorsAugmentation.NO_AUGMENTATION.value:
+        return apply_no_transformation
     else:
         raise ValueError(
             "Mode should be equal to 0-6 (see ENUM FlipsAndRotations).")
