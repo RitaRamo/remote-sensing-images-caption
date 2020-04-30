@@ -270,7 +270,9 @@ class AbstractEncoderDecoderModel(ABC):
                 "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
-        return self.MODEL_DIRECTORY + 'trained_models/' + self.args.file_name+'.pth.tar'
+        path = self.MODEL_DIRECTORY + 'trained_models/' + self.args.file_name+'.pth.tar'
+        print("get checkpoint path", path)
+        return path
 
     def test(self, test_dataset):
 
