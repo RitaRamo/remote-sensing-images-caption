@@ -364,10 +364,12 @@ class ContinuousLoss():
                 sentece_mean_target
             )
 
+            image_embedding = torch.nn.functional.normalize(images_embedding[i], p=2, dim=-1)
+
             # input loss (sentence predicted against input image)
             input_losses += self.criterion(
                 sentence_mean_pred,
-                images_embedding[i]
+                image_embedding
             )
 
         word_loss = word_losses/n_sentences
@@ -412,15 +414,17 @@ class ContinuousLoss():
                 sentece_mean_target
             )
 
+            image_embedding = torch.nn.functional.normalize(images_embedding[i], p=2, dim=-1)
+
             # 1º input loss (sentence predicted against input image)
             input1_losses += self.criterion(
                 sentence_mean_pred,
-                images_embedding[i]
+                image_embedding
             )
 
             # 2º input loss (sentence predicted against input image)
             input2_losses += self.criterion(
-                images_embedding[i],
+                image_embedding,
                 sentece_mean_target
             )
 
