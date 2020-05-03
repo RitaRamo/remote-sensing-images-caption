@@ -102,7 +102,7 @@ def augment_image_with_rotations_and_flips():
         return A.Rotate(limit=180, p=1)
     elif mode == FlipsAndRotations.ROT_270.value:
         return A.Rotate(limit=270, p=1)
-    elif mode == ColorsAugmentation.NO_AUGMENTATION.value:
+    elif mode == FlipsAndRotations.NO_AUGMENTATION.value:
         return apply_no_transformation
     else:
         raise ValueError(
