@@ -2,7 +2,7 @@ import torch
 from torch.utils.data import Dataset
 from PIL import Image
 from preprocess_data.tokens import convert_captions_to_Y
-from preprocess_data.images import augment_image_with_color, augment_image_with_rotations_and_flips
+from preprocess_data.images import augment_image_with_color, augment_image_with_rotations_and_flips, augment_image
 from create_data_files import get_dataset
 import albumentations as A
 import cv2
@@ -47,7 +47,7 @@ class CaptionDataset(Dataset):
             self.get_transformed_image = self.get_torch_image
 
     def get_image_augmented(self, image):
-        image = augment_image_with_color()(image=image)["image"]
+        image = augment_image()(image=image)["image"]
         return self.get_torch_image(image)
 
     def get_torch_image(self, image):
@@ -69,6 +69,37 @@ class CaptionDataset(Dataset):
 
     def __len__(self):
         return self.dataset_size
+
+
+# class POSCaptionDataset(CaptionDataset):
+
+#     def __init__(
+#         self,
+#         data_folder,
+#         images_folder,
+#         data_type,
+#         max_len,
+#         token_to_id,
+#         augmentation=False
+#     ):
+
+#     super().__init__(data_folder,images_folder,data_type,max_len,token_to_id,augmentation)
+
+
+#     def __getitem__(self, i):
+#         image_name = self.images_folder + self.images_names[i]
+#         image = cv2.imread(image_name)
+#         image = self.get_transformed_image(image)
+
+#         input_caption = self.input_captions[i]
+#         #https://spacy.io/api/annotation#pos-tagging
+#         #tens de garantir q fazes o mesmo split
+
+
+#         caption_lenght = self.captions_lengths[i]
+
+
+#         return image, torch.LongTensor(input_caption), torch.LongTensor([caption_lenght])
 
 # class TestDataset(Dataset):
 
