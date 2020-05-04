@@ -1,7 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
-from preprocess_data.tokens import convert_captions_to_Y
+from preprocess_data.tokens import convert_captions_to_Y, convert_captions_to_Y_and_POS
 from preprocess_data.images import augment_image_with_color, augment_image_with_rotations_and_flips, augment_image
 from create_data_files import get_dataset
 import albumentations as A
@@ -9,6 +9,8 @@ import cv2
 import matplotlib.pyplot as plt
 import imageio
 from torchvision import transforms
+import logging
+import os
 
 
 class CaptionDataset(Dataset):
@@ -17,12 +19,37 @@ class CaptionDataset(Dataset):
         self,
         data_folder,
         images_folder,
-        data_type,
         max_len,
         token_to_id,
         augmentation=False
     ):
+        # dataset = get_dataset(data_folder)
 
+        # self.images_names, captions_of_tokens = dataset[
+        #     "images_names"], dataset["captions_tokens"]
+
+        # self.input_captions, self.captions_lengths = convert_captions_to_Y(
+        #     captions_of_tokens, max_len, token_to_id)
+
+        # self.images_folder = images_folder
+        # self.dataset_size = len(self.images_names)
+
+        # self.transform = transforms.Compose([
+        #     transforms.ToTensor(),
+        #     transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
+        #                          std=[0.229, 0.224, 0.225])
+        # ])
+
+        # if augmentation:
+        #     self.get_transformed_image = self.get_image_augmented
+
+        # else:
+        #     self.get_transformed_image = self.get_torch_image
+
+        self._init_caption(data_folder, max_len, token_to_id)
+        self._init_images(images_folder, augmentation)
+
+    def _init_caption(self, data_folder, max_len, token_to_id):
         dataset = get_dataset(data_folder)
 
         self.images_names, captions_of_tokens = dataset[
@@ -31,6 +58,7 @@ class CaptionDataset(Dataset):
         self.input_captions, self.captions_lengths = convert_captions_to_Y(
             captions_of_tokens, max_len, token_to_id)
 
+    def _init_images(self, images_folder, augmentation):
         self.images_folder = images_folder
         self.dataset_size = len(self.images_names)
 
@@ -47,7 +75,7 @@ class CaptionDataset(Dataset):
             self.get_transformed_image = self.get_torch_image
 
     def get_image_augmented(self, image):
-        image = augment_image()(image=image)["image"]
+        image = augment_image_with_rotations_and_flips()(image=image)["image"]
         return self.get_torch_image(image)
 
     def get_torch_image(self, image):
@@ -71,35 +99,49 @@ class CaptionDataset(Dataset):
         return self.dataset_size
 
 
-# class POSCaptionDataset(CaptionDataset):
+class POSCaptionDataset(CaptionDataset):
 
-#     def __init__(
-#         self,
-#         data_folder,
-#         images_folder,
-#         data_type,
-#         max_len,
-#         token_to_id,
-#         augmentation=False
-#     ):
+    def __init__(
+        self,
+        data_folder,
+        images_folder,
+        max_len,
+        token_to_id,
+        augmentation=False
+    ):
+        print("entrei aqui")
+        super().__init__(data_folder,
+                         images_folder,
+                         max_len,
+                         token_to_id,
+                         augmentation
+                         )
 
-#     super().__init__(data_folder,images_folder,data_type,max_len,token_to_id,augmentation)
+    def _init_caption(self, data_folder, max_len, token_to_id):
+        dataset = get_dataset(data_folder)
 
+        self.images_names, captions_of_tokens = dataset[
+            "images_names"], dataset["captions_tokens"]
 
-#     def __getitem__(self, i):
-#         image_name = self.images_folder + self.images_names[i]
-#         image = cv2.imread(image_name)
-#         image = self.get_transformed_image(image)
+        dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
 
-#         input_caption = self.input_captions[i]
-#         #https://spacy.io/api/annotation#pos-tagging
-#         #tens de garantir q fazes o mesmo split
+        if os.path.exists(dataset_path):
+            loaded_dataset = torch.load(dataset_path)
+            self.input_captions = loaded_dataset["input_captions"]
+            self.captions_lengths = loaded_dataset["captions_lengths"]
 
+        else:
+            logging.info("loading caption and pos tagging")
+            self.input_captions, self.captions_lengths = convert_captions_to_Y_and_POS(
+                captions_of_tokens, max_len, token_to_id)
 
-#         caption_lenght = self.captions_lengths[i]
+            state = {
+                "input_captions": self.input_captions,
+                "captions_lengths": self.captions_lengths
+            }
 
+            torch.save(state, dataset_path)
 
-#         return image, torch.LongTensor(input_caption), torch.LongTensor([caption_lenght])
 
 # class TestDataset(Dataset):
 
