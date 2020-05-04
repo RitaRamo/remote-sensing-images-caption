@@ -14,6 +14,9 @@ def get_args():
     parser.add_argument(
         '--model_class_str', help='class name of the model to train', default="BasicEncoderDecoderModel")
 
+    parser.add_argument('--pos_tag_dataset', action='store_true',
+                        default=False, help='Use dataset of pos_tagging')
+
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
 

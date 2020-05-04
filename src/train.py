@@ -8,7 +8,7 @@ from torch.utils.data import DataLoader
 from args_parser import get_args
 from create_data_files import (PATH_DATASETS_RSICD, PATH_RSICD, get_dataset,
                                get_vocab_info)
-from datasets import CaptionDataset, TrialDataset
+from datasets import CaptionDataset, POSCaptionDataset
 
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
@@ -24,6 +24,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_schedule_sampling_alt import ContinuousAttentionWithScheduleSamplingAltModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_schedule_alt_with_image import ContinuousAttentionImageWithScheduleSamplingModel
+#from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image_pos import ContinuousAttentionImagePOSModel
 
 torch.manual_seed(0)
 np.random.seed(0)
@@ -58,16 +59,15 @@ if __name__ == "__main__":
 
     train_dataset_args = (PATH_DATASETS_RSICD+"train.json",
                           PATH_RSICD+"raw_dataset/RSICD_images/",
-                          "TRAIN",
                           max_len,
                           token_to_id
                           )
 
     val_dataset_args = (PATH_DATASETS_RSICD+"val.json",
                         PATH_RSICD+"raw_dataset/RSICD_images/",
-                        "VAL",
                         max_len,
-                        token_to_id)
+                        token_to_id
+                        )
 
     # if args.augment_data:
     #     transform = transforms.Compose([
@@ -83,19 +83,35 @@ if __name__ == "__main__":
     #                             std=[0.229, 0.224, 0.225])
     # ])
 
-    train_dataloader = DataLoader(
-        CaptionDataset(*train_dataset_args, args.augment_data),
-        batch_size=args.batch_size,
-        shuffle=True,
-        num_workers=args.num_workers
-    )
+    if args.pos_tag_dataset:
+        train_dataloader = DataLoader(
+            POSCaptionDataset(*train_dataset_args, args.augment_data),
+            batch_size=args.batch_size,
+            shuffle=True,
+            num_workers=args.num_workers
+        )
 
-    val_dataloader = DataLoader(
-        CaptionDataset(*val_dataset_args, args.augment_data),
-        batch_size=args.batch_size,
-        shuffle=False,
-        num_workers=args.num_workers
-    )
+        val_dataloader = DataLoader(
+            POSCaptionDataset(*val_dataset_args, args.augment_data),
+            batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=args.num_workers
+        )
+
+    else:
+        train_dataloader = DataLoader(
+            CaptionDataset(*train_dataset_args, args.augment_data),
+            batch_size=args.batch_size,
+            shuffle=True,
+            num_workers=args.num_workers
+        )
+
+        val_dataloader = DataLoader(
+            CaptionDataset(*val_dataset_args, args.augment_data),
+            batch_size=args.batch_size,
+            shuffle=False,
+            num_workers=args.num_workers
+        )
 
     model_class = globals()[args.model_class_str]
 
