@@ -4,6 +4,7 @@ from collections import OrderedDict
 from toolz.itertoolz import unique
 from enum import Enum
 import spacy
+from spacy.tokens import Doc
 
 START_TOKEN = "<start_seq>"
 END_TOKEN = "<end_seq>"
@@ -56,7 +57,7 @@ def convert_captions_to_Y(captions_of_tokens, max_len, token_to_id):
 
 def get_pos_score(pos):
     if pos == "NOUN":
-        return 0.75
+        return 1.0
     elif pos == "ADJ":
         return 0.5
     elif pos == "VERB":
@@ -94,7 +95,7 @@ def convert_captions_to_Y_and_POS(captions_of_tokens, max_len, token_to_id):
         # doesnot consider start token and end for spacy
         tokens_without_special_tokens = captions_of_tokens[i][1:-1]
         sentence = " ".join(tokens_without_special_tokens)
-        doc = nlp(sentence)
+        doc = nlp(sentence) if sentence != "" else []
 
         # pos tagging of start_token
         pos_to_integer.append(get_pos_score(None))

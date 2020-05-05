@@ -11,6 +11,7 @@ from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel
 from embeddings.embeddings import EmbeddingsType
+from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType
 
 
 class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
@@ -30,8 +31,16 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
         return super()._predict(encoder_out, caps_tokens, caption_lengths)
 
     def _define_loss_criteria(self):
-        self.criterion_word_level = nn.SmoothL1Loss(reduction="none").to(self.device)
-        self.criterion_sentence_level = nn.SmoothL1Loss().to(self.device)
+        loss_type = self.args.continuous_loss_type
+
+        if loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUTS.value:
+            self.loss_method = self.smoothl1_avg_sentence_and_inputs_loss_with_pos_tagging
+            self.criterion_word_level = nn.SmoothL1Loss(reduction="none").to(self.device)
+            self.criterion_sentence_level = nn.SmoothL1Loss().to(self.device)
+        else:
+            raise Exception("only available: smoothl1_avg_sentence_and_inputs_loss_with_pos_tagging ")
+        # elif loss_type == ContinuousLossesType.SMOOTHL1_TRIPLET_AVG_SENTENCE_AND_INPUTS.value:
+        #     self.loss_method = self.smoothl1_triplet_avg_sentence_and_inputs_loss
 
     def _calculate_loss(self, predict_output, caps, caption_lengths):
         predictions = predict_output["predictions"]
@@ -41,7 +50,7 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
         # vais buscar aqui a tua loss
         target_embeddings = self.decoder.embedding(targets).to(self.device)
 
-        loss = self.smoothl1_avg_sentence_and_inputs_loss_with_pos_tagging(
+        loss = self.loss_method(
             predictions,
             target_embeddings,
             caption_lengths,
