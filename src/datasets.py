@@ -1,8 +1,7 @@
 import torch
 from torch.utils.data import Dataset
 from PIL import Image
-from preprocess_data.tokens import convert_captions_to_Y
-# , convert_captions_to_Y_and_POS
+from preprocess_data.tokens import convert_captions_to_Y, convert_captions_to_Y_and_POS
 from preprocess_data.images import augment_image_with_color, augment_image_with_rotations_and_flips, augment_image
 from create_data_files import get_dataset
 import albumentations as A
@@ -94,7 +93,7 @@ class CaptionDataset(Dataset):
         input_caption = self.input_captions[i]
         caption_lenght = self.captions_lengths[i]
 
-        return image, torch.LongTensor(input_caption), torch.LongTensor([caption_lenght])
+        return image, input_caption, torch.LongTensor([caption_lenght])
 
     def __len__(self):
         return self.dataset_size
