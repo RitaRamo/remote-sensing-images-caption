@@ -93,7 +93,8 @@ class CaptionDataset(Dataset):
         input_caption = self.input_captions[i]
         caption_lenght = self.captions_lengths[i]
 
-        return image, input_caption, torch.LongTensor([caption_lenght])
+        return image, torch.LongTensor(input_caption), torch.LongTensor([caption_lenght])
+        # TODO: CHANGE torch.long
 
     def __len__(self):
         return self.dataset_size
@@ -141,6 +142,20 @@ class POSCaptionDataset(CaptionDataset):
             }
 
             torch.save(state, dataset_path)
+
+    def __getitem__(self, i):
+        image_name = self.images_folder + self.images_names[i]
+        #image = Image.open(image_name)
+        #image = self.transform(image)
+
+        image = cv2.imread(image_name)
+        image = self.get_transformed_image(image)
+        #image = self.transform(image)
+
+        input_caption = self.input_captions[i]
+        caption_lenght = self.captions_lengths[i]
+
+        return image, input_caption, torch.LongTensor([caption_lenght])
 
 
 # class TestDataset(Dataset):
