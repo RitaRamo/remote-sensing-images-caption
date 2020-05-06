@@ -106,7 +106,7 @@ def convert_captions_to_Y_and_POS(captions_of_tokens, max_len, token_to_id):
             pos_to_integer.append(pos_score)
 
         # pos tagging of end_token
-        pos_to_integer.append(get_pos_score(None))
+        pos_to_integer.append(1.0)
 
         if len(tokens_to_integer) != len(pos_to_integer):
             raise Exception("Tokens and respective pos tagging should have same len")
