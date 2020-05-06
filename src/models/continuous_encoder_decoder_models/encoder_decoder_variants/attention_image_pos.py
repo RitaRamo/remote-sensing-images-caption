@@ -42,7 +42,7 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
             self.criterion_word_level = nn.SmoothL1Loss(reduction="none").to(self.device)
             self.criterion_sentence_level = nn.SmoothL1Loss().to(self.device)
         elif loss_type == ContinuousLossesType.SMOOTHL1.value:
-            self.loss_method = smoothl1_pos_tagging
+            self.loss_method = self.smoothl1_pos_tagging
             self.criterion_word_level = nn.SmoothL1Loss(reduction="none").to(self.device)
         else:
             raise Exception("only available: smoothl1_avg_sentence_and_inputs_loss_with_pos_tagging ")
