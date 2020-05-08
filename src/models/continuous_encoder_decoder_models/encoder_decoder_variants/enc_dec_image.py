@@ -15,22 +15,17 @@ from embeddings.embeddings import EmbeddingsType
 
 
 class ContinuousDecoderWithImage(Decoder):
-    """
-    Decoder.
-    """
 
-    def __init__(
-            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048,
-            dropout=0.5):
+    def __init__(self, decoder_dim,  embed_dim, embedding_type, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
 
-        super(ContinuousDecoderWithImage, self).__init__(attention_dim, embedding_type,
-                                                         embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
+        super(ContinuousDecoderWithImage, self).__init__(decoder_dim,  embed_dim,
+                                                         embedding_type, vocab_size, token_to_id, encoder_dim, dropout)
 
         # linear layer to find representation of image
         self.represent_image = nn.Linear(encoder_dim, embed_dim)
         self.image_embedding = None
 
-        # replace softmax layer with embedding layer
+        # replace softmax with a embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
 
     def init_hidden_state(self, encoder_out):
@@ -65,7 +60,6 @@ class ContinuousEncoderDecoderImageModel(ContinuousEncoderDecoderModel):
 
         self.decoder = ContinuousDecoderWithImage(
             encoder_dim=self.encoder.encoder_dim,
-            attention_dim=self.args.attention_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=self.args.embedding_type,
             embed_dim=self.args.embed_dim,
