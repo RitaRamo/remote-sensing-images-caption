@@ -75,7 +75,7 @@ class CaptionDataset(Dataset):
             self.get_transformed_image = self.get_torch_image
 
     def get_image_augmented(self, image):
-        image = augment_image_with_rotations_and_flips()(image=image)["image"]
+        image = augment_image()(image=image)["image"]
         return self.get_torch_image(image)
 
     def get_torch_image(self, image):
