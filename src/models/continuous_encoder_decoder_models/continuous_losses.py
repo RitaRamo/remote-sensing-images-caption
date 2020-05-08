@@ -414,7 +414,7 @@ class ContinuousLoss():
                 sentece_mean_target
             )
 
-            image_embedding = torch.nn.functional.normalize(images_embedding[i], p=2, dim=-1)
+            image_embedding = images_embedding[i]
 
             # 1º input loss (sentence predicted against input image)
             input1_losses += self.criterion(
