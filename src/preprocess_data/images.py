@@ -10,7 +10,8 @@ class ImageNetModelsPretrained(Enum):
     RESNET = "resnet"
     DENSENET = "densenet"
     VGG16 = "vgg16"
-    MULTILABEL = "multilabel"
+    MULTILABEL_ALL = "multilabel_all"  # classification on remote sensing image with all layers unfreezed
+    MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
 
 
 def get_image_model(model_type):
@@ -32,19 +33,19 @@ def get_image_model(model_type):
         modules = list(image_model.children())[:-1]
         encoder_dim = 1920
 
-    else:
+    elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
         logging.info("image model with densenet model with multi-label classification")
 
         checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
         vocab_size = 512
 
         image_model = models.densenet201(pretrained=True)
-        num_features = image_model.classifier.in_features
-        image_model.classifier = nn.Linear(num_features, vocab_size)
+        encoder_dim = image_model.classifier.in_features
+        image_model.classifier = nn.Linear(encoder_dim, vocab_size)
 
         image_model.load_state_dict(checkpoint['model'])
 
-        return image_model, num_features
+        modules = list(image_model.children())[:-1]
 
     return nn.Sequential(*modules), encoder_dim
 

@@ -17,5 +17,5 @@ glove
 --continuous_loss_type
 smoothl1_avg_sentence_and_inputs_loss
 --image_model_type
-multilabel
+multilabel_all
 --augment_data
