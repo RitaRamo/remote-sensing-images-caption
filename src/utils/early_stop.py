@@ -3,9 +3,15 @@ from optimizer import adjust_learning_rate
 
 
 class EarlyStopping():
-    PERIOD_DECAY_LR = 5
 
-    def __init__(self, epochs_limit_without_improvement, epochs_since_last_improvement, baseline, encoder_optimizer, decoder_optimizer):
+    def __init__(
+        self,
+        epochs_limit_without_improvement,
+        epochs_since_last_improvement,
+        baseline, encoder_optimizer,
+        decoder_optimizer,
+        period_decay_lr=5
+    ):
         self.epochs_limit_without_improvement = epochs_limit_without_improvement
         self.epochs_since_last_improvement = epochs_since_last_improvement
         self.best_loss = baseline
@@ -13,6 +19,7 @@ class EarlyStopping():
         self.improved = False
         self.encoder_optimizer = encoder_optimizer
         self.decoder_optimizer = decoder_optimizer
+        self.period_decay_lr = period_decay_lr
 
     def check_improvement(self, current_loss):
 
@@ -37,7 +44,7 @@ class EarlyStopping():
                 self.stop_training = True
 
             # Decay learning rate if there is no improvement for x consecutive epochs
-            if self.epochs_since_last_improvement % self.PERIOD_DECAY_LR == 0:
+            if self.epochs_since_last_improvement % self.period_decay_lr == 0:
                 logging.info("Decay learning rate")
                 adjust_learning_rate(self.decoder_optimizer, 0.8)
                 if self.encoder_optimizer:
