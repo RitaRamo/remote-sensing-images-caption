@@ -13,8 +13,8 @@ import time
 
 
 DISABLE_STEPS = False
-FILE_NAME = "classification_finetune"
-FINE_TUNE = True
+FILE_NAME = "classification_last_layer"
+FINE_TUNE = False
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
