@@ -130,7 +130,11 @@ class ContinuousAttentionWithScheduleSamplingAltModel(ContinuousEncoderDecoderMo
 
         h, c = self.decoder.init_hidden_state(encoder_out)
 
-        sampling_rate = self.SAMPLING_INITIAL_RATE * self.rate_step
+        if self.current_epoch > 10:
+            sampling_rate = self.SAMPLING_INITIAL_RATE * self.rate_step
+        else:
+            sampling_rate=0.0
+            self.rate_step=0.0
 
         # 1º time-step  (embedding of ground-truth given as last prediction since there is no prediction yet)
         predictions, h, c, alpha = self.decoder(
