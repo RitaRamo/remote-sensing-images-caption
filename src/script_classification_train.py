@@ -224,7 +224,7 @@ if __name__ == "__main__":
     classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
     train_dataset_args = (classification_train, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
-    val_dataset_args = (classification_train, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
+    val_dataset_args = (classification_val, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
 
     train_dataloader = DataLoader(
         ClassificationDataset(*train_dataset_args),
