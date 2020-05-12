@@ -1,5 +1,5 @@
 --file_name
-test_encdec_4comp_augmentation.txt
+test_classification_encdec_smoothl1_aug.txt
 --model_class_str
 ContinuousEncoderDecoderImageModel
 --batch_size
