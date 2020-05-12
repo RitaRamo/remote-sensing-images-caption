@@ -23,28 +23,6 @@ class CaptionDataset(Dataset):
         token_to_id,
         augmentation=False
     ):
-        # dataset = get_dataset(data_folder)
-
-        # self.images_names, captions_of_tokens = dataset[
-        #     "images_names"], dataset["captions_tokens"]
-
-        # self.input_captions, self.captions_lengths = convert_captions_to_Y(
-        #     captions_of_tokens, max_len, token_to_id)
-
-        # self.images_folder = images_folder
-        # self.dataset_size = len(self.images_names)
-
-        # self.transform = transforms.Compose([
-        #     transforms.ToTensor(),
-        #     transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-        #                          std=[0.229, 0.224, 0.225])
-        # ])
-
-        # if augmentation:
-        #     self.get_transformed_image = self.get_image_augmented
-
-        # else:
-        #     self.get_transformed_image = self.get_torch_image
 
         self._init_caption(data_folder, max_len, token_to_id)
         self._init_images(images_folder, augmentation)
@@ -83,12 +61,12 @@ class CaptionDataset(Dataset):
 
     def __getitem__(self, i):
         image_name = self.images_folder + self.images_names[i]
-        #image = Image.open(image_name)
-        #image = self.transform(image)
+        # image = Image.open(image_name)
+        # image = self.transform(image)
 
         image = cv2.imread(image_name)
         image = self.get_transformed_image(image)
-        #image = self.transform(image)
+        # image = self.transform(image)
 
         input_caption = self.input_captions[i]
         caption_lenght = self.captions_lengths[i]
@@ -145,12 +123,12 @@ class POSCaptionDataset(CaptionDataset):
 
     def __getitem__(self, i):
         image_name = self.images_folder + self.images_names[i]
-        #image = Image.open(image_name)
-        #image = self.transform(image)
+        # image = Image.open(image_name)
+        # image = self.transform(image)
 
         image = cv2.imread(image_name)
         image = self.get_transformed_image(image)
-        #image = self.transform(image)
+        # image = self.transform(image)
 
         input_caption = self.input_captions[i]
         caption_lenght = self.captions_lengths[i]
@@ -158,50 +136,39 @@ class POSCaptionDataset(CaptionDataset):
         return image, input_caption, torch.LongTensor([caption_lenght])
 
 
-# class TestDataset(Dataset):
+class ClassificationDataset(CaptionDataset):
+    def __init__(
+        self,
+        data,
+        images_folder,
+        classes_to_id,
+        augmentation=True
+    ):
+        self.images_names, categories = zip(*(data.items()))
+        super()._init_images(images_folder, augmentation)
+        self._init_categories(categories, classes_to_id)
 
-#     def __init__(
-#         self,
-#         data_folder,
-#         images_folder,
-#         data_type,
-#         max_len,
-#         token_to_id,
-#         transform
-#     ):
+    def _init_categories(self, categories, classes_to_id):
+        # categories=items()
+        vocab_size = len(classes_to_id)
+        # tens de faze
+        self.categories_tensor = torch.zeros(self.dataset_size, vocab_size)
 
-#         self.dataset = get_dataset(data_folder)
+        for i in range(len(categories)):
 
-#         dataset_items = test_dataset.items
+            categories_to_integer = [classes_to_id[category] for category in categories[i]]
 
-#         self.data=iter(test_dataset.items):
+            self.categories_tensor[i, [categories_to_integer]] = 1
 
-#         self.input_captions, self.target_captions, self.captions_lengths = convert_captions_to_Y(
-#             captions_of_tokens, max_len, token_to_id)
+    def __getitem__(self, i):
+        image_name = self.images_folder + self.images_names[i]
+        print("image name", image_name)
+        image = cv2.imread(image_name)
+        image = self.get_transformed_image(image)
 
-#         # logging.info("len dataset of %s is %s",
-#         #              data_type, len(self.images_names))
-#         self.images_folder = images_folder
-#         self.dataset_size = len(self.images_names)
-#         self.transform = transform
+        classes = self.categories_tensor[i]
 
-#     def __getitem__(self, i):
-
-#         dataset.items
-#         image_name = self.images_folder + self.images_names[i]
-#         image = Image.open(image_name)
-
-#         image = self.transform(image)
-
-#         input_caption = self.input_captions[i]
-#         target_caption = self.target_captions[i]
-#         caption_lenght = self.captions_lengths[i]
-
-#         return image, torch.LongTensor(input_caption), torch.LongTensor(target_caption), torch.LongTensor([caption_lenght])
-
-#     def __len__(self):
-#         print("entrei aqui no LEN", self.dataset_size)
-#         return self.dataset_size
+        return image, classes
 
 
 class TrialDataset(Dataset):
