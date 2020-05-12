@@ -17,6 +17,7 @@ class ContinuousLossesType(Enum):
     SMOOTHL1_TRIPLET_DIFF = "smoothl1_triplet_diff"
     SMOOTHL1_AVG_SENTENCE = "smoothl1_avg_sentence"
     SMOOTHL1_TRIPLET_AVG_SENTENCE = "smoothl1_triplet_avg_sentence"
+    SMOOTHL1_AVG_SENTENCE_BSCORE = "smoothl1_avg_sentence_with_bscore"
     SMOOTHL1_AVG_SENTENCE_AND_INPUT = "smoothl1_avg_sentence_and_input_loss"
     SMOOTHL1_AVG_SENTENCE_AND_INPUTS = "smoothl1_avg_sentence_and_inputs_loss"
     SMOOTHL1_AVG_SENTENCE_AND_INPUTS_NORMALIZED = "smoothl1_avg_sentence_and_inputs_normalized"
@@ -70,6 +71,10 @@ class ContinuousLoss():
             self.loss_method = self.smoothl1_triplet_avg_sentence_loss
             self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
             self.margin = 1.0
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_BSCORE.value:
+            self.loss_method = self.smoothl1_avg_sentence_with_bscore_loss
+            self.criterion = nn.SmoothL1Loss().to(self.device)
 
         elif loss_type == ContinuousLossesType.SMOOTHL1_AVG_SENTENCE_AND_INPUT.value:
             self.loss_method = self.smoothl1_avg_sentence_and_input_loss
@@ -281,6 +286,54 @@ class ContinuousLoss():
                 sentence_mean_pred,
                 sentece_mean_target
             )
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+
+        loss = word_loss + sentence_loss
+
+        return loss
+
+    def smoothl1_avg_sentence_with_bscore_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0
+        sentence_losses = 0.0
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+        n_sentences = predictions.size()[0]
+
+        def sim_matrix(a, b, eps=1e-8):
+            """
+            added eps for numerical stability
+            """
+            a_n, b_n = a.norm(dim=1)[:, None], b.norm(dim=1)[:, None]
+            a_norm = a / torch.max(a_n, eps * torch.ones_like(a_n))
+            b_norm = b / torch.max(b_n, eps * torch.ones_like(b_n))
+            sim_mt = torch.mm(a_norm, b_norm.transpose(0, 1))
+
+            return sim_mt
+
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+
+            # word-level loss
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd
+            )
+
+            pairwise_cosine_similarity = sim_matrix(preds_without_padd, targets_without_padd)
+            # cos = cosine_similarity(preds_without_padd, targets_without_padd)
+
+            maximum_similarity, _ = torch.max(pairwise_cosine_similarity, dim=1)
+            # torch.sum*pesos/dividindo pelos pesos
+
+            sentence_losses += (1-torch.mean(maximum_similarity))
 
         word_loss = word_losses/n_sentences
         sentence_loss = sentence_losses/n_sentences
