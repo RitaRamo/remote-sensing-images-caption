@@ -4,6 +4,7 @@ from enum import Enum
 import logging
 import torch.nn as nn
 import albumentations as A
+import torch
 
 
 class ImageNetModelsPretrained(Enum):
