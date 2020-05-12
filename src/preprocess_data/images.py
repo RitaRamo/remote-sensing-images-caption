@@ -10,6 +10,7 @@ class ImageNetModelsPretrained(Enum):
     RESNET = "resnet"
     DENSENET = "densenet"
     VGG16 = "vgg16"
+    MULTILABEL = "multilabel"
 
 
 def get_image_model(model_type):
@@ -25,11 +26,25 @@ def get_image_model(model_type):
         modules = list(image_model.children())[:-1]
         encoder_dim = 512
 
-    else:
+    elif model_type == ImageNetModelsPretrained.DENSENET.value:
         logging.info("image model with densenet model")
         image_model = models.densenet201(pretrained=True)
         modules = list(image_model.children())[:-1]
         encoder_dim = 1920
+
+    else:
+        logging.info("image model with densenet model with multi-label classification")
+
+        checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
+        vocab_size = 512
+
+        image_model = models.densenet201(pretrained=True)
+        num_features = image_model.classifier.in_features
+        image_model.classifier = nn.Linear(num_features, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, num_features
 
     return nn.Sequential(*modules), encoder_dim
 
