@@ -162,7 +162,6 @@ class ClassificationDataset(CaptionDataset):
 
     def __getitem__(self, i):
         image_name = self.images_folder + self.images_names[i]
-        print("image name", image_name)
         image = cv2.imread(image_name)
         image = self.get_transformed_image(image)
 
