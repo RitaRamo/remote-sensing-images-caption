@@ -42,7 +42,7 @@ class ClassificationModel():
         if FINE_TUNE:
             self.optimizer = get_optimizer(OPTIMIZER_TYPE, self.model.parameters(), OPTIMIZER_LR)
         else:  # ConvNet as fixed feature extractor (freeze all the network except the final layer)
-            self.optimizer = get_optimizer(OPTIMIZER_TYPE, self.model.classifier.parameters(), lr)
+            self.optimizer = get_optimizer(OPTIMIZER_TYPE, self.model.classifier.parameters(), OPTIMIZER_LR)
 
         self._load_weights_from_checkpoint(load_to_train=True)
 
