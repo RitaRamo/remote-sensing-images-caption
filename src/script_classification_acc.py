@@ -283,6 +283,8 @@ if __name__ == "__main__":
 
             # print("acc_batch", total_acc)
             # print("total acc", total_acc)
+            if batch % 5 == 0:
+                print("acc_batch", acc_batch)
 
         epoch_acc = total_acc / len(train_dataloader)
         print("epoch acc", train_or_val, epoch_acc, total_acc / (batch+1))
