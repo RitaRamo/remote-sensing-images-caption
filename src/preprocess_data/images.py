@@ -35,7 +35,7 @@ def get_image_model(model_type):
         encoder_dim = 1920
 
     elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
-        logging.info("image model with densenet model with multi-label classification")
+        logging.info("image model with densenet model (all) with multi-label classification")
 
         checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
         vocab_size = 512
@@ -47,6 +47,20 @@ def get_image_model(model_type):
         image_model.load_state_dict(checkpoint['model'])
 
         modules = list(image_model.children())[:-1]
+
+    elif model_type == ImageNetModelsPretrained.MULTILABEL_LAST.value:
+        logging.info("image model with densenet model (last) with multi-label classification")
+
+        checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
+        vocab_size = 512
+
+        image_model = models.densenet201(pretrained=True)
+        image_model.classifier = nn.Linear(image_model.classifier.in_features, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        encoder_dim = 512
+        return image_model, encoder_dim
 
     return nn.Sequential(*modules), encoder_dim
 
