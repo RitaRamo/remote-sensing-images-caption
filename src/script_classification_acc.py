@@ -273,6 +273,7 @@ if __name__ == "__main__":
             n_preds = torch.sum(condition_1, dim=1)
 
             acc = correct_preds.double()/n_preds
+            acc[torch.isnan(acc)] = 0  # n_preds can be 0
             acc_batch = torch.mean(acc)
 
             total_acc += acc_batch
