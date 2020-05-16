@@ -272,7 +272,7 @@ if __name__ == "__main__":
             correct_preds = torch.sum(condition_1 * condition_2, dim=1)
             n_preds = torch.sum(condition_1, dim=1)
 
-            acc = correct_preds.double()/n_preds
+            acc = correct_preds.double()/n_preds if n_preds.item() > 0.0 else 0
             acc_batch = torch.mean(acc)
 
             total_acc += acc_batch.item()
@@ -283,9 +283,9 @@ if __name__ == "__main__":
 
             # print("acc_batch", total_acc)
             # print("total acc", total_acc)
-            if batch % 5 == 0:
-                print("acc_batch", acc_batch)
-                print("total loss", total_acc)
+            # if batch %  == 0:
+            print("acc_batch", acc_batch.item())
+            print("total loss", total_acc)
 
         print("len of train_data", len(train_dataloader))
         epoch_acc = (total_acc.item() / len(train_dataloader)).item()
