@@ -286,8 +286,8 @@ if __name__ == "__main__":
             if batch % 5 == 0:
                 print("acc_batch", acc_batch)
 
-        epoch_acc = total_acc / len(train_dataloader)
-        print("epoch acc", train_or_val, epoch_acc, total_acc / (batch+1))
+        epoch_acc = (total_acc / len(train_dataloader)).item()
+        print("epoch acc", train_or_val, epoch_acc, (total_acc / (batch+1)).item())
 
-    compute_acc(train_dataloader, "TRAIN")
+    #compute_acc(train_dataloader, "TRAIN")
     compute_acc(val_dataloader, "VAL")
