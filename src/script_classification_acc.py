@@ -287,6 +287,8 @@ if __name__ == "__main__":
             print("acc", acc)
             print("acc_batch", acc_batch.item())
             print("total loss", total_acc)
+            if torch.isnan(total_acc):
+                break
 
         print("len of train_data", len(train_dataloader))
         epoch_acc = (total_acc.item() / len(train_dataloader)).item()
