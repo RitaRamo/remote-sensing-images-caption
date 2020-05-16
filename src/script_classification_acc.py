@@ -284,18 +284,15 @@ if __name__ == "__main__":
 
             # print("acc_batch", total_acc)
             # print("total acc", total_acc)
-            # if batch %  == 0:
-            print("n_preds", n_preds)
-            print("acc", acc)
-            print("acc_batch", acc_batch.item())
-            print("total loss", total_acc)
-            if torch.isnan(total_acc):
-                break
+            if batch % 5 == 0:
+                # print("n_preds", n_preds)
+                # print("acc", acc)
+                print("acc_batch", acc_batch.item())
+                print("total loss", total_acc)
 
         print("len of train_data", len(train_dataloader))
-        epoch_acc = (total_acc.item() / len(train_dataloader)).item()
+        epoch_acc = (total_acc.item() / len(train_dataloader))
         print("epoch acc", train_or_val, epoch_acc, (total_acc / (batch+1)).item())
-        print("agora", epoch_acc)
 
-    #compute_acc(train_dataloader, "TRAIN")
+    compute_acc(train_dataloader, "TRAIN")
     compute_acc(val_dataloader, "VAL")
