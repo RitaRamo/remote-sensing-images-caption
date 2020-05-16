@@ -272,7 +272,7 @@ if __name__ == "__main__":
             correct_preds = torch.sum(condition_1 * condition_2, dim=1)
             n_preds = torch.sum(condition_1, dim=1)
 
-            acc = correct_preds.double()/n_preds if n_preds.item() > 0.0 else 0
+            acc = correct_preds.double()/n_preds
             acc_batch = torch.mean(acc)
 
             total_acc += acc_batch.item()
@@ -284,6 +284,7 @@ if __name__ == "__main__":
             # print("acc_batch", total_acc)
             # print("total acc", total_acc)
             # if batch %  == 0:
+            print("acc", acc)
             print("acc_batch", acc_batch.item())
             print("total loss", total_acc)
 
