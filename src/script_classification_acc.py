@@ -284,6 +284,7 @@ if __name__ == "__main__":
             # print("acc_batch", total_acc)
             # print("total acc", total_acc)
             # if batch %  == 0:
+            print("n_preds", n_preds)
             print("acc", acc)
             print("acc_batch", acc_batch.item())
             print("total loss", total_acc)
