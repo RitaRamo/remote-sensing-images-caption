@@ -252,7 +252,7 @@ if __name__ == "__main__":
     image_model.eval()
 
     def compute_acc(dataset, train_or_val):
-        total_acc = 0.0
+        total_acc = torch.tensor([0.0])
 
         for batch, (img, target) in enumerate(dataset):
 
@@ -275,7 +275,7 @@ if __name__ == "__main__":
             acc = correct_preds.double()/n_preds
             acc_batch = torch.mean(acc)
 
-            total_acc += acc_batch.item()
+            total_acc += acc_batch
 
             # print("corre preds", correct_preds)
             # print("n_preds preds", n_preds)
