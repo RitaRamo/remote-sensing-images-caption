@@ -275,7 +275,7 @@ if __name__ == "__main__":
             acc = correct_preds.double()/n_preds
             acc_batch = torch.mean(acc)
 
-            total_acc += acc_batch
+            total_acc += acc_batch.item()
 
             # print("corre preds", correct_preds)
             # print("n_preds preds", n_preds)
@@ -288,8 +288,8 @@ if __name__ == "__main__":
                 print("total loss", total_acc)
 
         print("len of train_data", len(train_dataloader))
-        epoch_acc = (total_acc.item() / len(train_dataloader).double()).item()
-        print("epoch acc", train_or_val, epoch_acc, (total_acc / (batch+1).double()).item())
+        epoch_acc = (total_acc.item() / len(train_dataloader)).item()
+        print("epoch acc", train_or_val, epoch_acc, (total_acc / (batch+1)).item())
         print("agora", epoch_acc)
 
     #compute_acc(train_dataloader, "TRAIN")
