@@ -291,8 +291,12 @@ if __name__ == "__main__":
                 print("total loss", total_acc)
 
         print("len of train_data", len(train_dataloader))
-        epoch_acc = (total_acc.item() / len(train_dataloader))
-        print("epoch acc", train_or_val, epoch_acc, (total_acc / (batch+1)).item())
+        epoch_acc = (total_acc / (batch+1)).item()
+        print("epoch acc", train_or_val, epoch_acc)
+        return epoch_acc
 
-    compute_acc(train_dataloader, "TRAIN")
-    compute_acc(val_dataloader, "VAL")
+    epoch_acc_train = compute_acc(train_dataloader, "TRAIN")
+    epoch_acc_val = compute_acc(val_dataloader, "VAL")
+
+    print("train epoch", epoch_acc_train)
+    print("val epoch", epoch_acc_val)
