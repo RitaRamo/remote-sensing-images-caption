@@ -242,7 +242,8 @@ if __name__ == "__main__":
 
     vocab_size = len(classes_to_id)
 
-    checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
+    # checkpoint =  torch.load('experiments/results/classification_finetune.pth.tar')
+    checkpoint = torch.load('experiments/results/classification_last_layer.pth.tar')
 
     image_model = models.densenet201(pretrained=True)
     num_features = image_model.classifier.in_features
