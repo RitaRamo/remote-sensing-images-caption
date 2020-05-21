@@ -112,7 +112,7 @@ class ContinuousAttentionAoANetImageModel(ContinuousAttentionImageModel):
             caption_lengths), num_pixels).to(self.device)
 
         h, c, mean_encoder_out = self.decoder.init_hidden_state(encoder_out)
-        context_vector = torch.zeros(batch_size, encoder_dim)
+        context_vector = torch.zeros(batch_size, encoder_dim).to(self.device)
 
         # Predict
         for t in range(max(
