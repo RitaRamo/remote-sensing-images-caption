@@ -19,7 +19,7 @@ def compute_perplexity(sentence):
 def filter_best_caption(options, k1=2, k2=2):
     sentences = [[[], 0]]
     for position, tokens in enumerate(options):
-        print("\npos and tokens", pos, tokens)
+        print("\npos and tokens", position, tokens)
         new_sentences = []
         for sp, sentence in enumerate(sentences):
             print("sp and sentence", sp, sentence)
