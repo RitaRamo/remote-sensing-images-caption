@@ -46,9 +46,12 @@ class Encoder(nn.Module):
         """
         out = self.model(
             images)  # (batch_size, 2048, image_size/32, image_size/32)
+
         # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
         # (batch_size, encoded_image_size, encoded_image_size, 2048)
+        # (later on the intermidiate dims are flatten: (prepare_inputs)
+        # (batch_size, encoded_image_size*encoded_image_size, 2048)
         out = out.permute(0, 2, 3, 1)
 
         return out
@@ -131,7 +134,11 @@ class Decoder(nn.Module):
         :param encoder_out: encoded images, a tensor of dimension (batch_size, num_pixels, encoder_dim)
         :return: hidden state, cell state
         """
+        # before: (batch_size, encoded_image_size*encoded_image_size, 2048)
         mean_encoder_out = encoder_out.mean(dim=1)
+        # (batch_size, 2048)
+
+        # transform 2048 (dim image embeddings) in decoder dim
         h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
         c = self.init_c(mean_encoder_out)
         return h, c
@@ -242,5 +249,4 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
 
     def _convert_prediction_to_output(self, predictions):
         scores = F.log_softmax(predictions, dim=1)
-        current_output_index = torch.argmax(scores, dim=1)
-        return current_output_index
+        return scores

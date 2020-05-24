@@ -274,120 +274,15 @@ class AbstractEncoderDecoderModel(ABC):
         print("get checkpoint path", path)
         return path
 
-    def test(self, test_dataset):
-
-        predicted = {"args": [self.args.__dict__]}
-        metrics = {}
-
-        if self.args.disable_metrics:
-            logging.info(
-                "disable_metrics = True, thus will not compute metrics")
-
-        else:
-            nlgeval = NLGEval()  # loads the models
-
-        n_comparations = 0
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-                                 std=[0.229, 0.224, 0.225])
-        ])
-
-        for img_name, references in test_dataset.items():
-
-            image_name = PATH_RSICD + \
-                "raw_dataset/RSICD_images/" + img_name
-            image = Image.open(image_name)
-            image = transform(image)
-            image = image.unsqueeze(0)
-
-            self.decoder.eval()
-            self.encoder.eval()
-
-            text_generated = self.generate_text(
-                image)
-
-            if self.args.disable_metrics:
-                break
-
-            # TODO:remove metrics that you will not use...
-            all_scores = nlgeval.compute_individual_metrics(
-                references, text_generated)
-
-            if n_comparations % self.args.print_freq == 0:
-                logging.info("this are dic metrics %s", all_scores)
-
-            predicted[img_name] = {
-                "value": text_generated,
-                "scores": all_scores
-            }
-
-            for metric, score in all_scores.items():
-                if metric not in metrics:
-                    metrics[metric] = score
-                else:
-                    metrics[metric] += score
-            n_comparations += 1
-
-        avg_metrics = {metric: total_score /
-                       n_comparations for metric, total_score in metrics.items()
-                       }
-
-        predicted['avg_metrics'] = {
-            "value": "",
-            "scores": avg_metrics
-        }
-
-        logging.info("avg_metrics %s", avg_metrics)
-
-        return predicted
-
-    @abstractmethod
-    def generate_output_index(self, input_word, encoder_out, h, c):
-        pass
-
-    def generate_text(self, image):
-        with torch.no_grad():  # no need to track history
-
-            decoder_sentence = START_TOKEN + " "
-
-            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
-
-            i = 1
-
-            encoder_output = self.encoder(image)
-            encoder_output = encoder_output.view(
-                1, -1, encoder_output.size()[-1])
-
-            h, c = self.decoder.init_hidden_state(encoder_output)
-
-            while True:
-
-                current_output_index, h, c = self.generate_output_index(
-                    input_word, encoder_output, h, c)
-
-                current_output_token = self.id_to_token[current_output_index.item(
-                )]
-
-                decoder_sentence += " " + current_output_token
-
-                if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
-                    break
-
-                input_word[0] = current_output_index.item()
-
-                i += 1
-
-            print("\ndecoded sentence", decoder_sentence)
-
-            return decoder_sentence  # input_caption
-
-    def save_scores(self, scores):
+    def save_scores(self, decoding_type, scores):
         scores = {key: str(values) for key, values in scores.items()}
 
         scores_path = self.MODEL_DIRECTORY + \
             'evaluation_scores/' + \
-            self.args.file_name  # str(self.args.__dict__)
+            self.args.file_name + decoding_type  # str(self.args.__dict__)
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
+
+    @abstractmethod
+    def generate_output_index(self, input_word, encoder_out, h, c):
+        pass

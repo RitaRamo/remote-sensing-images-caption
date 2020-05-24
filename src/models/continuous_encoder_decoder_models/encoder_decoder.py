@@ -23,18 +23,8 @@ class ContinuousDecoder(Decoder):
         super(ContinuousDecoder, self).__init__(decoder_dim,  embed_dim,
                                                 embedding_type, vocab_size, token_to_id, encoder_dim, dropout)
 
-        self.image_embedding = None
-
         # replace softmax with a embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
-
-    def init_hidden_state(self, encoder_out):
-        mean_encoder_out = encoder_out.mean(dim=1)
-        h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
-        c = self.init_c(mean_encoder_out)
-
-        self.image_embedding = h
-        return h, c
 
 
 class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
@@ -124,9 +114,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
         return current_output_index, h, c
 
     def _convert_prediction_to_output(self, predictions):
-        output_similarity_to_embeddings = cosine_similarity(
+        output = torch.cosine_similarity(
             self.decoder.embedding.weight.data, predictions)
 
-        current_output_index = np.argmax(output_similarity_to_embeddings)
-
-        return current_output_index
+        return output

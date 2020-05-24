@@ -17,6 +17,9 @@ def get_args():
     parser.add_argument('--pos_tag_dataset', action='store_true',
                         default=False, help='Use dataset of pos_tagging')
 
+    parser.add_argument('--beam_search', action='store_true',
+                        default=False, help='Use beam search')
+
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
 
