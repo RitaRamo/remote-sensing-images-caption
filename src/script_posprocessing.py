@@ -19,10 +19,11 @@ def compute_perplexity(sentence):
 def filter_best_caption(options, k1=2, k2=2):
     sentences = [[[], 0]]
     for position, tokens in enumerate(options):
+        print("\npos and tokens", pos, tokens)
         new_sentences = []
         for sp, sentence in enumerate(sentences):
+            print("sp and sentence", sp, sentence)
             best = dict()
-            print("\nbeggining for: this is best so far", best)
             for token in set(tokens):
                 best[token] = compute_perplexity(' '.join(sentence[0] + [token]))
                 print("this is best tken", best)
