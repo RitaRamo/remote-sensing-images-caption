@@ -24,6 +24,7 @@ from PIL import Image
 from preprocess_data.tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
+from nlgeval import NLGEval
 
 
 import torch
