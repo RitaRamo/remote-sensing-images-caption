@@ -341,21 +341,14 @@ class AbstractEncoderDecoderModel(ABC):
             return (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
 
         def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
-            print("current text", current_text)
-            tokens = self.language_model_tokenizer.encode(current_text)
-            print("tokens", tokens)
-
             current_text = ' '.join(current_text)
-            print("join current text", current_text)
             tokens = self.language_model_tokenizer.encode(current_text)
-            print("tokens join", tokens)
 
             input_ids = torch.tensor(tokens).unsqueeze(0)
             with torch.no_grad():
                 outputs = self.language_model(input_ids, labels=input_ids)
                 loss, logits = outputs[:2]
 
-            print("this is loss", loss)
             return math.exp(loss / len(tokens))
 
         def compute_sim2image(seed_text, seed_prob, sorted_scores, index, current_text):
