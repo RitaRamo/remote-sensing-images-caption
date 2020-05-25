@@ -33,101 +33,16 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
 
 
-# def compute_perplexity( sentence ):
-#   tokens = tokenizer.encode(sentence)
-#   input_ids = torch.tensor(tokens).unsqueeze(0)
-#   with torch.no_grad():
-#     outputs = model(input_ids, labels=input_ids)
-#     loss, logits = outputs[:2]
-#   return math.exp(loss / len(tokens) )
-
-
-# def inference_with_beamsearch(model, image, token_to_id, id_to_token, max_len, n_solutions=3):
-#     def compute_probability():
-#         return 0
-
-#     def compute_perplexity():
-#         return 0
-
-#     def compute_sim2image():
-#         return 0
-
-#     def compute_perplexity_with_sim2image():
-#         return 0
-
-#     def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
-#         last_token = seed_text[-1]
-
-#         if last_token == END_TOKEN:
-#             return [(seed_text, seed_prob, h, c)]
-
-#         top_solutions = []
-#         scores, h, c = model.generate_output_index(
-#             torch.tensor([token_to_id[last_token]]), encoder_out, h, c)
-
-#         sorted_scores, sorted_indices = torch.sort(
-#             scores, descending=True, dim=-1)
-
-#         for index in range(n_solutions):
-#             text = seed_text + \
-#                 [id_to_token[sorted_indices[index].item()]]
-#             # beam search taking into account lenght of sentence
-#             prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
-#             top_solutions.append((text, prob, h, c))
-
-#         return top_solutions
-
-#     def get_most_probable(candidates, n_solutions):
-#         return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
-
-#     with torch.no_grad():
-#         encoder_output = model.encoder(image)
-#         encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-#         h, c = model.decoder.init_hidden_state(encoder_output)
-
-#         top_solutions = [([START_TOKEN], 0.0, h, c)]
-
-#         # if decoding_type == :
-#         #     compute_score = compute_probability
-
-#         # elif decoding_type == :
-
-#         # elif decoding_type == :
-
-#         # else:
-
-#         for _ in range(max_len):
-#             candidates = []
-#             for sentence, prob, h, c in top_solutions:
-#                 candidates.extend(generate_n_solutions(
-#                     sentence, prob, encoder_output, h, c,  n_solutions))
-
-#             top_solutions = get_most_probable(candidates, n_solutions)
-
-#         # print("top solutions", [(text, prob)
-#         #                         for text, prob, _, _ in top_solutions])
-
-#         best_tokens, prob, h, c = top_solutions[0]
-
-#         best_sentence = " ".join(best_tokens)
-
-#         print("\nbeam decoded sentence:", best_sentence)
-#         return best_sentence
-
-
 if __name__ == "__main__":
-    logging.basicConfig(
-        format='%(levelname)s: %(message)s', level=logging.INFO)
-
     device = torch.device("cpu")
 
     args = get_args()
-    logging.info(args.__dict__)
+    print(args.__dict__)
 
     vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
-    logging.info("vocab size %s", vocab_size)
+    print("vocab size", vocab_size)
 
     test_dataset = get_dataset(PATH_DATASETS_RSICD+"test.json")
 
@@ -143,7 +58,7 @@ if __name__ == "__main__":
     metrics = {}
 
     if args.disable_metrics:
-        logging.info(
+        print(
             "disable_metrics = True, thus will not compute metrics")
     else:
         nlgeval = NLGEval()  # loads the metrics models
@@ -182,7 +97,7 @@ if __name__ == "__main__":
             references, text_generated)
 
         if n_comparations % args.print_freq == 0:
-            logging.info("this are dic metrics %s", all_scores)
+            print("this are dic metrics", all_scores)
 
         predicted[img_name] = {
             "value": text_generated,
@@ -205,6 +120,6 @@ if __name__ == "__main__":
         "scores": avg_metrics
     }
 
-    logging.info("avg_metrics %s", avg_metrics)
+    print("avg_metrics", avg_metrics)
 
     model.save_scores(args.decodying_type, predicted)
