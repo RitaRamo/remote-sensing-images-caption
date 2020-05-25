@@ -15,6 +15,7 @@ from nlgeval import NLGEval
 from optimizer import get_optimizer, clip_gradient
 from enum import Enum
 from transformers import GPT2Tokenizer, GPT2LMHeadModel
+import math
 
 
 class DecodingType(Enum):
