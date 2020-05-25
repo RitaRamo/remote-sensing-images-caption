@@ -1,3 +1,5 @@
+import os
+import torch
 import logging
 from args_parser import get_args
 from create_data_files import PATH_RSICD, PATH_DATASETS_RSICD, get_vocab_info, get_dataset
@@ -25,22 +27,10 @@ from preprocess_data.tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
 from nlgeval import NLGEval
-
-
-import torch
-
-
-import os
+from models.abtract_model import DecodingType
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
-
-
-# class DecodingType(Enum):
-#     GREEDY = "greedy"
-#     BEAM = "beam"
-#     BEAM_PERPLEXITY = "perplexity"
-#     BEAM_PERPLEXITY_IMAGE = "perplexity_image"  # classification on remote sensing image with all layers unfreezed
 
 
 # def compute_perplexity( sentence ):
@@ -52,77 +42,77 @@ os.environ['PYTHONHASHSEED'] = '0'
 #   return math.exp(loss / len(tokens) )
 
 
-def inference_with_beamsearch(model, image, token_to_id, id_to_token, max_len, n_solutions=3):
-    def compute_probability():
-        return 0
+# def inference_with_beamsearch(model, image, token_to_id, id_to_token, max_len, n_solutions=3):
+#     def compute_probability():
+#         return 0
 
-    def compute_perplexity():
-        return 0
+#     def compute_perplexity():
+#         return 0
 
-    def compute_sim2image():
-        return 0
+#     def compute_sim2image():
+#         return 0
 
-    def compute_perplexity_with_sim2image():
-        return 0
+#     def compute_perplexity_with_sim2image():
+#         return 0
 
-    def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
-        last_token = seed_text[-1]
+#     def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
+#         last_token = seed_text[-1]
 
-        if last_token == END_TOKEN:
-            return [(seed_text, seed_prob, h, c)]
+#         if last_token == END_TOKEN:
+#             return [(seed_text, seed_prob, h, c)]
 
-        top_solutions = []
-        scores, h, c = model.generate_output_index(
-            torch.tensor([token_to_id[last_token]]), encoder_out, h, c)
+#         top_solutions = []
+#         scores, h, c = model.generate_output_index(
+#             torch.tensor([token_to_id[last_token]]), encoder_out, h, c)
 
-        sorted_scores, sorted_indices = torch.sort(
-            scores, descending=True, dim=-1)
+#         sorted_scores, sorted_indices = torch.sort(
+#             scores, descending=True, dim=-1)
 
-        for index in range(n_solutions):
-            text = seed_text + \
-                [id_to_token[sorted_indices[index].item()]]
-            # beam search taking into account lenght of sentence
-            prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
-            top_solutions.append((text, prob, h, c))
+#         for index in range(n_solutions):
+#             text = seed_text + \
+#                 [id_to_token[sorted_indices[index].item()]]
+#             # beam search taking into account lenght of sentence
+#             prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
+#             top_solutions.append((text, prob, h, c))
 
-        return top_solutions
+#         return top_solutions
 
-    def get_most_probable(candidates, n_solutions):
-        return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+#     def get_most_probable(candidates, n_solutions):
+#         return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
-    with torch.no_grad():
-        encoder_output = model.encoder(image)
-        encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-        h, c = model.decoder.init_hidden_state(encoder_output)
+#     with torch.no_grad():
+#         encoder_output = model.encoder(image)
+#         encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+#         h, c = model.decoder.init_hidden_state(encoder_output)
 
-        top_solutions = [([START_TOKEN], 0.0, h, c)]
+#         top_solutions = [([START_TOKEN], 0.0, h, c)]
 
-        # if decoding_type == :
-        #     compute_score = compute_probability
+#         # if decoding_type == :
+#         #     compute_score = compute_probability
 
-        # elif decoding_type == :
+#         # elif decoding_type == :
 
-        # elif decoding_type == :
+#         # elif decoding_type == :
 
-        # else:
+#         # else:
 
-        for _ in range(max_len):
-            candidates = []
-            for sentence, prob, h, c in top_solutions:
-                candidates.extend(generate_n_solutions(
-                    sentence, prob, encoder_output, h, c,  n_solutions))
+#         for _ in range(max_len):
+#             candidates = []
+#             for sentence, prob, h, c in top_solutions:
+#                 candidates.extend(generate_n_solutions(
+#                     sentence, prob, encoder_output, h, c,  n_solutions))
 
-            top_solutions = get_most_probable(candidates, n_solutions)
+#             top_solutions = get_most_probable(candidates, n_solutions)
 
-        # print("top solutions", [(text, prob)
-        #                         for text, prob, _, _ in top_solutions])
+#         # print("top solutions", [(text, prob)
+#         #                         for text, prob, _, _ in top_solutions])
 
-        best_tokens, prob, h, c = top_solutions[0]
+#         best_tokens, prob, h, c = top_solutions[0]
 
-        best_sentence = " ".join(best_tokens)
+#         best_sentence = " ".join(best_tokens)
 
-        print("\nbeam decoded sentence:", best_sentence)
-        return best_sentence
+#         print("\nbeam decoded sentence:", best_sentence)
+#         return best_sentence
 
 
 if __name__ == "__main__":
@@ -166,12 +156,10 @@ if __name__ == "__main__":
     ])
 
     # mudar este beam search!
-    if args.beam_search:
-        decoding_method = inference_with_beamsearch
-        decoding_type = "beam"
-    else:
+    if args.decodying_type == DecodingType.GREEDY.value:
         decoding_method = model.inference_with_greedy
-        decoding_type = "greedy"
+    else:
+        decoding_method = model.inference_with_beamsearch
 
     for img_name, references in test_dataset.items():
 
@@ -219,4 +207,4 @@ if __name__ == "__main__":
 
     logging.info("avg_metrics %s", avg_metrics)
 
-    model.save_scores(decoding_type, predicted)
+    model.save_scores(args.decodying_type, predicted)

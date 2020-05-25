@@ -3,6 +3,7 @@ from embeddings.embeddings import EmbeddingsType
 from preprocess_data.images import ImageNetModelsPretrained
 from optimizer import OptimizerType
 from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType
+from models.abtract_model import DecodingType
 
 
 def get_args():
@@ -17,8 +18,8 @@ def get_args():
     parser.add_argument('--pos_tag_dataset', action='store_true',
                         default=False, help='Use dataset of pos_tagging')
 
-    parser.add_argument('--beam_search', action='store_true',
-                        default=False, help='Use beam search')
+    parser.add_argument('--decodying_type', type=str, default=DecodingType.GREEDY.value,
+                        choices=[decoding_type.value for decoding_type in DecodingType])
 
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
