@@ -351,7 +351,6 @@ class AbstractEncoderDecoderModel(ABC):
             with torch.no_grad():
                 outputs = self.language_model(input_ids, labels=input_ids)
                 loss, logits = outputs[:2]
-                print("current text and loss", current_text, loss)
 
             return math.exp(loss / len(tokens))
 
@@ -401,8 +400,6 @@ class AbstractEncoderDecoderModel(ABC):
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
-
-            print("\ncomecei o beam")
 
             top_solutions = [([START_TOKEN], 0.0, h, c)]
 
