@@ -62,6 +62,7 @@ if __name__ == "__main__":
             "disable_metrics = True, thus will not compute metrics")
     else:
         nlgeval = NLGEval()  # loads the metrics models
+        print("vou começar")
 
     n_comparations = 0
     transform = transforms.Compose([
