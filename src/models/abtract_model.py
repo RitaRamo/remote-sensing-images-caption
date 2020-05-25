@@ -345,6 +345,11 @@ class AbstractEncoderDecoderModel(ABC):
             tokens = self.language_model_tokenizer.encode(current_text)
             print("tokens", tokens)
 
+            current_text = ' '.join(current_text)
+            print("join current text", current_text)
+            tokens = self.language_model_tokenizer.encode(current_text)
+            print("tokens join", tokens)
+
             input_ids = torch.tensor(tokens).unsqueeze(0)
             with torch.no_grad():
                 outputs = self.language_model(input_ids, labels=input_ids)
