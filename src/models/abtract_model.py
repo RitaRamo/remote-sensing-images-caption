@@ -349,12 +349,18 @@ class AbstractEncoderDecoderModel(ABC):
             return math.exp(loss / len(tokens))
 
         def compute_sim2image(seed_text, seed_prob, sorted_scores, index, current_text):
-            # sentence_mean = torch.zeros(1, embedding_dim)
-            # for token in current_text:
-            #     target_embedding(sentence_mean)
+            n_tokens = len(current_text)
+            tokens_ids = torch.zeros(1, n_tokens)
+            for i in range(n_tokens):
+                token = current_text[i]
+                tokens_ids[0, i] = self.token_to_id[token]
 
-            # cosine_similarity(sentence_mean, self.image_repr)
-            return 0
+            tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
+
+            sentence_mean = torch.mean(tokens_embeddings, dim=1)
+            images_embedding = self.decoder.image_embedding
+
+            return torch.cosine_similarity(sentence_mean, images_embedding)
 
         def compute_perplexity_with_sim2image():
             return 0
@@ -373,10 +379,9 @@ class AbstractEncoderDecoderModel(ABC):
                 scores, descending=True, dim=-1)
 
             for index in range(n_solutions):
-                text = seed_text + \
-                    [self.id_to_token[sorted_indices[index].item()]]
+                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
                 # beam search taking into account lenght of sentence
-                #prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
+                # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
                 text_score = compute_score(seed_text, seed_prob, sorted_scores, index, text)
                 top_solutions.append((text, text_score, h, c))
 
