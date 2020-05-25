@@ -61,6 +61,9 @@ class AbstractEncoderDecoderModel(ABC):
     def setup_to_test(self):
         self._initialize_encoder_and_decoder()
         self._load_weights_from_checkpoint(load_to_train=False)
+        if self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
+            self.language_model_tokenizer = GPT2Tokenizer.from_pretrained('gpt2-xl')
+            self.language_model = GPT2LMHeadModel.from_pretrained('gpt2-xl')
 
     @abstractmethod
     def _initialize_encoder_and_decoder(self):
@@ -408,16 +411,12 @@ class AbstractEncoderDecoderModel(ABC):
 
             elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
                 compute_score = compute_perplexity
-                self.language_model_tokenizer = GPT2Tokenizer.from_pretrained('gpt2-xl')
-                self.language_model = GPT2LMHeadModel.from_pretrained('gpt2-xl')
 
             elif self.args.decodying_type == DecodingType.BEAM_SIM2IMAGE.value:
                 compute_score = compute_sim2image
 
             elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY_SIM2IMAGE.value:
                 compute_score = compute_perplexity_with_sim2image
-                self.language_model_tokenizer = GPT2Tokenizer.from_pretrained('gpt2-xl')
-                self.language_model = GPT2LMHeadModel.from_pretrained('gpt2-xl')
 
             else:
                 raise Exception("not available any other decoding type")
