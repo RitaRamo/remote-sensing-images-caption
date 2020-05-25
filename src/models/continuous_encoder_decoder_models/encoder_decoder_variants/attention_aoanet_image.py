@@ -12,6 +12,7 @@ from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel
 from embeddings.embeddings import EmbeddingsType
+from preprocess_data.tokens import START_TOKEN, END_TOKEN
 
 
 class ContinuousDecoderSoftWithAoANet(DecoderWithAttention):
@@ -134,3 +135,65 @@ class ContinuousAttentionAoANetImageModel(ContinuousAttentionImageModel):
             all_alphas[:batch_size_t, t, :] = alpha
 
         return {"predictions": all_predictions, "alphas": all_alphas}
+
+    def inference_with_greedy(self, image):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = START_TOKEN + " "
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            encoder_dim = encoder_output.size(2)
+            self.mean_encoder_out = encoder_output.mean(dim=1)
+
+            h, c = self.decoder.init_hidden_state(self.mean_encoder_out)
+
+            print("size encoder_output", encoder_output.size())
+            print("size mean_encoder_out", self.mean_encoder_out.size())
+
+            print("size h", h.size())
+
+            self.context_vector = torch.zeros(1, encoder_dim).to(self.device)
+            print("size context_vector", self.context_vector.size())
+
+            while True:
+
+                scores, h, c = self.generate_output_index(
+                    input_word, encoder_output, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence += " " + current_output_token
+
+                if (current_output_token == END_TOKEN or
+                        i >= self.max_len-1):  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            print("\ndecoded sentence", decoder_sentence)
+
+            return decoder_sentence  # input_caption
+
+    def generate_output_index(self, input_word, encoder_out, h, c):
+        predictions, h, c, context_vector, alpha = self.decoder(
+            input_word, encoder_out, h, c, self.mean_encoder_out, self.context_vector)
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        self.context_vector = context_vector
+
+        return current_output_index, h, c

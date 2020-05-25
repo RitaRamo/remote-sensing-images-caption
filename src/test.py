@@ -36,50 +36,34 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
 
 
-def generate_text(model, image, token_to_id, id_to_token, max_len):
+# class DecodingType(Enum):
+#     GREEDY = "greedy"
+#     BEAM = "beam"
+#     BEAM_PERPLEXITY = "perplexity"
+#     BEAM_PERPLEXITY_IMAGE = "perplexity_image"  # classification on remote sensing image with all layers unfreezed
 
-    with torch.no_grad():  # no need to track history
 
-        decoder_sentence = START_TOKEN + " "
-
-        input_word = torch.tensor([token_to_id[START_TOKEN]])
-
-        i = 1
-
-        encoder_output = model.encoder(image)
-        encoder_output = encoder_output.view(
-            1, -1, encoder_output.size()[-1])
-
-        h, c = model.decoder.init_hidden_state(encoder_output)
-
-        while True:
-
-            scores, h, c = model.generate_output_index(
-                input_word, encoder_output, h, c)
-
-            sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
-
-            current_output_index = sorted_indices[0]
-
-            current_output_token = id_to_token[current_output_index.item(
-            )]
-
-            decoder_sentence += " " + current_output_token
-
-            if (current_output_token == END_TOKEN or
-                    i >= max_len-1):  # until 35
-                break
-
-            input_word[0] = current_output_index.item()
-
-            i += 1
-
-        print("\ndecoded sentence", decoder_sentence)
-
-        return decoder_sentence
+# def compute_perplexity( sentence ):
+#   tokens = tokenizer.encode(sentence)
+#   input_ids = torch.tensor(tokens).unsqueeze(0)
+#   with torch.no_grad():
+#     outputs = model(input_ids, labels=input_ids)
+#     loss, logits = outputs[:2]
+#   return math.exp(loss / len(tokens) )
 
 
 def inference_with_beamsearch(model, image, token_to_id, id_to_token, max_len, n_solutions=3):
+    def compute_probability():
+        return 0
+
+    def compute_perplexity():
+        return 0
+
+    def compute_sim2image():
+        return 0
+
+    def compute_perplexity_with_sim2image():
+        return 0
 
     def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
         last_token = seed_text[-1]
@@ -93,10 +77,6 @@ def inference_with_beamsearch(model, image, token_to_id, id_to_token, max_len, n
 
         sorted_scores, sorted_indices = torch.sort(
             scores, descending=True, dim=-1)
-
-        # 36,74
-
-        # best_index_words = np.argsort(probs)[-n_solutions:][::-1]
 
         for index in range(n_solutions):
             text = seed_text + \
@@ -116,6 +96,15 @@ def inference_with_beamsearch(model, image, token_to_id, id_to_token, max_len, n
         h, c = model.decoder.init_hidden_state(encoder_output)
 
         top_solutions = [([START_TOKEN], 0.0, h, c)]
+
+        # if decoding_type == :
+        #     compute_score = compute_probability
+
+        # elif decoding_type == :
+
+        # elif decoding_type == :
+
+        # else:
 
         for _ in range(max_len):
             candidates = []
@@ -176,11 +165,12 @@ if __name__ == "__main__":
                              std=[0.229, 0.224, 0.225])
     ])
 
+    # mudar este beam search!
     if args.beam_search:
         decoding_method = inference_with_beamsearch
         decoding_type = "beam"
     else:
-        decoding_method = generate_text
+        decoding_method = model.inference_with_greedy
         decoding_type = "greedy"
 
     for img_name, references in test_dataset.items():
@@ -194,7 +184,7 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = decoding_method(model, image, token_to_id, id_to_token, max_len)
+        text_generated = decoding_method(image)
 
         if args.disable_metrics:
             break
