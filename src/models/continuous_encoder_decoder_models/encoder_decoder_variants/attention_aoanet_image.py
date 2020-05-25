@@ -35,13 +35,12 @@ class ContinuousDecoderSoftWithAoANet(DecoderWithAttention):
         # replace softmax layer with embedding layer
         self.fc = nn.Linear(encoder_dim, embed_dim)
 
-    def init_hidden_state(self, encoder_out):
-        mean_encoder_out = encoder_out.mean(dim=1)
+    def init_hidden_state(self, mean_encoder_out):
 
         h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
         self.image_embedding = self.represent_image(mean_encoder_out)
 
-        return h, h, mean_encoder_out
+        return h, h
 
     def forward(self, word, encoder_out, decoder_hidden_state, decoder_cell_state, mean_encoder_out, context_vector):
         embeddings = self.embedding(word)
@@ -111,7 +110,9 @@ class ContinuousAttentionAoANetImageModel(ContinuousAttentionImageModel):
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
 
-        h, c, mean_encoder_out = self.decoder.init_hidden_state(encoder_out)
+        mean_encoder_out = encoder_out.mean(dim=1)
+
+        h, c = self.decoder.init_hidden_state(mean_encoder_out)
         context_vector = torch.zeros(batch_size, encoder_dim).to(self.device)
 
         # Predict
