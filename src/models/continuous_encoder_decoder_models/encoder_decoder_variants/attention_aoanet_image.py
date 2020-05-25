@@ -154,13 +154,7 @@ class ContinuousAttentionAoANetImageModel(ContinuousAttentionImageModel):
 
             h, c = self.decoder.init_hidden_state(self.mean_encoder_out)
 
-            print("size encoder_output", encoder_output.size())
-            print("size mean_encoder_out", self.mean_encoder_out.size())
-
-            print("size h", h.size())
-
             self.context_vector = torch.zeros(1, encoder_dim).to(self.device)
-            print("size context_vector", self.context_vector.size())
 
             while True:
 
