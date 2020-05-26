@@ -470,14 +470,14 @@ class AbstractEncoderDecoderModel(ABC):
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
-                print("all candidates", candidates)
+                print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
                 top_solutions = get_most_probable(candidates, n_solutions)
                 print("top solutions", [(text, prob)
                                         for text, prob, _, _ in top_solutions])
 
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
-
+            print(lixo)
             best_tokens, prob, h, c = top_solutions[0]
 
             best_sentence = " ".join(best_tokens)
