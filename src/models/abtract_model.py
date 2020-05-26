@@ -487,12 +487,11 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def inference_with_perplexity(self, image, n_solutions=5):
+    def inference_with_perplexity(self, image, n_solutions=2):
 
         def compute_perplexity(current_text):
             # len_tokens=len(current_text)
             # current_text = ' '.join(current_text[1:])  # ignore start_token
-            print("current text", current_text)
             tokens = self.language_model_tokenizer.encode(current_text)
 
             input_ids = torch.tensor(tokens).unsqueeze(0)
@@ -500,7 +499,6 @@ class AbstractEncoderDecoderModel(ABC):
                 outputs = self.language_model(input_ids, labels=input_ids)
                 loss, logits = outputs[:2]
 
-            print("loss como está", math.exp(loss / len(tokens)))
             return math.exp(loss / len(tokens))
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
@@ -535,7 +533,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
 
         with torch.no_grad():
-            my_dict = {"cand": [], "top": []}
+            #my_dict = {"cand": [], "top": []}
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
@@ -550,16 +548,15 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-                print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
-                my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
-                print("top", [(text, prob)
-                              for text, prob, _, _ in top_solutions])
-                my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                #print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
+                #my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                # print("top", [(text, prob)
+                #               for text, prob, _, _ in top_solutions])
+                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
 
-            with open("with_end.json", 'w+') as f:
-                json.dump(my_dict, f, indent=2)
+            # with open("with_end.json", 'w+') as f:
+            #     json.dump(my_dict, f, indent=2)
 
-            print(lixo)
             best_tokens, prob, h, c = top_solutions[0]
 
             best_sentence = " ".join(best_tokens)
