@@ -487,7 +487,7 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def inference_with_perplexity(self, image, n_solutions=5):
+    def inference_with_perplexity(self, image, n_solutions=2):
 
         def compute_perplexity(current_text):
             # len_tokens=len(current_text)
@@ -517,14 +517,16 @@ class AbstractEncoderDecoderModel(ABC):
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
 
-                # if new_token == END_TOKEN:
-                #     text = seed_text + [new_token]
-                #     text_score = compute_perplexity(seed_text + ["."])
-                #     top_solutions.append((text, text_score, h, c))
-                #     continue
+                if new_token == END_TOKEN:
+                    text = seed_text + [new_token]
+                    current_text = ' '.join(seed_text[1:]) + "."
+                    text_score = compute_perplexity(current_text)
+                    top_solutions.append((text, text_score, h, c))
+                    continue
 
                 text = seed_text + [new_token]
-                text_score = compute_perplexity(text)
+                current_text = ' '.join(seed_text[1:])
+                text_score = compute_perplexity(current_text)
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
