@@ -439,8 +439,8 @@ class AbstractEncoderDecoderModel(ABC):
 
             return top_solutions
 
-        def get_most_probable(candidates, n_solutions, reverse):
-            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+        def get_most_probable(candidates, n_solutions, is_to_reverse):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=is_to_reverse)[:n_solutions]
 
         with torch.no_grad():
             encoder_output = self.encoder(image)
@@ -451,11 +451,11 @@ class AbstractEncoderDecoderModel(ABC):
 
             if self.args.decodying_type == DecodingType.BEAM.value:
                 compute_score = compute_probability
-                reverse = True
+                is_to_reverse = True
 
             elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
                 compute_score = compute_perplexity
-                reverse = False
+                is_to_reverse = False
 
             elif self.args.decodying_type == DecodingType.BEAM_SIM2IMAGE.value:
                 compute_score = compute_sim2image
