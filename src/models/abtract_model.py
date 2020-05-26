@@ -517,11 +517,11 @@ class AbstractEncoderDecoderModel(ABC):
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
 
-                if new_token == END_TOKEN:
-                    text = seed_text + [new_token]
-                    text_score = compute_perplexity(seed_text + ["."])
-                    top_solutions.append((text, text_score, h, c))
-                    continue
+                # if new_token == END_TOKEN:
+                #     text = seed_text + [new_token]
+                #     text_score = compute_perplexity(seed_text + ["."])
+                #     top_solutions.append((text, text_score, h, c))
+                #     continue
 
                 text = seed_text + [new_token]
                 text_score = compute_perplexity(text)
@@ -554,7 +554,7 @@ class AbstractEncoderDecoderModel(ABC):
                               for text, prob, _, _ in top_solutions])
                 my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
 
-            with open("with_pont.json", 'w+') as f:
+            with open("with_end.json", 'w+') as f:
                 json.dump(my_dict, f, indent=2)
 
             print(lixo)
