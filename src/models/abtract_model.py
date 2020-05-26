@@ -528,7 +528,6 @@ class AbstractEncoderDecoderModel(ABC):
 
         def get_most_probable(candidates, n_solutions):
             return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
-        f = open('post_processing.txt', 'w')
         with torch.no_grad():
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
@@ -545,17 +544,18 @@ class AbstractEncoderDecoderModel(ABC):
                 print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
 
                 # python will convert \n to os.linesep
-                f.write('candidates', [(text, prob) for text, prob, _, _ in candidates])
+                # f.write(
+
+                # [(text, prob) for text, prob, _, _ in candidates])
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
                 # python will convert \n to os.linesep
-                f.write('solution', [(text, prob) for text, prob, _, _ in top_solutions])
+                # f.write('solution', [(text, prob) for text, prob, _, _ in top_solutions])
 
-                print("top solutions", [(text, prob)
-                                        for text, prob, _, _ in top_solutions])
+                print([(text, prob)
+                       for text, prob, _, _ in top_solutions])
 
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
-            f.close()
             print(lixo)
             best_tokens, prob, h, c = top_solutions[0]
 
