@@ -65,7 +65,7 @@ if __name__ == "__main__":
     vocab_size = len(classes_to_id)
 
     # checkpoint =  torch.load('experiments/results/classification_finetune.pth.tar')
-    checkpoint = torch.load('experiments/results/classification_efficientnet.pth.tar')
+    checkpoint = torch.load('experiments/results/classification_efficientnet_focalloss.pth.tar')
     print("checkpoint loaded")
     if EFFICIENT_NET:
         image_model = EfficientNet.from_pretrained('efficientnet-b4')
