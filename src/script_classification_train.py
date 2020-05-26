@@ -10,11 +10,12 @@ import logging
 import os
 import numpy as np
 import time
-
+from efficientnet_pytorch import EfficientNet
 
 DISABLE_STEPS = False
-FILE_NAME = "classification_last_layer"
-FINE_TUNE = False
+FILE_NAME = "classification_efficientnet"
+FINE_TUNE = True
+EFFICIENT_NET = True
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -31,9 +32,14 @@ class ClassificationModel():
         self.device = device
         self.checkpoint_exists = False
 
-        image_model = models.densenet201(pretrained=True)
-        num_features = image_model.classifier.in_features
-        image_model.classifier = nn.Linear(num_features, vocab_size)
+        if EFFICIENT_NET:
+            image_model = EfficientNet.from_pretrained('efficientnet-b4')
+            num_features = image_model._fc.in_features
+            image_model._fc = nn.Linear(num_features, vocab_size)
+        else:  # use densenet
+            image_model = models.densenet201(pretrained=True)
+            num_features = image_model.classifier.in_features
+            image_model.classifier = nn.Linear(num_features, vocab_size)
 
         self.model = image_model.to(self.device)
 
