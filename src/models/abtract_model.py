@@ -528,7 +528,9 @@ class AbstractEncoderDecoderModel(ABC):
 
         def get_most_probable(candidates, n_solutions):
             return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
+
         with torch.no_grad():
+            my_dict = {"cand": [], "top": []}
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
@@ -541,21 +543,17 @@ class AbstractEncoderDecoderModel(ABC):
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
+                top_solutions = get_most_probable(candidates, n_solutions)
+
                 print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
+                my_dict[cand].append([(text, prob) for text, prob, _, _ in candidates])
+                print("top", [(text, prob)
+                              for text, prob, _, _ in top_solutions])
+                my_dict[top].append([(text, prob) for text, prob, _, _ in top_solutions])
 
-                # python will convert \n to os.linesep
-                # f.write(
+            with open("lixo.json", 'w+') as f:
+                json.dump(my_dict, f, indent=2)
 
-                # [(text, prob) for text, prob, _, _ in candidates])
-                top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
-                # python will convert \n to os.linesep
-                # f.write('solution', [(text, prob) for text, prob, _, _ in top_solutions])
-
-                print([(text, prob)
-                       for text, prob, _, _ in top_solutions])
-
-            # print("top solutions", [(text, prob)
-            #                         for text, prob, _, _ in top_solutions])
             print(lixo)
             best_tokens, prob, h, c = top_solutions[0]
 
