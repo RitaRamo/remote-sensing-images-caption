@@ -525,7 +525,7 @@ class AbstractEncoderDecoderModel(ABC):
                     continue
 
                 text = seed_text + [new_token]
-                current_text = ' '.join(seed_text[1:])
+                current_text = ' '.join(text[1:])
                 text_score = compute_perplexity(current_text)
                 top_solutions.append((text, text_score, h, c))
 
