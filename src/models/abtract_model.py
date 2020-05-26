@@ -490,7 +490,7 @@ class AbstractEncoderDecoderModel(ABC):
     def inference_with_perplexity(self, image, n_solutions=3):
 
         def compute_perplexity(current_text):
-            len_tokens = len(current_text)
+            # len_tokens=len(current_text)
             current_text = ' '.join(current_text[1:])  # ignore start_token
             print("current text", current_text)
             tokens = self.language_model_tokenizer.encode(current_text)
@@ -501,7 +501,7 @@ class AbstractEncoderDecoderModel(ABC):
                 loss, logits = outputs[:2]
 
             print("loss como está", math.exp(loss / len(tokens)))
-            return math.exp(loss / len_tokens)
+            return math.exp(loss / len(tokens))
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
             last_token = seed_text[-1]
@@ -516,12 +516,13 @@ class AbstractEncoderDecoderModel(ABC):
 
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
-                text = seed_text + [new_token]
 
                 if new_token == END_TOKEN:
+                    text = seed_text + ["."]
                     top_solutions.append((text, seed_prob, h, c))
                     continue
 
+                text = seed_text + [new_token]
                 text_score = compute_perplexity(text)
                 top_solutions.append((text, text_score, h, c))
 
@@ -552,7 +553,7 @@ class AbstractEncoderDecoderModel(ABC):
                               for text, prob, _, _ in top_solutions])
                 my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
 
-            with open("wihlen.json", 'w+') as f:
+            with open("with_pont.json", 'w+') as f:
                 json.dump(my_dict, f, indent=2)
 
             print(lixo)
