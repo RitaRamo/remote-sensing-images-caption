@@ -491,7 +491,7 @@ class AbstractEncoderDecoderModel(ABC):
 
         def compute_perplexity(current_text):
             # len_tokens=len(current_text)
-            current_text = ' '.join(current_text[1:])  # ignore start_token
+            # current_text = ' '.join(current_text[1:])  # ignore start_token
             print("current text", current_text)
             tokens = self.language_model_tokenizer.encode(current_text)
 
