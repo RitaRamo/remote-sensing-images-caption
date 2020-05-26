@@ -10,6 +10,7 @@ import logging
 import os
 import numpy as np
 import time
+from efficientnet_pytorch import EfficientNet
 
 
 DISABLE_STEPS = False
@@ -250,10 +251,17 @@ if __name__ == "__main__":
 
     # checkpoint =  torch.load('experiments/results/classification_finetune.pth.tar')
     checkpoint = torch.load('experiments/results/classification_efficientnet.pth.tar')
+    print("checkpoint loaded")
+    if EFFICIENT_NET:
+        image_model = EfficientNet.from_pretrained('efficientnet-b4')
+        num_features = image_model._fc.in_features
+        image_model._fc = nn.Linear(num_features, vocab_size)
+        print("image model loaded")
 
-    image_model = models.densenet201(pretrained=True)
-    num_features = image_model.classifier.in_features
-    image_model.classifier = nn.Linear(num_features, vocab_size)
+    else:
+        image_model = models.densenet201(pretrained=True)
+        num_features = image_model.classifier.in_features
+        image_model.classifier = nn.Linear(num_features, vocab_size)
 
     image_model.load_state_dict(checkpoint['model'])
     image_model.eval()
