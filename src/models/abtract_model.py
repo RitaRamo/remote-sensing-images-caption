@@ -473,7 +473,7 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
                 print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
-                top_solutions = get_most_probable(candidates, n_solutions, reverse)
+                top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
                 print("top solutions", [(text, prob)
                                         for text, prob, _, _ in top_solutions])
 
