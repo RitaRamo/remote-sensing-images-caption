@@ -33,7 +33,6 @@ class FocalLoss(nn.Module):
         super(FocalLoss, self).__init__()
         self.alpha = alpha
         self.gamma = gamma
-        self.logits = logits
         self.reduce = reduce
 
     def forward(self, inputs, targets):
