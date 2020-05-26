@@ -487,12 +487,10 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-
-
-     def inference_with_perplexity(self, image, n_solutions=3):
+    def inference_with_perplexity(self, image, n_solutions=3):
 
         def compute_perplexity(current_text):
-            current_text = ' '.join(current_text[1:]) #ignore start_token
+            current_text = ' '.join(current_text[1:])  # ignore start_token
             print("current text", current_text)
             tokens = self.language_model_tokenizer.encode(current_text)
 
@@ -564,7 +562,6 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    
     @abstractmethod
     def generate_output_index(self, input_word, encoder_out, h, c):
         pass
