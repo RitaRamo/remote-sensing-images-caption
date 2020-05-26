@@ -439,7 +439,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             return top_solutions
 
-        def get_most_probable(candidates, n_solutions):
+        def get_most_probable(candidates, n_solutions, reverse):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
@@ -451,9 +451,11 @@ class AbstractEncoderDecoderModel(ABC):
 
             if self.args.decodying_type == DecodingType.BEAM.value:
                 compute_score = compute_probability
+                reverse = True
 
             elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
                 compute_score = compute_perplexity
+                reverse = False
 
             elif self.args.decodying_type == DecodingType.BEAM_SIM2IMAGE.value:
                 compute_score = compute_sim2image
@@ -471,7 +473,7 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
                 print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
-                top_solutions = get_most_probable(candidates, n_solutions)
+                top_solutions = get_most_probable(candidates, n_solutions, reverse)
                 print("top solutions", [(text, prob)
                                         for text, prob, _, _ in top_solutions])
 
