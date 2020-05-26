@@ -509,11 +509,9 @@ class AbstractEncoderDecoderModel(ABC):
                 return [(seed_text, seed_prob, h, c)]
 
             top_solutions = []
-            scores, h, c = self.generate_output_index(
-                torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
+            scores, h, c = self.generate_output_index(torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices = torch.sort(
-                scores, descending=True, dim=-1)
+            sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
@@ -537,9 +535,6 @@ class AbstractEncoderDecoderModel(ABC):
             h, c = self.decoder.init_hidden_state(encoder_output)
 
             top_solutions = [([START_TOKEN], 0.0, h, c)]
-
-            else:
-                raise Exception("not available any other decoding type")
 
             for _ in range(self.max_len):
                 candidates = []
