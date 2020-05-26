@@ -74,6 +74,10 @@ if __name__ == "__main__":
     # mudar este beam search!
     if args.decodying_type == DecodingType.GREEDY.value:
         decoding_method = model.inference_with_greedy
+    elif args.decodying_type == DecodingType.GREEDY_EMBEDDING.value:
+        decoding_method = model.inference_with_greedy_embedding
+    elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
+        decoding_method = model.inference_with_perplexity
     else:
         decoding_method = model.inference_with_beamsearch
 
