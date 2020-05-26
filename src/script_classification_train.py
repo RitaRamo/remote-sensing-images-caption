@@ -11,18 +11,40 @@ import os
 import numpy as np
 import time
 from efficientnet_pytorch import EfficientNet
+import torch.nn.functional as F
 
 DISABLE_STEPS = False
-FILE_NAME = "classification_efficientnet"
+FILE_NAME = "classification_efficientnet_focalloss"
 FINE_TUNE = True
 EFFICIENT_NET = True
+FOCAL_LOSS = True
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
 
+
 NUM_WORKERS = 0
 OPTIMIZER_TYPE = "adam"
 OPTIMIZER_LR = 1e-4
+
+
+class FocalLoss(nn.Module):
+    def __init__(self, alpha=0.25, gamma=2, reduce=True):
+        super(FocalLoss, self).__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.logits = logits
+        self.reduce = reduce
+
+    def forward(self, inputs, targets):
+        BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduce=False)
+        pt = torch.exp(-BCE_loss)
+        F_loss = self.alpha * (1-pt)**self.gamma * BCE_loss
+
+        if self.reduce:
+            return torch.mean(F_loss)
+        else:
+            return F_loss
 
 
 class ClassificationModel():
@@ -44,7 +66,10 @@ class ClassificationModel():
         self.model = image_model.to(self.device)
 
     def setup_to_train(self):
-        self.criterion = nn.BCEWithLogitsLoss().to(self.device)
+        if FOCAL_LOSS:
+            self.criterion = FocalLoss().to(self.device)
+        else:
+            self.criterion = nn.BCEWithLogitsLoss().to(self.device)
         if FINE_TUNE:
             self.optimizer = get_optimizer(OPTIMIZER_TYPE, self.model.parameters(), OPTIMIZER_LR)
         else:  # ConvNet as fixed feature extractor (freeze all the network except the final layer)
