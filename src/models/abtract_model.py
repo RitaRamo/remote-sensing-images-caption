@@ -28,6 +28,7 @@ class DecodingType(Enum):
     BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
     POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
     BIGRAM_PROB = "bigram_prob"
+    POSTPROCESSING_BIGRAM_PROB = "postprocessing_bigramprob"
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -649,6 +650,58 @@ class AbstractEncoderDecoderModel(ABC):
 
             best_tokens, prob, h, c = top_solutions[0]
 
+            best_sentence = " ".join(best_tokens)
+
+            print("\nbeam decoded sentence:", best_sentence)
+            return best_sentence
+
+    def inference_with_postprocessing_bigramprob(self, image, n_solutions=2):
+        def compute_n_solutions(seed_text, seed_prob, sorted_indices, n_solutions):
+            last_token = seed_text[-1]
+
+            if last_token == END_TOKEN:
+                return [(seed_text, seed_prob)]
+
+            candidates = []
+
+            for k in range(n_solutions):  # calculate topkscores
+                new_token = self.id_to_token[sorted_indices[index].item()]
+                current_prob = corpus_bigram_prob[new_token][last_token]
+
+                text = seed_text + [new_token]
+                text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
+                top_solutions.append((text, text_score))
+
+            return candidates
+
+        def get_most_probable(candidates, n_solutions):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+
+        with torch.no_grad():
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            top_solutions = [([START_TOKEN], 0.0)]
+
+            for _ in range(self.max_len):
+
+                # predicted embeddings at time-step (scores ==similarity of predicted embeddings to target embeddings)
+                scores, h, c = self.generate_output_index(input_word, encoder_output, h, c)
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+                input_word[0] = sorted_indices[0].item()
+
+                # extend the top solutions, each appending the generated possible n_words (best n_sorted_scores)
+                candidates = []
+                for sentence, prob in top_solutions:
+                    candidates.extend(compute_n_solutions(
+                        sentence, prob, sorted_indices, n_solutions))
+
+                top_solutions = get_most_probable(candidates, n_solutions)
+
+            best_tokens, prob = top_solutions[0]
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)

@@ -85,6 +85,8 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_postprocessing_perplexity
     elif args.decodying_type == DecodingType.BIGRAM_PROB.value:
         decoding_method = model.inference_with_bigramprob
+    elif args.decodying_type == DecodingType.POSTPROCESSING_BIGRAM_PROB.value:
+        decoding_method = model.inference_with_postprocessing_bigramprob
     else:
         decoding_method = model.inference_with_beamsearch
 
