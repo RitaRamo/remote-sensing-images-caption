@@ -670,7 +670,7 @@ class AbstractEncoderDecoderModel(ABC):
 
                 text = seed_text + [new_token]
                 text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
-                top_solutions.append((text, text_score))
+                candidates.append((text, text_score))
 
             return candidates
 
@@ -750,6 +750,9 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
+
+            # copiar para aqui a imagem:
+                # depois fazer score com imagem
 
             best_tokens, prob, h, c = top_solutions[0]
 
