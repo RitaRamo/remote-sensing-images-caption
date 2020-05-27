@@ -29,6 +29,7 @@ class DecodingType(Enum):
     POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
     BIGRAM_PROB = "bigram_prob"
     POSTPROCESSING_BIGRAM_PROB = "postprocessing_bigramprob"
+    BIGRAM_PROB_IMAGE = "bigramprob_and_image"
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -709,7 +710,7 @@ class AbstractEncoderDecoderModel(ABC):
 
     # def inference_with_bigramprob_and_cosscore
 
-    def inference_with_bigramprob_and_image(self, image, n_solutions=2):
+    def inference_with_bigramprob_and_image(self, image, n_solutions=5):
         def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
             last_token = seed_text[-1]
 
@@ -731,6 +732,20 @@ class AbstractEncoderDecoderModel(ABC):
 
             return top_solutions
 
+        def compute_sim2image(current_text):
+            n_tokens = len(current_text)
+            tokens_ids = torch.zeros(1, n_tokens)
+            for i in range(n_tokens):
+                token = current_text[i]
+                tokens_ids[0, i] = self.token_to_id[token]
+
+            tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
+
+            sentence_mean = torch.mean(tokens_embeddings, dim=1)
+            images_embedding = self.decoder.image_embedding
+
+            return torch.cosine_similarity(sentence_mean, images_embedding)
+
         def get_most_probable(candidates, n_solutions):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
@@ -751,10 +766,19 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-            # copiar para aqui a imagem:
-                # depois fazer score com imagem
+            print("top before", [(text, prob)
+                                 for text, prob, _, _ in top_solutions])
 
-            best_tokens, prob, h, c = top_solutions[0]
+            final_solutions = []
+            for sentence, prob, h, c in top_solutions:
+                image_rank = compute_sim2image(sentence)
+                final_solutions.append((sentence, image_rank))
+
+            final_solutions = get_most_probable(final_solutions, n_solutions)
+
+            print("final_solutions", final_solutions)
+
+            best_tokens, prob, h, c = final_solutions[0]
 
             best_sentence = " ".join(best_tokens)
 
