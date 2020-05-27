@@ -459,6 +459,11 @@ class AbstractEncoderDecoderModel(ABC):
             return math.exp(loss / len(tokens))
 
         def compute_n_solutions(seed_text, seed_prob, sorted_indices, n_solutions):
+            last_token = seed_text[-1]
+
+            if last_token == END_TOKEN:
+                return [(seed_text, seed_prob)]
+
             candidates = []
 
             for k in range(n_solutions):  # calculate topkscores
@@ -503,6 +508,17 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, sorted_indices, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
+
+                print("all candidates", [(text, prob) for text, prob in candidates])
+                my_dict["cand"].append([(text, prob) for text, prob in candidates])
+                print("top", [(text, prob)
+                              for text, prob in top_solutions])
+                my_dict["top"].append([(text, prob) for text, prob in top_solutions])
+
+            with open("postprocessing.json", 'w+') as f:
+                json.dump(my_dict, f, indent=2)
+
+            print(stop)
 
             best_tokens, prob = top_solutions[0]
             best_sentence = " ".join(best_tokens)
