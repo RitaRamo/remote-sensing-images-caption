@@ -468,7 +468,7 @@ class AbstractEncoderDecoderModel(ABC):
                     text = seed_text + [new_token]
                     current_text = ' '.join(seed_text[1:]) + "."
                     text_score = compute_perplexity(current_text)
-                    top_solutions.append((text, text_score))
+                    candidates.append((text, text_score))
                     continue
 
                 text = seed_text + [new_token]
@@ -504,7 +504,7 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-            best_tokens, prob, h, c = top_solutions[0]
+            best_tokens, prob = top_solutions[0]
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
