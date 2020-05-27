@@ -333,7 +333,7 @@ if __name__ == "__main__":
         print("image_model", image_model)
         num_features = image_model.fc.in_features
         image_model.fc = nn.Linear(num_features, vocab_size)
-        checkpoint = torch.load('src/resnet50dct_upscaled_static_64/model_best.pth.tar.pth.tar')
+        checkpoint = torch.load('src/resnet50dct_upscaled_static_64/model_best.pth.tar')
         image_model.load_state_dict(checkpoint['model'])
     else:
         image_model = models.densenet201(pretrained=True)
