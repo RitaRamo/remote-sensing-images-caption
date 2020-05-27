@@ -15,7 +15,7 @@ from efficientnet_pytorch import EfficientNet
 DISABLE_STEPS = False
 FILE_NAME = "classification_efficientnet5"
 FINE_TUNE = True
-EFFICIENT_NET = TRUE
+EFFICIENT_NET = True
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
