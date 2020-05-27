@@ -161,15 +161,10 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
             while True:
 
                 predictions, h, c, _ = self.decoder(input_word, encoder_output, h, c)
-                print("predictions", predictions.size())
                 scores = self.criterion(predictions, self.decoder.embedding.weight.data)
-                print("scores size", scores.size())
-
                 scores = torch.mean(scores, dim=1)
-                print("scores size", scores.size())
 
                 sorted_scores, sorted_indices = torch.sort(scores, descending=False, dim=-1)
-                print("sorted scores", sorted_scores)
 
                 current_output_index = sorted_indices[0]
 
