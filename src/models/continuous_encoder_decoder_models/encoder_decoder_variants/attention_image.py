@@ -12,6 +12,7 @@ from preprocess_data.tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from embeddings.embeddings import EmbeddingsType
+from preprocess_data.tokens import START_TOKEN, END_TOKEN
 
 
 class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
@@ -40,6 +41,19 @@ class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
         self.image_embedding = self.represent_image(mean_encoder_out)
 
         return h, h
+
+    def inference(self, embeddings, encoder_out, decoder_hidden_state, decoder_cell_state):
+        attention_weighted_encoding, alpha = self.attention(encoder_out, decoder_hidden_state)
+
+        decoder_input = torch.cat((embeddings, attention_weighted_encoding), dim=1)
+
+        decoder_hidden_state, decoder_cell_state = self.decode_step(
+            decoder_input, (decoder_hidden_state, decoder_cell_state)
+        )
+
+        scores = self.fc(self.dropout(decoder_hidden_state))
+
+        return scores, decoder_hidden_state, decoder_cell_state, alpha
 
 
 class ContinuousAttentionImageModel(ContinuousAttentionModel):
@@ -78,3 +92,53 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
 
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
+
+    def generate_output_embedding(self, input_embedding, encoder_out, h, c):
+        predictions, h, c, _ = self.decoder.inference(
+            input_embedding, encoder_out, h, c)
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        return predictions, current_output_index, h, c
+
+    def inference_with_greedy_embedding(self, image):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = START_TOKEN + " "
+
+            input_embedding = self.decoder.embedding(torch.tensor([self.token_to_id[START_TOKEN]]))
+            # chamas a cena do embedding
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            while True:
+
+                predictions, scores, h, c = self.generate_output_embedding(
+                    input_embedding, encoder_output, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence += " " + current_output_token
+
+                if (current_output_token == END_TOKEN or
+                        i >= self.max_len-1):  # until 35
+                    break
+
+                input_embedding[0, :] = predictions
+
+                i += 1
+
+            print("\ndecoded sentence", decoder_sentence)
+
+            return decoder_sentence  # input_caption
