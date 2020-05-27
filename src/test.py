@@ -81,6 +81,8 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_greedy_smoothl1
     elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
         decoding_method = model.inference_with_perplexity
+    elif args.decodying_type == DecodingType.POSTPROCESSING_PERPLEXITY.value:
+        decoding_method = model.inference_with_postprocessing_perplexity
     else:
         decoding_method = model.inference_with_beamsearch
 

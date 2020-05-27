@@ -25,7 +25,8 @@ class DecodingType(Enum):
     BEAM = "beam"
     BEAM_PERPLEXITY = "perplexity"
     BEAM_SIM2IMAGE = "sim2image"
-    BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"  # classification on remote sensing image with all layers unfreezed
+    BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
+    POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -63,7 +64,7 @@ class AbstractEncoderDecoderModel(ABC):
     def setup_to_test(self):
         self._initialize_encoder_and_decoder()
         self._load_weights_from_checkpoint(load_to_train=False)
-        if self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
+        if self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value or self.args.decodying_type == DecodingType.POSTPROCESSING_PERPLEXITY.value:
             self.language_model_tokenizer = GPT2Tokenizer.from_pretrained('gpt2-xl')
             self.language_model = GPT2LMHeadModel.from_pretrained('gpt2-xl')
 
@@ -446,7 +447,7 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def postprocessing_perplexity(self, image, n_solutions=3):
+    def inference_with_postprocessing_perplexity(self, image, n_solutions=3):
         def compute_perplexity(current_text):
             tokens = self.language_model_tokenizer.encode(current_text)
 
@@ -482,7 +483,6 @@ class AbstractEncoderDecoderModel(ABC):
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
-
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
             top_solutions = [([START_TOKEN], 0.0, h, c)]
