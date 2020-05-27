@@ -103,7 +103,7 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = decoding_method(image)
+        text_generated = decoding_method(image, self.args.n_beam)
 
         if args.disable_metrics:
             break
@@ -138,4 +138,4 @@ if __name__ == "__main__":
 
     print("avg_metrics", avg_metrics)
 
-    model.save_scores(args.decodying_type, predicted)
+    model.save_scores(args.decodying_type, args.n_beam, predicted)

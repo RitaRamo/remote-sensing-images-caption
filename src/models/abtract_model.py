@@ -294,12 +294,12 @@ class AbstractEncoderDecoderModel(ABC):
         print("get checkpoint path", path)
         return path
 
-    def save_scores(self, decoding_type, scores):
+    def save_scores(self, decoding_type, n_beam, scores):
         scores = {key: str(values) for key, values in scores.items()}
 
         scores_path = self.MODEL_DIRECTORY + \
             'evaluation_scores/' + \
-            self.args.file_name + decoding_type  # str(self.args.__dict__)
+            self.args.file_name + decoding_type + n_beam  # str(self.args.__dict__)
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
 

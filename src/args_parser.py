@@ -27,6 +27,9 @@ def get_args():
     parser.add_argument('--batch_size', type=int, default=8,
                         help='define batch size to train the model')
 
+    parser.add_argument('--n_beam', type=int, default=0,
+                        help='define beam for inference')
+
     parser.add_argument('--num_workers', type=int, default=1,
                         help='define num_works to dataloader')
 
