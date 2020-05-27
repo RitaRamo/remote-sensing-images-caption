@@ -436,7 +436,6 @@ class AbstractEncoderDecoderModel(ABC):
 
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
-            print(lixo)
             best_tokens, prob, h, c = top_solutions[0]
 
             best_sentence = " ".join(best_tokens)
