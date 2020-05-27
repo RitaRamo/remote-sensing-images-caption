@@ -468,13 +468,13 @@ class AbstractEncoderDecoderModel(ABC):
                     text = seed_text + [new_token]
                     current_text = ' '.join(seed_text[1:]) + "."
                     text_score = compute_perplexity(current_text)
-                    top_solutions.append((text, text_score, h, c))
+                    top_solutions.append((text, text_score))
                     continue
 
                 text = seed_text + [new_token]
                 current_text = ' '.join(text[1:])  # does not consider start token
                 text_score = compute_perplexity(current_text)
-                candidates.append((text, text_score, h, c))
+                candidates.append((text, text_score))
 
             return candidates
 
@@ -488,7 +488,7 @@ class AbstractEncoderDecoderModel(ABC):
             h, c = self.decoder.init_hidden_state(encoder_output)
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
-            top_solutions = [([START_TOKEN], 0.0, h, c)]
+            top_solutions = [([START_TOKEN], 0.0)]
 
             for _ in range(self.max_len):
 
@@ -499,7 +499,7 @@ class AbstractEncoderDecoderModel(ABC):
 
                 # extend the top solutions, each appending the generated possible n_words (best n_sorted_scores)
                 candidates = []
-                for sentence, prob, h, c in top_solutions:
+                for sentence, prob in top_solutions:
                     candidates.extend(compute_n_solutions(
                         sentence, prob, sorted_indices, n_solutions))
 
@@ -513,6 +513,8 @@ class AbstractEncoderDecoderModel(ABC):
 
             with open("postprocessing_gpt2.json", 'w+') as f:
                 json.dump(my_dict, f, indent=2)
+
+            print("stop", ola)
 
             best_tokens, prob, h, c = top_solutions[0]
             best_sentence = " ".join(best_tokens)

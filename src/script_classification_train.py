@@ -15,7 +15,7 @@ import torch.nn.functional as F
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet5"
+FILE_NAME = "classification_efficientnet_gamma5_alpha1"
 FINE_TUNE = True
 EFFICIENT_NET = True
 FOCAL_LOSS = True
@@ -30,7 +30,7 @@ OPTIMIZER_LR = 1e-4
 
 
 class FocalLoss(nn.Module):
-    def __init__(self, alpha=0.25, gamma=5, reduce=True):
+    def __init__(self, alpha=1.0, gamma=5, reduce=True):
         super(FocalLoss, self).__init__()
         self.alpha = alpha
         self.gamma = gamma
