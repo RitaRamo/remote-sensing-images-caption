@@ -490,7 +490,7 @@ class AbstractEncoderDecoderModel(ABC):
             for _ in range(self.max_len):
 
                 # predicted embeddings at time-step (scores ==similarity of predicted embeddings to target embeddings)
-                scores, h, c = self.generate_output_index(input_word, encoder_out, h, c)
+                scores, h, c = self.generate_output_index(input_word, encoder_output, h, c)
                 sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
                 input_word[0] = sorted_indices[0].item()
 
