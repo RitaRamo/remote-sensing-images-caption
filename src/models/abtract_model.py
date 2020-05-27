@@ -482,7 +482,6 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
 
         with torch.no_grad():
-            my_dict = {"cand": [], "top": []}
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
@@ -504,17 +503,6 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, sorted_indices, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
-
-                print("all candidates", [(text, prob) for text, prob in candidates])
-                my_dict["cand"].append([(text, prob) for text, prob in candidates])
-                print("top", [(text, prob)
-                              for text, prob in top_solutions])
-                my_dict["top"].append([(text, prob) for text, prob in top_solutions])
-
-            with open("postprocessing_gpt2.json", 'w+') as f:
-                json.dump(my_dict, f, indent=2)
-
-            print("stop", ola)
 
             best_tokens, prob, h, c = top_solutions[0]
             best_sentence = " ".join(best_tokens)
