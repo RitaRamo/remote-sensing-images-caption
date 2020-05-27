@@ -505,11 +505,11 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-                print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
-                my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                print("all candidates", [(text, prob) for text, prob in candidates])
+                my_dict["cand"].append([(text, prob) for text, prob in candidates])
                 print("top", [(text, prob)
-                              for text, prob, _, _ in top_solutions])
-                my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                              for text, prob in top_solutions])
+                my_dict["top"].append([(text, prob) for text, prob in top_solutions])
 
             with open("postprocessing_gpt2.json", 'w+') as f:
                 json.dump(my_dict, f, indent=2)
