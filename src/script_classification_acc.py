@@ -11,7 +11,10 @@ import os
 import numpy as np
 import time
 from efficientnet_pytorch import EfficientNet
-
+try:
+    from torch.hub import load_state_dict_from_url
+except ImportError:
+    from torch.utils.model_zoo import load_url as load_state_dict_from_url
 
 DISABLE_STEPS = False
 FILE_NAME = "classification_resnetfreq"
