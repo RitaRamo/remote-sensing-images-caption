@@ -107,7 +107,6 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
             decoder_sentence = START_TOKEN + " "
 
             input_embedding = self.decoder.embedding(torch.tensor([self.token_to_id[START_TOKEN]]))
-            # chamas a cena do embedding
 
             i = 1
 
@@ -136,6 +135,54 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
                     break
 
                 input_embedding[0, :] = predictions
+
+                i += 1
+
+            print("\ndecoded sentence", decoder_sentence)
+
+            return decoder_sentence  # input_caption
+
+    def inference_with_greedy_smoothl1(self, image):
+        with torch.no_grad():  # no need to track history
+            self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
+
+            decoder_sentence = START_TOKEN + " "
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            while True:
+
+                predictions, h, c, _ = self.decoder(input_word, encoder_output, h, c)
+                print("predictions", predictions.size())
+                scores = self.criterion(predictions, self.decoder.embedding.weight.data)
+                print("scores size", scores.size())
+
+                scores = torch.mean(scores, dim=1)
+                print("scores size", scores.size())
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=False, dim=-1)
+                print("sorted scores", sorted_scores)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence += " " + current_output_token
+
+                if (current_output_token == END_TOKEN or
+                        i >= self.max_len-1):  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
 
                 i += 1
 

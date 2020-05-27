@@ -21,6 +21,7 @@ import math
 class DecodingType(Enum):
     GREEDY = "greedy"
     GREEDY_EMBEDDING = "greedy_embedding"
+    GREEDY_SMOOTHL1 = "greedy_smoothl1"
     BEAM = "beam"
     BEAM_PERPLEXITY = "perplexity"
     BEAM_SIM2IMAGE = "sim2image"
