@@ -446,6 +446,77 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
+    def postprocessing_perplexity(self, image, n_solutions=3):
+        def compute_perplexity(current_text):
+            tokens = self.language_model_tokenizer.encode(current_text)
+
+            input_ids = torch.tensor(tokens).unsqueeze(0)
+            with torch.no_grad():
+                outputs = self.language_model(input_ids, labels=input_ids)
+                loss, logits = outputs[:2]
+
+            return math.exp(loss / len(tokens))
+
+        def compute_n_solutions(seed_text, seed_prob, sorted_indices, n_solutions):
+            candidates = []
+
+            for k in range(n_solutions):  # calculate topkscores
+                new_token = self.id_to_token[sorted_indices[k].item()]
+
+                if new_token == END_TOKEN:
+                    text = seed_text + [new_token]
+                    current_text = ' '.join(seed_text[1:]) + "."
+                    text_score = compute_perplexity(current_text)
+                    top_solutions.append((text, text_score, h, c))
+                    continue
+
+                text = seed_text + [new_token]
+                current_text = ' '.join(text[1:])  # does not consider start token
+                text_score = compute_perplexity(current_text)
+                candidates.append((text, text_score, h, c))
+
+            return candidates
+
+        with torch.no_grad():
+            my_dict = {"cand": [], "top": []}
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
+
+            for _ in range(self.max_len):
+
+                # predicted embeddings at time-step (scores ==similarity of predicted embeddings to target embeddings)
+                scores, h, c = self.generate_output_index(input_word, encoder_out, h, c)
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+                input_word[0] = sorted_indices[0].item()
+
+                # extend the top solutions, each appending the generated possible n_words (best n_sorted_scores)
+                candidates = []
+                for sentence, prob, h, c in top_solutions:
+                    candidates.extend(compute_n_solutions(
+                        sentence, prob, sorted_indices, n_solutions))
+
+                top_solutions = get_most_probable(candidates, n_solutions)
+
+                print("all candidates", [(text, prob) for text, prob, _, _ in candidates])
+                my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                print("top", [(text, prob)
+                              for text, prob, _, _ in top_solutions])
+                my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+
+            with open("postprocessing_gpt2.json", 'w+') as f:
+                json.dump(my_dict, f, indent=2)
+
+            best_tokens, prob, h, c = top_solutions[0]
+            best_sentence = " ".join(best_tokens)
+
+            print("\nbeam decoded sentence:", best_sentence)
+            return best_sentence
+
     def inference_with_perplexity(self, image, n_solutions=2):
 
         def compute_perplexity(current_text):
