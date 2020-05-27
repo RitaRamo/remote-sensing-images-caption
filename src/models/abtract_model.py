@@ -478,6 +478,9 @@ class AbstractEncoderDecoderModel(ABC):
 
             return candidates
 
+        def get_most_probable(candidates, n_solutions):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
+
         with torch.no_grad():
             my_dict = {"cand": [], "top": []}
             encoder_output = self.encoder(image)
