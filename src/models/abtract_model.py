@@ -734,6 +734,7 @@ class AbstractEncoderDecoderModel(ABC):
                 tokens_ids[0, i] = self.token_to_id[token]
 
             tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
+            tokens_embeddings = torch.nn.functional.normalize(tokens_embeddings, p=2, dim=-1)
 
             sentence_mean = torch.mean(tokens_embeddings, dim=1)
             images_embedding = self.decoder.image_embedding
