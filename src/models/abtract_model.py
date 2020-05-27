@@ -778,7 +778,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             print("final_solutions", final_solutions)
 
-            best_tokens, prob, h, c = final_solutions[0]
+            best_tokens, prob = final_solutions[0]
 
             best_sentence = " ".join(best_tokens)
 
