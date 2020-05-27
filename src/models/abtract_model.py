@@ -27,6 +27,7 @@ class DecodingType(Enum):
     BEAM_SIM2IMAGE = "sim2image"
     BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
     POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
+    BIGRAM_PROB = "bigram_prob"
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -604,7 +605,6 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-
     def inference_with_bigramprob(self, image, n_solutions=2):
         def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
             last_token = seed_text[-1]
@@ -619,18 +619,10 @@ class AbstractEncoderDecoderModel(ABC):
 
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
-
-                if new_token == END_TOKEN:
-                    text = seed_text + [new_token]
-                    current_text = ' '.join(seed_text[1:]) + "."
-                    text_score = compute_perplexity(current_text)
-                    top_solutions.append((text, text_score, h, c))
-                    continue
+                current_prob = corpus_bigram_prob[new_token][last_token]
 
                 text = seed_text + [new_token]
-                current_text = ' '.join(text[1:])
-                current_prob = corpus_bigram_prob[new_token][last_token]
-                text_score=(seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
+                text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
@@ -640,7 +632,8 @@ class AbstractEncoderDecoderModel(ABC):
 
         with torch.no_grad():
             my_dict = {"cand": [], "top": []}
-            corpus_bigram_prob={}
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
+
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
@@ -661,7 +654,7 @@ class AbstractEncoderDecoderModel(ABC):
                               for text, prob, _, _ in top_solutions])
                 my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
 
-            with open("with_end.json", 'w+') as f:
+            with open("bigramprob.json", 'w+') as f:
                 json.dump(my_dict, f, indent=2)
 
             best_tokens, prob, h, c = top_solutions[0]
