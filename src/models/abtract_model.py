@@ -300,7 +300,7 @@ class AbstractEncoderDecoderModel(ABC):
 
         scores_path = self.MODEL_DIRECTORY + \
             'evaluation_scores/' + \
-            self.args.file_name + decoding_type + n_beam  # str(self.args.__dict__)
+            self.args.file_name + decoding_type + str(n_beam)  # str(self.args.__dict__)
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
 
