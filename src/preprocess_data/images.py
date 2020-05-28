@@ -5,6 +5,7 @@ import logging
 import torch.nn as nn
 import albumentations as A
 import torch
+from efficientnet_pytorch import EfficientNet
 
 
 class ImageNetModelsPretrained(Enum):
