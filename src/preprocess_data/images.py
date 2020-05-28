@@ -76,7 +76,7 @@ def get_image_model(model_type):
 
         image_model.load_state_dict(checkpoint['model'])
 
-        modules = list(image_model.children())[:-2]
+        return image_model, encoder_dim
 
     return nn.Sequential(*modules), encoder_dim
 
