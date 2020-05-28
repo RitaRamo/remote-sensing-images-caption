@@ -13,6 +13,7 @@ class ImageNetModelsPretrained(Enum):
     VGG16 = "vgg16"
     MULTILABEL_ALL = "multilabel_all"  # classification on remote sensing image with all layers unfreezed
     MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
+    MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
 
 
 def get_image_model(model_type):
@@ -61,6 +62,22 @@ def get_image_model(model_type):
 
         encoder_dim = 512
         return image_model, encoder_dim
+
+    elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
+        logging.info("image model with efficientnet model (all) with multi-label classification")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet.pth.tar')
+        vocab_size = 512
+
+        image_model = EfficientNet.from_pretrained('efficientnet-b4')
+        num_features = image_model._fc.in_features
+        image_model._fc = nn.Linear(num_features, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        modules = list(image_model.children())[:-1]
+        print("modules", modules)
+        print(ola)
 
     return nn.Sequential(*modules), encoder_dim
 
