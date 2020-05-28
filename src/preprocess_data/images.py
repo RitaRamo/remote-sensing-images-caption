@@ -76,7 +76,7 @@ def get_image_model(model_type):
 
         image_model.load_state_dict(checkpoint['model'])
 
-        modules = list(image_model.children())[:-1]
+        modules = list(image_model.children())[:-2]
         print("modules", modules)
         print(ola)
 
