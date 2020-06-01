@@ -73,12 +73,9 @@ if __name__ == "__main__":
     # mudar este beam search!
     decoding_method1 = model.inference_with_greedy
 
-    decoding_method2 = model.inference_with_beamsearch
+    decoding_method2 = model.inference_with_bigramprob
 
     for img_name, references in test_dataset.items():
-        if img_name != "railwaystation_72.jpg":
-            continue
-
         image_name = PATH_RSICD + \
             "raw_dataset/RSICD_images/" + img_name
         image = Image.open(image_name)
@@ -90,3 +87,4 @@ if __name__ == "__main__":
 
         text_generated = decoding_method2(image, n_solutions=5)
         #text_generated = decoding_method1(image)
+        break
