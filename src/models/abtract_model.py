@@ -616,7 +616,6 @@ class AbstractEncoderDecoderModel(ABC):
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
                 current_prob = corpus_bigram_prob[new_token][last_token]
-                print("new token, current current_prob", new_token, current_prob)
 
                 text = seed_text + [new_token]
                 text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
@@ -628,6 +627,8 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
+            #my_dict = {"cand": [], "top": []}
+
             corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
 
             encoder_output = self.encoder(image)
@@ -643,10 +644,14 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
-                print("candidates", [(text, prob)
-                                     for text, prob, _, _ in candidates])
+                print("all candidates", [(text, prob) for text, prob in candidates])
+                my_dict["cand"].append([(text, prob) for text, prob in candidates])
                 print("top", [(text, prob)
-                              for text, prob, _, _ in top_solutions])
+                              for text, prob in top_solutions])
+                my_dict["top"].append([(text, prob) for text, prob in top_solutions])
+
+            with open("bigram.json", 'w+') as f:
+                json.dump(my_dict, f, indent=2)
 
             best_tokens, prob, h, c = top_solutions[0]
 
