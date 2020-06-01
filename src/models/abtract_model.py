@@ -627,7 +627,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            #my_dict = {"cand": [], "top": []}
+            my_dict = {"cand": [], "top": []}
 
             corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
 
