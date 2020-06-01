@@ -71,7 +71,7 @@ if __name__ == "__main__":
     ])
 
     # mudar este beam search!
-    decoding_method1 = model.inference_with_greedy
+    decoding_method1 = model.inference_with_bigramprob_and_cos
 
     decoding_method2 = model.inference_with_bigramprob
 
@@ -85,6 +85,6 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = decoding_method2(image, n_solutions=5)
-        #text_generated = decoding_method1(image)
+        text_generated = decoding_method2(image, args.n_beam)
+        text_generated = decoding_method1(image, args.n_beam)
         break
