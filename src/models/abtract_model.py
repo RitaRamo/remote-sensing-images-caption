@@ -304,7 +304,7 @@ class AbstractEncoderDecoderModel(ABC):
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
 
-    def inference_with_greedy(self, image):
+    def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
             decoder_sentence = START_TOKEN + " "
