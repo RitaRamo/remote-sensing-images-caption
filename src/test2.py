@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # mudar este beam search!
     decoding_method1 = model.inference_with_greedy
 
-    decoding_method2 = model.inference_with_perplexity
+    decoding_method2 = model.inference_with_bigramprob
 
     for img_name, references in test_dataset.items():
         if img_name != "railwaystation_72.jpg":
