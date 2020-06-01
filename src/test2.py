@@ -73,7 +73,7 @@ if __name__ == "__main__":
     # mudar este beam search!
     decoding_method1 = model.inference_with_greedy
 
-    decoding_method2 = model.inference_with_bigramprob
+    decoding_method2 = model.inference_with_beamsearch
 
     for img_name, references in test_dataset.items():
         if img_name != "railwaystation_72.jpg":
@@ -88,5 +88,5 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = inference_with_beamsearch(image, n_solutions=5)
+        text_generated = decoding_method2(image, n_solutions=5)
         #text_generated = decoding_method1(image)
