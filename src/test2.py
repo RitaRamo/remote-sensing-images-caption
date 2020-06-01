@@ -88,5 +88,5 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = decoding_method1(image)
-        text_generated = decoding_method2(image, n_solutions=5)
+        text_generated = inference_with_beamsearch(image, n_solutions=5)
+        #text_generated = decoding_method1(image)
