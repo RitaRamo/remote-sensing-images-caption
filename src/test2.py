@@ -71,9 +71,27 @@ if __name__ == "__main__":
     ])
 
     # mudar este beam search!
-    decoding_method1 = model.inference_with_bigramprob_and_cos
+    if args.decodying_type == DecodingType.GREEDY.value:
+        decoding_method = model.inference_with_greedy
+    elif args.decodying_type == DecodingType.GREEDY_EMBEDDING.value:
+        decoding_method = model.inference_with_greedy_embedding
 
-    decoding_method2 = model.inference_with_bigramprob
+    elif args.decodying_type == DecodingType.GREEDY_SMOOTHL1.value:
+        decoding_method = model.inference_with_greedy_smoothl1
+    elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
+        decoding_method = model.inference_with_perplexity
+    elif args.decodying_type == DecodingType.POSTPROCESSING_PERPLEXITY.value:
+        decoding_method = model.inference_with_postprocessing_perplexity
+    elif args.decodying_type == DecodingType.BIGRAM_PROB.value:
+        decoding_method = model.inference_with_bigramprob
+    elif args.decodying_type == DecodingType.BIGRAM_PROB_IMAGE.value:
+        decoding_method = model.inference_with_bigramprob_and_image
+    elif args.decodying_type == DecodingType.POSTPROCESSING_BIGRAM_PROB.value:
+        decoding_method = model.inference_with_postprocessing_bigramprob
+    elif args.decodying_type == DecodingType.BIGRAM_PROB_COS.value:
+        decoding_method = model.inference_with_bigramprob_and_cos
+    else:
+        decoding_method = model.inference_with_beamsearch
 
     for img_name, references in test_dataset.items():
         image_name = PATH_RSICD + \
@@ -85,6 +103,5 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = decoding_method2(image, args.n_beam)
-        text_generated = decoding_method1(image, args.n_beam)
+        text_generated = decoding_method(image, args.n_beam)
         break
