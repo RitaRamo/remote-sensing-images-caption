@@ -6,6 +6,7 @@ from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from preprocess_data.images import get_image_model
+from torchvision import transforms, models
 
 
 class Encoder(nn.Module):
@@ -44,11 +45,11 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        # out = self.model(
-        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
+        out = self.model(
+            images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        out = self.model.extract_features(images)
-        #print("image size", out.size())
+        # out = self.model.extract_features(images)
+        # print("image size", out.size())
 
         # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
