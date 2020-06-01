@@ -616,6 +616,7 @@ class AbstractEncoderDecoderModel(ABC):
             for index in range(n_solutions):
                 new_token = self.id_to_token[sorted_indices[index].item()]
                 current_prob = corpus_bigram_prob[new_token][last_token]
+                print("new token, current current_prob", new_token, current_prob)
 
                 text = seed_text + [new_token]
                 text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
@@ -642,6 +643,10 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
+                print("candidates", [(text, prob)
+                                     for text, prob, _, _ in candidates])
+                print("top", [(text, prob)
+                              for text, prob, _, _ in top_solutions])
 
             best_tokens, prob, h, c = top_solutions[0]
 

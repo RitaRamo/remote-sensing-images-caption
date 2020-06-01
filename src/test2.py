@@ -89,4 +89,4 @@ if __name__ == "__main__":
         model.encoder.eval()
 
         text_generated = decoding_method1(image)
-        text_generated = decoding_method2(image)
+        text_generated = decoding_method2(image, n_solutions=5)
