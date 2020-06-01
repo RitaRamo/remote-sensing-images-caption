@@ -109,7 +109,7 @@ if __name__ == "__main__":
         model.decoder.eval()
         model.encoder.eval()
 
-        text_generated = decoding_method(image)
+        text_generated = decoding_method(image, n_solutions=5)
 
         if args.disable_metrics:
             break

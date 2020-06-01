@@ -679,8 +679,7 @@ class AbstractEncoderDecoderModel(ABC):
                 current_score_bigram = corpus_bigram_prob[new_token][last_token]
                 current_score_cos = sorted_scores[index].item()
                 text_score = (
-                    seed_prob * len(seed_text) + np.log(current_score_bigram) + np.log(current_score_cos)) /
-                (len(seed_text) + 1)
+                    seed_prob * len(seed_text) + np.log(current_score_bigram) + np.log(current_score_cos))/(len(seed_text) + 1)
 
                 top_solutions.append((text, text_score, h, c))
 
