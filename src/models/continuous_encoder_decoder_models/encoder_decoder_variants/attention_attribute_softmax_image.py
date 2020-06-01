@@ -29,7 +29,7 @@ def get_image_extractor(model_type, enable_fine_tuning):
         encoder_dim = image_model.classifier.in_features
 
         if model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
-            logging.info("image model with densenet model (last) with multi-label classification")
+            logging.info("image model with densenet model (all) with multi-label classification")
             checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
             image_model.load_state_dict(checkpoint['model'])
         else:  # pretrained densenet model of ImageNet
@@ -95,9 +95,6 @@ class FutureAndAttrEncoder(nn.Module):
         # (later on the intermidiate dims are flatten: (prepare_inputs)
         # (batch_size, encoded_image_size*encoded_image_size, 2048)
         features = features.permute(0, 2, 3, 1)
-
-        print("this is out.size2", features.size())
-        print("this is attrs.size2", attrs.size())
 
         return features, attrs
 
@@ -231,10 +228,8 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
 
         # encoder #TODO: MUDAR
         encoder_features, encoder_attrs = self.encoder(imgs)
-        print("this is encoder out", encoder_features.size())
         encoder_features = encoder_features.view(
             encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
-        print("this is encoder flater", encoder_features.size())
 
         # sorted captions
         caption_lengths, sort_ind = caption_lengths.squeeze(
