@@ -618,32 +618,32 @@ class AbstractEncoderDecoderModel(ABC):
                 current_prob = corpus_bigram_prob[new_token][last_token]
 
                 text = seed_text + [new_token]
-                text_score = (seed_prob*len(seed_text) + np.log(current_prob)) / (len(seed_text)+1))
+                text_score = (seed_prob*len(seed_text) + np.log(current_prob)) / (len(seed_text)+1)
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key = operator.itemgetter(1), reverse = True)[:n_solutions]
+            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            my_dict={"cand": [], "top": []}
+            my_dict = {"cand": [], "top": []}
 
-            corpus_bigram_prob=torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
 
-            encoder_output=self.encoder(image)
-            encoder_output=encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-            h, c=self.decoder.init_hidden_state(encoder_output)
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
 
-            top_solutions=[([START_TOKEN], 0.0, h, c)]
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
 
             for _ in range(self.max_len):
-                candidates=[]
+                candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
-                top_solutions=get_most_probable(candidates, n_solutions)
+                top_solutions = get_most_probable(candidates, n_solutions)
                 print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
                 my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
                 print("\ntop", [(text, prob)
@@ -651,34 +651,34 @@ class AbstractEncoderDecoderModel(ABC):
                 my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
 
             with open("bigram.json", 'w+') as f:
-                json.dump(my_dict, f, indent = 2)
+                json.dump(my_dict, f, indent=2)
 
-            best_tokens, prob, h, c=top_solutions[0]
+            best_tokens, prob, h, c = top_solutions[0]
 
-            best_sentence=" ".join(best_tokens)
+            best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def inference_with_bigramprob_and_cos(self, image, n_solutions = 2):
+    def inference_with_bigramprob_and_cos(self, image, n_solutions=2):
         def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
-            last_token=seed_text[-1]
+            last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
                 return [(seed_text, seed_prob, h, c)]
 
-            top_solutions=[]
-            scores, h, c=self.generate_output_index(torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
+            top_solutions = []
+            scores, h, c = self.generate_output_index(torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices=torch.sort(scores, descending = True, dim = -1)
+            sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
             for index in range(n_solutions):
-                new_token=self.id_to_token[sorted_indices[index].item()]
+                new_token = self.id_to_token[sorted_indices[index].item()]
 
-                text=seed_text + [new_token]
-                current_score_bigram=corpus_bigram_prob[new_token][last_token]
-                current_score_cos=sorted_scores[index].item()
-                text_score=(
+                text = seed_text + [new_token]
+                current_score_bigram = corpus_bigram_prob[new_token][last_token]
+                current_score_cos = sorted_scores[index].item()
+                text_score = (
                     seed_prob * len(seed_text) + np.log(current_score_bigram) + np.log(current_score_cos) /
                     (len(seed_text) + 1))
 
@@ -687,158 +687,158 @@ class AbstractEncoderDecoderModel(ABC):
             return top_solutions
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key = operator.itemgetter(1), reverse = True)[:n_solutions]
+            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            corpus_bigram_prob=torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
 
-            encoder_output=self.encoder(image)
-            encoder_output=encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-            h, c=self.decoder.init_hidden_state(encoder_output)
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
 
-            top_solutions=[([START_TOKEN], 0.0, h, c)]
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
 
             for _ in range(self.max_len):
-                candidates=[]
+                candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
-                top_solutions=get_most_probable(candidates, n_solutions)
+                top_solutions = get_most_probable(candidates, n_solutions)
 
-            best_tokens, prob, h, c=top_solutions[0]
+            best_tokens, prob, h, c = top_solutions[0]
 
-            best_sentence=" ".join(best_tokens)
+            best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def inference_with_postprocessing_bigramprob(self, image, n_solutions = 2):
+    def inference_with_postprocessing_bigramprob(self, image, n_solutions=2):
         def compute_n_solutions(seed_text, seed_prob, sorted_indices, n_solutions):
-            last_token=seed_text[-1]
+            last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
                 return [(seed_text, seed_prob)]
 
-            candidates=[]
+            candidates = []
 
             for index in range(n_solutions):  # calculate topkscores
-                new_token=self.id_to_token[sorted_indices[index].item()]
-                current_prob=corpus_bigram_prob[new_token][last_token]
+                new_token = self.id_to_token[sorted_indices[index].item()]
+                current_prob = corpus_bigram_prob[new_token][last_token]
 
-                text=seed_text + [new_token]
-                text_score=(seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
+                text = seed_text + [new_token]
+                text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
                 candidates.append((text, text_score))
 
             return candidates
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key = operator.itemgetter(1), reverse = True)[:n_solutions]
+            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            corpus_bigram_prob=torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
-            encoder_output=self.encoder(image)
-            encoder_output=encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-            h, c=self.decoder.init_hidden_state(encoder_output)
-            input_word=torch.tensor([self.token_to_id[START_TOKEN]])
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
-            top_solutions=[([START_TOKEN], 0.0)]
+            top_solutions = [([START_TOKEN], 0.0)]
 
             for _ in range(self.max_len):
 
                 # predicted embeddings at time-step (scores ==similarity of predicted embeddings to target embeddings)
-                scores, h, c=self.generate_output_index(input_word, encoder_output, h, c)
-                sorted_scores, sorted_indices=torch.sort(scores, descending = True, dim = -1)
-                input_word[0]=sorted_indices[0].item()
+                scores, h, c = self.generate_output_index(input_word, encoder_output, h, c)
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+                input_word[0] = sorted_indices[0].item()
 
                 # extend the top solutions, each appending the generated possible n_words (best n_sorted_scores)
-                candidates=[]
+                candidates = []
                 for sentence, prob in top_solutions:
                     candidates.extend(compute_n_solutions(
                         sentence, prob, sorted_indices, n_solutions))
 
-                top_solutions=get_most_probable(candidates, n_solutions)
+                top_solutions = get_most_probable(candidates, n_solutions)
 
-            best_tokens, prob=top_solutions[0]
-            best_sentence=" ".join(best_tokens)
+            best_tokens, prob = top_solutions[0]
+            best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
     # def inference_with_bigramprob_and_cosscore
 
-    def inference_with_bigramprob_and_image(self, image, n_solutions = 5):
+    def inference_with_bigramprob_and_image(self, image, n_solutions=5):
         def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
-            last_token=seed_text[-1]
+            last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
                 return [(seed_text, seed_prob, h, c)]
 
-            top_solutions=[]
-            scores, h, c=self.generate_output_index(torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
+            top_solutions = []
+            scores, h, c = self.generate_output_index(torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices=torch.sort(scores, descending = True, dim = -1)
+            sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
             for index in range(n_solutions):
-                new_token=self.id_to_token[sorted_indices[index].item()]
-                current_prob=corpus_bigram_prob[new_token][last_token]
+                new_token = self.id_to_token[sorted_indices[index].item()]
+                current_prob = corpus_bigram_prob[new_token][last_token]
 
-                text=seed_text + [new_token]
-                text_score=(seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
+                text = seed_text + [new_token]
+                text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
 
         def compute_sim2image(current_text):
-            n_tokens=len(current_text)
-            tokens_ids=torch.zeros(1, n_tokens)
+            n_tokens = len(current_text)
+            tokens_ids = torch.zeros(1, n_tokens)
             for i in range(n_tokens):
-                token=current_text[i]
-                tokens_ids[0, i]=self.token_to_id[token]
+                token = current_text[i]
+                tokens_ids[0, i] = self.token_to_id[token]
 
-            tokens_embeddings=self.decoder.embedding(tokens_ids.long()).to(self.device)
-            tokens_embeddings=torch.nn.functional.normalize(tokens_embeddings, p = 2, dim = -1)
+            tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
+            tokens_embeddings = torch.nn.functional.normalize(tokens_embeddings, p=2, dim=-1)
 
-            sentence_mean=torch.mean(tokens_embeddings, dim = 1)
-            images_embedding=self.decoder.image_embedding
+            sentence_mean = torch.mean(tokens_embeddings, dim=1)
+            images_embedding = self.decoder.image_embedding
 
             return torch.cosine_similarity(sentence_mean, images_embedding)
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key = operator.itemgetter(1), reverse = True)[:n_solutions]
+            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            corpus_bigram_prob=torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
 
-            encoder_output=self.encoder(image)
-            encoder_output=encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-            h, c=self.decoder.init_hidden_state(encoder_output)
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
 
-            top_solutions=[([START_TOKEN], 0.0, h, c)]
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
 
             for _ in range(self.max_len):
-                candidates=[]
+                candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c,  n_solutions))
 
-                top_solutions=get_most_probable(candidates, n_solutions)
+                top_solutions = get_most_probable(candidates, n_solutions)
 
             print("top before", [(text, prob)
                                  for text, prob, _, _ in top_solutions])
 
-            final_solutions=[]
+            final_solutions = []
             for sentence, prob, h, c in top_solutions:
-                image_rank=compute_sim2image(sentence)
+                image_rank = compute_sim2image(sentence)
                 final_solutions.append((sentence, image_rank))
 
-            final_solutions=get_most_probable(final_solutions, n_solutions)
+            final_solutions = get_most_probable(final_solutions, n_solutions)
 
             print("final_solutions", final_solutions)
 
-            best_tokens, prob=final_solutions[0]
+            best_tokens, prob = final_solutions[0]
 
-            best_sentence=" ".join(best_tokens)
+            best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
