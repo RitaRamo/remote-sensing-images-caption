@@ -288,7 +288,7 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
 
             i = 1
 
-            encoder_features, encoder_attrs = self.encoder(imgs)
+            encoder_features, encoder_attrs = self.encoder(image)
             encoder_features = encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
 
             h, c = self.decoder.init_hidden_state(encoder_features)
