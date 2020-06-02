@@ -296,7 +296,7 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
             while True:
 
                 scores, h, c = self.generate_output_index(
-                    input_word, encoder_output, encoder_attrs, h, c)
+                    input_word, encoder_features, encoder_attrs, h, c)
 
                 sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
@@ -319,9 +319,9 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
 
             return decoder_sentence  # input_caption
 
-    def generate_output_index(self, input_word, encoder_out, encoder_attrs,  h, c):
+    def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
         predictions, h, c, _ = self.decoder(
-            input_word, encoder_out, encoder_attrs,  h, c)
+            input_word, encoder_features, encoder_attrs,  h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
