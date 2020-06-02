@@ -277,3 +277,51 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
             all_alphas[:batch_size_t, t, :] = alpha
 
         return {"predictions": all_predictions, "alphas": all_alphas}
+
+    def inference_with_greedy(self, image, n_solutions=0):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = START_TOKEN + " "
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_features, encoder_attrs = self.encoder(imgs)
+            encoder_features = encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
+
+            h, c = self.decoder.init_hidden_state(encoder_features)
+
+            while True:
+
+                scores, h, c = self.generate_output_index(
+                    input_word, encoder_output, encoder_attrs, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence += " " + current_output_token
+
+                if (current_output_token == END_TOKEN or
+                        i >= self.max_len-1):  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            print("\ndecoded sentence", decoder_sentence)
+
+            return decoder_sentence  # input_caption
+
+    def generate_output_index(self, input_word, encoder_out, encoder_attrs,  h, c):
+        predictions, h, c, _ = self.decoder(
+            input_word, encoder_out, encoder_attrs,  h, c)
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        return current_output_index, h, c
