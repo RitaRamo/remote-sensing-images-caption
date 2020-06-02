@@ -14,6 +14,7 @@ from embeddings.embeddings import EmbeddingsType
 from preprocess_data.images import ImageNetModelsPretrained
 import logging
 from torchvision import models
+from preprocess_data.tokens import START_TOKEN, END_TOKEN
 
 # chamar image models
 
