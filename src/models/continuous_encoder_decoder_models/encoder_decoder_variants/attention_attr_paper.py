@@ -33,10 +33,10 @@ def get_image_extractor(model_type, enable_fine_tuning):
             logging.info("image model with densenet model (all) with multi-label classification")
             checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
             image_model.load_state_dict(checkpoint['model'])
-        else:  # pretrained densenet model of ImageNet
-            if enable_fine_tuning == False:
-                raise Exception(
-                    "To extract attr, the densenet should be already fine_tuned (as above) or requires fine-tune after pretraning of Imagenet")
+        # else:  # pretrained densenet model of ImageNet
+            # if enable_fine_tuning == False:
+            #     raise Exception(
+            #         "To extract attr, the densenet should be already fine_tuned (as above) or requires fine-tune after pretraning of Imagenet")
         return DenseNetFeatureAndAttrExtractor(image_model), encoder_dim
     else:
         raise Exception("not implemented extractor for the other types")
@@ -123,14 +123,10 @@ class FeaturesAndAttrAttention(nn.Module):
         """
         super(FeaturesAndAttrAttention, self).__init__()
         # linear layer to transform encoded image
-        self.encoder_att = nn.Linear(encoder_dim + 512, attention_dim)
-        # linear layer to transform decoder's output
-        self.decoder_att = nn.Linear(decoder_dim, attention_dim)
+        self.encoder_att = nn.Linear(encoder_dim + 512, decoder_dim)
 
         self.attr_att = nn.Linear(512, 512)
-        # linear layer to calculate values to be softmax-ed
-        self.full_att = nn.Linear(attention_dim, 1)
-        self.relu = nn.ReLU()
+
         self.softmax = nn.Softmax(dim=1)  # softmax layer to calculate weights
 
     def forward(self, encoder_features, encoder_attr, decoder_hidden):
@@ -140,18 +136,17 @@ class FeaturesAndAttrAttention(nn.Module):
         :param decoder_hidden: previous decoder output, a tensor of dimension (batch_size, decoder_dim)
         :return: attention weighted encoding, weights
         """
-        # TODO: encoder_attrs -> transformacaão linear
         encoder_attr = encoder_attr.unsqueeze(1).repeat(1, encoder_features.size(1), 1)
-        encoder_attr = self.attr_att(encoder_attr)
+        attr_transformation = self.attr_att(encoder_attr)  # (batch_size, l_regions, 512)
 
-        att1 = self.encoder_att(torch.cat([encoder_features, encoder_attr], -1)
-                                )  # (batch_size, l_regions, attention_dim)
+        values = torch.cat([encoder_features, encoder_attr], -1)  # (batch_size, l_regions, encoder_dim+512)
+        values_transformation = self.encoder_att(values)  # (batch_size, l_regions, query_dim)
 
-        att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
+        query = decoder_hidden.unsqueeze(1)  # (batch_size, 1, query_dim)
 
-        # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
-        att = self.full_att(self.relu(att1 + att2.unsqueeze(1))).squeeze(2)
-        alpha = self.softmax(att)  # (batch_size, l_regions)
+        att = torch.matmul(query, values_transformation.transpose(-2, -1))
+
+        alpha = self.softmax(att.squeeze(1))  # squeeze: (batch_size,1,l_regions) -> (batch_size, l_regions)
         attention_weighted_encoding = (
             encoder_features * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, encoder_dim)
 
@@ -185,12 +180,12 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
             decoder_input, (decoder_hidden_state, decoder_cell_state)
         )
 
-        scores = self.fc(self.dropout(decoder_hidden_state))
+        scores = self.fc(decoder_hidden_state)
 
         return scores, decoder_hidden_state, decoder_cell_state, alpha
 
 
-class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
+class ContinuousAttentionAttrPaperImageModel(ContinuousAttentionImageModel):
 
     def __init__(self,
                  args,
@@ -330,3 +325,17 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
         current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c
+
+    def _calculate_loss(self, predict_output, caps, caption_lengths):
+        loss = super._calculate_loss(predict_output, caps, caption_lengths)
+        reg_lambda = 0.001
+        l2_reg = None
+
+        for W in mdl.parameters():
+            if l2_reg is None:
+                l2_reg = W.norm(2)
+            else:
+                l2_reg = l2_reg + W.norm(2)
+
+        batch_loss = loss + l2_reg * reg_lambda
+        return loss
