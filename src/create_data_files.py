@@ -15,21 +15,18 @@ PATH_DATASETS_RSICD = PATH_RSICD+"datasets/"
 
 
 def _get_images_and_captions(dataset):
-    images_names = []
-    captions_of_tokens = []
+    images_names = {"train": [], "val": [], "test": []}
+    captions_of_tokens = {"train": [], "val": [], "test": []}
     for row in dataset["images"]:
         image_name = row["filename"]
+        split = row["split"]
+
         for caption in row["sentences"]:
-            caption = re.sub(r'\.', r'', caption["raw"])
+            tokens = [START_TOKEN] + caption["tokens"] + [END_TOKEN]
 
-            tokens = [START_TOKEN] + \
-                tokenizer.tokenize(caption) + [END_TOKEN]
+            captions_of_tokens[split].append(tokens)
+            images_names[split].append(image_name)
 
-            captions_of_tokens.append(tokens)
-            images_names.append(image_name)
-
-    images_names, captions_of_tokens = shuffle(
-        images_names, captions_of_tokens, random_state=42)
     return images_names, captions_of_tokens
 
 
@@ -37,11 +34,12 @@ def _get_dict_image_and_its_captions(dataset):
     images_captions = defaultdict(list)
     for row in dataset["images"]:
         image_name = row["filename"]
-        for caption in row["sentences"]:
-            caption = re.sub(r'\.', r'', caption["raw"])
-            caption_of_tokens = START_TOKEN + " " + caption + END_TOKEN
+        if row["split"] == "test":
+            for caption in row["sentences"]:
+                tokens = [START_TOKEN] + caption["tokens"] + [END_TOKEN]
+                tokens = " ".join(tokens)
 
-            images_captions[image_name].append(caption_of_tokens)
+                images_captions[image_name].append(tokens)
 
     return images_captions
 
@@ -77,17 +75,17 @@ def _dump_vocab_to_json(vocab_size, token_to_id, id_to_token, max_len, file_dir)
 
 def _save_dataset(raw_dataset, file_dir):
     # suffle and split dataset into train,val and test
-    raw_dataset = raw_dataset.sample(frac=1, random_state=42)
-    train, validation, test = np.split(
-        raw_dataset, [int(.8*len(raw_dataset)), int(.9*len(raw_dataset))])
+    images_names, captions_of_tokens = _get_images_and_captions(raw_dataset)
 
-    # "transform dataset into respective images [[img_name]...] and captions [[token1,token2,...]...]")
-    train_images_names, train_captions_of_tokens = _get_images_and_captions(
-        train)
-    val_images_names, val_captions_of_tokens = _get_images_and_captions(
-        validation)
+    train_images_names, train_captions_of_tokens = shuffle(
+        images_names["train"], captions_of_tokens["train"], random_state=42)
+    val_images_names, val_captions_of_tokens = shuffle(images_names["val"], captions_of_tokens["val"], random_state=42)
 
-    test_dict_image_captions = _get_dict_image_and_its_captions(test)
+    test_dict_image_captions = _get_dict_image_and_its_captions(raw_dataset)
+
+    vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
+        train_captions_of_tokens
+    )  # preprocess should be done with trainset
 
     vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
         train_captions_of_tokens
