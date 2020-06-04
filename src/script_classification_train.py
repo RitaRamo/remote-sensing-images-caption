@@ -15,10 +15,10 @@ import torch.nn.functional as F
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet_gamma5_alpha1"
+FILE_NAME = "classification_densenet_modifiedrsicd"
 FINE_TUNE = True
-EFFICIENT_NET = True
-FOCAL_LOSS = True
+EFFICIENT_NET = False
+FOCAL_LOSS = False
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -58,6 +58,8 @@ class ClassificationModel():
             image_model = EfficientNet.from_pretrained('efficientnet-b4')
             num_features = image_model._fc.in_features
             image_model._fc = nn.Linear(num_features, vocab_size)
+            print("image model", image_model)
+            print(stop)
         else:  # use densenet
             image_model = models.densenet201(pretrained=True)
             num_features = image_model.classifier.in_features
