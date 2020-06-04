@@ -108,7 +108,7 @@ if __name__ == "__main__":
     list_wordid = []
     for classe, id in classes_to_id.items():
         classid_to_wordid[id] = token_to_id[classe]
-        list_wordid.apped(token_to_id[classe])
+        list_wordid.append(token_to_id[classe])
 
     state = {
         "classification_dataset": image_vocabcategories,
