@@ -124,7 +124,7 @@ class FeaturesAndAttrAttention(nn.Module):
         """
         super(FeaturesAndAttrAttention, self).__init__()
         # linear layer to transform encoded image
-        self.encoder_att = nn.Linear(embed_dim, attention_dim)
+        self.encoder_att = nn.Linear(encoder_dim, attention_dim)
         # linear layer to transform decoder's output
         self.decoder_att = nn.Linear(decoder_dim, attention_dim)
 
