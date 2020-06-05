@@ -133,7 +133,8 @@ class FeaturesAndAttrAttention(nn.Module):
         self.relu = nn.ReLU()
         self.softmax = nn.Softmax(dim=1)  # softmax layer to calculate weights
 
-        self.embedding_attr = embedding_attr
+        self.embedding_attr = embedding_attr.repeat(8, 1, 1)
+        print("sel attr size", self.embedding_attr.size())
 
     def forward(self, encoder_features, encoder_attr, decoder_hidden):
         """
