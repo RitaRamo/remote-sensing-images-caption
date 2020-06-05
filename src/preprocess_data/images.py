@@ -37,9 +37,9 @@ def get_image_model(model_type):
         encoder_dim = 1920
 
     elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
-        logging.info("image model with densenet model (all) with multi-label classification")
+        logging.info("image model with densenet model (all) with multi-label classification on modified")
 
-        checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
+        checkpoint = torch.load('experiments/results/classification_densenet_modifiedrsicd.pth.tar')
         vocab_size = 512
 
         image_model = models.densenet201(pretrained=True)
