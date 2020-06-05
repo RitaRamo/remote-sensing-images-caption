@@ -124,11 +124,10 @@ class FeaturesAndAttrAttention(nn.Module):
         """
         super(FeaturesAndAttrAttention, self).__init__()
         # linear layer to transform encoded image
-        self.encoder_att = nn.Linear(encoder_dim + 512, attention_dim)
+        self.encoder_att = nn.Linear(embed_dim, attention_dim)
         # linear layer to transform decoder's output
         self.decoder_att = nn.Linear(decoder_dim, attention_dim)
 
-        self.attr_att = nn.Linear(512, 512)
         # linear layer to calculate values to be softmax-ed
         self.full_att = nn.Linear(attention_dim, 1)
         self.relu = nn.ReLU()
@@ -191,7 +190,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         print("this is size", embedding_attr.size())
 
         self.attention = FeaturesAndAttrAttention(
-            encoder_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
+            embed_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
         attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
