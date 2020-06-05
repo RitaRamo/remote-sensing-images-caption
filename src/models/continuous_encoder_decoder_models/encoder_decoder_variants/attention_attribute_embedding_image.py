@@ -273,11 +273,13 @@ class ContinuousAttentionAttrEmbeddingImageModel(ContinuousAttentionImageModel):
         batch_size = encoder_features.size(0)
         num_pixels = encoder_features.size(1)
 
+        print("encoder attrs size", encoder_attrs.size())
+
         # Create tensors to hold word predicion scores and alphas
         all_predictions = torch.zeros(batch_size,  max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
-            caption_lengths), self.args.embed_dim).to(self.device)
+            caption_lengths), encoder_attrs.size()[1]).to(self.device)
 
         h, c = self.decoder.init_hidden_state(encoder_features)
 
