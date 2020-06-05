@@ -173,7 +173,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
     def __init__(
             self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048,
-            dropout=0.5):
+            dropout=0.5, device):
 
         super(ContinuousAttrAttentionDecoder, self).__init__(attention_dim, embedding_type,
                                                              embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
@@ -186,7 +186,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         print("torch.tensor(list_wordid).unsqueeze(-1)", torch.tensor(list_wordid).unsqueeze(-1))
         encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid).unsqueeze(-1), 0, 1)
         print("encoder aencoder_attrs_classes", encoder_attrs_classes.size())
-        embedding_attr = self.embedding(encoder_attrs_classes)
+        embedding_attr = self.embedding(encoder_attrs_classes).to(self.device)
 
         print("this is size", embedding_attr.size())
 
@@ -236,7 +236,8 @@ class ContinuousAttentionAttrEmbeddingImageModel(ContinuousAttentionImageModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
-            dropout=self.args.dropout
+            dropout=self.args.dropout,
+            self.device
         )
 
         self.decoder.normalize_embeddings()
