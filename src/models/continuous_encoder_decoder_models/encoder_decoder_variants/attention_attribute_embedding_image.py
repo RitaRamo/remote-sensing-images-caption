@@ -277,7 +277,7 @@ class ContinuousAttentionAttrEmbeddingImageModel(ContinuousAttentionImageModel):
         all_predictions = torch.zeros(batch_size,  max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
-            caption_lengths), num_pixels).to(self.device)
+            caption_lengths), self.args.embed_dim).to(self.device)
 
         h, c = self.decoder.init_hidden_state(encoder_features)
 
