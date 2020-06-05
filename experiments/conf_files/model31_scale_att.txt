@@ -15,7 +15,7 @@ glove
 --embed_dim
 300
 --continuous_loss_type
-smoothl1_avg_sentence_and_inputs_loss
+cos_avg_sentence_and_inputs_loss
 --image_model_type
 multilabel_all
 --augment_data
