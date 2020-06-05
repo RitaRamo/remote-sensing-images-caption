@@ -186,7 +186,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         print("torch.tensor(list_wordid).unsqueeze(-1)", torch.tensor(list_wordid).unsqueeze(-1))
         encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid).unsqueeze(-1), 0, 1)
         print("encoder aencoder_attrs_classes", encoder_attrs_classes.size())
-        embedding_attr = self.embedding(encoder_attrs_classes).to(self.device)
+        embedding_attr = self.embedding(encoder_attrs_classes)
 
         print("this is size", self.embedding_attr.size())
 
