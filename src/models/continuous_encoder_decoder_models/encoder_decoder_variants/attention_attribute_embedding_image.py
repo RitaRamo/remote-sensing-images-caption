@@ -133,7 +133,7 @@ class FeaturesAndAttrAttention(nn.Module):
         self.relu = nn.ReLU()
         self.softmax = nn.Softmax(dim=1)  # softmax layer to calculate weights
 
-        self.embedding_attr = embedding_attr.repeat(8, 1, 1)
+        self.embedding_attr = embedding_attr
         print("sel attr size", self.embedding_attr.size())
 
     def forward(self, encoder_features, encoder_attr, decoder_hidden):
@@ -144,7 +144,8 @@ class FeaturesAndAttrAttention(nn.Module):
         :return: attention weighted encoding, weights
         """
         # TODO: encoder_attrs -> transformacaão linear
-        att1 = self.encoder_att(self.embedding_attr)  # (batch_size, n_attr, attention_dim)
+        att1 = self.encoder_att(self.embedding_attr.repeat(encoder_features.size()
+                                                           [0], 1, 1))  # (batch_size, n_attr, attention_dim)
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
 
         # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
