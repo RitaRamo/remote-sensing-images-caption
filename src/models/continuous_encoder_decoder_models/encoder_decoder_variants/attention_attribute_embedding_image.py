@@ -155,12 +155,9 @@ class FeaturesAndAttrAttention(nn.Module):
         print("encoder attr size", alpha.size())
 
         print("encoder attr size", encoder_attr.size())
-        print("encoder alpha size", alpha)
-        print("encoder attr size", encoder_attr)
-        print("new alpha", new_alpha)
 
         attention_weighted_encoding = (
-            encoder_features * new_alpha).sum(dim=1)/torch.sum(new_alpha)  # (batch_size, encoder_dim)
+            self.embedding_attr * new_alpha).sum(dim=1)/torch.sum(new_alpha)  # (batch_size, encoder_dim)
 
         return attention_weighted_encoding, alpha
 
