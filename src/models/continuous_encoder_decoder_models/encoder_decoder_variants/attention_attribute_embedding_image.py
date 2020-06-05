@@ -188,7 +188,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         print("encoder aencoder_attrs_classes", encoder_attrs_classes.size())
         embedding_attr = self.embedding(encoder_attrs_classes)
 
-        print("this is size", self.embedding_attr.size())
+        print("this is size", embedding_attr.size())
 
         self.attention = FeaturesAndAttrAttention(
             encoder_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
