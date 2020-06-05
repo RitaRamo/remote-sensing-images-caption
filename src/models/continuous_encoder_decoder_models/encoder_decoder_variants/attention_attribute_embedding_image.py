@@ -160,7 +160,7 @@ class FeaturesAndAttrAttention(nn.Module):
         attention_weighted_encoding = (
             self.embedding_attr * new_alpha).sum(dim=1)/torch.sum(new_alpha)  # (batch_size, encoder_dim)
         print("attention embedding_encoding", attention_weighted_encoding.size())
-        return attention_weighted_encoding, alpha
+        return attention_weighted_encoding, new_alpha.squeeze(2)
 
 
 class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
