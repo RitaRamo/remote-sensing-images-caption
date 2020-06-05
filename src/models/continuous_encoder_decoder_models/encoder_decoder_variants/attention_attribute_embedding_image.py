@@ -183,7 +183,9 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
         list_wordid = classification_state["list_wordid"]
 
-        encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid), 0, 1)
+        print("torch.tensor(list_wordid).unsqueeze(-1)", torch.tensor(list_wordid).unsqueeze(-1))
+        encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid).unsqueeze(-1), 0, 1)
+        print("encoder aencoder_attrs_classes", encoder_attrs_classes)
         embedding_attr = embedding(encoder_attrs_classes).to(self.device)
 
         print("this is size", self.embedding_attr.size())
