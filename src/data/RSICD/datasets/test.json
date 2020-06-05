@@ -735,11 +735,11 @@
     "<start_seq> beach beside the sea is very blue <end_seq>"
   ],
   "beach_67.jpg": [
-    "<start_seq> the sea there are many waves . <end_seq>",
+    "<start_seq> the sea there are many waves <end_seq>",
     "<start_seq> there are many small particles on the beach <end_seq>",
     "<start_seq> white waves in an ocean is near a beach <end_seq>",
     "<start_seq> white waves in an ocean is near a beach <end_seq>",
-    "<start_seq> the sea there are many waves . <end_seq>"
+    "<start_seq> the sea there are many waves <end_seq>"
   ],
   "beach_68.jpg": [
     "<start_seq> the sunlight is very good on the beach <end_seq>",
@@ -996,7 +996,6 @@
   "bridge_59.jpg": [
     "<start_seq> the long bridge is across the river with a eyot <end_seq>",
     "<start_seq> the bridge lying over the river connects both banks with an island in the middle <end_seq>",
-    "<start_seq> <end_seq>",
     "<start_seq> the magnificent bridge with two branches stretches across the river which has an island in it <end_seq>",
     "<start_seq> some cars are on a curved bridge over a river with an island in it connected to the bridge <end_seq>"
   ],
@@ -3536,7 +3535,7 @@
   ],
   "mountain_72.jpg": [
     "<start_seq> mountain in east-west direction <end_seq>",
-    "<start_seq> mountain winding ups and downs . <end_seq>",
+    "<start_seq> mountain winding ups and downs <end_seq>",
     "<start_seq> it is a piece of green mountain <end_seq>",
     "<start_seq> it is a piece of green mountain <end_seq>",
     "<start_seq> mountain in east-west direction <end_seq>"
@@ -6307,7 +6306,7 @@
     "<start_seq> planted many trees in the square <end_seq>"
   ],
   "square_86.jpg": [
-    "<start_seq> square surrounded by the comings and goings of the car on the road . <end_seq>",
+    "<start_seq> square surrounded by the comings and goings of the car on the road <end_seq>",
     "<start_seq> inside the square facilities are very good <end_seq>",
     "<start_seq> round green belts occupies around the square space and orange roof of the building <end_seq>",
     "<start_seq> round square for people to rest and take a walk <end_seq>",
