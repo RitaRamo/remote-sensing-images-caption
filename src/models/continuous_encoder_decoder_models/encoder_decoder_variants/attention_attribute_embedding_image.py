@@ -158,7 +158,7 @@ class FeaturesAndAttrAttention(nn.Module):
 
         attention_weighted_encoding = (
             self.embedding_attr * new_alpha).sum(dim=1)/torch.sum(new_alpha)  # (batch_size, encoder_dim)
-
+        print("attention embedding_encoding", attention_weighted_encoding.size())
         return attention_weighted_encoding, alpha
 
 
@@ -174,8 +174,6 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         super(ContinuousAttrAttentionDecoder, self).__init__(attention_dim, embedding_type,
                                                              embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
 
-        self.init_h = nn.Linear(encoder_dim, decoder_dim)
-
         classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
         list_wordid = classification_state["list_wordid"]
 
@@ -188,6 +186,8 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         self.attention = FeaturesAndAttrAttention(
             embed_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
+
+        self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
         attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
@@ -226,7 +226,7 @@ class ContinuousAttentionAttrEmbeddingImageModel(ContinuousAttentionImageModel):
                                             enable_fine_tuning=self.args.fine_tune_encoder)
         self.decoder = ContinuousAttrAttentionDecoder(
             encoder_dim=self.encoder.encoder_dim,
-            attention_dim=300,
+            attention_dim=self.args.embed_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=self.args.embedding_type,
             embed_dim=self.args.embed_dim,
