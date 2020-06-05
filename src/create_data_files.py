@@ -22,7 +22,19 @@ def _get_images_and_captions(dataset):
         split = row["split"]
 
         for caption in row["sentences"]:
-            tokens = [START_TOKEN] + caption["tokens"] + [END_TOKEN]
+            if not caption["tokens"]:
+                continue
+            if caption["tokens"][-1] == ".":
+                if len(caption["tokens"][:-1]) > 0:  # len sentence without pont needs to >0 to be considered
+                    caption_tokens = caption["tokens"][:-1]
+                else:
+                    continue
+            else:
+                caption_tokens = caption["tokens"]
+
+            tokens = [START_TOKEN] + caption_tokens + [END_TOKEN]
+
+            print("this is the token for image fianl", tokens, image_name)
 
             captions_of_tokens[split].append(tokens)
             images_names[split].append(image_name)
@@ -36,7 +48,17 @@ def _get_dict_image_and_its_captions(dataset):
         image_name = row["filename"]
         if row["split"] == "test":
             for caption in row["sentences"]:
-                tokens = [START_TOKEN] + caption["tokens"] + [END_TOKEN]
+                if not caption["tokens"]:
+                    continue
+                if caption["tokens"][-1] == ".":
+                    if len(caption["tokens"][:-1]) > 0:  # len sentence without pont needs to >0 to be considered
+                        caption_tokens = caption["tokens"][:-1]
+                    else:
+                        continue
+                        #caption_tokens = caption["tokens"][:-1]
+                else:
+                    caption_tokens = caption["tokens"]
+                tokens = [START_TOKEN] + caption_tokens + [END_TOKEN]
                 tokens = " ".join(tokens)
 
                 images_captions[image_name].append(tokens)
