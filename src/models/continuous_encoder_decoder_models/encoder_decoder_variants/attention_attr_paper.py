@@ -15,46 +15,47 @@ from preprocess_data.images import ImageNetModelsPretrained
 import logging
 from torchvision import models
 from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from preprocess_data.images import get_image_extractor, DenseNetFeatureAndAttrExtractor
 
 # chamar image models
 
 
-def get_image_extractor(model_type, enable_fine_tuning):
-    if model_type == ImageNetModelsPretrained.DENSENET.value or model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
-        logging.info("image model with densenet model")
-        vocab_size = 512
+# def get_image_extractor(model_type, enable_fine_tuning):
+#     if model_type == ImageNetModelsPretrained.DENSENET.value or model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
+#         logging.info("image model with densenet model")
+#         vocab_size = 512
 
-        image_model = models.densenet201(pretrained=True)
-        image_model.classifier = nn.Linear(image_model.classifier.in_features, vocab_size)
+#         image_model = models.densenet201(pretrained=True)
+#         image_model.classifier = nn.Linear(image_model.classifier.in_features, vocab_size)
 
-        encoder_dim = image_model.classifier.in_features
+#         encoder_dim = image_model.classifier.in_features
 
-        if model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
-            logging.info("image model with densenet model (all) with multi-label classification")
-            checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
-            image_model.load_state_dict(checkpoint['model'])
-        # else:  # pretrained densenet model of ImageNet
-            # if enable_fine_tuning == False:
-            #     raise Exception(
-            #         "To extract attr, the densenet should be already fine_tuned (as above) or requires fine-tune after pretraning of Imagenet")
-        return DenseNetFeatureAndAttrExtractor(image_model), encoder_dim
-    else:
-        raise Exception("not implemented extractor for the other types")
+#         if model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
+#             logging.info("image model with densenet model (all) with multi-label classification")
+#             checkpoint = torch.load('experiments/results/classification_finetune.pth.tar')
+#             image_model.load_state_dict(checkpoint['model'])
+#         # else:  # pretrained densenet model of ImageNet
+#             # if enable_fine_tuning == False:
+#             #     raise Exception(
+#             #         "To extract attr, the densenet should be already fine_tuned (as above) or requires fine-tune after pretraning of Imagenet")
+#         return DenseNetFeatureAndAttrExtractor(image_model), encoder_dim
+#     else:
+#         raise Exception("not implemented extractor for the other types")
 
 
-class DenseNetFeatureAndAttrExtractor(nn.Module):
-    def __init__(self, image_model):
-        super().__init__()
-        self.image_model = image_model
+# class DenseNetFeatureAndAttrExtractor(nn.Module):
+#     def __init__(self, image_model):
+#         super().__init__()
+#         self.image_model = image_model
 
-    def forward(self, x):
-        modules_features = list(self.image_model.children())[:-1]
-        features_extractor = nn.Sequential(*modules_features)
+#     def forward(self, x):
+#         modules_features = list(self.image_model.children())[:-1]
+#         features_extractor = nn.Sequential(*modules_features)
 
-        features = features_extractor(x)
-        attrs = self.image_model(x)
+#         features = features_extractor(x)
+#         attrs = self.image_model(x)
 
-        return features, attrs
+#         return features, attrs
 
 
 class FutureAndAttrEncoder(nn.Module):

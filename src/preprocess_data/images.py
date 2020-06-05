@@ -81,6 +81,41 @@ def get_image_model(model_type):
     return nn.Sequential(*modules), encoder_dim
 
 
+def get_image_extractor(model_type, enable_fine_tuning):
+    if model_type == ImageNetModelsPretrained.DENSENET.value or model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
+        logging.info("image model with densenet model")
+        vocab_size = 512
+
+        image_model = models.densenet201(pretrained=True)
+        image_model.classifier = nn.Linear(image_model.classifier.in_features, vocab_size)
+
+        encoder_dim = image_model.classifier.in_features
+
+        if model_type == ImageNetModelsPretrained.MULTILABEL_ALL.value:
+            logging.info("image model with densenet model (all) with multi-label classification")
+            checkpoint = torch.load('experiments/results/classification_densenet_modifiedrsicd.pth.tar')
+            image_model.load_state_dict(checkpoint['model'])
+
+        return DenseNetFeatureAndAttrExtractor(image_model), encoder_dim
+    else:
+        raise Exception("not implemented extractor for the other types")
+
+
+class DenseNetFeatureAndAttrExtractor(nn.Module):
+    def __init__(self, image_model):
+        super().__init__()
+        self.image_model = image_model
+
+    def forward(self, x):
+        modules_features = list(self.image_model.children())[:-1]
+        features_extractor = nn.Sequential(*modules_features)
+
+        features = features_extractor(x)
+        attrs = self.image_model(x)
+
+        return features, attrs
+
+
 class ColorsAugmentation(Enum):
     LIGHT = 0
     CLACHE = 1

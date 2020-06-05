@@ -116,7 +116,7 @@ class FeaturesAndAttrAttention(nn.Module):
     Attention Network.
     """
 
-    def __init__(self, encoder_dim, decoder_dim, attention_dim):
+    def __init__(self, encoder_dim, decoder_dim, attention_dim, embedding_attr):
         """
         :param encoder_dim: feature size of encoded images
         :param decoder_dim: size of decoder's RNN
@@ -134,6 +134,8 @@ class FeaturesAndAttrAttention(nn.Module):
         self.relu = nn.ReLU()
         self.softmax = nn.Softmax(dim=1)  # softmax layer to calculate weights
 
+        self.embedding_attr = embedding_attr
+
     def forward(self, encoder_features, encoder_attr, decoder_hidden):
         """
         Forward propagation.
@@ -142,19 +144,24 @@ class FeaturesAndAttrAttention(nn.Module):
         :return: attention weighted encoding, weights
         """
         # TODO: encoder_attrs -> transformacaão linear
-        encoder_attr = encoder_attr.unsqueeze(1).repeat(1, encoder_features.size(1), 1)
-        encoder_attr = self.attr_att(encoder_attr)
-
-        att1 = self.encoder_att(torch.cat([encoder_features, encoder_attr], -1)
-                                )  # (batch_size, l_regions, attention_dim)
-
+        att1 = self.encoder_att(self.embedding_attr)  # (batch_size, n_attr, attention_dim)
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
 
         # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
         att = self.full_att(self.relu(att1 + att2.unsqueeze(1))).squeeze(2)
-        alpha = self.softmax(att)  # (batch_size, l_regions)
+        alpha = self.softmax(att).unsqueeze(2)  # (batch_size, n_attr,1)
+        encoder_attr = encoder_attr.unsqueeze(-1)  # (batch_size, n_attr,1)
+
+        new_alpha = alpha * encoder_attr
+        print("encoder attr size", alpha.size())
+
+        print("encoder attr size", encoder_attr.size())
+        print("encoder alpha size", alpha)
+        print("encoder attr size", encoder_attr)
+        print("new alpha", new_alpha)
+
         attention_weighted_encoding = (
-            encoder_features * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, encoder_dim)
+            encoder_features * new_alpha).sum(dim=1)/torch.sum(new_alpha)  # (batch_size, encoder_dim)
 
         return attention_weighted_encoding, alpha
 
@@ -173,8 +180,16 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
 
+        classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
+        list_wordid = classification_state["list_wordid"]
+
+        encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid), 0, 1)
+        embedding_attr = embedding(encoder_attrs_classes).to(self.device)
+
+        print("this is size", self.embedding_attr.size())
+
         self.attention = FeaturesAndAttrAttention(
-            encoder_dim, decoder_dim, attention_dim)  # attention network
+            encoder_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
         attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
@@ -191,7 +206,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         return scores, decoder_hidden_state, decoder_cell_state, alpha
 
 
-class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
+class ContinuousAttentionAttrEmbeddingImageModel(ContinuousAttentionImageModel):
 
     def __init__(self,
                  args,
@@ -213,7 +228,7 @@ class ContinuousAttentionAttrSoftmaxImageModel(ContinuousAttentionImageModel):
                                             enable_fine_tuning=self.args.fine_tune_encoder)
         self.decoder = ContinuousAttrAttentionDecoder(
             encoder_dim=self.encoder.encoder_dim,
-            attention_dim=self.args.attention_dim,
+            attention_dim=300,
             decoder_dim=self.args.decoder_dim,
             embedding_type=self.args.embedding_type,
             embed_dim=self.args.embed_dim,
