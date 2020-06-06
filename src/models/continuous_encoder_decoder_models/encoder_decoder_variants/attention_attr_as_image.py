@@ -144,7 +144,6 @@ class ContinuousDecoderWithAttentionAsAttrImage(ContinuousDecoderWithAttention):
         batch_attr_embedding = self.embedding_attr.repeat(encoder_attr.size()[0], 1, 1)
 
         mean_attr = torch.sum(batch_attr_embedding*encoder_attr.unsqueeze(2), dim=1)/torch.sum(encoder_attr)
-        mean_attr = torch.nn.functional.normalize(mean_attr, p=2, dim=-1)
 
         self.image_embedding = mean_attr
 
