@@ -134,7 +134,6 @@ class FeaturesAndAttrAttention(nn.Module):
         self.softmax = nn.Softmax(dim=1)  # softmax layer to calculate weights
 
         self.embedding_attr = embedding_attr
-        print("sel attr size", self.embedding_attr.size())
 
     def forward(self, encoder_features, encoder_attr, decoder_hidden):
         """
@@ -143,7 +142,6 @@ class FeaturesAndAttrAttention(nn.Module):
         :param decoder_hidden: previous decoder output, a tensor of dimension (batch_size, decoder_dim)
         :return: attention weighted encoding, weights
         """
-        # TODO: encoder_attrs -> transformacaão linear
         att1 = self.encoder_att(self.embedding_attr.repeat(encoder_features.size()
                                                            [0], 1, 1))  # (batch_size, n_attr, attention_dim)
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
@@ -154,13 +152,9 @@ class FeaturesAndAttrAttention(nn.Module):
         encoder_attr = encoder_attr.unsqueeze(-1)  # (batch_size, n_attr,1)
 
         new_alpha = alpha * encoder_attr
-        print("encoder attr size", alpha.size())
-
-        print("encoder attr size", encoder_attr.size())
 
         attention_weighted_encoding = (
             self.embedding_attr * new_alpha).sum(dim=1)/torch.sum(new_alpha)  # (batch_size, encoder_dim)
-        print("attention embedding_encoding", attention_weighted_encoding.size())
         return attention_weighted_encoding, new_alpha.squeeze(2)
 
 
@@ -179,12 +173,8 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
         list_wordid = classification_state["list_wordid"]
 
-        print("torch.tensor(list_wordid).unsqueeze(-1)", torch.tensor(list_wordid).unsqueeze(-1))
         encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid).unsqueeze(-1), 0, 1)
-        print("encoder aencoder_attrs_classes", encoder_attrs_classes.size())
         embedding_attr = self.embedding(encoder_attrs_classes).to(device)
-
-        print("this is size", embedding_attr.size())
 
         self.attention = FeaturesAndAttrAttention(
             embed_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
@@ -273,8 +263,6 @@ class ContinuousAttentionAttrEmbeddingImageModel(ContinuousAttentionImageModel):
 
         batch_size = encoder_features.size(0)
         num_pixels = encoder_features.size(1)
-
-        print("encoder attrs size", encoder_attrs.size())
 
         # Create tensors to hold word predicion scores and alphas
         all_predictions = torch.zeros(batch_size,  max(
