@@ -117,8 +117,8 @@ class ContinuousDecoderWithAttentionAsAttrImage(ContinuousDecoderWithAttention):
     """
 
     def __init__(
-            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048,
-            dropout=0.5):
+            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, device,
+            encoder_dim=2048, dropout=0.5):
 
         super(ContinuousDecoderWithAttentionAsAttrImage, self).__init__(attention_dim,
                                                                         embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
@@ -182,7 +182,8 @@ class ContinuousAttentionAttrAsImageModel(ContinuousAttentionModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
-            dropout=self.args.dropout
+            dropout=self.args.dropout,
+            device=self.device
         )
 
         self.decoder.normalize_embeddings()
