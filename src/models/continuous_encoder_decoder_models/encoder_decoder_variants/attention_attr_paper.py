@@ -328,7 +328,7 @@ class ContinuousAttentionAttrPaperImageModel(ContinuousAttentionImageModel):
         return current_output_index, h, c
 
     def _calculate_loss(self, predict_output, caps, caption_lengths):
-        loss = super._calculate_loss(predict_output, caps, caption_lengths)
+        loss = super()._calculate_loss(predict_output, caps, caption_lengths)
         reg_lambda = 0.001
         l2_reg = None
 
