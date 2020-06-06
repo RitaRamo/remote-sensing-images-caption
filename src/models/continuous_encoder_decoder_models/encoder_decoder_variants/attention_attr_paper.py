@@ -332,7 +332,7 @@ class ContinuousAttentionAttrPaperImageModel(ContinuousAttentionImageModel):
         reg_lambda = 0.001
         l2_reg = None
 
-        for W in mdl.parameters():
+        for W in self.decoder.parameters():
             if l2_reg is None:
                 l2_reg = W.norm(2)
             else:
