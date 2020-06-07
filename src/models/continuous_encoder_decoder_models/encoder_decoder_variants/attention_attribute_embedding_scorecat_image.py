@@ -153,8 +153,6 @@ class FeaturesAndAttrAttention(nn.Module):
         att1 = self.encoder_att(torch.cat([batch_attr_embedding, encoder_attr.unsqueeze(2)], -1)
                                 )  # (batch_size, l_regions, attention_dim)
 
-        print("cat together", torch.cat([batch_attr_embedding, encoder_attr.unsqueeze(2)], -1).size())
-
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
 
         # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
