@@ -283,9 +283,9 @@ class ContinuousAttentionAttrAsImageModel(ContinuousAttentionModel):
 
             return decoder_sentence  # input_caption
 
-    def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
+    def generate_output_index(self, input_word, encoder_features,  h, c):
         predictions, h, c, _ = self.decoder(
-            input_word, encoder_features, encoder_attrs,  h, c)
+            input_word, encoder_features,  h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
