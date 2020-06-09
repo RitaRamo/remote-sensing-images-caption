@@ -1,4 +1,4 @@
-0--file_name
+--file_name
 model31_scale_image_within600glovefast.txt
 --model_class_str
 ContinuousProductAttentionImageWithinModel
