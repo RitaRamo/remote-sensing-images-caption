@@ -86,7 +86,7 @@ class FeaturesAndAttrAttention(nn.Module):
 
         self.dk = encoder_dim
         # linear layer to transform decoder's output
-        self.decoder_att = nn.Linear(decoder_dim, attention_dim)
+        self.decoder_att = nn.Linear(decoder_dim, encoder_dim)
 
         self.softmax = nn.Softmax(dim=1)  # softmax layer to calculate weights
 

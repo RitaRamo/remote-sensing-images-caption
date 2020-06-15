@@ -40,7 +40,7 @@ class ProductAttention(nn.Module):
         :param decoder_hidden: previous decoder output, a tensor of dimension (batch_size, decoder_dim)
         :return: attention weighted encoding, weights
         """
-        query = self.decoder_att(decoder_hidden).unsqueeze(1)  # (batch_size, l_regions,1)
+        query = self.decoder_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, encoder_dim)
 
         #scores = (batch_size,1,l_regions)
         scores = torch.matmul(query, encoder_out.transpose(-2, -1)) \
