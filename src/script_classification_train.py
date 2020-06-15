@@ -15,9 +15,9 @@ import torch.nn.functional as F
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_densenet_modifiedrsicd"
+FILE_NAME = "classification_efficientnet_modifiedrsicd"
 FINE_TUNE = True
-EFFICIENT_NET = False
+EFFICIENT_NET = True
 FOCAL_LOSS = False
 EPOCHS = 300
 BATCH_SIZE = 8
@@ -55,7 +55,7 @@ class ClassificationModel():
         self.checkpoint_exists = False
 
         if EFFICIENT_NET:
-            image_model = EfficientNet.from_pretrained('efficientnet-b4')
+            image_model = EfficientNet.from_pretrained('efficientnet-b5')
             num_features = image_model._fc.in_features
             image_model._fc = nn.Linear(num_features, vocab_size)
             print("image model", image_model)
