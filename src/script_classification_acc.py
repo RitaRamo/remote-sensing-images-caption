@@ -13,9 +13,9 @@ import time
 from efficientnet_pytorch import EfficientNet
 
 DISABLE_STEPS = False
-FILE_NAME = "classification_efficientnet5"
+FILE_NAME = "classification_densenet_modifiedrsicd"
 FINE_TUNE = True
-EFFICIENT_NET = True
+EFFICIENT_NET = False
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     vocab_size = len(classes_to_id)
 
     # checkpoint =  torch.load('experiments/results/classification_finetune.pth.tar')
-    checkpoint = torch.load('experiments/results/classification_efficientnet5.pth.tar')
+    checkpoint = torch.load('experiments/results/classification_densenet_modifiedrsicd.pth.tar')
     print("checkpoint loaded")
     if EFFICIENT_NET:
         image_model = EfficientNet.from_pretrained('efficientnet-b4')
