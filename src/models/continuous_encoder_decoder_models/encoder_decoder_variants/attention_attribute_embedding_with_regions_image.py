@@ -148,24 +148,17 @@ class FeaturesAndAttrAttention(nn.Module):
         att_attr = self.encoder_attr_att(self.embedding_attr.repeat(encoder_features.size()
                                                                     [0], 1, 1))  # (batch_size, n_attr, attention_dim)
         att_features = self.encoder_features_att(encoder_features)  # (batch_size, l_regions, attention_dim)
-        print("att features", att_features.size())
         encoder_out = torch.cat([att_attr, att_features], 1)  # (batch_size, n_attr + l_regions, attention_dim)
-        print("this is the encod size", encoder_out.size())
 
         att1 = self.encoder_att(encoder_out)  # (batch_size, n_attr + l_regions, attention_dim)
-        print("this is the att1 size", att1.size())
 
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
         # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
         att = self.full_att(self.relu(att1 + att2.unsqueeze(1))).squeeze(2)
-        print("this is att size", att.size())
         alpha = self.softmax(att)  # (batch_size, l_regions)
-        print("this is alpha size2", alpha.size())
 
         attention_weighted_encoding = (
             encoder_out * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, n_attr + l_regions)
-
-        print("this is the attention_weighted_encoding size", attention_weighted_encoding.size())
 
         return attention_weighted_encoding, alpha
 
@@ -191,8 +184,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         self.attention = FeaturesAndAttrAttention(
             encoder_dim, embed_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
 
-        # LSTM cell receives the embedding dim (word) + size of attention ()
-        self.decode_step = nn.LSTMCell(embed_dim + attention_dim, decoder_dim, bias=True)
+        self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)  # decoding LSTMCell
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
         attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
