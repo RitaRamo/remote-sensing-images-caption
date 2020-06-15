@@ -158,9 +158,13 @@ class FeaturesAndAttrAttention(nn.Module):
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
         # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
         att = self.full_att(self.relu(att1 + att2.unsqueeze(1))).squeeze(2)
+        print("this is att size", att.size())
         alpha = self.softmax(att)  # (batch_size, l_regions)
+        print("this is alpha size2", alpha.size())
+
         attention_weighted_encoding = (
             encoder_out * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, n_attr + l_regions)
+
         print("this is the attention_weighted_encoding size", attention_weighted_encoding.size())
 
         return attention_weighted_encoding, alpha
