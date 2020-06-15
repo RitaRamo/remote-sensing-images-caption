@@ -67,7 +67,7 @@ if __name__ == "__main__":
     checkpoint = torch.load('experiments/results/classification_densenet_modifiedrsicd.pth.tar')
     print("checkpoint loaded")
     if EFFICIENT_NET:
-        image_model = EfficientNet.from_pretrained('efficientnet-b4')
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
         num_features = image_model._fc.in_features
         image_model._fc = nn.Linear(num_features, vocab_size)
         print("image model loaded")
