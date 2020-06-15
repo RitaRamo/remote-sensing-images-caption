@@ -13,9 +13,9 @@ import time
 from efficientnet_pytorch import EfficientNet
 
 DISABLE_STEPS = False
-FILE_NAME = "classification_densenet_modifiedrsicd"
+FILE_NAME = "classification_efficientnet_modifiedrsicd"
 FINE_TUNE = True
-EFFICIENT_NET = False
+EFFICIENT_NET = True
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
