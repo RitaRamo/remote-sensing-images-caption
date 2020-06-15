@@ -59,7 +59,6 @@ class ClassificationModel():
             num_features = image_model._fc.in_features
             image_model._fc = nn.Linear(num_features, vocab_size)
             print("image model", image_model)
-            print(stop)
         else:  # use densenet
             image_model = models.densenet201(pretrained=True)
             num_features = image_model.classifier.in_features
