@@ -92,7 +92,7 @@ class FeaturesAndAttrAttention(nn.Module):
 
         self.embedding_attr = embedding_attr
 
-    def forward(self, encoder_attr, decoder_hidden):
+    def forward(self, encoder_features, encoder_attr, decoder_hidden):
         """
         Forward propagation.
         :param encoder_out: encoded images, a tensor of dimension (batch_size, num_pixels, encoder_dim)
@@ -139,7 +139,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
-        attention_weighted_encoding, alpha = self.attention(encoder_attrs, decoder_hidden_state)
+        attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
         embeddings = self.embedding(word)
 
         decoder_input = torch.cat((embeddings, attention_weighted_encoding), dim=1)
