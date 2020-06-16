@@ -149,29 +149,29 @@ class FeaturesAndAttrAttention(nn.Module):
         :return: attention weighted encoding, weights
         """
         w_attr = self.attr_att(self.embedding_attr.repeat(encoder_features.size()
-                               [0], 1, 1))  # (batch_size, n_attr, attention_dim)
+                                                          [0], 1, 1))  # (batch_size, n_attr, attention_dim)
         w_h = self.decoder_attr_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
-        att = self.full_att(self.relu(w_attr + w_h).squeeze(2)  # (batch_size, n_attr) (with squeeze)
-        alpha=self.softmax(att)  # (batch_size, n_attr)
-        attention1=(self.embedding_attr * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
+        att = self.full_att(self.relu(w_attr + w_h)).squeeze(2)  # (batch_size, n_attr) (with squeeze)
+        alpha = self.softmax(att)  # (batch_size, n_attr)
+        attention1 = (self.embedding_attr * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
 
-        w_features=self.features_att(encoder_features)  # (batch_size, l_regions, attention_dim)
-        w_h=self.decoder_features_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
-        att=self.full_att(self.relu(w_features + w_h)).squeeze(2)
-        alpha=self.softmax(att)  # (batch_size, l_regions,1)
-        attention2=(w_features * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
+        w_features = self.features_att(encoder_features)  # (batch_size, l_regions, attention_dim)
+        w_h = self.decoder_features_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
+        att = self.full_att(self.relu(w_features + w_h)).squeeze(2)
+        alpha = self.softmax(att)  # (batch_size, l_regions,1)
+        attention2 = (w_features * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
 
-        w_attention1=self.attention1_att(attention1)
-        w_h=self.decoder_attention1_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
-        att_att1=self.full_att(self.relu(w_attention1 + w_h)).squeeze(2)
-        alpha_att1=self.softmax(att_att1)
+        w_attention1 = self.attention1_att(attention1)
+        w_h = self.decoder_attention1_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
+        att_att1 = self.full_att(self.relu(w_attention1 + w_h)).squeeze(2)
+        alpha_att1 = self.softmax(att_att1)
 
-        w_attention2=self.attention2_att(attention2)
-        w_h=self.decoder_attention2_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
-        att_att2=self.full_att(self.relu(w_attention2 + w_h)).squeeze(2)
-        alpha_att2=self.softmax(att_att2)
+        w_attention2 = self.attention2_att(attention2)
+        w_h = self.decoder_attention2_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
+        att_att2 = self.full_att(self.relu(w_attention2 + w_h)).squeeze(2)
+        alpha_att2 = self.softmax(att_att2)
 
-        attention_weighted_encoding=alpha_att1*attention1 + alpha_att2*attention2
+        attention_weighted_encoding = alpha_att1*attention1 + alpha_att2*attention2
 
         return attention_weighted_encoding, alpha
 
@@ -188,28 +188,28 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         super(ContinuousAttrAttentionDecoder, self).__init__(attention_dim, embedding_type,
                                                              embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
 
-        classification_state=torch.load("src/data/RSICD/datasets/classification_dataset")
-        list_wordid=classification_state["list_wordid"]
+        classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
+        list_wordid = classification_state["list_wordid"]
 
-        encoder_attrs_classes=torch.transpose(torch.tensor(list_wordid).unsqueeze(-1), 0, 1)
-        embedding_attr=self.embedding(encoder_attrs_classes).to(device)
+        encoder_attrs_classes = torch.transpose(torch.tensor(list_wordid).unsqueeze(-1), 0, 1)
+        embedding_attr = self.embedding(encoder_attrs_classes).to(device)
 
-        self.attention=FeaturesAndAttrAttention(
+        self.attention = FeaturesAndAttrAttention(
             encoder_dim, embed_dim, decoder_dim, attention_dim, embedding_attr)  # attention network
 
-        self.decode_step=nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)
+        self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
-        attention_weighted_encoding, alpha=self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
-        embeddings=self.embedding(word)
+        attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
+        embeddings = self.embedding(word)
 
-        decoder_input=torch.cat((embeddings, attention_weighted_encoding), dim=1)
+        decoder_input = torch.cat((embeddings, attention_weighted_encoding), dim=1)
 
-        decoder_hidden_state, decoder_cell_state=self.decode_step(
+        decoder_hidden_state, decoder_cell_state = self.decode_step(
             decoder_input, (decoder_hidden_state, decoder_cell_state)
         )
 
-        scores=self.fc(self.dropout(decoder_hidden_state))
+        scores = self.fc(self.dropout(decoder_hidden_state))
 
         return scores, decoder_hidden_state, decoder_cell_state, alpha
 
@@ -232,9 +232,9 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
             raise ValueError(
                 "Continuous model should use pretrained embeddings...")
 
-        self.encoder=FutureAndAttrEncoder(self.args.image_model_type,
+        self.encoder = FutureAndAttrEncoder(self.args.image_model_type,
                                             enable_fine_tuning=self.args.fine_tune_encoder)
-        self.decoder=ContinuousAttrAttentionDecoder(
+        self.decoder = ContinuousAttrAttentionDecoder(
             encoder_dim=self.encoder.encoder_dim,
             attention_dim=self.args.embed_dim,
             decoder_dim=self.args.decoder_dim,
@@ -248,90 +248,90 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
 
         self.decoder.normalize_embeddings()
 
-        self.encoder=self.encoder.to(self.device)
-        self.decoder=self.decoder.to(self.device)
+        self.encoder = self.encoder.to(self.device)
+        self.decoder = self.decoder.to(self.device)
 
     def _prepare_inputs_to_forward_pass(self, imgs, caps, caption_lengths):
-        imgs=imgs.to(self.device)
-        caps=caps.to(self.device)
-        caption_lengths=caption_lengths.to(self.device)
+        imgs = imgs.to(self.device)
+        caps = caps.to(self.device)
+        caption_lengths = caption_lengths.to(self.device)
 
         # encoder #TODO: MUDAR
-        encoder_features, encoder_attrs=self.encoder(imgs)
-        encoder_features=encoder_features.view(
+        encoder_features, encoder_attrs = self.encoder(imgs)
+        encoder_features = encoder_features.view(
             encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
 
         # sorted captions
-        caption_lengths, sort_ind=caption_lengths.squeeze(
+        caption_lengths, sort_ind = caption_lengths.squeeze(
             1).sort(dim=0, descending=True)
-        encoder_features=encoder_features[sort_ind]
-        encoder_attrs=encoder_attrs[sort_ind]
-        caps_sorted=caps[sort_ind]
+        encoder_features = encoder_features[sort_ind]
+        encoder_attrs = encoder_attrs[sort_ind]
+        caps_sorted = caps[sort_ind]
 
         # input captions must not have "end_token"
-        caption_lengths=(caption_lengths - 1).tolist()
+        caption_lengths = (caption_lengths - 1).tolist()
 
-        encoder_out=encoder_features, encoder_attrs
+        encoder_out = encoder_features, encoder_attrs
 
         return encoder_out, caps_sorted, caption_lengths
 
     def _predict(self, encoder_out, caps, caption_lengths):
 
-        encoder_features, encoder_attrs=encoder_out
+        encoder_features, encoder_attrs = encoder_out
 
-        batch_size=encoder_features.size(0)
-        num_pixels=encoder_features.size(1)
+        batch_size = encoder_features.size(0)
+        num_pixels = encoder_features.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions=torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size,  max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
-        all_alphas=torch.zeros(batch_size, max(
+        all_alphas = torch.zeros(batch_size, max(
             caption_lengths), encoder_attrs.size()[1]).to(self.device)
 
-        h, c=self.decoder.init_hidden_state(encoder_features)
+        h, c = self.decoder.init_hidden_state(encoder_features)
 
         # Predict
         for t in range(max(
                 caption_lengths)):
             # batchsizes of current time_step are the ones with lenght bigger than time-step (i.e have not fineshed yet)
-            batch_size_t=sum([l > t for l in caption_lengths])
+            batch_size_t = sum([l > t for l in caption_lengths])
 
-            predictions, h, c, alpha=self.decoder(
+            predictions, h, c, alpha = self.decoder(
                 caps[: batch_size_t, t],
                 encoder_features[: batch_size_t],
                 encoder_attrs[: batch_size_t],
                 h[: batch_size_t],
                 c[: batch_size_t])
 
-            all_predictions[:batch_size_t, t, :]=predictions
-            all_alphas[:batch_size_t, t, :]=alpha
+            all_predictions[:batch_size_t, t, :] = predictions
+            all_alphas[:batch_size_t, t, :] = alpha
 
         return {"predictions": all_predictions, "alphas": all_alphas}
 
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence=START_TOKEN + " "
+            decoder_sentence = START_TOKEN + " "
 
-            input_word=torch.tensor([self.token_to_id[START_TOKEN]])
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
-            i=1
+            i = 1
 
-            encoder_features, encoder_attrs=self.encoder(image)
-            encoder_features=encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
+            encoder_features, encoder_attrs = self.encoder(image)
+            encoder_features = encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
 
-            h, c=self.decoder.init_hidden_state(encoder_features)
+            h, c = self.decoder.init_hidden_state(encoder_features)
 
             while True:
 
-                scores, h, c=self.generate_output_index(
+                scores, h, c = self.generate_output_index(
                     input_word, encoder_features, encoder_attrs, h, c)
 
-                sorted_scores, sorted_indices=torch.sort(scores, descending=True, dim=-1)
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
-                current_output_index=sorted_indices[0]
+                current_output_index = sorted_indices[0]
 
-                current_output_token=self.id_to_token[current_output_index.item(
+                current_output_token = self.id_to_token[current_output_index.item(
                 )]
 
                 decoder_sentence += " " + current_output_token
@@ -340,7 +340,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
                         i >= self.max_len-1):  # until 35
                     break
 
-                input_word[0]=current_output_index.item()
+                input_word[0] = current_output_index.item()
 
                 i += 1
 
@@ -349,9 +349,9 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
             return decoder_sentence  # input_caption
 
     def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
-        predictions, h, c, _=self.decoder(
+        predictions, h, c, _ = self.decoder(
             input_word, encoder_features, encoder_attrs,  h, c)
 
-        current_output_index=self._convert_prediction_to_output(predictions)
+        current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c
