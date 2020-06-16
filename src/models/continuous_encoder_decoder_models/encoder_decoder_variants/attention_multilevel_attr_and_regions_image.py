@@ -152,15 +152,16 @@ class FeaturesAndAttrAttention(nn.Module):
                                                           [0], 1, 1))  # (batch_size, n_attr, attention_dim)
         w_h = self.decoder_attr_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att = self.full_att(self.relu(w_attr + w_h)).squeeze(2)  # (batch_size, n_attr) (with squeeze)
-        alpha = self.softmax(att)  # (batch_size, n_attr)
-        attention1 = (self.embedding_attr * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
+        alpha_attr = self.softmax(att)  # (batch_size, n_attr)
+        # (batch_size, attention_dim == embed_dim)
+        attention1 = (self.embedding_attr * alpha_attr.unsqueeze(2)).sum(dim=1)
         print("this is attention1 shae", attention1.size())
 
         w_features = self.features_att(encoder_features)  # (batch_size, l_regions, attention_dim)
         w_h = self.decoder_features_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att = self.full_att(self.relu(w_features + w_h)).squeeze(2)
-        alpha = self.softmax(att)  # (batch_size, l_regions,1)
-        attention2 = (w_features * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
+        alpha_regions = self.softmax(att)  # (batch_size, l_regions,1)
+        attention2 = (w_features * alpha_regions.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
         print("this is attention2 shae", attention2.size())
 
         w_attention1 = self.attention1_att(attention1).unsqueeze(1)
@@ -178,7 +179,7 @@ class FeaturesAndAttrAttention(nn.Module):
 
         attention_weighted_encoding = alpha_att1*attention1 + alpha_att2*attention2
 
-        return attention_weighted_encoding, alpha
+        return attention_weighted_encoding, alpha_attr, alpha_regions, alpha_att1, alpha_att2
 
 
 class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
@@ -205,7 +206,10 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
         self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)
 
     def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
-        attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
+        attention_weighted_encoding, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.attention(
+            encoder_features,
+            encoder_attrs,
+            decoder_hidden_state)
         embeddings = self.embedding(word)
 
         decoder_input = torch.cat((embeddings, attention_weighted_encoding), dim=1)
@@ -216,7 +220,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         scores = self.fc(self.dropout(decoder_hidden_state))
 
-        return scores, decoder_hidden_state, decoder_cell_state, alpha
+        return scores, decoder_hidden_state, decoder_cell_state,  alpha_attr, alpha_regions, alpha_att1, alpha_att2
 
 
 class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousAttentionImageModel):
@@ -290,8 +294,14 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
         # Create tensors to hold word predicion scores and alphas
         all_predictions = torch.zeros(batch_size,  max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
-        all_alphas = torch.zeros(batch_size, max(
+        all_alphas_attr = torch.zeros(batch_size, max(
             caption_lengths), encoder_attrs.size()[1]).to(self.device)
+        all_alphas_regions = torch.zeros(batch_size, max(
+            caption_lengths), encoder_attrs.size()[1]).to(self.device)
+        all_alphas_att1 = torch.zeros(batch_size, max(
+            caption_lengths), 1).to(self.device)
+        all_alphas_att2 = torch.zeros(batch_size, max(
+            caption_lengths), 1).to(self.device)
 
         h, c = self.decoder.init_hidden_state(encoder_features)
 
@@ -301,7 +311,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
             # batchsizes of current time_step are the ones with lenght bigger than time-step (i.e have not fineshed yet)
             batch_size_t = sum([l > t for l in caption_lengths])
 
-            predictions, h, c, alpha = self.decoder(
+            predictions, h, c,  alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(
                 caps[: batch_size_t, t],
                 encoder_features[: batch_size_t],
                 encoder_attrs[: batch_size_t],
@@ -309,9 +319,18 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
                 c[: batch_size_t])
 
             all_predictions[:batch_size_t, t, :] = predictions
-            all_alphas[:batch_size_t, t, :] = alpha
+            all_alphas_attr[:batch_size_t, t, :] = alpha_attr
+            all_alphas_regions[:batch_size_t, t, :] = alpha_regions
+            all_alphas_att1[:batch_size_t, t, :] = alpha_att1
+            all_alphas_att2[:batch_size_t, t, :] = alpha_att2
 
-        return {"predictions": all_predictions, "alphas": all_alphas}
+        return {
+            "predictions": all_predictions,
+            "all_alphas_attr": all_alphas_attr,
+            "all_alphas_regions": all_alphas_regions,
+            "all_alphas_att1": all_alphas_att1,
+            "all_alphas_att2": all_alphas_att2
+        }
 
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
