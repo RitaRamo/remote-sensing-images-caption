@@ -155,27 +155,22 @@ class FeaturesAndAttrAttention(nn.Module):
         alpha_attr = self.softmax(att)  # (batch_size, n_attr)
         # (batch_size, attention_dim == embed_dim)
         attention1 = (self.embedding_attr * alpha_attr.unsqueeze(2)).sum(dim=1)
-        print("this is attention1 shae", attention1.size())
 
         w_features = self.features_att(encoder_features)  # (batch_size, l_regions, attention_dim)
         w_h = self.decoder_features_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att = self.full_att(self.relu(w_features + w_h)).squeeze(2)
         alpha_regions = self.softmax(att)  # (batch_size, l_regions,1)
         attention2 = (w_features * alpha_regions.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
-        print("this is attention2 shae", attention2.size())
 
         w_attention1 = self.attention1_att(attention1).unsqueeze(1)
         w_h = self.decoder_attention1_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att_att1 = self.full_att(self.relu(w_attention1 + w_h)).squeeze(2)
-        print("this is att_att1", att_att1.size())
         alpha_att1 = self.softmax(att_att1)
-        print("this is alpha_att1", alpha_att1.size())
 
         w_attention2 = self.attention2_att(attention2).unsqueeze(1)
         w_h = self.decoder_attention2_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att_att2 = self.full_att(self.relu(w_attention2 + w_h)).squeeze(2)
         alpha_att2 = self.softmax(att_att2)
-        print("this is alpha_att2", alpha_att2.size())
 
         attention_weighted_encoding = alpha_att1*attention1 + alpha_att2*attention2
 
@@ -297,7 +292,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
         all_alphas_attr = torch.zeros(batch_size, max(
             caption_lengths), encoder_attrs.size()[1]).to(self.device)
         all_alphas_regions = torch.zeros(batch_size, max(
-            caption_lengths), encoder_attrs.size()[1]).to(self.device)
+            caption_lengths), encoder_features.size()[1]).to(self.device)
         all_alphas_att1 = torch.zeros(batch_size, max(
             caption_lengths), 1).to(self.device)
         all_alphas_att2 = torch.zeros(batch_size, max(
