@@ -163,13 +163,14 @@ class FeaturesAndAttrAttention(nn.Module):
         attention2 = (w_features * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, attention_dim == embed_dim)
         print("this is attention2 shae", attention2.size())
 
-        w_attention1 = self.attention1_att(attention1)
+        w_attention1 = self.attention1_att(attention1).unsqueeze(1)
         w_h = self.decoder_attention1_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att_att1 = self.full_att(self.relu(w_attention1 + w_h)).squeeze(2)
+        print("this is att_att1", att_att1.size())
         alpha_att1 = self.softmax(att_att1)
         print("this is alpha_att1", alpha_att1.size())
 
-        w_attention2 = self.attention2_att(attention2)
+        w_attention2 = self.attention2_att(attention2).unsqueeze(1)
         w_h = self.decoder_attention2_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att_att2 = self.full_att(self.relu(w_attention2 + w_h)).squeeze(2)
         alpha_att2 = self.softmax(att_att2)
