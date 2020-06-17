@@ -307,7 +307,7 @@ class AbstractEncoderDecoderModel(ABC):
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence = START_TOKEN + " "
+            decoder_sentence = START_TOKEN
 
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
