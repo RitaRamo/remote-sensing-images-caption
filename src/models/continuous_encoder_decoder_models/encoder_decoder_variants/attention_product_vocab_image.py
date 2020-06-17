@@ -225,7 +225,7 @@ class ContinuousAttentionProductVocabImageModel(ContinuousAttentionImageModel):
         all_predictions = torch.zeros(batch_size,  max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
-            caption_lengths), encoder_attrs.size()[1]).to(self.device)
+            caption_lengths), self.vocab_size-4).to(self.device)  # -4 to remove special tokens(start,end,unk,pad)
 
         h, c = self.decoder.init_hidden_state(encoder_features)
 
