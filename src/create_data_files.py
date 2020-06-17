@@ -58,7 +58,7 @@ def _get_dict_image_and_its_captions(dataset):
                         #caption_tokens = caption["tokens"][:-1]
                 else:
                     caption_tokens = caption["tokens"]
-                tokens = [START_TOKEN] + caption_tokens + [END_TOKEN]
+                tokens = caption_tokens
                 tokens = " ".join(tokens)
 
                 images_captions[image_name].append(tokens)
