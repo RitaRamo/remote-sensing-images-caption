@@ -368,7 +368,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
             return decoder_sentence  # input_caption
 
     def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
-        predictions, h, c, _ = self.decoder(
+        predictions, h, c, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(
             input_word, encoder_features, encoder_attrs,  h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
