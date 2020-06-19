@@ -26,18 +26,8 @@ class ContinuousDecoderWithAttention(DecoderWithAttention):
         super(ContinuousDecoderWithAttention, self).__init__(attention_dim, embedding_type,
                                                              embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
 
-        self.image_embedding = None
         # replace softmax layer with embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
-
-    def init_hidden_state(self, encoder_out):
-
-        mean_encoder_out = encoder_out.mean(dim=1)
-        h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
-        c = self.init_c(mean_encoder_out)
-
-        self.image_embedding = h
-        return h, c
 
 
 class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
@@ -78,6 +68,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
         self.decoder = self.decoder.to(self.device)
 
     def _predict(self, encoder_out, caps, caption_lengths):
+        print("entrei no predict da attention")
         batch_size = encoder_out.size(0)
         num_pixels = encoder_out.size(1)
 
