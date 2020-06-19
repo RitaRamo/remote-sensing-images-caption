@@ -36,12 +36,11 @@ class Attention(nn.Module):
         :param decoder_hidden: previous decoder output, a tensor of dimension (batch_size, decoder_dim)
         :return: attention weighted encoding, weights
         """
-        att1 = self.encoder_att(
-            encoder_out)  # (batch_size, num_pixels, attention_dim)
+        att1 = self.encoder_att(encoder_out)  # (batch_size, l_regions, attention_dim)
         att2 = self.decoder_att(decoder_hidden)  # (batch_size, attention_dim)
-        # (batch_size, num_pixels)
+        # (batch_size, num_pixels,1) -> com squeeze(2) fica (batch_size, l_regions)
         att = self.full_att(self.relu(att1 + att2.unsqueeze(1))).squeeze(2)
-        alpha = self.softmax(att)  # (batch_size, num_pixels)
+        alpha = self.softmax(att)  # (batch_size, l_regions)
         attention_weighted_encoding = (
             encoder_out * alpha.unsqueeze(2)).sum(dim=1)  # (batch_size, encoder_dim)
 
@@ -53,7 +52,9 @@ class DecoderWithAttention(nn.Module):
     Decoder.
     """
 
-    def __init__(self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
+    def __init__(
+            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048,
+            dropout=0.5):
         """
         :param attention_dim: size of attention network
         :param embed_dim: embedding size
@@ -84,7 +85,7 @@ class DecoderWithAttention(nn.Module):
         # linear layer to find initial hidden state of LSTMCell
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
         # linear layer to find initial cell state of LSTMCell
-        self.init_c = nn.Linear(encoder_dim, decoder_dim)
+        #self.init_c = nn.Linear(encoder_dim, decoder_dim)
 
         self.fc = nn.Linear(decoder_dim, vocab_size)
         self.init_weights()  # initialize some layers with the uniform distribution
@@ -125,19 +126,15 @@ class DecoderWithAttention(nn.Module):
         """
         mean_encoder_out = encoder_out.mean(dim=1)
         h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
-        c = self.init_c(mean_encoder_out)
+        #c = self.init_c(mean_encoder_out)
+        c = h
         return h, c
 
     def forward(self, word, encoder_out, decoder_hidden_state, decoder_cell_state):
-
-        attention_weighted_encoding, alpha = self.attention(encoder_out,
-                                                            decoder_hidden_state)
-
+        attention_weighted_encoding, alpha = self.attention(encoder_out, decoder_hidden_state)
         embeddings = self.embedding(word)
 
-        decoder_input = torch.cat(
-            (embeddings, attention_weighted_encoding), dim=1
-        )
+        decoder_input = torch.cat((embeddings, attention_weighted_encoding), dim=1)
 
         decoder_hidden_state, decoder_cell_state = self.decode_step(
             decoder_input, (decoder_hidden_state, decoder_cell_state)

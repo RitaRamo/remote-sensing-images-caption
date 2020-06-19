@@ -6,7 +6,6 @@ from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from preprocess_data.images import get_image_model
-from torchvision import transforms, models
 
 
 class Encoder(nn.Module):
@@ -48,7 +47,7 @@ class Encoder(nn.Module):
         out = self.model(
             images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        # out = self.model.extract_features(images)
+        #out = self.model.extract_features(images)
         # print("image size", out.size())
 
         # (batch_size, 2048, encoded_image_size, encoded_image_size)
@@ -102,7 +101,7 @@ class Decoder(nn.Module):
         # linear layer to find initial hidden state of LSTMCell
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
         # linear layer to find initial cell state of LSTMCell
-        self.init_c = nn.Linear(encoder_dim, decoder_dim)
+        #self.init_c = nn.Linear(encoder_dim, decoder_dim)
 
         self.fc = nn.Linear(decoder_dim, vocab_size)
         self.init_weights()  # initialize some layers with the uniform distribution
@@ -144,7 +143,8 @@ class Decoder(nn.Module):
 
         # transform 2048 (dim image embeddings) in decoder dim
         h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
-        c = self.init_c(mean_encoder_out)
+        #c = self.init_c(mean_encoder_out)
+        c = h
         return h, c
 
     def forward(self, word, encoder_out, decoder_hidden_state, decoder_cell_state):
@@ -223,23 +223,23 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         targets = caps_sorted[:, 1:]  # targets doesnt have stark token
 
         # # pack scores and target
-        # predictions = pack_padded_sequence(
-        #     predictions, caption_lengths, batch_first=True)
-        # targets = pack_padded_sequence(
-        #     targets, caption_lengths, batch_first=True)
+        predictions = pack_padded_sequence(
+            predictions, caption_lengths, batch_first=True)
+        targets = pack_padded_sequence(
+            targets, caption_lengths, batch_first=True)
 
-        # loss = self.criterion(predictions.data, targets.data)
+        loss = self.criterion(predictions.data, targets.data)
 
-        loss_per_sentece = 0
+        # loss_per_sentece = 0
 
-        for i in range(predictions.size()[0]):
+        # for i in range(predictions.size()[0]):
 
-            loss_per_sentece += self.criterion(
-                predictions[i][:caption_lengths[i]],
-                targets[i][:caption_lengths[i]]
-            )
+        #     loss_per_sentece += self.criterion(
+        #         predictions[i][:caption_lengths[i]],
+        #         targets[i][:caption_lengths[i]]
+        #     )
 
-        loss = loss_per_sentece/predictions.size()[0]
+        # loss = loss_per_sentece/predictions.size()[0]
 
         return loss
 
