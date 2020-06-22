@@ -47,8 +47,8 @@ import operator
 from nlgeval import compute_metrics
 from models.abtract_model import DecodingType
 import json
-from coco_caption.pycocotools.coco import COCO
-from coco_caption.pycocoevalcap.eval import COCOEvalCap
+# from coco_caption.pycocotools.coco import COCO
+# from coco_caption.pycocoevalcap.eval import COCOEvalCap
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
