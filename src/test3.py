@@ -137,26 +137,26 @@ if __name__ == "__main__":
     with open(sentences_path+'.json', 'w+') as f:
         json.dump(list_hipotheses, f, indent=2)
 
-    coco = COCO(test_dataset)
-    cocoRes = coco.loadRes(sentences_path+'.json')
+    # coco = COCO(test_dataset)
+    # cocoRes = coco.loadRes(sentences_path+'.json')
 
-    cocoEval = COCOEvalCap(coco, cocoRes)
+    # cocoEval = COCOEvalCap(coco, cocoRes)
 
-    cocoEval.params["image_id"] = cocoRes.getImgIds()
-    cocoEval.evaluate()
+    # cocoEval.params["image_id"] = cocoRes.getImgIds()
+    # cocoEval.evaluate()
 
-    predicted = {"args": [args.__dict__]}
-    avg_score = cocoEval.eval.items()
-    individual_scores = [eva for eva in cocoEval.evalImgs]
-    for i in range(len(individual_scores)):
-        predicted[individual_scores[i]["image_id"]] = individual_scores[i]
-    predicted["avg_metrics"] = avg_score
+    # predicted = {"args": [args.__dict__]}
+    # avg_score = cocoEval.eval.items()
+    # individual_scores = [eva for eva in cocoEval.evalImgs]
+    # for i in range(len(individual_scores)):
+    #     predicted[individual_scores[i]["image_id"]] = individual_scores[i]
+    # predicted["avg_metrics"] = avg_score
 
-    model.save_scores(args.decodying_type, args.n_beam, predicted, True)
+    # model.save_scores(args.decodying_type, args.n_beam, predicted, True)
 
-    scores_path = model.MODEL_DIRECTORY + \
-        'evaluation_scores/' + \
-        args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
+    # scores_path = model.MODEL_DIRECTORY + \
+    #     'evaluation_scores/' + \
+    #     args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
-    with open(scores_path+'.json', 'w+') as f:
-        json.dump(predicted, f, indent=2)
+    # with open(scores_path+'.json', 'w+') as f:
+    #     json.dump(predicted, f, indent=2)
