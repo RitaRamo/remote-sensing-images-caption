@@ -1,6 +1,7 @@
 import json
 from coco_caption.pycocotools.coco import COCO
 from coco_caption.pycocoevalcap.eval import COCOEvalCap
+from args_parser import get_args
 
 
 if __name__ == "__main__":
