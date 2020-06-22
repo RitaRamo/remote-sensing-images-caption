@@ -4,24 +4,13 @@ from coco_caption.pycocoevalcap.eval import COCOEvalCap
 
 
 if __name__ == "__main__":
-    device = torch.device("cpu")
 
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
-    vocab_size, token_to_id, id_to_token, max_len = vocab_info[
-        "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
-    print("vocab size", vocab_size)
-
     test_dataset = get_dataset(PATH_DATASETS_RSICD+"test_coco_format.json")
 
-    model_class = globals()[args.model_class_str]
-    model = model_class(
-        args, vocab_size, token_to_id, id_to_token, max_len, device)
-    model.setup_to_test()
-
-    sentences_path = model.MODEL_DIRECTORY + \
+    sentences_path = "experiments/results/continuous_models/" + \
         'evaluation_sentences/' + \
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
