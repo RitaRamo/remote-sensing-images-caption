@@ -104,6 +104,7 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_beamsearch
 
     list_hipotheses = []
+    i = 0
     for values in test_dataset["images"]:
 
         img_name = values["file_name"]
@@ -126,6 +127,10 @@ if __name__ == "__main__":
         })
 
         if args.disable_metrics:
+            break
+
+        i += 1
+        if i == 10:
             break
 
     #model.save_sentences(args.decodying_type, args.n_beam, list_hipotheses)
