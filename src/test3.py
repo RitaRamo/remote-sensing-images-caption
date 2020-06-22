@@ -34,7 +34,10 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_attribute_embedding_image import ContinuousAttentionProductAttrEmbeddingWithoutScoreImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_attribute_embedding_with_regions_image import ContinuousAttentionAttrEmbeddingWithRegionsImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_multilevel_attr_and_regions_image import ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel
-
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_attribute_embedding_within_image import ContinuousAttentionProductAttrEmbeddingWithoutScoreWithinImageModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_attribute_embedding_within_imagec import ContinuousAttentionProductAttrEmbeddingWithoutScoreWithinImageCModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_vocab_image import ContinuousAttentionVocabImageModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_vocab_image import ContinuousAttentionProductVocabImageModel
 
 from torchvision import transforms
 from PIL import Image
@@ -43,6 +46,9 @@ import numpy as np
 import operator
 from nlgeval import compute_metrics
 from models.abtract_model import DecodingType
+import json
+# from coco_caption.pycocotools.coco import COCO
+# from coco_caption.pycocoevalcap.eval import COCOEvalCap
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -59,14 +65,14 @@ if __name__ == "__main__":
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    test_dataset = get_dataset(PATH_DATASETS_RSICD+"test.json")
+    test_dataset = get_dataset(PATH_DATASETS_RSICD+"test_coco_format.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(
         args, vocab_size, token_to_id, id_to_token, max_len, device)
     model.setup_to_test()
 
-    #scores = model.test(test_dataset)
+    # scores = model.test(test_dataset)
 
     transform = transforms.Compose([
         transforms.ToTensor(),
@@ -98,8 +104,10 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_beamsearch
 
     list_hipotheses = []
-    list_reference = []
-    for img_name, references in test_dataset.items():
+    for values in test_dataset["images"]:
+
+        img_name = values["file_name"]
+        img_id = values["id"]
 
         image_name = PATH_RSICD + \
             "raw_dataset/RSICD_images/" + img_name
@@ -111,21 +119,44 @@ if __name__ == "__main__":
         model.encoder.eval()
 
         text_generated = decoding_method(image, args.n_beam)
-        list_hipotheses.append(text_generated)
-        list_reference.append(references[0])
 
-        # if args.disable_metrics:
-        break
+        list_hipotheses.append({
+            "image_id": img_id,
+            "caption": text_generated,
+        })
 
-    # por ambos num ficheiro:
+        if args.disable_metrics:
+            break
 
-    with open('hypotheses_results.txt', 'w') as f:
-        for listitem in list_hipotheses:
-            f.write('%s\n' % listitem)
+    #model.save_sentences(args.decodying_type, args.n_beam, list_hipotheses)
 
-    with open('references.txt', 'w') as f:
-        for listitem in list_reference:
-            f.write('%s\n' % listitem)
+    sentences_path = model.MODEL_DIRECTORY + \
+        'evaluation_sentences/' + \
+        args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
-    metrics_dict = compute_metrics(hypothesis='hypotheses_results.txt', references=['references.txt'])
-    print("metrcis_dict", metrics_dict)
+    with open(sentences_path+'.json', 'w+') as f:
+        json.dump(list_hipotheses, f, indent=2)
+
+    # coco = COCO(test_dataset)
+    # cocoRes = coco.loadRes(sentences_path+'.json')
+
+    # cocoEval = COCOEvalCap(coco, cocoRes)
+
+    # cocoEval.params["image_id"] = cocoRes.getImgIds()
+    # cocoEval.evaluate()
+
+    # predicted = {"args": [args.__dict__]}
+    # avg_score = cocoEval.eval.items()
+    # individual_scores = [eva for eva in cocoEval.evalImgs]
+    # for i in range(len(individual_scores)):
+    #     predicted[individual_scores[i]["image_id"]] = individual_scores[i]
+    # predicted["avg_metrics"] = avg_score
+
+    # model.save_scores(args.decodying_type, args.n_beam, predicted, True)
+
+    # scores_path = model.MODEL_DIRECTORY + \
+    #     'evaluation_scores/' + \
+    #     args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) +'_coco'  # str(self.args.__dict__)
+
+    # with open(scores_path+'.json', 'w+') as f:
+    #     json.dump(predicted, f, indent=2)
