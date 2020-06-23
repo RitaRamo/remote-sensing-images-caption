@@ -140,7 +140,7 @@ class FeaturesAndAttrAttention(nn.Module):
         :param decoder_hidden: previous decoder output, a tensor of dimension (batch_size, decoder_dim)
         :return: attention weighted encoding, weights
         """
-        w_h = self.self.decoder_att(decoder_hidden).unsqueeze(1)
+        w_h = self.decoder_att(decoder_hidden).unsqueeze(1)
 
         encoder_attr = self.embedding_attr.repeat(
             encoder_features.size()[0],
