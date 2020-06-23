@@ -13,24 +13,25 @@ import time
 from utils.early_stop import EarlyStopping
 from nlgeval import NLGEval
 from optimizer import get_optimizer, clip_gradient
-from enum import Enum
+#from enum import Enum
+from utils.enums import DecodingType
 #from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import math
 
 
-class DecodingType(Enum):
-    GREEDY = "greedy"
-    GREEDY_EMBEDDING = "greedy_embedding"
-    GREEDY_SMOOTHL1 = "greedy_smoothl1"
-    BEAM = "beam"
-    BEAM_PERPLEXITY = "perplexity"
-    BEAM_SIM2IMAGE = "sim2image"
-    BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
-    POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
-    BIGRAM_PROB = "bigram_prob"
-    POSTPROCESSING_BIGRAM_PROB = "postprocessing_bigramprob"
-    BIGRAM_PROB_IMAGE = "bigramprob_and_image"
-    BIGRAM_PROB_COS = "bigramprob_and_cos"
+# class DecodingType(Enum):
+#     GREEDY = "greedy"
+#     GREEDY_EMBEDDING = "greedy_embedding"
+#     GREEDY_SMOOTHL1 = "greedy_smoothl1"
+#     BEAM = "beam"
+#     BEAM_PERPLEXITY = "perplexity"
+#     BEAM_SIM2IMAGE = "sim2image"
+#     BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
+#     POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
+#     BIGRAM_PROB = "bigram_prob"
+#     POSTPROCESSING_BIGRAM_PROB = "postprocessing_bigramprob"
+#     BIGRAM_PROB_IMAGE = "bigramprob_and_image"
+#     BIGRAM_PROB_COS = "bigramprob_and_cos"
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -303,6 +304,13 @@ class AbstractEncoderDecoderModel(ABC):
             self.args.file_name + decoding_type + str(n_beam)  # str(self.args.__dict__)
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
+
+    # def save_sentences(self, decoding_type, n_beam, sentences):
+    #     scores_path = self.MODEL_DIRECTORY + \
+    #         'evaluation_sentences/' + \
+    #         self.args.file_name + decoding_type + str(n_beam)  # str(self.args.__dict__)
+    #     with open(scores_path+'.json', 'w+') as f:
+    #         json.dump(sentences, f, indent=2)
 
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history

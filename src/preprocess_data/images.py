@@ -1,6 +1,7 @@
 from torchvision import transforms, models
 import numpy as np
 from enum import Enum
+from utils.enums import ImageNetModelsPretrained
 import logging
 import torch.nn as nn
 import albumentations as A
@@ -8,13 +9,13 @@ import torch
 from efficientnet_pytorch import EfficientNet
 
 
-class ImageNetModelsPretrained(Enum):
-    RESNET = "resnet"
-    DENSENET = "densenet"
-    VGG16 = "vgg16"
-    MULTILABEL_ALL = "multilabel_all"  # classification on remote sensing image with all layers unfreezed
-    MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
-    MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
+# class ImageNetModelsPretrained(Enum):
+#     RESNET = "resnet"
+#     DENSENET = "densenet"
+#     VGG16 = "vgg16"
+#     MULTILABEL_ALL = "multilabel_all"  # classification on remote sensing image with all layers unfreezed
+#     MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
+#     MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
 
 
 def get_image_model(model_type):

@@ -1,5 +1,6 @@
 import numpy as np
-from enum import Enum
+#from enum import Enum
+from utils.enums import EmbeddingsType
 import spacy
 from preprocess_data.tokens import END_TOKEN
 import torch
@@ -9,11 +10,11 @@ import logging
 import fasttext
 
 
-class EmbeddingsType(Enum):
-    GLOVE = "glove"
-    FASTTEXT = "fasttext"
-    CONCATENATE_GLOVE_FASTTEXT = "concatenate_glove_fasttext"
-    BERT = "bert"
+# class EmbeddingsType(Enum):
+#     GLOVE = "glove"
+#     FASTTEXT = "fasttext"
+#     CONCATENATE_GLOVE_FASTTEXT = "concatenate_glove_fasttext"
+#     BERT = "bert"
 
 
 def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
@@ -26,9 +27,6 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
         if embedding_type == EmbeddingsType.GLOVE.value:
             logging.info("loading pretrained embeddings of glove")
 
-            # pretrained_embeddings = _get_glove_embeddings_matrix(
-            #     vocab_size, embed_dim, token_to_id)
-
             glove_path = _get_glove_path(embed_dim)
 
             glove_embeddings = _read_glove_vectors(
@@ -39,14 +37,6 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
 
         elif embedding_type == EmbeddingsType.FASTTEXT.value:
             logging.info("loading pretrained embeddings of fasttext")
-
-            # pretrained_embeddings = _get_fasttext_embeddings_matrix(
-            #     vocab_size, embed_dim, token_to_id)
-
-            # fasttext_path = _get_fasttext_path(embed_dim)
-
-            # fasttext_embeddings = _read_fasttext_vectors(
-            #     fasttext_path)
 
             fasttext_path = _get_fasttext_path(embed_dim)
 
