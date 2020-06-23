@@ -1,14 +1,6 @@
-#from enum import Enum
 from utils.enums import OptimizerType
 from torch import optim
 import logging
-
-
-# class OptimizerType(Enum):
-#     ADAM = "adam"
-#     ADAGRAD = "adagrad"
-#     ADADELTA = "adadelta"
-#     SGD = "sgd"
 
 
 def get_optimizer(optimizer_type, model_params, learning_rate):

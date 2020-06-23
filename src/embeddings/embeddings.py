@@ -1,5 +1,4 @@
 import numpy as np
-#from enum import Enum
 from utils.enums import EmbeddingsType
 import spacy
 from preprocess_data.tokens import END_TOKEN
@@ -8,13 +7,6 @@ from torch import nn
 import io
 import logging
 import fasttext
-
-
-# class EmbeddingsType(Enum):
-#     GLOVE = "glove"
-#     FASTTEXT = "fasttext"
-#     CONCATENATE_GLOVE_FASTTEXT = "concatenate_glove_fasttext"
-#     BERT = "bert"
 
 
 def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):

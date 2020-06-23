@@ -19,21 +19,6 @@ from utils.enums import DecodingType
 import math
 
 
-# class DecodingType(Enum):
-#     GREEDY = "greedy"
-#     GREEDY_EMBEDDING = "greedy_embedding"
-#     GREEDY_SMOOTHL1 = "greedy_smoothl1"
-#     BEAM = "beam"
-#     BEAM_PERPLEXITY = "perplexity"
-#     BEAM_SIM2IMAGE = "sim2image"
-#     BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
-#     POSTPROCESSING_PERPLEXITY = "postprocessing_perplexity"
-#     BIGRAM_PROB = "bigram_prob"
-#     POSTPROCESSING_BIGRAM_PROB = "postprocessing_bigramprob"
-#     BIGRAM_PROB_IMAGE = "bigramprob_and_image"
-#     BIGRAM_PROB_COS = "bigramprob_and_cos"
-
-
 class AbstractEncoderDecoderModel(ABC):
 
     MODEL_DIRECTORY = "experiments/results/"

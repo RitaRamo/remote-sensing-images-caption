@@ -1,4 +1,3 @@
-#from enum import Enum
 from utils.enums import ContinuousLossesType
 import torch
 from sklearn.metrics.pairwise import cosine_similarity
@@ -6,28 +5,6 @@ import numpy as np
 from torch.nn import functional
 from torch import nn
 from utils.utils import get_pack_padded_sequences, sink
-
-
-# class ContinuousLossesType(Enum):
-#     COSINE = "cosine"
-#     MARGIN = "margin"
-#     MARGIN_SYN_DISTANCE = "margin_syn_distance"
-#     MARGIN_SYN_SIMILARITY = "margin_syn_similarity"
-#     SMOOTHL1 = "smoothl1"
-#     SMOOTHL1_TRIPLET = "smoothl1_triplet"
-#     SMOOTHL1_TRIPLET_DIFF = "smoothl1_triplet_diff"
-#     SMOOTHL1_AVG_SENTENCE = "smoothl1_avg_sentence"
-#     SMOOTHL1_TRIPLET_AVG_SENTENCE = "smoothl1_triplet_avg_sentence"
-#     SMOOTHL1_AVG_SENTENCE_BSCORE = "smoothl1_avg_sentence_with_bscore"
-#     SMOOTHL1_AVG_SENTENCE_AND_INPUT = "smoothl1_avg_sentence_and_input_loss"
-#     SMOOTHL1_AVG_SENTENCE_AND_INPUTS = "smoothl1_avg_sentence_and_inputs_loss"
-#     SMOOTHL1_AVG_SENTENCE_AND_INPUTS_NORMALIZED = "smoothl1_avg_sentence_and_inputs_normalized"
-#     SMOOTHL1_TRIPLET_AVG_SENTENCE_AND_INPUTS = "smoothl1_triplet_avg_sentence_and_inputs"
-#     SMOOTHL1_SINK_SENTENCE = "smoothl1_sink_sentence"
-#     COS_AVG_SENTENCE_AND_INPUTS = "cos_avg_sentence_and_inputs_loss"
-#     COS_AVG_SENTENCE_AND_INPUTS_WEIGHTED = "cos_avg_sentence_and_inputs_loss_weightedbyhalf"
-#     COS_AVG_SENTENCE = "cos_avg_sentence"
-#     COS_AVG_SENTENCE_AND_INPUT = "cos_avg_sentence_and_input_loss"
 
 
 class ContinuousLoss():
