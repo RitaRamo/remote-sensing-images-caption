@@ -37,9 +37,9 @@ if __name__ == "__main__":
         predicted[individual_scores[i]["image_id"]] = individual_scores[i]
     predicted["avg_metrics"] = avg_score
 
-    model.save_scores(args.decodying_type, args.n_beam, predicted, True)
+    #model.save_scores(args.decodying_type, args.n_beam, predicted, True)
 
-    scores_path = model.MODEL_DIRECTORY + \
+    scores_path = "experiments/results/continuous_models/" + \
         'evaluation_scores/' + \
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
