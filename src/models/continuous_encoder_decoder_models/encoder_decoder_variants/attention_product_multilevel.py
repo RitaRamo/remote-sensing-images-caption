@@ -16,7 +16,7 @@ import logging
 from torchvision import models
 from preprocess_data.tokens import START_TOKEN, END_TOKEN
 from preprocess_data.images import get_image_extractor, DenseNetFeatureAndAttrExtractor
-
+import math
 # chamar image models
 
 
