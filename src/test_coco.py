@@ -30,8 +30,8 @@ if __name__ == "__main__":
     cocoEval.params["image_id"] = cocoRes.getImgIds()
     cocoEval.evaluate()
 
-    predicted = {"args": [args.__dict__]}
-    avg_score = cocoEval.eval.items()
+    predicted = {"args": args.__dict__}
+    avg_score = cocoEval.eval
     individual_scores = [eva for eva in cocoEval.evalImgs]
     for i in range(len(individual_scores)):
         predicted[individual_scores[i]["image_id"]] = individual_scores[i]
