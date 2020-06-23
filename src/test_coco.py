@@ -19,7 +19,11 @@ if __name__ == "__main__":
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
     coco = COCO(test_path)
+    print("done", test_path)
+    print("vamos tentar", sentences_path+'.json')
+
     cocoRes = coco.loadRes(sentences_path+'.json')
+    print("falta")
 
     cocoEval = COCOEvalCap(coco, cocoRes)
 
