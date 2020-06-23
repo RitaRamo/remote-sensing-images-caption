@@ -85,7 +85,7 @@ class DecoderWithAttention(nn.Module):
         # linear layer to find initial hidden state of LSTMCell
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
         # linear layer to find initial cell state of LSTMCell
-        # self.init_c = nn.Linear(encoder_dim, decoder_dim)
+        self.init_c = nn.Linear(encoder_dim, decoder_dim)
 
         self.fc = nn.Linear(decoder_dim, vocab_size)
         self.init_weights()  # initialize some layers with the uniform distribution
