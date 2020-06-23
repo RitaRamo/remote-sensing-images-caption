@@ -162,7 +162,7 @@ class FeaturesAndAttrAttention(nn.Module):
         alpha_att1 = self.softmax(att_att1.squeeze(1))  # (batch_size, 1)
 
         w_h = self.decoder_attention2_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
-        att_att2 = torch.matmul(w_h, attention2.transpose(-2, -1)) / math.sqrt(self.dk)(batch_size, 1)
+        att_att2 = torch.matmul(w_h, attention2.transpose(-2, -1)) / math.sqrt(self.dk)  # (batch_size, 1)
         alpha_att2 = self.softmax(att_att2.squeeze(1))  # (batch_size, 1)
 
         attention_weighted_encoding = alpha_att1*attention1 + alpha_att2*attention2
