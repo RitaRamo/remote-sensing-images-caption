@@ -2,6 +2,7 @@ import json
 from coco_caption.pycocotools.coco import COCO
 from coco_caption.pycocoevalcap.eval import COCOEvalCap
 from args_parser import get_args
+from create_data_files import PATH_RSICD, PATH_DATASETS_RSICD, get_vocab_info, get_dataset
 
 
 if __name__ == "__main__":
