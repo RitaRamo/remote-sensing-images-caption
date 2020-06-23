@@ -23,6 +23,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_aoanet_image import ContinuousAttentionAoANetImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_image import ContinuousProductAttentionImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_attribute_softmax_image import ContinuousAttentionAttrSoftmaxImageModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_attr_paper import ContinuousAttentionAttrPaperImageModel
 
 
 from torchvision import transforms
@@ -32,6 +33,7 @@ import numpy as np
 import operator
 from nlgeval import NLGEval
 from models.abtract_model import DecodingType
+from args_parser import get_args
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -88,6 +90,7 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_bigramprob_and_image
     elif args.decodying_type == DecodingType.POSTPROCESSING_BIGRAM_PROB.value:
         decoding_method = model.inference_with_postprocessing_bigramprob
+        print("entrei aqui")
     elif args.decodying_type == DecodingType.BIGRAM_PROB_COS.value:
         decoding_method = model.inference_with_bigramprob_and_cos
     else:

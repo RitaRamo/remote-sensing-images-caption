@@ -38,6 +38,8 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_attribute_embedding_within_imagec import ContinuousAttentionProductAttrEmbeddingWithoutScoreWithinImageCModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_vocab_image import ContinuousAttentionVocabImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_vocab_image import ContinuousAttentionProductVocabImageModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_multilevel import from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_vocab_image import ContinuousAttentionProductVocabImageModel
+
 
 from torchvision import transforms
 from PIL import Image
@@ -141,6 +143,9 @@ if __name__ == "__main__":
 
     with open(sentences_path+'.json', 'w+') as f:
         json.dump(list_hipotheses, f, indent=2)
+
+    # grava um path: "rscid_"
+    # coco_eval rscid_
 
     # coco = COCO(test_dataset)
     # cocoRes = coco.loadRes(sentences_path+'.json')
