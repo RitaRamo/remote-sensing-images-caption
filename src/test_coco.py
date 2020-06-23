@@ -12,17 +12,13 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    with open(PATH_DATASETS_RSICD+"test_coco_format.json") as json_file:
-        test_dataset = json.load(json_file)
+    test_path = PATH_DATASETS_RSICD+"test_coco_format.json"
 
     sentences_path = "experiments/results/continuous_models/" + \
         'evaluation_sentences/' + \
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
-    with open(sentences_path+'.json', 'w+') as f:
-        json.dump(list_hipotheses, f, indent=2)
-
-    coco = COCO(test_dataset)
+    coco = COCO(test_path)
     cocoRes = coco.loadRes(sentences_path+'.json')
 
     cocoEval = COCOEvalCap(coco, cocoRes)
