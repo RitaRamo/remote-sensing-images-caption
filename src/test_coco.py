@@ -2,15 +2,18 @@ import json
 from coco_caption.pycocotools.coco import COCO
 from coco_caption.pycocoevalcap.eval import COCOEvalCap
 from args_parser import get_args
-from create_data_files import PATH_RSICD, PATH_DATASETS_RSICD, get_vocab_info, get_dataset
 
+
+PATH_RSICD = "src/data/RSICD/"
+PATH_DATASETS_RSICD = PATH_RSICD+"datasets/"
 
 if __name__ == "__main__":
 
     args = get_args()
     print(args.__dict__)
 
-    test_dataset = get_dataset(PATH_DATASETS_RSICD+"test_coco_format.json")
+    with open(PATH_DATASETS_RSICD+"test_coco_format.json") as json_file:
+        test_dataset = json.load(json_file)
 
     sentences_path = "experiments/results/continuous_models/" + \
         'evaluation_sentences/' + \
