@@ -148,9 +148,7 @@ class FeaturesAndAttrAttention(nn.Module):
             1, 1)  # (batch_size, attr (512), attention_dim)
         w_h = self.decoder_attr_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         scores = torch.matmul(w_h, encoder_attr.transpose(-2, -1)) / math.sqrt(self.dk)
-        print("scores", scores.size())
         alpha_attr = self.softmax(scores.squeeze(1))  # (batch_size, attr)
-        print("alpha_attr", alpha_attr.size())
         attention1 = (encoder_attr * alpha_attr.unsqueeze(2)).sum(dim=1)  # (batch_size, encoder_dim)
 
         w_features = self.features_att(encoder_features)  # (batch_size, l_regions, attention_dim)
@@ -161,12 +159,7 @@ class FeaturesAndAttrAttention(nn.Module):
 
         w_h = self.decoder_attention1_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att_att1 = torch.matmul(w_h, attention1.unsqueeze(1).transpose(-2, -1)) / math.sqrt(self.dk)  # (batch_size, 1)
-        print("att_att1", att_att1.size())
-        print("att_att1.squeeze(1)", att_att1.squeeze(1).size())
-
         alpha_att1 = self.softmax(att_att1.squeeze(1))  # (batch_size, 1)
-        print("alpha_att1", alpha_att1.size())
-        print("attention1", attention1.size())
 
         w_h = self.decoder_attention2_att(decoder_hidden).unsqueeze(1)  # (batch_size, 1, attention_dim)
         att_att2 = torch.matmul(w_h, attention2.unsqueeze(1).transpose(-2, -1)) / math.sqrt(self.dk)  # (batch_size, 1)
