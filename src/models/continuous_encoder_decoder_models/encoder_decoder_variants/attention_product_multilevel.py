@@ -293,11 +293,6 @@ class ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsImageModel(Cont
 
         h, c = self.decoder.init_hidden_state(encoder_features)
 
-        c = torch.zeros(batch_size, max(
-            caption_lengths), lstm_units).to(self.device)
-
-        h, c[:, 0] = self.decoder.init_hidden_state(encoder_features)
-
         # Predict
         for t in range(max(
                 caption_lengths)):
@@ -366,7 +361,7 @@ class ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsImageModel(Cont
             return decoder_sentence  # input_caption
 
     def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
-        predictions, h, c, _ = self.decoder(
+        predictions, h, c, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(
             input_word, encoder_features, encoder_attrs,  h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
