@@ -1,9 +1,10 @@
 import argparse
-from embeddings.embeddings import EmbeddingsType
-from preprocess_data.images import ImageNetModelsPretrained
-from optimizer import OptimizerType
-from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType
-from models.abtract_model import DecodingType
+# from embeddings.embeddings import EmbeddingsType
+# from preprocess_data.images import ImageNetModelsPretrained
+# from optimizer import OptimizerType
+# from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType
+# from models.abtract_model import DecodingType
+from utils.enums import EmbeddingsType, ImageNetModelsPretrained, OptimizerType, ContinuousLossesType, DecodingType
 
 
 def get_args():
