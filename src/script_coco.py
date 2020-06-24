@@ -12,17 +12,8 @@ import pandas as pd
 from datetime import datetime
 import json
 
-VOCAB_SIZE = 512
-dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
-
 if __name__ == "__main__":
 
-    # vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
-    # vocab_size, token_to_id, id_to_token, max_len = vocab_info[
-    #     "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
-    # print("vocab size", vocab_size)
-
-    # test_dataset = get_dataset(PATH_DATASETS_RSICD+"test.json")
     raw_dataset = pd.read_json(PATH_RSICD + "raw_dataset/dataset_rsicd.json")
 
     images = []
@@ -72,8 +63,8 @@ if __name__ == "__main__":
 
                 id_annotation += 1
 
-            if id_annotation >= 11:
-                break
+            # if id_annotation >= 11:
+            #     break
 
     info = {
         "year": 2020,
@@ -100,57 +91,5 @@ if __name__ == "__main__":
         "type": "captions"
     }
 
-    with open("test_coco_format.json", 'w+') as f:
+    with open(PATH_DATASETS_RSICD+"test_coco_format.json", 'w+') as f:
         json.dump(test_coco_format, f, indent=2)
-
-    # for img_name, references in test_dataset.items():
-
-    #     images.append(
-    #         {
-    #             "id": img_name,
-    #             "width": 0,
-    #             "height": 0,
-    #             "file_name": img_name,
-    #             "license": 1,
-    #             "flickr_url": "none",
-    #             "coco_url": "none",
-    #             "date_captured": data trm,
-    #         }
-    #     }
-
-    #     license{
-    #         "id": 1,
-    #         "name": "none",
-    #         "url": "none",
-    #     }
-
-    #     for reference in references:
-    #         annotations.append(
-    #             {
-    #                 "id": id_annotation,
-    #                 "image_id": int, -> mesmo da imagem
-    #                 "caption": reference,
-    #             }
-    #         }
-    #         id_annotation += 1
-
-    #     if i == 2:
-    #         break
-
-    # info = {
-    #     "year": 2020,
-    #     "version": 1,
-    #     "description": "none",
-    #     "contributor": "none",
-    #     "url": "none",
-    #     "date_created": datetime,
-    # }
-
-    # test_coco_format = {
-    #     "info": info,
-    #     "images": images,
-    #     "annotations": annotations,
-    #     "licenses": licenses
-    # }
-
-    # json_save
