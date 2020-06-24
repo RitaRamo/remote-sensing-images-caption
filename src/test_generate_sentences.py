@@ -51,7 +51,7 @@ from nlgeval import compute_metrics
 from models.abtract_model import DecodingType
 import json
 
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD, EVALUATION_SENTENCES
+from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -135,7 +135,7 @@ if __name__ == "__main__":
         if i == 10:
             break
 
-    sentences_path = EVALUATION_SENTENCES + \
+    sentences_path = PATH_EVALUATION_SENTENCES + \
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
     with open(sentences_path+'.json', 'w+') as f:

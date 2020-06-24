@@ -29,8 +29,6 @@ class ContinuousDecoder(Decoder):
 
 class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
-    MODEL_DIRECTORY = "experiments/results/continuous_models/"
-
     def __init__(self,
                  args,
                  vocab_size,

@@ -161,8 +161,6 @@ class Decoder(nn.Module):
 
 class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
 
-    MODEL_DIRECTORY = "experiments/results/basic_models/"
-
     def __init__(self,
                  args,
                  vocab_size,

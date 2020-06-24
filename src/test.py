@@ -2,7 +2,7 @@ import os
 import torch
 import logging
 from args_parser import get_args
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD,
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD
 from create_data_files import get_vocab_info, get_dataset
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel

@@ -16,7 +16,7 @@ from optimizer import get_optimizer, clip_gradient
 from utils.enums import DecodingType
 #from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import math
-from definitions import TRAINED_MODELS
+from definitions import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -277,25 +277,17 @@ class AbstractEncoderDecoderModel(ABC):
                 "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
-        path = TRAINED_MODELS + self.args.file_name+'.pth.tar'
+        path = PATH_TRAINED_MODELS + self.args.file_name+'.pth.tar'
         print("get checkpoint path", path)
         return path
 
     def save_scores(self, decoding_type, n_beam, scores):
         scores = {key: str(values) for key, values in scores.items()}
 
-        scores_path = self.MODEL_DIRECTORY + \
-            'evaluation_scores/' + \
+        scores_path = PATH_EVALUATION_SCORES + \
             self.args.file_name + decoding_type + str(n_beam)  # str(self.args.__dict__)
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
-
-    # def save_sentences(self, decoding_type, n_beam, sentences):
-    #     scores_path = self.MODEL_DIRECTORY + \
-    #         'evaluation_sentences/' + \
-    #         self.args.file_name + decoding_type + str(n_beam)  # str(self.args.__dict__)
-    #     with open(scores_path+'.json', 'w+') as f:
-    #         json.dump(sentences, f, indent=2)
 
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
