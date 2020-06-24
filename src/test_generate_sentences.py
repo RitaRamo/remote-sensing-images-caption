@@ -2,7 +2,7 @@ import os
 import torch
 import logging
 from args_parser import get_args
-from create_data_files import PATH_RSICD, PATH_DATASETS_RSICD, get_vocab_info, get_dataset
+from create_data_files import get_vocab_info, get_dataset
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.sat import BasicShowAttendAndTellModel
@@ -50,8 +50,8 @@ import operator
 from nlgeval import compute_metrics
 from models.abtract_model import DecodingType
 import json
-# from coco_caption.pycocotools.coco import COCO
-# from coco_caption.pycocoevalcap.eval import COCOEvalCap
+
+from definitions import PATH_DATASETS_RSICD, PATH_RSICD, EVALUATION_SENTENCES
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -75,8 +75,6 @@ if __name__ == "__main__":
         args, vocab_size, token_to_id, id_to_token, max_len, device)
     model.setup_to_test()
 
-    # scores = model.test(test_dataset)
-
     transform = transforms.Compose([
         transforms.ToTensor(),
         transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
@@ -86,11 +84,12 @@ if __name__ == "__main__":
     # mudar este beam search!
     if args.decodying_type == DecodingType.GREEDY.value:
         decoding_method = model.inference_with_greedy
+
     elif args.decodying_type == DecodingType.GREEDY_EMBEDDING.value:
         decoding_method = model.inference_with_greedy_embedding
-
     elif args.decodying_type == DecodingType.GREEDY_SMOOTHL1.value:
         decoding_method = model.inference_with_greedy_smoothl1
+
     elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
         decoding_method = model.inference_with_perplexity
     elif args.decodying_type == DecodingType.POSTPROCESSING_PERPLEXITY.value:
@@ -136,38 +135,8 @@ if __name__ == "__main__":
         if i == 10:
             break
 
-    #model.save_sentences(args.decodying_type, args.n_beam, list_hipotheses)
-
-    sentences_path = model.MODEL_DIRECTORY + \
-        'evaluation_sentences/' + \
+    sentences_path = EVALUATION_SENTENCES + \
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
     with open(sentences_path+'.json', 'w+') as f:
         json.dump(list_hipotheses, f, indent=2)
-
-    # grava um path: "rscid_"
-    # coco_eval rscid_
-
-    # coco = COCO(test_dataset)
-    # cocoRes = coco.loadRes(sentences_path+'.json')
-
-    # cocoEval = COCOEvalCap(coco, cocoRes)
-
-    # cocoEval.params["image_id"] = cocoRes.getImgIds()
-    # cocoEval.evaluate()
-
-    # predicted = {"args": [args.__dict__]}
-    # avg_score = cocoEval.eval.items()
-    # individual_scores = [eva for eva in cocoEval.evalImgs]
-    # for i in range(len(individual_scores)):
-    #     predicted[individual_scores[i]["image_id"]] = individual_scores[i]
-    # predicted["avg_metrics"] = avg_score
-
-    # model.save_scores(args.decodying_type, args.n_beam, predicted, True)
-
-    # scores_path = model.MODEL_DIRECTORY + \
-    #     'evaluation_scores/' + \
-    #     args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
-
-    # with open(scores_path+'.json', 'w+') as f:
-    #     json.dump(predicted, f, indent=2)

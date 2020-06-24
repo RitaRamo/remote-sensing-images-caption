@@ -2,7 +2,6 @@ import operator
 from preprocess_data.tokens import START_TOKEN, END_TOKEN
 from torchvision import transforms
 from PIL import Image
-from create_data_files import PATH_RSICD
 from abc import ABC, abstractmethod
 import torch
 import json
@@ -17,11 +16,12 @@ from optimizer import get_optimizer, clip_gradient
 from utils.enums import DecodingType
 #from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import math
+from definitions import TRAINED_MODELS
 
 
 class AbstractEncoderDecoderModel(ABC):
 
-    MODEL_DIRECTORY = "experiments/results/"
+    #MODEL_DIRECTORY = "experiments/results/"
 
     def __init__(
         self,
@@ -277,7 +277,7 @@ class AbstractEncoderDecoderModel(ABC):
                 "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
-        path = self.MODEL_DIRECTORY + 'trained_models/' + self.args.file_name+'.pth.tar'
+        path = TRAINED_MODELS + self.args.file_name+'.pth.tar'
         print("get checkpoint path", path)
         return path
 

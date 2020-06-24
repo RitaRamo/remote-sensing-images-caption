@@ -1,0 +1,5 @@
+PATH_RSICD = "src/data/RSICD/"
+PATH_DATASETS_RSICD = PATH_RSICD+"datasets/"
+TRAINED_MODELS = "experiments/results/trained_models/"
+EVALUATION_SENTENCES = "experiments/results/evaluation_sentences/"
+EVALUATION_SCORES = "experiments/results/evaluation_scores/"

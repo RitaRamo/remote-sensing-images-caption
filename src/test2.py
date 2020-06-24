@@ -2,7 +2,8 @@ import os
 import torch
 import logging
 from args_parser import get_args
-from create_data_files import PATH_RSICD, PATH_DATASETS_RSICD, get_vocab_info, get_dataset
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from create_data_files import get_vocab_info, get_dataset
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.sat import BasicShowAttendAndTellModel
@@ -33,7 +34,6 @@ import numpy as np
 import operator
 from nlgeval import NLGEval
 from models.abtract_model import DecodingType
-from args_parser import get_args
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'

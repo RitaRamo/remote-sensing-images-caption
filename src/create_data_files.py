@@ -8,10 +8,7 @@ from sklearn.utils import shuffle
 from collections import defaultdict
 from preprocess_data.tokens import END_TOKEN, START_TOKEN, preprocess_tokens
 import re
-
-
-PATH_RSICD = "src/data/RSICD/"
-PATH_DATASETS_RSICD = PATH_RSICD+"datasets/"
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD
 
 
 def _get_images_and_captions(dataset):
@@ -46,6 +43,7 @@ def _get_dict_image_and_its_captions(dataset):
     images_captions = defaultdict(list)
     for row in dataset["images"]:
         image_name = row["filename"]
+        image_id = row["imgid"]
         if row["split"] == "test":
             for caption in row["sentences"]:
                 if not caption["tokens"]:

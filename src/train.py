@@ -6,8 +6,8 @@ import torch
 from torch.utils.data import DataLoader
 
 from args_parser import get_args
-from create_data_files import (PATH_DATASETS_RSICD, PATH_RSICD, get_dataset,
-                               get_vocab_info)
+from definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from create_data_files import get_dataset, get_vocab_info
 from datasets import CaptionDataset, POSCaptionDataset
 
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
@@ -49,7 +49,6 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_vocab_image import ContinuousAttentionProductVocabImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_multilevel import ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_multilevel_1query import ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsOneQueryImageModel
-
 
 torch.manual_seed(0)
 np.random.seed(0)
@@ -93,20 +92,6 @@ if __name__ == "__main__":
                         max_len,
                         token_to_id
                         )
-
-    # if args.augment_data:
-    #     transform = transforms.Compose([
-    #         # augment_image(),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-    #                              std=[0.229, 0.224, 0.225])
-    #     ])
-
-    # transform = transforms.Compose([
-    #     transforms.ToTensor(),
-    #     transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-    #                             std=[0.229, 0.224, 0.225])
-    # ])
 
     if args.pos_tag_dataset:
         train_dataloader = DataLoader(
