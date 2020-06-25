@@ -356,7 +356,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
 
-                decoder_sentence += " " + current_output_token
+                decoder_sentence.append(current_output_token)
 
                 if current_output_token == END_TOKEN:
                     # ignore end_token
