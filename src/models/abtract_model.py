@@ -318,9 +318,9 @@ class AbstractEncoderDecoderModel(ABC):
 
                 decoder_sentence += " " + current_output_token
 
-                if (current_output_token == END_TOKEN)
-                print("\ndecoded sentence", decoder_sentence)
-                return decoder_sentence[1:-1]
+                if current_output_token == END_TOKEN:
+                    print("\ndecoded sentence", decoder_sentence)
+                    return decoder_sentence[1:-1]
 
                 if i >= self.max_len-1:  # until 35
                     print("\ndecoded sentence", decoder_sentence)
