@@ -323,7 +323,7 @@ class ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsImageModel(Cont
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence = START_TOKEN + " "
+            decoder_sentence = []
 
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
@@ -346,19 +346,24 @@ class ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsImageModel(Cont
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
 
-                decoder_sentence += " " + current_output_token
+                decoder_sentence.append(current_output_token)
 
-                if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len-1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
 
                 i += 1
 
-            print("\ndecoded sentence", decoder_sentence)
+            generated_sentence = " ".join(decoder_sentence)
+            print("\ngenerated sentence:", generated_sentence)
 
-            return decoder_sentence  # input_caption
+            return generated_sentence  # input_caption
 
     def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
         predictions, h, c, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(

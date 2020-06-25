@@ -154,8 +154,6 @@ class FeaturesAndAttrAttention(nn.Module):
         att = self.full_att(self.relu(w_attr + w_h)).squeeze(2)  # (batch_size, n_attr) (with squeeze)
         alpha_attr = self.softmax(att)  # (batch_size, n_attr)
         # (batch_size, attention_dim == embed_dim)
-        print("torch size embedding attr", self.embedding_attr.size())
-        print("alpha_attr  attr", alpha_attr.size())
 
         attention1 = (self.embedding_attr * alpha_attr.unsqueeze(2)).sum(dim=1)
 
