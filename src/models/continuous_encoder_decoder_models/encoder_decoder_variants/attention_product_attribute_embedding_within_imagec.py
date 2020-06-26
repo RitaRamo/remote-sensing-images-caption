@@ -17,6 +17,8 @@ from torchvision import models
 from preprocess_data.tokens import START_TOKEN, END_TOKEN
 from preprocess_data.images import get_image_extractor, DenseNetFeatureAndAttrExtractor
 import math
+import operator
+from utils.enums import DecodingType
 
 
 class FutureAndAttrEncoder(nn.Module):
@@ -301,6 +303,110 @@ class ContinuousAttentionProductAttrEmbeddingWithoutScoreWithinImageCModel(Conti
             print("\ngenerated sentence:", generated_sentence)
 
             return generated_sentence  # input_caption
+
+    def inference_with_beamsearch(self, image, n_solutions=3):
+
+        def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
+            return (seed_prob*len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text)+1)
+
+        def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
+            current_text = ' '.join(current_text)
+            tokens = self.language_model_tokenizer.encode(current_text)
+
+            input_ids = torch.tensor(tokens).unsqueeze(0)
+            with torch.no_grad():
+                outputs = self.language_model(input_ids, labels=input_ids)
+                loss, logits = outputs[:2]
+
+            return math.exp(loss / len(tokens))
+
+        def compute_sim2image(seed_text, seed_prob, sorted_scores, index, current_text):
+            n_tokens = len(current_text)
+            tokens_ids = torch.zeros(1, n_tokens)
+            for i in range(n_tokens):
+                token = current_text[i]
+                tokens_ids[0, i] = self.token_to_id[token]
+
+            tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
+
+            sentence_mean = torch.mean(tokens_embeddings, dim=1)
+            images_embedding = self.decoder.image_embedding
+
+            return torch.cosine_similarity(sentence_mean, images_embedding)
+
+        def compute_perplexity_with_sim2image():
+            return 0
+
+        def generate_n_solutions(seed_text, seed_prob, encoder_features, encoder_attrs,  h, c,  n_solutions):
+            last_token = seed_text[-1]
+
+            if last_token == END_TOKEN:
+                return [(seed_text, seed_prob, h, c)]
+
+            top_solutions = []
+            scores, h, c = self.generate_output_index(
+                torch.tensor([self.token_to_id[last_token]]), encoder_features, encoder_attrs, h, c)
+
+            sorted_scores, sorted_indices = torch.sort(
+                scores, descending=True, dim=-1)
+
+            for index in range(n_solutions):
+                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
+                # beam search taking into account lenght of sentence
+                # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
+                text_score = compute_score(seed_text, seed_prob, sorted_scores, index, text)
+                top_solutions.append((text, text_score, h, c))
+
+            return top_solutions
+
+        def get_most_probable(candidates, n_solutions, is_to_reverse):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=is_to_reverse)[:n_solutions]
+
+        with torch.no_grad():
+            encoder_features, encoder_attrs = self.encoder(image)
+            encoder_features = encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
+
+            h, c = self.decoder.init_hidden_state(encoder_features)
+
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
+
+            if self.args.decodying_type == DecodingType.BEAM.value:
+                compute_score = compute_probability
+                is_to_reverse = True
+
+            elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
+                compute_score = compute_perplexity
+                is_to_reverse = False
+
+            elif self.args.decodying_type == DecodingType.BEAM_SIM2IMAGE.value:
+                compute_score = compute_sim2image
+
+            elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY_SIM2IMAGE.value:
+                compute_score = compute_perplexity_with_sim2image
+
+            else:
+                raise Exception("not available any other decoding type")
+
+            for _ in range(self.max_len):
+                candidates = []
+                for sentence, prob, h, c in top_solutions:
+                    candidates.extend(generate_n_solutions(
+                        sentence, prob, encoder_features, encoder_attrs, h, c,  n_solutions))
+
+                top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
+
+            # print("top solutions", [(text, prob)
+            #                         for text, prob, _, _ in top_solutions])
+            best_tokens, prob, h, c = top_solutions[0]
+
+            if best_tokens[0] == START_TOKEN:
+                best_tokens = best_tokens[1:]
+            if best_tokens[-1] == END_TOKEN:
+                best_tokens = best_tokens[:-1]
+            best_sentence = " ".join(best_tokens)
+
+            print("\nbeam decoded sentence:", best_sentence)
+            return best_sentence
 
     def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
         predictions, h, c, _ = self.decoder(
