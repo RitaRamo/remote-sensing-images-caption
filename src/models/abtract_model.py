@@ -289,56 +289,10 @@ class AbstractEncoderDecoderModel(ABC):
         with open(scores_path+'.json', 'w+') as f:
             json.dump(scores, f, indent=2)
 
-    # def inference_with_greedy(self, image, n_solutions=0):
-    #     with torch.no_grad():  # no need to track history
-
-    #         decoder_sentence = []
-
-    #         input_word = torch.tensor([self.token_to_id[START_TOKEN]])
-
-    #         i = 1
-
-    #         encoder_output = self.encoder(image)
-    #         encoder_output = encoder_output.view(
-    #             1, -1, encoder_output.size()[-1])
-
-    #         h, c = self.decoder.init_hidden_state(encoder_output)
-
-    #         while True:
-
-    #             scores, h, c = self.generate_output_index(
-    #                 input_word, encoder_output, h, c)
-
-    #             sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
-
-    #             current_output_index = sorted_indices[0]
-
-    #             current_output_token = self.id_to_token[current_output_index.item(
-    #             )]
-
-    #             decoder_sentence.append(current_output_token)
-
-    #             if current_output_token == END_TOKEN:
-    #                 # ignore end_token
-    #                 decoder_sentence = decoder_sentence[:-1]
-    #                 break
-
-    #             if i >= self.max_len-1:  # until 35
-    #                 break
-
-    #             input_word[0] = current_output_index.item()
-
-    #             i += 1
-
-    #         generated_sentence = " ".join(decoder_sentence)
-    #         print("\ngenerated sentence:", generated_sentence)
-
-    #         return generated_sentence  # input_caption
-
     def inference_with_greedy(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence = START_TOKEN
+            decoder_sentence = []
 
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
@@ -362,19 +316,65 @@ class AbstractEncoderDecoderModel(ABC):
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
 
-                decoder_sentence += " " + current_output_token
+                decoder_sentence.append(current_output_token)
 
-                if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len-1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
 
                 i += 1
 
-            print("\ndecoded sentence", decoder_sentence)
+            generated_sentence = " ".join(decoder_sentence)
+            print("\ngenerated sentence:", generated_sentence)
 
-            return decoder_sentence  # input_caption
+            return generated_sentence  # input_caption
+
+    # def inference_with_greedy(self, image, n_solutions=0):
+    #     with torch.no_grad():  # no need to track history
+
+    #         decoder_sentence = START_TOKEN
+
+    #         input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+    #         i = 1
+
+    #         encoder_output = self.encoder(image)
+    #         encoder_output = encoder_output.view(
+    #             1, -1, encoder_output.size()[-1])
+
+    #         h, c = self.decoder.init_hidden_state(encoder_output)
+
+    #         while True:
+
+    #             scores, h, c = self.generate_output_index(
+    #                 input_word, encoder_output, h, c)
+
+    #             sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+    #             current_output_index = sorted_indices[0]
+
+    #             current_output_token = self.id_to_token[current_output_index.item(
+    #             )]
+
+    #             decoder_sentence += " " + current_output_token
+
+    #             if (current_output_token == END_TOKEN or
+    #                     i >= self.max_len-1):  # until 35
+    #                 break
+
+    #             input_word[0] = current_output_index.item()
+
+    #             i += 1
+
+    #         print("\ndecoded sentence", decoder_sentence)
+
+    #         return decoder_sentence  # input_caption
 
     def inference_with_beamsearch(self, image, n_solutions=3):
 
