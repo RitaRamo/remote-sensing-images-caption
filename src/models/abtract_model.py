@@ -470,6 +470,10 @@ class AbstractEncoderDecoderModel(ABC):
             #                         for text, prob, _, _ in top_solutions])
             best_tokens, prob, h, c = top_solutions[0]
 
+            if best_tokens[0] == START_TOKEN:
+                best_tokens = best_tokens[1:]
+            if best_tokens[-1] == END_TOKEN:
+                best_tokens = best_tokens[:-1]
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
