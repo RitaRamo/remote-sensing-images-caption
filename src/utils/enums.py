@@ -44,6 +44,9 @@ class ContinuousLossesType(Enum):
     COS_AVG_SENTENCE_AND_INPUTS_WEIGHTED = "cos_avg_sentence_and_inputs_loss_weightedbyhalf"
     COS_AVG_SENTENCE = "cos_avg_sentence"
     COS_AVG_SENTENCE_AND_INPUT = "cos_avg_sentence_and_input_loss"
+    COS_124 = "cos_124"
+    COS_14 = "cos_14"
+    COS_13 = "cos_13"
 
 
 class DecodingType(Enum):
