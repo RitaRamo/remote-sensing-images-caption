@@ -495,7 +495,7 @@ class ContinuousAttentionAttrEmbeddingWithoutScoreImageModel(ContinuousAttention
     def greedy_with_attention(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence = []
+            decoder_sentence = [START_TOKEN]
 
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
