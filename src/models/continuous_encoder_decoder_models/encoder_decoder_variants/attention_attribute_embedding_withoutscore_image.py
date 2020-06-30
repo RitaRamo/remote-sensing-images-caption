@@ -483,3 +483,58 @@ class ContinuousAttentionAttrEmbeddingWithoutScoreImageModel(ContinuousAttention
         current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c
+
+    def generate_output_index_with_alphas(self, input_word, encoder_features, encoder_attrs,  h, c):
+        predictions, h, c, alphas = self.decoder(
+            input_word, encoder_features, encoder_attrs,  h, c)
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        return current_output_index, h, c, alphas
+
+    def greedy_with_attention(self, image, n_solutions=0):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            t = 1  # 0 is for start_token
+
+            encoder_features, encoder_attrs = self.encoder(image)
+            encoder_features = encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
+
+            h, c = self.decoder.init_hidden_state(encoder_features)
+
+            all_alphas = torch.zeros(1, self.max_len, encoder_attrs.size()[1])
+
+            while True:
+
+                scores, h, c, alpha = self.generate_output_index_with_alphas(
+                    input_word, encoder_features, encoder_attrs, h, c)
+
+                all_alphas[0, t, :] = alpha
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    break
+
+                if t >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                t += 1
+
+            print("\ndecoded sentence", decoder_sentence)
+
+            return decoder_sentence, all_alphas  # input_caption
