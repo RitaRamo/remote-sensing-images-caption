@@ -190,7 +190,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         scores = self.fc(self.dropout(decoder_hidden_state))
 
-        return scores, decoder_hidden_state, decoder_cell_state, alpha
+        return scores, decoder_hidden_state, decoder_cell_state, alpha, attention_weighted_encoding
 
 
 class ContinuousAttentionAttrEmbeddingWithoutScoreImageModel(ContinuousAttentionImageModel):
@@ -485,12 +485,12 @@ class ContinuousAttentionAttrEmbeddingWithoutScoreImageModel(ContinuousAttention
         return current_output_index, h, c
 
     def generate_output_index_with_alphas(self, input_word, encoder_features, encoder_attrs,  h, c):
-        predictions, h, c, alphas = self.decoder(
+        predictions, h, c, alphas, attention_weighted_encoding = self.decoder(
             input_word, encoder_features, encoder_attrs,  h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
-        return current_output_index, h, c, alphas
+        return current_output_index, h, c, alphas, attention_weighted_encoding
 
     def greedy_with_attention(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
@@ -507,13 +507,18 @@ class ContinuousAttentionAttrEmbeddingWithoutScoreImageModel(ContinuousAttention
             h, c = self.decoder.init_hidden_state(encoder_features)
 
             all_alphas = torch.zeros(1, self.max_len, encoder_attrs.size()[1])
+            all_context_vectors = torch.zeros(1, self.max_len, self.args.embed_dim)
+            all_similar_embeddings = torch.zeros(1, self.max_len, self.vocab_size)
 
             while True:
 
-                scores, h, c, alpha = self.generate_output_index_with_alphas(
+                scores, h, c, alpha, attention_weighted_encoding = self.generate_output_index_with_alphas(
                     input_word, encoder_features, encoder_attrs, h, c)
 
                 all_alphas[0, t, :] = alpha
+                all_context_vectors[0, t, :] = attention_weighted_encoding
+                similar_embeddings_of_attention = self._convert_prediction_to_output(attention_weighted_encoding)
+                all_similar_embeddings[0, t, :] = similar_embeddings_of_attention
 
                 sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
