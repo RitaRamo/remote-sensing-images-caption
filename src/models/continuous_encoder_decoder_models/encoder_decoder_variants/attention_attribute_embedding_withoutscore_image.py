@@ -542,4 +542,4 @@ class ContinuousAttentionAttrEmbeddingWithoutScoreImageModel(ContinuousAttention
 
             print("\ndecoded sentence", decoder_sentence)
 
-            return decoder_sentence, all_alphas  # input_caption
+            return decoder_sentence, all_alphas, all_similar_embeddings  # input_caption

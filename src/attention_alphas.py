@@ -65,12 +65,13 @@ if __name__ == "__main__":
         model.encoder.eval()
 
         # TODO: tens de mudar o decoding method para considerar o alpha!
-        text_generated, alphas = model.greedy_with_attention(image, args.n_beam)
+        text_generated, alphas, all_similar_embeddings = model.greedy_with_attention(image, args.n_beam)
 
         list_hipotheses.append({
             "image_id": img_id,
             "caption": text_generated,
-            "alphas": alphas
+            "alphas": alphas,
+            "all_similar_embeddings": all_similar_embeddings
         })
 
         if args.disable_metrics:
