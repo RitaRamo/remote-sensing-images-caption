@@ -1,4 +1,4 @@
-from create_data_files import PATH_RSICD
+from definitions import PATH_RSICD
 import torch
 from torchvision import transforms, models
 from torch import nn
@@ -15,7 +15,7 @@ import torch.nn.functional as F
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet_modifiedrsicd"
+FILE_NAME = "classification_densenet_modifiedrsicd_600"
 FINE_TUNE = True
 EFFICIENT_NET = True
 FOCAL_LOSS = False
@@ -244,7 +244,7 @@ if __name__ == "__main__":
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
-    classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
+    classification_state = torch.load("src/data/RSICD/datasets/classification_dataset_600")
     classes_to_id = classification_state["classes_to_id"]
     id_to_classes = classification_state["id_to_classes"]
     classification_dataset = classification_state["classification_dataset"]
