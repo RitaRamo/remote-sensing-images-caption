@@ -48,15 +48,14 @@ class Encoder(nn.Module):
         #     images)  # (batch_size, 2048, image_size/32, image_size/32)
 
         out = self.model.extract_features(images)
-        print("this shape of out", out.size())
         # # print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
-        # out = self.adaptive_pool(out)
+        out = self.adaptive_pool(out)
         # # (batch_size, encoded_image_size, encoded_image_size, 2048)
         # # (later on the intermidiate dims are flatten: (prepare_inputs)
         # # (batch_size, encoded_image_size*encoded_image_size, 2048)
-        # out = out.permute(0, 2, 3, 1)
+        out = out.permute(0, 2, 3, 1)
 
         return out
 
