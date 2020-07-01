@@ -62,7 +62,7 @@ def get_image_model(model_type):
         checkpoint = torch.load('experiments/results/classification_efficientnet_modifiedrsicd.pth.tar')
         vocab_size = 512
 
-        image_model = EfficientNet.from_pretrained('efficientnet-b4')
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
         image_model._fc = nn.Linear(encoder_dim, vocab_size)
 
