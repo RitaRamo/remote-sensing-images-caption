@@ -59,7 +59,7 @@ def get_image_model(model_type):
     elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
         logging.info("image model with efficientnet model (all) with multi-label classification")
 
-        checkpoint = torch.load('experiments/results/classification_efficientnet.pth.tar')
+        checkpoint = torch.load('experiments/results/classification_efficientnet_modifiedrsicd.pth.tar')
         vocab_size = 512
 
         image_model = EfficientNet.from_pretrained('efficientnet-b4')
