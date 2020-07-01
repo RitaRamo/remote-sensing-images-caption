@@ -48,6 +48,7 @@ class Encoder(nn.Module):
         #     images)  # (batch_size, 2048, image_size/32, image_size/32)
 
         out = self.model.extract_features(images)
+        print("this shape of out", out.size())
         # # print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
