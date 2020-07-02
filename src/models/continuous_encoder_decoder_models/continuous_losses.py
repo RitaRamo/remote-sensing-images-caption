@@ -111,6 +111,10 @@ class ContinuousLoss():
             self.loss_method = self.cos_sum_sentence_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.COS_AVG_SENTENCE_AND_INPUTS_NORM.value:
+            self.loss_method = self.cos_avg_sentence_and_inputs_norm_loss
+            self.criterion = nn.CosineEmbeddingLoss(reduction='none').to(self.device)
+
     def compute_loss(
         self,
         predictions,
@@ -689,7 +693,6 @@ class ContinuousLoss():
         input1_losses = 0.0
         input2_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -752,7 +755,6 @@ class ContinuousLoss():
         sentence_losses = 0.0
         input1_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -807,7 +809,6 @@ class ContinuousLoss():
         sentence_losses = 0.0
         input2_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -861,8 +862,6 @@ class ContinuousLoss():
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         sentence_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
-
         n_sentences = predictions.size()[0]
         for i in range(n_sentences):  # iterate by sentence
             preds_without_padd = predictions[i, :caption_lengths[i], :]
@@ -903,8 +902,6 @@ class ContinuousLoss():
     ):
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         sentence_losses = 0.0
-
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         n_sentences = predictions.size()[0]
         for i in range(n_sentences):  # iterate by sentence
@@ -947,7 +944,6 @@ class ContinuousLoss():
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         input2_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -992,7 +988,6 @@ class ContinuousLoss():
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         input1_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -1039,7 +1034,6 @@ class ContinuousLoss():
         input1_losses = 0.0
         input2_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -1096,7 +1090,6 @@ class ContinuousLoss():
     #     input1_losses = 0.0
     #     input2_losses = 0.0
 
-    #     predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
     #     images_embedding = self.decoder.image_embedding
 
     #     n_sentences = predictions.size()[0]
@@ -1105,16 +1098,22 @@ class ContinuousLoss():
     #         targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
     #         y = torch.ones(targets_without_padd.shape[0]).to(self.device)
 
-    #         # word-level loss   (each prediction against each target)
-    #         word_losses += self.criterion(
+    #         print("caption lens", caption_lengths[i])
+    #         print("preds dize", predictions[i, :caption_lengths[i], :].size())
+
+    #         loss_of_each_word = self.criterion(
     #             preds_without_padd,
     #             targets_without_padd,
     #             y
     #         )
 
-    #         print("this is word_loss", word_losses)
-    #         print("this is word_loss size", word_losses.size())
-    #         weighted_postagging_loss = torch.sum(loss_of_each_word*pos_scores)/torch.sum(pos_scores)
+    #         print("loss of each word", loss_of_each_word.size())
+
+    #         targets_norms = targets_without_padd.norm(p=2, dim=1, keepdim=True)
+    #         print("this is norm of each word", targets_norms)
+
+    #         weighted_norm_loss = torch.sum(loss_of_each_word*targets_norms)/torch.sum(target_norms)
+    #         word_losses += weighted_norm_loss
 
     #         # sentence-level loss (sentence predicted agains target sentence)
     #         sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
