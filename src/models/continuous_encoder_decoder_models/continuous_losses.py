@@ -107,6 +107,10 @@ class ContinuousLoss():
             self.loss_method = self.cos_inputs_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.COS_SUM_SENTENCE.value:
+            self.loss_method = self.cos_sum_sentence_loss
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
     def compute_loss(
         self,
         predictions,
@@ -881,6 +885,49 @@ class ContinuousLoss():
             sentence_losses += self.criterion(
                 sentence_mean_pred,
                 sentece_mean_target,
+                y
+            )
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+
+        loss = word_loss + sentence_loss
+
+        return loss
+
+    def cos_sum_sentence_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_sum_pred = torch.sum(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_sum_target = torch.sum(targets_without_padd, dim=0).unsqueeze(0)
+
+            y = torch.ones(1).to(self.device)
+
+            sentence_losses += self.criterion(
+                sentence_sum_pred,
+                sentece_sum_target,
                 y
             )
 
