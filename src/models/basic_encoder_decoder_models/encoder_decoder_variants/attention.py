@@ -108,15 +108,18 @@ class DecoderWithAttention(nn.Module):
         for p in self.embedding.parameters():
             p.requires_grad = fine_tune
 
-    def normalize_embeddings(self):
+    def normalize_embeddings(self, no_normalization=False):
         """
         Normalize values of embbedings (ex: makes sense for pretrained embeddings)
         """
-
-        embeddings_values = self.embedding.weight.data
-        norm = embeddings_values.norm(
-            p=2, dim=1, keepdim=True).clamp(min=1e-12)
-        self.embedding.weight.data.copy_(embeddings_values.div(norm))
+        if no_normalization:
+            print("embeddings without normalization")
+        else:
+            print("embeddings start normalized")
+            embeddings_values = self.embedding.weight.data
+            norm = embeddings_values.norm(
+                p=2, dim=1, keepdim=True).clamp(min=1e-12)
+            self.embedding.weight.data.copy_(embeddings_values.div(norm))
 
     def init_hidden_state(self, encoder_out):
         """

@@ -44,10 +44,10 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        # out = self.model(
-        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
+        out = self.model(
+            images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        out = self.model.extract_features(images)
+        # out = self.model.extract_features(images)
         # print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
@@ -121,15 +121,18 @@ class Decoder(nn.Module):
         for p in self.embedding.parameters():
             p.requires_grad = fine_tune
 
-    def normalize_embeddings(self):
+    def normalize_embeddings(self, no_normalization=False):
         """
         Normalize values of embbedings (ex: makes sense for pretrained embeddings)
         """
-
-        embeddings_values = self.embedding.weight.data
-        norm = embeddings_values.norm(
-            p=2, dim=1, keepdim=True).clamp(min=1e-12)
-        self.embedding.weight.data.copy_(embeddings_values.div(norm))
+        if no_normalization:
+            print("embeddings without normalization")
+        else:
+            print("embeddings start normalized")
+            embeddings_values = self.embedding.weight.data
+            norm = embeddings_values.norm(
+                p=2, dim=1, keepdim=True).clamp(min=1e-12)
+            self.embedding.weight.data.copy_(embeddings_values.div(norm))
 
     def init_hidden_state(self, encoder_out):
         """

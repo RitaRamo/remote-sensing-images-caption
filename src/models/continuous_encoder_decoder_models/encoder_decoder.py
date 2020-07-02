@@ -58,7 +58,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
             dropout=self.args.dropout
         )
 
-        self.decoder.normalize_embeddings()
+        self.decoder.normalize_embeddings(self.args.no_normalization)
 
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)

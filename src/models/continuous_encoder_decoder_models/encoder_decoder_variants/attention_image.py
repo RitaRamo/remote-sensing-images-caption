@@ -37,8 +37,9 @@ class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
     def init_hidden_state(self, encoder_out):
         mean_encoder_out = encoder_out.mean(dim=1)
 
-        h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
-        self.image_embedding = self.represent_image(mean_encoder_out)
+        h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim) 512 units
+
+        self.image_embedding = self.represent_image(mean_encoder_out)  # 300 512
 
         return h, h
 
@@ -88,7 +89,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
             dropout=self.args.dropout
         )
 
-        self.decoder.normalize_embeddings()
+        self.decoder.normalize_embeddings(self.args.no_normalization)
 
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
