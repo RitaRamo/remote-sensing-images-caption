@@ -25,6 +25,9 @@ def get_args():
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
 
+    parser.add_argument('--no_normalization', action='store_true',
+                        default=False, help='Set a switch to false')
+
     parser.add_argument('--batch_size', type=int, default=8,
                         help='define batch size to train the model')
 
