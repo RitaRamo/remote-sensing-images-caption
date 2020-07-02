@@ -44,11 +44,11 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        out = self.model(
-            images)  # (batch_size, 2048, image_size/32, image_size/32)
+        # out = self.model(
+        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        #out = self.model.extract_features(images)
-        # # print("image size", out.size())
+        out = self.model.extract_features(images)
+        # print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
@@ -101,7 +101,7 @@ class Decoder(nn.Module):
         # linear layer to find initial hidden state of LSTMCell
         self.init_h = nn.Linear(encoder_dim, decoder_dim)
         # linear layer to find initial cell state of LSTMCell
-        #self.init_c = nn.Linear(encoder_dim, decoder_dim)
+        self.init_c = nn.Linear(encoder_dim, decoder_dim)
 
         self.fc = nn.Linear(decoder_dim, vocab_size)
         self.init_weights()  # initialize some layers with the uniform distribution
