@@ -19,3 +19,4 @@ cos_avg_sentence_norm
 --image_model_type
 multilabel_all
 --augment_data
+--no_normalization
