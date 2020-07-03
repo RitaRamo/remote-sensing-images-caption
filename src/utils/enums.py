@@ -49,6 +49,8 @@ class ContinuousLossesType(Enum):
     COS_13 = "cos_13"
     COS_134 = "cos_134"
     COS_SUM_SENTENCE = "cos_sum_sentence"
+    COS_AVG_SENTENCE_AND_INPUTS_NORM = "cos_avg_sentence_and_inputs_norm_loss"
+    COSINE_NORM = "cosine_norm"
 
 
 class DecodingType(Enum):

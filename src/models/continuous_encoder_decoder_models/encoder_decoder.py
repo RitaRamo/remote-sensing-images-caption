@@ -95,6 +95,10 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         target_embeddings = self.decoder.embedding(targets).to(self.device)
 
+        if self.args.no_normalization == False:
+            # when target embeddings start normalized, predictions should also be normalized
+            predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
         loss = self.criteria.compute_loss(
             predictions,
             target_embeddings,
