@@ -120,7 +120,7 @@ class ContinuousLoss():
             self.loss_method = self.cosine_norm_loss
             self.criterion_word_level = nn.CosineEmbeddingLoss(reduction="none").to(self.device)
 
-        elif loss_type == ContinuousLossesType.COS_AVG_SENTENCE_AND_INPUTS_NORM.value:
+        elif loss_type == ContinuousLossesType.COS_AVG_SENTENCE_NORM.value:
             self.loss_method = self.cos_avg_sentence_norm_loss
             self.criterion_word_level = nn.CosineEmbeddingLoss(reduction="none").to(self.device)
             self.criterion_sentence_level = nn.CosineEmbeddingLoss().to(self.device)
