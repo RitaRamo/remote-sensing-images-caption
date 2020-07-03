@@ -1183,12 +1183,7 @@ class ContinuousLoss():
         target_embeddings,
         caption_lengths
     ):
-        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
-        sentence_losses = 0.0
-        input1_losses = 0.0
-        input2_losses = 0.0
-
-        images_embedding = self.decoder.image_embedding
+        word_losses = 0.0
 
         targets_batch_norms = target_embeddings.norm(p=2, dim=1)
         min_targets_batch_norms = torch.min(targets_batch_norms)
