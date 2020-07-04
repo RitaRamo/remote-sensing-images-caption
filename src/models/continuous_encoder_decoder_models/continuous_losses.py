@@ -1387,6 +1387,8 @@ class ContinuousLoss():
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         input1_losses = 0.0
 
+        images_embedding = self.decoder.image_embedding
+
         targets_batch_norms = target_embeddings.norm(p=2, dim=1)
         min_targets_batch_norms = torch.min(targets_batch_norms)
         max_targets_batch_norms = torch.max(targets_batch_norms)
