@@ -13,6 +13,7 @@ class ImageNetModelsPretrained(Enum):
     DENSENET = "densenet"
     VGG16 = "vgg16"
     MULTILABEL_ALL = "multilabel_all"  # classification on remote sensing image with all layers unfreezed
+    MULTILABEL_ALL_600 = "multilabel_all_600"  # classification on remote sensing image with all layers unfreezed
     MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
     MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
 
@@ -55,6 +56,7 @@ class ContinuousLossesType(Enum):
     COS_13_NORM = "cos_13_norm"
     COS_134_NORM = "cos_134_norm"
     COS_NONORM_AVG_SENTENCE_NORM = "cos_nonorm_avg_sentence_norm"
+    COS_NORM_AVG_SENTENCE_NONORM = "cos_norm_avg_sentence_nonorm"
 
 
 class DecodingType(Enum):
