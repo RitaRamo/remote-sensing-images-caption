@@ -164,10 +164,10 @@ class ContinuousAttentionOutModel(ContinuousAttentionModel):
 
         return {"predictions": all_predictions, "alphas": all_alphas, "alpha_out": all_alphas_out}
 
-    def generate_output_embedding(self, input_embedding, encoder_out, h, c):
+    def generate_output_index(self, input_word, encoder_out, h, c):
         predictions, h, c, _, _ = self.decoder(
-            input_embedding, encoder_out, h, c)
+            input_word, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
-        return predictions, current_output_index, h, c
+        return current_output_index, h, c
