@@ -42,6 +42,20 @@ def get_image_model(model_type):
 
         modules = list(image_model.children())[:-1]
 
+    elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL_600.value:
+        logging.info("image model with densenet model (all) with multi-label classification on modified 600")
+
+        checkpoint = torch.load('experiments/results/classification_densenet_modifiedrsicd_600.pth.tar')
+        vocab_size = 600
+
+        image_model = models.densenet201(pretrained=True)
+        encoder_dim = image_model.classifier.in_features
+        image_model.classifier = nn.Linear(encoder_dim, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        modules = list(image_model.children())[:-1]
+
     elif model_type == ImageNetModelsPretrained.MULTILABEL_LAST.value:
         logging.info("image model with densenet model (last) with multi-label classification")
 
