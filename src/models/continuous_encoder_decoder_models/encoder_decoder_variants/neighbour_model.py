@@ -33,10 +33,6 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
 
     def _initialize_encoder_and_decoder(self):
 
-        if (self.args.embedding_type not in [embedding.value for embedding in EmbeddingsType]):
-            raise ValueError(
-                "Continuous model should use pretrained embeddings...")
-
         self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
 
