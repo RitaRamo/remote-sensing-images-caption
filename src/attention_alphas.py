@@ -133,10 +133,6 @@ if __name__ == "__main__":
         if args.disable_metrics:
             break
 
-        i += 1
-        if i == 11:
-            break
-
     sentences_path = PATH_EVALUATION_SENTENCES + \
         args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_alphas'  # str(self.args.__dict__)
 
