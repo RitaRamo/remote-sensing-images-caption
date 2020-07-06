@@ -44,9 +44,65 @@ if __name__ == "__main__":
     list_hipotheses = []
     i = 0
 
-    img_names = ["00722.jpg", "storagetanks_8.jpg", "storagetanks_81.jpg",
-                 "storagetanks_90.jpg", "forest_88.jpg", "bareland_91.jpg"]
-    img_ids = [10721, 9558, 9560, 9570, 3817, 661]
+    # img_names = ["00722.jpg", "storagetanks_8.jpg", "storagetanks_81.jpg",
+    #              "storagetanks_90.jpg", "forest_88.jpg", "bareland_91.jpg"]
+    # img_ids = [10721, 9558, 9560, 9570, 3817, 661]
+    img_names = ['airport_62.jpg',
+                 'bareland_80.jpg',
+                 'baseballfield_9.jpg',
+                 'beach_69.jpg',
+                 'center_84.jpg',
+                 'church_78.jpg',
+                 'commercial_76.jpg',
+                 'denseresidential_78.jpg',
+                 'desert_81.jpg',
+                 'farmland_70.jpg',
+                 'forest_85.jpg',
+                 'industrial_89.jpg',
+                 'meadow_97.jpg',
+                 'mediumresidential_73.jpg',
+                 'mountain_80.jpg',
+                 'park_76.jpg',
+                 'playground_76.jpg',
+                 'pond_84.jpg',
+                 'port_90.jpg',
+                 'railwaystation_9.jpg',
+                 'resort_93.jpg',
+                 'river_68.jpg',
+                 'school_81.jpg',
+                 'sparseresidential_82.jpg',
+                 'square_80.jpg',
+                 'stadium_74.jpg',
+                 'storagetanks_69.jpg',
+                 'viaduct_66.jpg']
+    img_ids = ['319',
+               '649',
+               '879',
+               '1256',
+               '1893',
+               '2126',
+               '2474',
+               '2886',
+               '3190',
+               '3548',
+               '3814',
+               '4208',
+               '4497',
+               '4761',
+               '5109',
+               '5454',
+               '6214',
+               '6643',
+               '7030',
+               '7289',
+               '7583',
+               '7965',
+               '8280',
+               '8581',
+               '8909',
+               '9192',
+               '9546',
+               '9963']
     # Escolheres 3 em que tens máx score
     # Escolheres 3 em que tens péssimo score
     # for values in test_dataset["images"]:
