@@ -40,12 +40,12 @@ def _get_images_and_captions(dataset):
     return images_names, captions_of_tokens
 
 
-def _get_dict_image_and_its_captions(dataset):
+def _get_dict_image_and_its_captions(dataset, split="test"):
     images_captions = defaultdict(list)
     for row in dataset["images"]:
         image_name = row["filename"]
         image_id = row["imgid"]
-        if row["split"] == "test":
+        if row["split"] == split:
             for caption in row["sentences"]:
                 if not caption["tokens"]:
                     continue
@@ -182,6 +182,8 @@ def _save_dataset(raw_dataset, file_dir):
     val_images_names, val_captions_of_tokens = shuffle(images_names["val"], captions_of_tokens["val"], random_state=42)
 
     test_dict_image_captions = _get_dict_image_and_its_captions(raw_dataset)
+    # only for neighbour model
+    train_dict_image_captions = _get_dict_image_and_its_captions(raw_dataset, "train")
 
     test_coco_format = _get_test_with_coco_format(raw_dataset)
 
@@ -203,6 +205,7 @@ def _save_dataset(raw_dataset, file_dir):
                        file_dir, "val.json")
 
     _dump_dict_to_json(test_dict_image_captions, file_dir, "test.json")
+    _dump_dict_to_json(train_dict_image_captions, file_dir, "train_dict.json")
 
     _dump_dict_to_json(test_coco_format, file_dir, "test_coco_format.json")
 

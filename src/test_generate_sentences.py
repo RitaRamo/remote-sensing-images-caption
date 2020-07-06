@@ -43,6 +43,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_multilevel_1query import ContinuousProductAttentionMultilevelAttrEmbeddingAndRegionsOneQueryImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_product_attribute_embedding_imagec import ContinuousAttentionProductAttrEmbeddingWithoutScoreImageCModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image_h import ContinuousAttentionImageHModel
+from models.continuous_encoder_decoder_models.encoder_decoder_variants.neighbour_model import ContinuousNeighbourModel
 
 
 from torchvision import transforms
@@ -121,8 +122,9 @@ if __name__ == "__main__":
         image = transform(image)
         image = image.unsqueeze(0)
 
-        model.decoder.eval()
-        model.encoder.eval()
+        # know the eval is inside the model.setup_to_test()
+        # model.decoder.eval()
+        # model.encoder.eval()
 
         text_generated = decoding_method(image, args.n_beam)
 
