@@ -73,6 +73,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
                 encoder_neighbour = encoder_neighbour.view(1, -1, encoder_neighbour.size()[-1])
                 mean_encoder_neighbour = encoder_neighbour.mean(dim=1)
                 sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
+                print("sim scores", sim)
                 scores_similarity.append(sim.item())
                 image_names.append(image_name)
 
