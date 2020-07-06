@@ -1,0 +1,4 @@
+--file_name
+neighbour_top0.txt
+--model_class_str
+ContinuousNeighbourModel
