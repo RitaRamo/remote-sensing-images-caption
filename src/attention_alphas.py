@@ -48,7 +48,10 @@ if __name__ == "__main__":
     #              "storagetanks_90.jpg", "forest_88.jpg", "bareland_91.jpg"]
     # img_ids = [10721, 9558, 9560, 9570, 3817, 661]
     img_names = ['airport_62.jpg',
+                 'airport_72.jpg',
                  'bareland_80.jpg',
+                 'bareland_94.jpg',
+                 'baseballfield_97.jpg',
                  'baseballfield_9.jpg',
                  'beach_69.jpg',
                  'center_84.jpg',
@@ -76,7 +79,10 @@ if __name__ == "__main__":
                  'storagetanks_69.jpg',
                  'viaduct_66.jpg']
     img_ids = ['319',
+               '330',
                '649',
+               '664',
+               '887',
                '879',
                '1256',
                '1893',
