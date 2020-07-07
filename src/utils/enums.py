@@ -51,6 +51,7 @@ class ContinuousLossesType(Enum):
     COS_134 = "cos_134"
     COS_SUM_SENTENCE = "cos_sum_sentence"
     COS_AVG_SENTENCE_AND_INPUTS_NORM = "cos_avg_sentence_and_inputs_norm_loss"
+    COS_NONORM_AVG_SENTENCE_AND_INPUTS_NORM = "cos_nonorm_avg_sentence_and_inputs_norm_loss"
     COSINE_NORM = "cosine_norm"
     COS_AVG_SENTENCE_NORM = "cos_avg_sentence_norm"
     COS_13_NORM = "cos_13_norm"
