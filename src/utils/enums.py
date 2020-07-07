@@ -59,6 +59,7 @@ class ContinuousLossesType(Enum):
     COS_134_NORM = "cos_134_norm"
     COS_NONORM_AVG_SENTENCE_NORM = "cos_nonorm_avg_sentence_norm"
     COS_NORM_AVG_SENTENCE_NONORM = "cos_norm_avg_sentence_nonorm"
+    COS_NONORM_AVG_SENTENCE_NORM_DIFFICULTY = "cos_nonorm_avg_sentence_norm_difficulty"
 
 
 class DecodingType(Enum):
