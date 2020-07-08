@@ -91,6 +91,10 @@ class ContinuousLoss():
             self.loss_method = self.cos_avg_sentence_and_input_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.COS_NONORM_AVG_SENTENCE_NORM_AND_INPUT_NONORM.value:
+            self.loss_method = self.cos_nonorm_avg_sentence_norm_and_input_nonorm_loss
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
         elif loss_type == ContinuousLossesType.COS_124.value:
             self.loss_method = self.cos_avg_sentence_and_fourth_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
@@ -1302,6 +1306,168 @@ class ContinuousLoss():
         input2_loss = input2_losses/n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss
+
+    def cos_nonorm_avg_sentence_norm_and_inputs_nonorm_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input1_losses = 0.0
+        input2_losses = 0.0
+
+        images_embedding = self.decoder.image_embedding
+
+        targets_batch_norms = target_embeddings.norm(p=2, dim=1)
+        min_targets_batch_norms = torch.min(targets_batch_norms)
+        max_targets_batch_norms = torch.max(targets_batch_norms)
+
+        preds_batch_norms = predictions.norm(p=2, dim=1)
+        min_preds_batch_norms = torch.min(preds_batch_norms)
+        max_preds_batch_norms = torch.max(preds_batch_norms)
+
+        param_a = 0.5
+        param_b = 1.0
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            preds_norms = preds_without_padd.norm(p=2, dim=1)
+            normalized_preds_norms = param_a + ((preds_norms - min_preds_batch_norms)
+                                                * (param_b - param_a)) / (max_preds_batch_norms - min_preds_batch_norms)
+
+            targets_norms = targets_without_padd.norm(p=2, dim=1)
+            normalized_targets_norms = param_a + ((targets_norms - min_targets_batch_norms)
+                                                  * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
+
+            sentence_mean_pred_norm = torch.sum(preds_without_padd * normalized_preds_norms.unsqueeze(1),
+                                                dim=0).unsqueeze(0) / torch.sum(normalized_preds_norms)  # ver a dim
+            sentece_mean_target_norm = torch.sum(targets_without_padd * normalized_targets_norms.unsqueeze(1),
+                                                 dim=0).unsqueeze(0) / torch.sum(normalized_targets_norms)
+
+            y = torch.ones(1).to(self.device)
+
+            sentence_losses += self.criterion(
+                sentence_mean_pred_norm,
+                sentece_mean_target_norm,
+                y
+            )
+
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0).unsqueeze(0)
+
+            image_embedding = images_embedding[i].unsqueeze(0)
+
+            # 1º input loss (sentence predicted against input image)
+            input1_losses += self.criterion(
+                sentence_mean_pred,
+                image_embedding,
+                y
+            )
+
+            # 2º input loss (sentence predicted against input image)
+            input2_losses += self.criterion(
+                image_embedding,
+                sentece_mean_target,
+                y
+            )
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+        input1_loss = input1_losses/n_sentences
+        input2_loss = input2_losses/n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss
+
+    def cos_nonorm_avg_sentence_norm_and_input_nonorm_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input1_losses = 0.0
+
+        images_embedding = self.decoder.image_embedding
+
+        targets_batch_norms = target_embeddings.norm(p=2, dim=1)
+        min_targets_batch_norms = torch.min(targets_batch_norms)
+        max_targets_batch_norms = torch.max(targets_batch_norms)
+
+        preds_batch_norms = predictions.norm(p=2, dim=1)
+        min_preds_batch_norms = torch.min(preds_batch_norms)
+        max_preds_batch_norms = torch.max(preds_batch_norms)
+
+        param_a = 0.5
+        param_b = 1.0
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            preds_norms = preds_without_padd.norm(p=2, dim=1)
+            normalized_preds_norms = param_a + ((preds_norms - min_preds_batch_norms)
+                                                * (param_b - param_a)) / (max_preds_batch_norms - min_preds_batch_norms)
+
+            targets_norms = targets_without_padd.norm(p=2, dim=1)
+            normalized_targets_norms = param_a + ((targets_norms - min_targets_batch_norms)
+                                                  * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
+
+            sentence_mean_pred_norm = torch.sum(preds_without_padd * normalized_preds_norms.unsqueeze(1),
+                                                dim=0).unsqueeze(0) / torch.sum(normalized_preds_norms)  # ver a dim
+            sentece_mean_target_norm = torch.sum(targets_without_padd * normalized_targets_norms.unsqueeze(1),
+                                                 dim=0).unsqueeze(0) / torch.sum(normalized_targets_norms)
+
+            y = torch.ones(1).to(self.device)
+
+            sentence_losses += self.criterion(
+                sentence_mean_pred_norm,
+                sentece_mean_target_norm,
+                y
+            )
+
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+
+            image_embedding = images_embedding[i].unsqueeze(0)
+
+            # 1º input loss (sentence predicted against input image)
+            input1_losses += self.criterion(
+                sentence_mean_pred,
+                image_embedding,
+                y
+            )
+
+        word_loss = word_losses/n_sentences
+        sentence_loss = sentence_losses/n_sentences
+        input1_loss = input1_losses/n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss
 
         return loss
 
