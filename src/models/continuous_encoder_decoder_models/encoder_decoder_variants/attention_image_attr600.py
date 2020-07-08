@@ -126,7 +126,6 @@ class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
         self.fc = nn.Linear(decoder_dim, embed_dim)
 
     def init_hidden_state(self, encoder_attr):
-        print("enc size", encoder_attr.size())
 
         h = encoder_attr  # (batch_size, decoder_dim) 512 units
 
