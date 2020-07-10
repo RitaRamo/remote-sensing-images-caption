@@ -133,19 +133,6 @@ class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
 
         return h, h
 
-    def inference(self, embeddings, encoder_out, decoder_hidden_state, decoder_cell_state):
-        attention_weighted_encoding, alpha = self.attention(encoder_out, decoder_hidden_state)
-
-        decoder_input = torch.cat((embeddings, attention_weighted_encoding), dim=1)
-
-        decoder_hidden_state, decoder_cell_state = self.decode_step(
-            decoder_input, (decoder_hidden_state, decoder_cell_state)
-        )
-
-        scores = self.fc(self.dropout(decoder_hidden_state))
-
-        return scores, decoder_hidden_state, decoder_cell_state, alpha
-
 
 class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
 
@@ -241,9 +228,54 @@ class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
         return {"predictions": all_predictions, "alphas": all_alphas}
 
     def generate_output_embedding(self, input_embedding, encoder_out, h, c):
-        predictions, h, c, _ = self.decoder.inference(
+        predictions, h, c, _ = self.decoder(
             input_embedding, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
         return predictions, current_output_index, h, c
+
+    def inference_with_greedy(self, image, n_solutions=0):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_features, encoder_attrs = self.encoder(image)
+            encoder_features = encoder_features.view(encoder_features.size(0), -1, encoder_features.size(-1))  # flatten
+
+            h, c = self.decoder.init_hidden_state(encoder_attrs)
+
+            while True:
+
+                scores, h, c = self.generate_output_index(
+                    input_word, encoder_features, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len-1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence  # input_caption
