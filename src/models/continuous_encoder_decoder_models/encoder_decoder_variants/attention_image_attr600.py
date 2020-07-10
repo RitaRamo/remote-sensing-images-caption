@@ -16,6 +16,8 @@ from preprocess_data.tokens import START_TOKEN, END_TOKEN
 from preprocess_data.images import ImageNetModelsPretrained
 import logging
 from torchvision import transforms, models
+from utils.enums import DecodingType
+import operator
 
 
 def get_image_extractor(model_type, enable_fine_tuning):
