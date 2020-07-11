@@ -1,5 +1,5 @@
 --file_name
-split_fine_attentionsoft_2comp_eff_notnormalized.txt
+split_fine_attentionsoft_2comp_notnormalized.txt
 --model_class_str
 ContinuousAttentionModel
 --batch_size
