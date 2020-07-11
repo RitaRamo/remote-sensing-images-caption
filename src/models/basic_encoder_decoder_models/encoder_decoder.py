@@ -56,8 +56,6 @@ class Encoder(nn.Module):
         # # (later on the intermidiate dims are flatten: (prepare_inputs)
         # # (batch_size, encoded_image_size*encoded_image_size, 2048)
         out = out.permute(0, 2, 3, 1)
-        print("this is out", out.size())
-        print(stop)
 
         return out
 
