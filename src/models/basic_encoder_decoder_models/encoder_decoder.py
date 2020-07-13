@@ -44,10 +44,10 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        out = self.model(
-            images)  # (batch_size, 2048, image_size/32, image_size/32)
+        # out = self.model(
+        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        # out = self.model.extract_features(images)
+        out = self.model.extract_features(images)
         # #print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
@@ -75,7 +75,8 @@ class Decoder(nn.Module):
     Decoder.
     """
 
-    def __init__(self, decoder_dim,  embed_dim, embedding_type, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
+    def __init__(self, decoder_dim, embed_dim, embedding_type, vocab_size, token_to_id, post_processing,
+                 encoder_dim=2048, dropout=0.5):
         """
         :param attention_dim: size of attention network
         :param embed_dim: embedding size
@@ -93,7 +94,7 @@ class Decoder(nn.Module):
         self.dropout = dropout
 
         self.embedding = get_embedding_layer(
-            embedding_type, embed_dim, vocab_size, token_to_id)
+            embedding_type, embed_dim, vocab_size, token_to_id, post_processing)
 
         self.dropout = nn.Dropout(p=self.dropout)
         self.decode_step = nn.LSTMCell(
@@ -186,6 +187,7 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
+            post_processing=self.args.post_processing,
             dropout=self.args.dropout
         )
 
