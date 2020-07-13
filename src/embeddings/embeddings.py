@@ -7,9 +7,10 @@ from torch import nn
 import io
 import logging
 import fasttext
+from sklearn.decomposition import PCA
 
 
-def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
+def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id, post_processing):
     embedding_layer = nn.Embedding(vocab_size, embed_dim)  # embedding layer
 
     if embedding_type == None:
@@ -61,6 +62,23 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id):
 
         elif embedding_type == EmbeddingsType.BERT.value:
             pretrained_embeddings = torch.load(get_bert_path())["pretrained_embeddings_matrix"].data.numpy()
+
+        if post_processing:
+            logging.info("post-processing embeddings")
+            pca = PCA()
+            X_train = pretrained_embeddings - np.mean(pretrained_embeddings, axis=0)
+            pca.fit(X_train)
+            U1 = pca.components_
+
+            post = np.zeros((np.shape(X_train)[0], np.shape(X_train)[1]))
+
+            # Removing Projections on Top Components
+            for i, x in enumerate(X_train):
+                for u in U1[0:3]:
+                    x = x - np.dot(u.transpose(), x) * u
+                post[i, :] = x
+
+            pretrained_embeddings = post
 
         embedding_layer.weight.data.copy_(
             torch.from_numpy(pretrained_embeddings))

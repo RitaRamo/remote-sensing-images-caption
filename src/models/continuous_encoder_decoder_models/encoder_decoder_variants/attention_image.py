@@ -21,11 +21,11 @@ class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
     """
 
     def __init__(
-            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048,
-            dropout=0.5):
+            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, post_processing,
+            encoder_dim=2048, dropout=0.5):
 
         super(ContinuousDecoderWithAttentionAndImage, self).__init__(attention_dim, embedding_type,
-                                                                     embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
+                                                                     embed_dim, decoder_dim, vocab_size, token_to_id, post_processing, encoder_dim, dropout)
 
         # linear layer to find representation of image
         self.represent_image = nn.Linear(encoder_dim, embed_dim)
@@ -86,6 +86,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
+            post_processing=self.args.post_processing,
             dropout=self.args.dropout
         )
 

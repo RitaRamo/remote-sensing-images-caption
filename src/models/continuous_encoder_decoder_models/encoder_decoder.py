@@ -18,10 +18,11 @@ class ContinuousDecoder(Decoder):
     Decoder.
     """
 
-    def __init__(self, decoder_dim,  embed_dim, embedding_type, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
+    def __init__(self, decoder_dim, embed_dim, embedding_type, vocab_size, token_to_id, post_processing,
+                 encoder_dim=2048, dropout=0.5):
 
-        super(ContinuousDecoder, self).__init__(decoder_dim,  embed_dim,
-                                                embedding_type, vocab_size, token_to_id, encoder_dim, dropout)
+        super(ContinuousDecoder, self).__init__(decoder_dim, embed_dim, embedding_type,
+                                                vocab_size, token_to_id, post_processing, encoder_dim, dropout)
 
         # replace softmax with a embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
@@ -55,6 +56,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
+            post_processing=self.args.post_processing,
             dropout=self.args.dropout
         )
 
