@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from preprocess_data.tokens import OOV_TOKEN, START_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
@@ -113,7 +113,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
     def greedy_with_attention(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence = []
+            decoder_sentence = [START_TOKEN]
 
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
@@ -144,8 +144,6 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
                 decoder_sentence.append(current_output_token)
 
                 if current_output_token == END_TOKEN:
-                    # ignore end_token
-                    decoder_sentence = decoder_sentence[:-1]
                     break
 
                 if i >= self.max_len-1:  # until 35
@@ -155,7 +153,6 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
 
                 i += 1
 
-            generated_sentence = " ".join(decoder_sentence)
-            print("\ngenerated sentence:", generated_sentence)
+            print("\decoder_sentence sentence:", decoder_sentence)
 
-            return generated_sentence, all_alphas, None  # input_caption
+            return decoder_sentence, all_alphas, None  # input_caption

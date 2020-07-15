@@ -114,7 +114,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
     def greedy_with_attention(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
 
-            decoder_sentence = []
+            decoder_sentence = [START_TOKEN]
 
             input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
@@ -145,8 +145,6 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
                 decoder_sentence.append(current_output_token)
 
                 if current_output_token == END_TOKEN:
-                    # ignore end_token
-                    decoder_sentence = decoder_sentence[:-1]
                     break
 
                 if i >= self.max_len-1:  # until 35
@@ -156,10 +154,9 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
 
                 i += 1
 
-            generated_sentence = " ".join(decoder_sentence)
-            print("\ngenerated sentence:", generated_sentence)
+            print("\decoder_sentence sentence:", decoder_sentence)
 
-            return generated_sentence, all_alphas, None  # input_caption
+            return decoder_sentence, all_alphas, None  # input_caption
 
     def inference_with_greedy_embedding(self, image):
         with torch.no_grad():  # no need to track history
