@@ -126,7 +126,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
 
             h, c = self.decoder.init_hidden_state(encoder_output)
 
-            all_alphas = torch.zeros(1, self.max_len, encoder_attrs.size()[1])
+            all_alphas = torch.zeros(1, self.max_len, encoder_output.size(1))
 
             while True:
 
