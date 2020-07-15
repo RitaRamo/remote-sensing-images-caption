@@ -101,3 +101,61 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
         current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c
+
+    def generate_output_embedding_with_alphas(self, input_embedding, encoder_out, h, c):
+        predictions, h, c, alphas = self.decoder.inference(
+            input_embedding, encoder_out, h, c)
+
+        current_output_index = self._convert_prediction_to_output(predictions)
+
+        return predictions, current_output_index, h, c, alphas
+
+    def greedy_with_attention(self, image, n_solutions=0):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            all_alphas = torch.zeros(1, self.max_len, encoder_attrs.size()[1])
+
+            while True:
+
+                scores, h, c, alpha = self.generate_output_embedding_with_alphas(
+                    input_word, encoder_output, h, c)
+
+                all_alphas[0, t, :] = alpha
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                current_output_index = sorted_indices[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len-1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence, all_alphas, None  # input_caption
