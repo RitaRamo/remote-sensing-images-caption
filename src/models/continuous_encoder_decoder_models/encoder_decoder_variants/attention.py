@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN, START_TOKEN
+from preprocess_data.tokens import OOV_TOKEN, START_TOKEN, END_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
