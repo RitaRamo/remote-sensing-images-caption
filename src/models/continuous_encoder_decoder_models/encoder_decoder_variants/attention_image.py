@@ -109,7 +109,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
-        return predictions, current_output_index, h, c, alphas
+        return current_output_index, h, c, alphas
 
     def greedy_with_attention(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history

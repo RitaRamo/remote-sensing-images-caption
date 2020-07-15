@@ -102,13 +102,13 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
 
         return current_output_index, h, c
 
-    def generate_output_embedding_with_alphas(self, input_embedding, encoder_out, h, c):
+    def generate_output_embedding_with_alphas(self, input_word, encoder_out, h, c):
         predictions, h, c, alphas = self.decoder(
-            input_embedding, encoder_out, h, c)
+            input_word, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
-        return predictions, current_output_index, h, c, alphas
+        return current_output_index, h, c, alphas
 
     def greedy_with_attention(self, image, n_solutions=0):
         with torch.no_grad():  # no need to track history
