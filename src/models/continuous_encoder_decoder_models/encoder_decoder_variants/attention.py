@@ -103,7 +103,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
         return current_output_index, h, c
 
     def generate_output_embedding_with_alphas(self, input_embedding, encoder_out, h, c):
-        predictions, h, c, alphas = self.decoder.inference(
+        predictions, h, c, alphas = self.decoder(
             input_embedding, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
