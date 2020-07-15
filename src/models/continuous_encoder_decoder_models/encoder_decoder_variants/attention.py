@@ -132,7 +132,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
                 scores, h, c, alpha = self.generate_output_embedding_with_alphas(
                     input_word, encoder_output, h, c)
 
-                all_alphas[0, t, :] = alpha
+                all_alphas[0, i, :] = alpha
 
                 sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
