@@ -836,12 +836,6 @@ class ContinuousLoss():
                 y
             )
 
-            print("sentence loss", self.criterion(
-                sentence_mean_pred,
-                sentece_mean_target,
-                y
-            ))
-
             image_embedding = images_embedding[i].unsqueeze(0)
 
             # 1º input loss (sentence predicted against input image)
