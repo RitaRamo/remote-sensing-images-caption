@@ -8,12 +8,12 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from embeddings.embeddings import EmbeddingsType
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
-from preprocess_data.images import ImageNetModelsPretrained
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_images import ImageNetModelsPretrained
 import logging
 from torchvision import transforms, models
 from utils.enums import DecodingType
@@ -205,7 +205,7 @@ class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
         num_pixels = encoder_features.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
@@ -270,7 +270,7 @@ class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
                     decoder_sentence = decoder_sentence[:-1]
                     break
 
-                if i >= self.max_len-1:  # until 35
+                if i >= self.max_len - 1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -285,7 +285,7 @@ class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
     def inference_with_beamsearch(self, image, n_solutions=3):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            return (seed_prob*len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text)+1)
+            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
         def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
             current_text = ' '.join(current_text)
@@ -315,7 +315,7 @@ class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
         def compute_perplexity_with_sim2image():
             return 0
 
-        def generate_n_solutions(seed_text, seed_prob, encoder_features,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_features, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -369,7 +369,7 @@ class ContinuousAttentionImageAttr600Model(ContinuousAttentionModel):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_features, h, c,  n_solutions))
+                        sentence, prob, encoder_features, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 

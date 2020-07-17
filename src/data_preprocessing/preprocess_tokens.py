@@ -32,6 +32,8 @@ def preprocess_tokens(train_captions):
 
     max_len = max(map(len, train_captions))
 
+    print("max_len", max_len)
+
     return len_vocab, token_to_id, id_to_token, max_len
 
 

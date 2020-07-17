@@ -7,15 +7,15 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel, ContinuousDecoderWithAttention
 from embeddings.embeddings import EmbeddingsType
-from preprocess_data.images import ImageNetModelsPretrained
+from data_preprocessing.preprocess_images import ImageNetModelsPretrained
 import logging
 from torchvision import models
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
-from preprocess_data.images import get_image_extractor, DenseNetFeatureAndAttrExtractor
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_images import get_image_extractor, DenseNetFeatureAndAttrExtractor
 
 # chamar image models
 
@@ -143,7 +143,7 @@ class ContinuousDecoderWithAttentionAsAttrImage(ContinuousDecoderWithAttention):
 
         batch_attr_embedding = self.embedding_attr.repeat(encoder_attr.size()[0], 1, 1)
 
-        mean_attr = torch.sum(batch_attr_embedding*encoder_attr.unsqueeze(2), dim=1)/torch.sum(encoder_attr)
+        mean_attr = torch.sum(batch_attr_embedding * encoder_attr.unsqueeze(2), dim=1) / torch.sum(encoder_attr)
 
         self.image_embedding = mean_attr
 
@@ -220,7 +220,7 @@ class ContinuousAttentionAttrAsImageModel(ContinuousAttentionModel):
         num_pixels = encoder_features.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
@@ -277,7 +277,7 @@ class ContinuousAttentionAttrAsImageModel(ContinuousAttentionModel):
                     decoder_sentence = decoder_sentence[:-1]
                     break
 
-                if i >= self.max_len-1:  # until 35
+                if i >= self.max_len - 1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -289,9 +289,9 @@ class ContinuousAttentionAttrAsImageModel(ContinuousAttentionModel):
 
             return generated_sentence  # input_caption
 
-    def generate_output_index(self, input_word, encoder_features,  h, c):
+    def generate_output_index(self, input_word, encoder_features, h, c):
         predictions, h, c, _ = self.decoder(
-            input_word, encoder_features,  h, c)
+            input_word, encoder_features, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 

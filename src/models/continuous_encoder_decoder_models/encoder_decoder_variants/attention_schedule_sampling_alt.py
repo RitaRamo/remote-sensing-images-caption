@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
@@ -44,7 +44,7 @@ class ContinuousDecoderWithAttentionAndScheduleSampling(DecoderWithAttention):
 
         embedding_ground = self.embedding(word_ground_truth)
 
-        embedding = (sampling_rate)*embedding_predicted + (1-sampling_rate)*embedding_ground
+        embedding = (sampling_rate) * embedding_predicted + (1 - sampling_rate) * embedding_ground
 
         decoder_input = torch.cat(
             (embedding, attention_weighted_encoding), dim=1
@@ -123,7 +123,7 @@ class ContinuousAttentionWithScheduleSamplingAltModel(ContinuousEncoderDecoderMo
         num_pixels = encoder_out.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
@@ -133,8 +133,8 @@ class ContinuousAttentionWithScheduleSamplingAltModel(ContinuousEncoderDecoderMo
         if self.current_epoch > 10:
             sampling_rate = self.SAMPLING_INITIAL_RATE * self.rate_step
         else:
-            sampling_rate=0.0
-            self.rate_step=0.0
+            sampling_rate = 0.0
+            self.rate_step = 0.0
 
         # 1º time-step  (embedding of ground-truth given as last prediction since there is no prediction yet)
         predictions, h, c, alpha = self.decoder(

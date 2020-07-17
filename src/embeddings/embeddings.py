@@ -1,7 +1,7 @@
 import numpy as np
 from utils.enums import EmbeddingsType
 import spacy
-from preprocess_data.tokens import END_TOKEN
+from data_preprocessing.preprocess_tokens import END_TOKEN
 import torch
 from torch import nn
 import io
@@ -40,7 +40,7 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id, post
 
         elif embedding_type == EmbeddingsType.CONCATENATE_GLOVE_FASTTEXT.value:
 
-            embed_dim = int(embed_dim/2)
+            embed_dim = int(embed_dim / 2)
             glove_path = _get_glove_path(embed_dim)
 
             glove_embeddings = _read_glove_vectors(
@@ -114,7 +114,7 @@ def _read_fasttext_vectors(fname):
 
 
 def _get_glove_path(embedding_size):
-    return 'src/embeddings/glove.6B/glove.6B.'+str(embedding_size) + 'd.txt'
+    return 'src/embeddings/glove.6B/glove.6B.' + str(embedding_size) + 'd.txt'
 
 
 def _get_fasttext_path(embedding_size):

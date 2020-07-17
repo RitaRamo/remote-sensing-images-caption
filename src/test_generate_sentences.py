@@ -1,8 +1,8 @@
 import os
 import torch
 import logging
-from args_parser import get_args
-from create_data_files import get_vocab_info, get_dataset
+from utils.args_parser import get_args
+from data_preprocessing.create_data_files import get_vocab_info, get_dataset
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.sat import BasicShowAttendAndTellModel
@@ -48,14 +48,14 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 
 from torchvision import transforms
 from PIL import Image
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
 from nlgeval import compute_metrics
 from models.abtract_model import DecodingType
 import json
 
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
+from utils.definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -67,12 +67,12 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    test_dataset = get_dataset(PATH_DATASETS_RSICD+"test_coco_format.json")
+    test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(
@@ -80,7 +80,7 @@ if __name__ == "__main__":
     model.setup_to_test()
 
     transform = transforms.Compose([
-        transforms.ToTensor(),
+        transforms.ToTensor(),  # histogram
         transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
                              std=[0.229, 0.224, 0.225])
     ])
@@ -141,7 +141,7 @@ if __name__ == "__main__":
         #     break
 
     sentences_path = PATH_EVALUATION_SENTENCES + \
-        args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_coco'  # str(self.args.__dict__)
+        args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'  # str(self.args.__dict__)
 
-    with open(sentences_path+'.json', 'w+') as f:
+    with open(sentences_path + '.json', 'w+') as f:
         json.dump(list_hipotheses, f, indent=2)

@@ -8,15 +8,17 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
 from torchvision import transforms
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD
-from create_data_files import get_dataset
+from utils.definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from data_preprocessing.create_data_files import get_dataset
 from PIL import Image
 from toolz import unique
+from data_preprocessing.datasets import NeighbourDataset
+from torch.utils.data import DataLoader
 
 
 class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
@@ -57,12 +59,48 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
                 1, -1, encoder_output.size()[-1])
             mean_encoder_output = encoder_output.mean(dim=1)
 
-            train_dataset = get_dataset(PATH_DATASETS_RSICD+"train_dict.json")
+            #train_dataset = get_dataset(PATH_DATASETS_RSICD+"train_dict.json")
+
+            train_dataset_args = (PATH_DATASETS_RSICD + "train_dict.json",
+                                  max_len,
+                                  token_to_id
+                                  )
+
+            train_dataloader = DataLoader(
+                NeighbourDataset(*train_dataset_args, args.augment_data),
+                batch_size=8,
+                shuffle=False,
+                num_workers=args.num_workers
+            )
 
             scores_similarity = []
-            image_names = []
-            i = 0
-            for image_name, references in train_dataset.items():
+            # image_names = []
+            # i = 0
+
+            # for image_name, references in train_dataset.items():
+            #     image_path = PATH_RSICD + \
+            #         "raw_dataset/RSICD_images/" + image_name
+            #     image = Image.open(image_path)
+            #     image = transform(image)
+            #     image = image.unsqueeze(0)
+
+            #     encoder_neighbour = self.encoder(image)
+            #     encoder_neighbour = encoder_neighbour.view(1, -1, encoder_neighbour.size()[-1])
+            #     mean_encoder_neighbour = encoder_neighbour.mean(dim=1)
+            #     sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
+            #     print("sim scores", sim)
+            #     scores_similarity.append(sim.item())
+            #     image_names.append(image_name)
+
+            # sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity),  descending=True, dim=-1)
+
+            # best_image_index = sorted_indices[0]
+            # best_image_name = image_names[best_image_index]
+            # generated_sentence = train_dataset[best_image_name][0]  # there are 5 captions per image
+
+            captions = []
+            for batch_i, (image_name, caption) in enumerate(train_dataloader):
+
                 image_path = PATH_RSICD + \
                     "raw_dataset/RSICD_images/" + image_name
                 image = Image.open(image_path)
@@ -75,9 +113,9 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
                 sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
                 print("sim scores", sim)
                 scores_similarity.append(sim.item())
-                image_names.append(image_name)
+                captions.append(caption)
 
-            sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity),  descending=True, dim=-1)
+            sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity), descending=True, dim=-1)
 
             best_image_index = sorted_indices[0]
             best_image_name = image_names[best_image_index]

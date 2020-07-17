@@ -5,10 +5,10 @@ import numpy as np
 import torch
 from torch.utils.data import DataLoader
 
-from args_parser import get_args
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD
-from create_data_files import get_dataset, get_vocab_info
-from datasets import CaptionDataset, POSCaptionDataset
+from utils.args_parser import get_args
+from utils.definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from data_preprocessing.create_data_files import get_dataset, get_vocab_info
+from data_preprocessing.datasets import CaptionDataset, POSCaptionDataset
 
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
@@ -19,7 +19,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_relu import ContinuousAttentionReluModel
 #from models.continuous_encoder_decoder_models.encoder_decoder_variants.diff_loss import ContinuousMarginModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.bert import ContinuousBertModel
-from preprocess_data.images import augment_image
+from data_preprocessing.preprocess_images import augment_image
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_schedule_sampling import ContinuousAttentionWithScheduleSamplingModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_schedule_sampling_alt import ContinuousAttentionWithScheduleSamplingAltModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel
@@ -53,6 +53,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image_normalized import ContinuousAttentionImageNormalizedModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image_attr600 import ContinuousAttentionImageAttr600Model
 
+
 torch.manual_seed(0)
 np.random.seed(0)
 torch.backends.cudnn.deterministic = True
@@ -79,19 +80,19 @@ if __name__ == "__main__":
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     logging.info("vocab size %s", vocab_size)
 
-    train_dataset_args = (PATH_DATASETS_RSICD+"train.json",
-                          PATH_RSICD+"raw_dataset/RSICD_images/",
+    train_dataset_args = (PATH_DATASETS_RSICD + "train.json",
+                          PATH_RSICD + "raw_dataset/RSICD_images/",
                           max_len,
                           token_to_id
                           )
 
-    val_dataset_args = (PATH_DATASETS_RSICD+"val.json",
-                        PATH_RSICD+"raw_dataset/RSICD_images/",
+    val_dataset_args = (PATH_DATASETS_RSICD + "val.json",
+                        PATH_RSICD + "raw_dataset/RSICD_images/",
                         max_len,
                         token_to_id
                         )

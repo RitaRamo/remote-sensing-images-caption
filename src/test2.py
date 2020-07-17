@@ -1,9 +1,9 @@
 import os
 import torch
 import logging
-from args_parser import get_args
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD
-from create_data_files import get_vocab_info, get_dataset
+from utils.args_parser import get_args
+from utils.definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from data_preprocessing.create_data_files import get_vocab_info, get_dataset
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.sat import BasicShowAttendAndTellModel
@@ -29,7 +29,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 
 from torchvision import transforms
 from PIL import Image
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
 from nlgeval import NLGEval
@@ -45,12 +45,12 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    test_dataset = get_dataset(PATH_DATASETS_RSICD+"test.json")
+    test_dataset = get_dataset(PATH_DATASETS_RSICD + "test.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(

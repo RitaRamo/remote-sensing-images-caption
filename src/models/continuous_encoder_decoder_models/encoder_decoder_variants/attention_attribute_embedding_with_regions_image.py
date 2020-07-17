@@ -7,15 +7,15 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel, ContinuousDecoderWithAttentionAndImage
 from embeddings.embeddings import EmbeddingsType
-from preprocess_data.images import ImageNetModelsPretrained
+from data_preprocessing.preprocess_images import ImageNetModelsPretrained
 import logging
 from torchvision import models
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
-from preprocess_data.images import get_image_extractor, DenseNetFeatureAndAttrExtractor
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_images import get_image_extractor, DenseNetFeatureAndAttrExtractor
 
 # chamar image models
 
@@ -116,7 +116,7 @@ class FeaturesAndAttrAttention(nn.Module):
     Attention Network.
     """
 
-    def __init__(self, encoder_dim,  embed_dim, decoder_dim, attention_dim, embedding_attr):
+    def __init__(self, encoder_dim, embed_dim, decoder_dim, attention_dim, embedding_attr):
         """
         :param encoder_dim: feature size of encoded images
         :param decoder_dim: size of decoder's RNN
@@ -186,7 +186,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)  # decoding LSTMCell
 
-    def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
+    def forward(self, word, encoder_features, encoder_attrs, decoder_hidden_state, decoder_cell_state):
         attention_weighted_encoding, alpha = self.attention(encoder_features, encoder_attrs, decoder_hidden_state)
         embeddings = self.embedding(word)
 
@@ -271,7 +271,7 @@ class ContinuousAttentionAttrEmbeddingWithRegionsImageModel(ContinuousAttentionI
         num_pixels = encoder_features.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), encoder_attrs.size()[1] + encoder_features.size()[1]).to(self.device)
@@ -325,7 +325,7 @@ class ContinuousAttentionAttrEmbeddingWithRegionsImageModel(ContinuousAttentionI
                 decoder_sentence += " " + current_output_token
 
                 if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -336,9 +336,9 @@ class ContinuousAttentionAttrEmbeddingWithRegionsImageModel(ContinuousAttentionI
 
             return decoder_sentence  # input_caption
 
-    def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
+    def generate_output_index(self, input_word, encoder_features, encoder_attrs, h, c):
         predictions, h, c, _ = self.decoder(
-            input_word, encoder_features, encoder_attrs,  h, c)
+            input_word, encoder_features, encoder_attrs, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 

@@ -7,15 +7,15 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel, ContinuousDecoderWithAttentionAndImage
 from embeddings.embeddings import EmbeddingsType
-from preprocess_data.images import ImageNetModelsPretrained
+from data_preprocessing.preprocess_images import ImageNetModelsPretrained
 import logging
 from torchvision import models
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
-from preprocess_data.images import get_image_extractor, DenseNetFeatureAndAttrExtractor
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_images import get_image_extractor, DenseNetFeatureAndAttrExtractor
 from utils.enums import DecodingType
 import operator
 
@@ -118,7 +118,7 @@ class FeaturesAndAttrAttention(nn.Module):
     Attention Network.
     """
 
-    def __init__(self, encoder_dim,  embed_dim, decoder_dim, attention_dim, embedding_attr):
+    def __init__(self, encoder_dim, embed_dim, decoder_dim, attention_dim, embedding_attr):
         """
         :param encoder_dim: feature size of encoded images
         :param decoder_dim: size of decoder's RNN
@@ -175,7 +175,7 @@ class FeaturesAndAttrAttention(nn.Module):
         att_att2 = self.full_att(self.relu(w_attention2 + w_h)).squeeze(2)
         alpha_att2 = self.softmax(att_att2)
 
-        attention_weighted_encoding = alpha_att1*attention1 + alpha_att2*attention2
+        attention_weighted_encoding = alpha_att1 * attention1 + alpha_att2 * attention2
 
         return attention_weighted_encoding, alpha_attr, alpha_regions, alpha_att1, alpha_att2
 
@@ -203,7 +203,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         self.decode_step = nn.LSTMCell(embed_dim + embed_dim, decoder_dim, bias=True)
 
-    def forward(self, word, encoder_features, encoder_attrs,  decoder_hidden_state, decoder_cell_state):
+    def forward(self, word, encoder_features, encoder_attrs, decoder_hidden_state, decoder_cell_state):
         attention_weighted_encoding, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.attention(
             encoder_features,
             encoder_attrs,
@@ -218,7 +218,7 @@ class ContinuousAttrAttentionDecoder(ContinuousDecoderWithAttentionAndImage):
 
         scores = self.fc(self.dropout(decoder_hidden_state))
 
-        return scores, decoder_hidden_state, decoder_cell_state,  alpha_attr, alpha_regions, alpha_att1, alpha_att2
+        return scores, decoder_hidden_state, decoder_cell_state, alpha_attr, alpha_regions, alpha_att1, alpha_att2
 
 
 class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousAttentionImageModel):
@@ -291,7 +291,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
         num_pixels = encoder_features.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas_attr = torch.zeros(batch_size, max(
             caption_lengths), encoder_attrs.size()[1]).to(self.device)
@@ -310,7 +310,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
             # batchsizes of current time_step are the ones with lenght bigger than time-step (i.e have not fineshed yet)
             batch_size_t = sum([l > t for l in caption_lengths])
 
-            predictions, h, c,  alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(
+            predictions, h, c, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(
                 caps[: batch_size_t, t],
                 encoder_features[: batch_size_t],
                 encoder_attrs[: batch_size_t],
@@ -364,7 +364,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
                     decoder_sentence = decoder_sentence[:-1]
                     break
 
-                if i >= self.max_len-1:  # until 35
+                if i >= self.max_len - 1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -379,7 +379,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
     def inference_with_beamsearch(self, image, n_solutions=3):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            return (seed_prob*len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text)+1)
+            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
         def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
             current_text = ' '.join(current_text)
@@ -409,7 +409,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
         def compute_perplexity_with_sim2image():
             return 0
 
-        def generate_n_solutions(seed_text, seed_prob, encoder_features, encoder_attrs,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_features, encoder_attrs, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -463,7 +463,7 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_features, encoder_attrs, h, c,  n_solutions))
+                        sentence, prob, encoder_features, encoder_attrs, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
@@ -480,9 +480,9 @@ class ContinuousAttentionMultilevelAttrEmbeddingAndRegionsImageModel(ContinuousA
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def generate_output_index(self, input_word, encoder_features, encoder_attrs,  h, c):
+    def generate_output_index(self, input_word, encoder_features, encoder_attrs, h, c):
         predictions, h, c, alpha_attr, alpha_regions, alpha_att1, alpha_att2 = self.decoder(
-            input_word, encoder_features, encoder_attrs,  h, c)
+            input_word, encoder_features, encoder_attrs, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 

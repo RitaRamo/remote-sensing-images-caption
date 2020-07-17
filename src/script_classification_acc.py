@@ -1,11 +1,11 @@
-from create_data_files import PATH_RSICD
+from utils.definitions import PATH_RSICD
 import torch
 from torchvision import transforms, models
 from torch import nn
 from datasets import ClassificationDataset
 from torch.utils.data import DataLoader
 from utils.early_stop import EarlyStopping
-from optimizer import get_optimizer
+from utils.optimizer import get_optimizer
 import logging
 import os
 import numpy as np
@@ -44,8 +44,8 @@ if __name__ == "__main__":
     classification_train = dict(list(classification_dataset.items())[split_ratio:])
     classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
-    train_dataset_args = (classification_train, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
-    val_dataset_args = (classification_val, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
+    train_dataset_args = (classification_train, PATH_RSICD + "raw_dataset/RSICD_images/", classes_to_id)
+    val_dataset_args = (classification_val, PATH_RSICD + "raw_dataset/RSICD_images/", classes_to_id)
 
     train_dataloader = DataLoader(
         ClassificationDataset(*train_dataset_args),
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     vocab_size = len(classes_to_id)
 
     # checkpoint =  torch.load('experiments/results/classification_finetune.pth.tar')
-    checkpoint = torch.load('experiments/results/'+FILE_NAME + '.pth.tar')
+    checkpoint = torch.load('experiments/results/' + FILE_NAME + '.pth.tar')
     print("checkpoint loaded")
     if EFFICIENT_NET:
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
@@ -100,7 +100,7 @@ if __name__ == "__main__":
             correct_preds = torch.sum(condition_1 * condition_2, dim=1)
             n_preds = torch.sum(condition_1, dim=1)
 
-            acc = correct_preds.double()/n_preds
+            acc = correct_preds.double() / n_preds
             acc[torch.isnan(acc)] = 0  # n_preds can be 0
             acc_batch = torch.mean(acc)
 
@@ -119,7 +119,7 @@ if __name__ == "__main__":
                 print("total loss", total_acc)
 
         print("len of train_data", len(train_dataloader))
-        epoch_acc = (total_acc / (batch+1)).item()
+        epoch_acc = (total_acc / (batch + 1)).item()
         print("epoch acc", train_or_val, epoch_acc)
         return epoch_acc
 

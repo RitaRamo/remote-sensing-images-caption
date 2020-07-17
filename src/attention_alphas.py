@@ -6,17 +6,17 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 import os
 import torch
 import logging
-from args_parser import get_args
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD
-from create_data_files import get_vocab_info, get_dataset
+from utils.args_parser import get_args
+from utils.definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from data_preprocessing.create_data_files import get_vocab_info, get_dataset
 from torchvision import transforms
 from PIL import Image
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
 from nlgeval import NLGEval
 from models.abtract_model import DecodingType
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
+from utils.definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 import json
 
 if __name__ == "__main__":
@@ -25,12 +25,12 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    test_dataset = get_dataset(PATH_DATASETS_RSICD+"test_coco_format.json")
+    test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(
@@ -142,7 +142,7 @@ if __name__ == "__main__":
             break
 
     sentences_path = PATH_EVALUATION_SENTENCES + \
-        args.file_name + "_"+args.decodying_type + "_"+str(args.n_beam) + '_alphas'  # str(self.args.__dict__)
+        args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_alphas'  # str(self.args.__dict__)
 
     # with open(sentences_path+'.json', 'w+') as f:
     #     json.dump(list_hipotheses, f, indent=2)

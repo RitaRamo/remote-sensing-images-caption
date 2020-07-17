@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN, START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN, START_TOKEN, END_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
@@ -73,7 +73,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
         num_pixels = encoder_out.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
@@ -146,7 +146,7 @@ class ContinuousAttentionModel(ContinuousEncoderDecoderModel):
                 if current_output_token == END_TOKEN:
                     break
 
-                if i >= self.max_len-1:  # until 35
+                if i >= self.max_len - 1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()

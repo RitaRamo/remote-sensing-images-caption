@@ -1,11 +1,11 @@
-from definitions import PATH_RSICD
+from utils.definitions import PATH_RSICD
 import torch
 from torchvision import transforms, models
 from torch import nn
 from datasets import ClassificationDataset
 from torch.utils.data import DataLoader
 from utils.early_stop import EarlyStopping
-from optimizer import get_optimizer
+from utils.optimizer import get_optimizer
 import logging
 import os
 import numpy as np
@@ -39,7 +39,7 @@ class FocalLoss(nn.Module):
     def forward(self, inputs, targets):
         BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduce=False)
         pt = torch.exp(-BCE_loss)
-        F_loss = self.alpha * (1-pt)**self.gamma * BCE_loss
+        F_loss = self.alpha * (1 - pt)**self.gamma * BCE_loss
 
         if self.reduce:
             return torch.mean(F_loss)
@@ -146,11 +146,11 @@ class ClassificationModel():
                     break
 
             # End training
-            epoch_loss = train_total_loss/(batch_i+1)
+            epoch_loss = train_total_loss / (batch_i + 1)
             logging.info('Time taken for 1 epoch {:.4f} sec'.format(
                 time.time() - start))
             logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
-                                                                                  train_total_loss/(batch_i+1)))
+                                                                                  train_total_loss / (batch_i + 1)))
 
             # Start validation
             self.model.eval()  # eval mode (no dropout or batchnorm)
@@ -172,7 +172,7 @@ class ClassificationModel():
                         break
 
             # End validation
-            epoch_val_loss = val_total_loss/(batch_i+1)
+            epoch_val_loss = val_total_loss / (batch_i + 1)
 
             early_stopping.check_improvement(epoch_val_loss)
 
@@ -232,7 +232,7 @@ class ClassificationModel():
                 "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
-        path = self.MODEL_DIRECTORY + FILE_NAME+'.pth.tar'
+        path = self.MODEL_DIRECTORY + FILE_NAME + '.pth.tar'
         return path
 
 
@@ -255,8 +255,8 @@ if __name__ == "__main__":
     classification_train = dict(list(classification_dataset.items())[split_ratio:])
     classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
-    train_dataset_args = (classification_train, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
-    val_dataset_args = (classification_val, PATH_RSICD+"raw_dataset/RSICD_images/", classes_to_id)
+    train_dataset_args = (classification_train, PATH_RSICD + "raw_dataset/RSICD_images/", classes_to_id)
+    val_dataset_args = (classification_val, PATH_RSICD + "raw_dataset/RSICD_images/", classes_to_id)
 
     train_dataloader = DataLoader(
         ClassificationDataset(*train_dataset_args),

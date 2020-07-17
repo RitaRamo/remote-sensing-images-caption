@@ -7,7 +7,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_image import ContinuousAttentionImageModel
 from embeddings.embeddings import EmbeddingsType
@@ -95,7 +95,7 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
             )
 
             loss_of_each_word = torch.mean(word_loss_per_dim, dim=1)
-            weighted_postagging_loss = torch.sum(loss_of_each_word*pos_scores)/torch.sum(pos_scores)
+            weighted_postagging_loss = torch.sum(loss_of_each_word * pos_scores) / torch.sum(pos_scores)
             word_losses += weighted_postagging_loss
 
             # sentence-level loss (sentence predicted agains target sentence)
@@ -121,10 +121,10 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
                 sentece_mean_target
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -155,10 +155,10 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
             )
 
             loss_of_each_word = torch.mean(word_loss_per_dim, dim=1)
-            weighted_postagging_loss = torch.sum(loss_of_each_word*pos_scores)/torch.sum(pos_scores)
+            weighted_postagging_loss = torch.sum(loss_of_each_word * pos_scores) / torch.sum(pos_scores)
             word_losses += weighted_postagging_loss
 
-        word_loss = word_losses/n_sentences
+        word_loss = word_losses / n_sentences
         loss = word_loss
 
         return loss
@@ -192,7 +192,7 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
             )
 
             loss_of_each_word = torch.mean(word_loss_per_dim, dim=1)
-            weighted_postagging_loss = torch.sum(loss_of_each_word*pos_scores)/torch.sum(pos_scores)
+            weighted_postagging_loss = torch.sum(loss_of_each_word * pos_scores) / torch.sum(pos_scores)
             word_losses += weighted_postagging_loss
 
             # sentence-level loss (sentence predicted agains target sentence)
@@ -202,7 +202,9 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
             print(" target", targets_without_padd.size())
             print(" pos_scores", pos_scores.size())
 
-            sentece_mean_target = torch.sum(targets_without_padd*pos_scores.unsqueeze(1), dim=0)/torch.sum(pos_scores)
+            sentece_mean_target = torch.sum(
+                targets_without_padd * pos_scores.unsqueeze(1),
+                dim=0) / torch.sum(pos_scores)
             print("this is sentence mean target", sentece_mean_target.size())
 
             sentence_losses += self.criterion_sentence_level(
@@ -224,10 +226,10 @@ class ContinuousAttentionImagePOSModel(ContinuousAttentionImageModel):
                 sentece_mean_target
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 

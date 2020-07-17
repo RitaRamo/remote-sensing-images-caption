@@ -1,9 +1,9 @@
-from create_data_files import get_vocab_info, get_dataset
-from definitions import PATH_DATASETS_RSICD
+from data_preprocessing.create_data_files import get_vocab_info, get_dataset
+from utils.definitions import PATH_DATASETS_RSICD
 from collections import defaultdict
 import spacy
 from spacy.tokens import Doc
-from preprocess_data.tokens import WhitespaceTokenizer
+from data_preprocessing.preprocess_tokens import WhitespaceTokenizer
 import inflect
 from collections import Counter
 import torch
@@ -19,8 +19,8 @@ if __name__ == "__main__":
     nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
     p = inflect.engine()
 
-    train_dataset = get_dataset(PATH_DATASETS_RSICD+"train.json")
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD+"vocab_info.json")
+    train_dataset = get_dataset(PATH_DATASETS_RSICD + "train.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
 

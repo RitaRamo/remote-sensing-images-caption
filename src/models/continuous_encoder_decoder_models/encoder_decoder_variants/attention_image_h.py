@@ -8,11 +8,11 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from embeddings.embeddings import EmbeddingsType
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 from utils.enums import ContinuousLossesType
 
 
@@ -134,7 +134,7 @@ class ContinuousAttentionImageHModel(ContinuousAttentionModel):
                 decoder_sentence += " " + current_output_token
 
                 if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_embedding[0, :] = predictions
@@ -177,7 +177,7 @@ class ContinuousAttentionImageHModel(ContinuousAttentionModel):
                 decoder_sentence += " " + current_output_token
 
                 if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -193,7 +193,7 @@ class ContinuousAttentionImageHModel(ContinuousAttentionModel):
         num_pixels = encoder_out.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
@@ -263,7 +263,7 @@ class ContinuousAttentionImageHModel(ContinuousAttentionModel):
         for i in range(n_sentences):  # iterate by sentence
             preds_without_padd = predictions[i, :caption_lengths[i], :]
             targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
-            final_hs = hs[i, caption_lengths[i]-1, :].unsqueeze(0)  # get last h
+            final_hs = hs[i, caption_lengths[i] - 1, :].unsqueeze(0)  # get last h
 
             y = torch.ones(targets_without_padd.shape[0]).to(self.device)
 
@@ -285,8 +285,8 @@ class ContinuousAttentionImageHModel(ContinuousAttentionModel):
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + input1_loss
 

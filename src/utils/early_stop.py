@@ -1,5 +1,5 @@
 import logging
-from optimizer import adjust_learning_rate
+from utils.optimizer import adjust_learning_rate
 
 
 class EarlyStopping():

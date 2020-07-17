@@ -1,5 +1,5 @@
 import operator
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 from torchvision import transforms
 from PIL import Image
 from abc import ABC, abstractmethod
@@ -11,12 +11,12 @@ import numpy as np
 import time
 from utils.early_stop import EarlyStopping
 from nlgeval import NLGEval
-from optimizer import get_optimizer, clip_gradient
+from utils.optimizer import get_optimizer, clip_gradient
 #from enum import Enum
 from utils.enums import DecodingType
 #from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import math
-from definitions import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
+from utils.definitions import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -121,11 +121,11 @@ class AbstractEncoderDecoderModel(ABC):
                     break
 
             # End training
-            epoch_loss = train_total_loss/(batch_i+1)
+            epoch_loss = train_total_loss / (batch_i + 1)
             logging.info('Time taken for 1 epoch {:.4f} sec'.format(
                 time.time() - start))
             logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
-                                                                                  train_total_loss/(batch_i+1)))
+                                                                                  train_total_loss / (batch_i + 1)))
 
             # Start validation
             self.decoder.eval()  # eval mode (no dropout or batchnorm)
@@ -148,7 +148,7 @@ class AbstractEncoderDecoderModel(ABC):
                         break
 
             # End validation
-            epoch_val_loss = val_total_loss/(batch_i+1)
+            epoch_val_loss = val_total_loss / (batch_i + 1)
 
             early_stopping.check_improvement(epoch_val_loss)
 
@@ -280,7 +280,7 @@ class AbstractEncoderDecoderModel(ABC):
                 "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
-        path = PATH_TRAINED_MODELS + self.args.file_name+'.pth.tar'
+        path = PATH_TRAINED_MODELS + self.args.file_name + '.pth.tar'
         print("get checkpoint path", path)
         return path
 
@@ -289,7 +289,7 @@ class AbstractEncoderDecoderModel(ABC):
 
         scores_path = PATH_EVALUATION_SCORES + \
             self.args.file_name + decoding_type + str(n_beam) + "_startent"  # str(self.args.__dict__)
-        with open(scores_path+'.json', 'w+') as f:
+        with open(scores_path + '.json', 'w+') as f:
             json.dump(scores, f, indent=2)
 
     def inference_with_greedy(self, image, n_solutions=0):
@@ -326,7 +326,7 @@ class AbstractEncoderDecoderModel(ABC):
                     decoder_sentence = decoder_sentence[:-1]
                     break
 
-                if i >= self.max_len-1:  # until 35
+                if i >= self.max_len - 1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -382,7 +382,7 @@ class AbstractEncoderDecoderModel(ABC):
     def inference_with_beamsearch(self, image, n_solutions=3):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            return (seed_prob*len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text)+1)
+            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
         def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
             current_text = ' '.join(current_text)
@@ -412,7 +412,7 @@ class AbstractEncoderDecoderModel(ABC):
         def compute_perplexity_with_sim2image():
             return 0
 
-        def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -465,7 +465,7 @@ class AbstractEncoderDecoderModel(ABC):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c,  n_solutions))
+                        sentence, prob, encoder_output, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
@@ -576,7 +576,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             return math.exp(loss / len(tokens))
 
-        def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -619,7 +619,7 @@ class AbstractEncoderDecoderModel(ABC):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c,  n_solutions))
+                        sentence, prob, encoder_output, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
@@ -640,7 +640,7 @@ class AbstractEncoderDecoderModel(ABC):
             return best_sentence
 
     def inference_with_bigramprob(self, image, n_solutions=2):
-        def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -656,7 +656,7 @@ class AbstractEncoderDecoderModel(ABC):
                 current_prob = corpus_bigram_prob[new_token][last_token]
 
                 text = seed_text + [new_token]
-                text_score = (seed_prob*len(seed_text) + np.log(current_prob)) / (len(seed_text)+1)
+                text_score = (seed_prob * len(seed_text) + np.log(current_prob)) / (len(seed_text) + 1)
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
@@ -679,7 +679,7 @@ class AbstractEncoderDecoderModel(ABC):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c,  n_solutions))
+                        sentence, prob, encoder_output, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
                 print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
@@ -699,7 +699,7 @@ class AbstractEncoderDecoderModel(ABC):
             return best_sentence
 
     def inference_with_bigramprob_and_cos(self, image, n_solutions=2):
-        def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -717,7 +717,7 @@ class AbstractEncoderDecoderModel(ABC):
                 current_score_bigram = corpus_bigram_prob[new_token][last_token]
                 current_score_cos = sorted_scores[index].item()
                 text_score = (
-                    seed_prob * len(seed_text) + np.log(current_score_bigram) + np.log(current_score_cos))/(len(seed_text) + 1)
+                    seed_prob * len(seed_text) + np.log(current_score_bigram) + np.log(current_score_cos)) / (len(seed_text) + 1)
 
                 top_solutions.append((text, text_score, h, c))
 
@@ -740,7 +740,7 @@ class AbstractEncoderDecoderModel(ABC):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c,  n_solutions))
+                        sentence, prob, encoder_output, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
@@ -774,7 +774,7 @@ class AbstractEncoderDecoderModel(ABC):
                 current_prob = corpus_bigram_prob[new_token][last_token]
 
                 text = seed_text + [new_token]
-                text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
+                text_score = (seed_prob * len(seed_text) + np.log(current_prob) / (len(seed_text) + 1))
                 candidates.append((text, text_score))
 
             return candidates
@@ -815,7 +815,7 @@ class AbstractEncoderDecoderModel(ABC):
     # def inference_with_bigramprob_and_cosscore
 
     def inference_with_bigramprob_and_image(self, image, n_solutions=5):
-        def generate_n_solutions(seed_text, seed_prob, encoder_out,  h, c,  n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -831,7 +831,7 @@ class AbstractEncoderDecoderModel(ABC):
                 current_prob = corpus_bigram_prob[new_token][last_token]
 
                 text = seed_text + [new_token]
-                text_score = (seed_prob*len(seed_text) + np.log(current_prob) / (len(seed_text)+1))
+                text_score = (seed_prob * len(seed_text) + np.log(current_prob) / (len(seed_text) + 1))
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
@@ -867,7 +867,7 @@ class AbstractEncoderDecoderModel(ABC):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c,  n_solutions))
+                        sentence, prob, encoder_output, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 

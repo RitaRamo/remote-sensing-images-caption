@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN, END_TOKEN, START_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN, END_TOKEN, START_TOKEN
 from embeddings.embeddings import EmbeddingsType, get_bert_path
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 # from transformers import BertModel, BertTokenizer
@@ -80,8 +80,7 @@ class BertDecoder(nn.Module):
         n_bert_tokens_for_current_word = len(
             self.bert_tokenizer.tokenize(current_word))
 
-        embeddings_of_current_word = last_hidden_states[-
-                                                        n_bert_tokens_for_current_word:, :]
+        embeddings_of_current_word = last_hidden_states[-n_bert_tokens_for_current_word:, :]
 
         embedding_of_current_word = torch.mean(
             embeddings_of_current_word, dim=0)
@@ -170,7 +169,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
         num_pixels = encoder_out.size(1)
 
         # Create tensors to hold word predicion scores and alphas
-        all_predictions = torch.zeros(batch_size,  max(
+        all_predictions = torch.zeros(batch_size, max(
             caption_lengths), self.decoder.embed_dim).to(self.device)
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
@@ -184,7 +183,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
 
             # caps[:batch_size_t, :t] instead of caps[:batch_size_t, t] to have current word with previous words
             predictions, h, c = self.decoder(
-                caps[:batch_size_t, 0:t+1], encoder_out[:batch_size_t], h[:batch_size_t], c[:batch_size_t])
+                caps[:batch_size_t, 0:t + 1], encoder_out[:batch_size_t], h[:batch_size_t], c[:batch_size_t])
             # not inclusive, hence t+1
             all_predictions[:batch_size_t, t, :] = predictions
 
@@ -207,7 +206,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
         for i in range(batch_size):
             # do not reach end_token (we will need to replace by SEP token)
             current_word_and_previous_ones = ""
-            for t in range(caption_lengths[i]-1):
+            for t in range(caption_lengths[i] - 1):
 
                 id_word = targets[i, t]  # word of caption_i of time-step_t
 
@@ -223,7 +222,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
             current_word_and_previous_ones += "[SEP]"
             embedding_target = self.decoder.get_contextualize_embedding(
                 current_word_and_previous_ones)
-            targets_embeddings[i, t+1, :] = embedding_target
+            targets_embeddings[i, t + 1, :] = embedding_target
 
         predictions = pack_padded_sequence(
             predictions, caption_lengths, batch_first=True)
@@ -243,7 +242,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
             decoder_sentence = START_TOKEN + " "
 
             input_words_index = torch.zeros(
-                (1, self.max_len-1), dtype=torch.int32)
+                (1, self.max_len - 1), dtype=torch.int32)
 
             input_words_index[0] = self.token_to_id[START_TOKEN]
 
@@ -265,7 +264,7 @@ class ContinuousBertModel(ContinuousEncoderDecoderModel):
                 decoder_sentence += " " + current_output_token
 
                 if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_words_index[:, i] = current_output_index.item()

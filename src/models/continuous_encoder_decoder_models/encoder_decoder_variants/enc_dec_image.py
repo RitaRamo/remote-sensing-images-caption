@@ -8,7 +8,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
@@ -19,7 +19,7 @@ class ContinuousDecoderWithImage(Decoder):
     def __init__(self, decoder_dim, embed_dim, embedding_type, vocab_size, token_to_id, post_processing,
                  encoder_dim=2048, dropout=0.5):
 
-        super(ContinuousDecoderWithImage, self).__init__(decoder_dim,  embed_dim,
+        super(ContinuousDecoderWithImage, self).__init__(decoder_dim, embed_dim,
                                                          embedding_type, vocab_size, token_to_id, post_processing, encoder_dim, dropout)
 
         # linear layer to find representation of image

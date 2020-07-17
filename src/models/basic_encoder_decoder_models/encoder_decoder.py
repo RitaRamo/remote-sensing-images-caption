@@ -5,7 +5,7 @@ from torch.nn.utils.rnn import pack_padded_sequence
 from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
-from preprocess_data.images import get_image_model
+from data_preprocessing.preprocess_images import get_image_model
 
 
 class Encoder(nn.Module):
@@ -44,10 +44,10 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        # out = self.model(
-        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
+        out = self.model(
+            images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        out = self.model.extract_features(images)
+        # out = self.model.extract_features(images)
         # #print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
@@ -204,7 +204,7 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         # all_predictions = torch.zeros(batch_size, max(
         #     caption_lengths), self.vocab_size).to(self.device)
         all_predictions = torch.zeros(
-            batch_size, self.max_len-1, self.vocab_size).to(self.device)
+            batch_size, self.max_len - 1, self.vocab_size).to(self.device)
 
         h, c = self.decoder.init_hidden_state(encoder_out)
 

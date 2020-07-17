@@ -10,7 +10,7 @@ import random
 from utils.early_stop import EarlyStopping
 import numpy as np
 import time
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import logging
 
 
@@ -124,7 +124,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
 
         token_to_id[self.MASK_TOKEN] = vocab_size
         id_to_token[vocab_size] = self.MASK_TOKEN
-        vocab_size = vocab_size+1
+        vocab_size = vocab_size + 1
 
         super().__init__(args, vocab_size, token_to_id, id_to_token, max_len, device)
 
@@ -148,7 +148,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
 
     def train(self, train_dataloader, val_dataloader, print_freq):
         min_number_of_epochs_at_each_phase = 10
-        list_of_n_token_to_mask = [0, 2, 4, 8, 16, self.max_len-1]
+        list_of_n_token_to_mask = [0, 2, 4, 8, 16, self.max_len - 1]
 
         for n_tokens_to_mask in list_of_n_token_to_mask:
 
@@ -186,11 +186,11 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
                         break
 
                 # End training
-                epoch_loss = train_total_loss/(batch_i+1)
+                epoch_loss = train_total_loss / (batch_i + 1)
                 logging.info('Time taken for 1 epoch {:.4f} sec'.format(
                     time.time() - start))
                 logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
-                                                                                      train_total_loss/(batch_i+1)))
+                                                                                      train_total_loss / (batch_i + 1)))
 
                 # Start validation
                 self.decoder.eval()  # eval mode (no dropout or batchnorm)
@@ -213,9 +213,9 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
                             break
 
                 # End validation
-                epoch_val_loss = val_total_loss/(batch_i+1)
+                epoch_val_loss = val_total_loss / (batch_i + 1)
 
-                if epoch > min_number_of_epochs_at_each_phase:
+                if epoch > min_number_of_epochs_at_each_phase:  # todo:tentar chegar à mesma loss q antes
                     # only consider early stop after min number of epoch at each phase
 
                     early_stopping.check_improvement(epoch_val_loss)
@@ -300,7 +300,11 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
             batch_size_t = sum([l > t for l in caption_lengths])
 
             predictions, h, c = self.decoder(
-                caps[:batch_size_t, t], decoder_predicted_word[:batch_size_t], encoder_out[:batch_size_t], h[:batch_size_t], c[:batch_size_t])
+                caps[: batch_size_t, t],
+                decoder_predicted_word[: batch_size_t],
+                encoder_out[: batch_size_t],
+                h[: batch_size_t],
+                c[: batch_size_t])
 
             all_predictions[:batch_size_t, t, :] = predictions
 
@@ -333,7 +337,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
             #print("this is batch i", batch_i)
             # random that does not consider start_token to mask, hence random(len(caps)-1) +1
             rand_columns = (torch.randperm(
-                caption_lengths[batch_i]-1)+1)[:n_tokens_to_mask]
+                caption_lengths[batch_i] - 1) + 1)[:n_tokens_to_mask]
             caps[batch_i, rand_columns] = mask
 
         #print("caps after", caps)
@@ -370,7 +374,7 @@ class BasicMaskGroundTruthWithPredictionModel(BasicEncoderDecoderModel):
                 decoder_sentence += " " + predicted_word
 
                 if (predicted_word == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_word_id = torch.tensor(

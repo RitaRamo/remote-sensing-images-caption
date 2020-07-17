@@ -8,11 +8,11 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
-from preprocess_data.tokens import OOV_TOKEN
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from embeddings.embeddings import EmbeddingsType
-from preprocess_data.tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 
 
 class ContinuousDecoderWithAttentionAndImage(DecoderWithAttention):
@@ -147,7 +147,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
                 if current_output_token == END_TOKEN:
                     break
 
-                if i >= self.max_len-1:  # until 35
+                if i >= self.max_len - 1:  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
@@ -188,7 +188,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
                 decoder_sentence += " " + current_output_token
 
                 if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_embedding[0, :] = predictions
@@ -231,7 +231,7 @@ class ContinuousAttentionImageModel(ContinuousAttentionModel):
                 decoder_sentence += " " + current_output_token
 
                 if (current_output_token == END_TOKEN or
-                        i >= self.max_len-1):  # until 35
+                        i >= self.max_len - 1):  # until 35
                     break
 
                 input_word[0] = current_output_index.item()
