@@ -1,5 +1,5 @@
 --file_name
-split_fine_attentionsoft_13comp_eff_noaug.txt
+split_fine_encdec_13comp_eff_noaug.txt
 --model_class_str
 ContinuousEncoderDecoderImageModel
 --batch_size
