@@ -7,7 +7,7 @@ sys.path.append('src/')
 
 
 from data_preprocessing.preprocess_tokens import WhitespaceTokenizer
-from utils.definitions import PATH_DATASETS_RSICD
+from definitions import PATH_DATASETS_RSICD
 from data_preprocessing.create_data_files import get_dataset, get_vocab_info
 from spacy.tokens import Doc
 import torch

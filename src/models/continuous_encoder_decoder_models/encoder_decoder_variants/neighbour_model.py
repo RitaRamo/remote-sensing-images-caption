@@ -13,7 +13,7 @@ from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
 from torchvision import transforms
-from utils.definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from definitions import PATH_DATASETS_RSICD, PATH_RSICD
 from data_preprocessing.create_data_files import get_dataset
 from PIL import Image
 from toolz import unique

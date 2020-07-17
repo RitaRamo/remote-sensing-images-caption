@@ -16,7 +16,7 @@ from utils.optimizer import get_optimizer, clip_gradient
 from utils.enums import DecodingType
 #from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import math
-from utils.definitions import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
+from definitions import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
 
 
 class AbstractEncoderDecoderModel(ABC):

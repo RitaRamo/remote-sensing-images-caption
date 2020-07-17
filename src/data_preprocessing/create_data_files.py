@@ -10,7 +10,7 @@ from sklearn.utils import shuffle
 from collections import defaultdict
 from data_preprocessing.preprocess_tokens import END_TOKEN, START_TOKEN, preprocess_tokens
 import re
-from utils.definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD
 from datetime import datetime
 
 

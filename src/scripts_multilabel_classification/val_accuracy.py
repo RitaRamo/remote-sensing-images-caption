@@ -1,7 +1,7 @@
 import sys
 sys.path.append('src/')
 
-from utils.definitions import PATH_RSICD
+from definitions import PATH_RSICD
 import torch
 from torchvision import transforms, models
 from torch import nn

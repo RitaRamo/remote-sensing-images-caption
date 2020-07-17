@@ -1,9 +1,9 @@
 import json
 from coco_caption.pycocotools.coco import COCO
 from coco_caption.pycocoevalcap.eval import COCOEvalCap
-from utils.args_parser import get_args
+from args_parser import get_args
 
-from utils.definitions import PATH_RSICD, PATH_DATASETS_RSICD, PATH_EVALUATION_SENTENCES, PATH_EVALUATION_SCORES
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD, PATH_EVALUATION_SENTENCES, PATH_EVALUATION_SCORES
 
 
 if __name__ == "__main__":

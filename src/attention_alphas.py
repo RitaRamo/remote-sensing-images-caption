@@ -6,8 +6,8 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 import os
 import torch
 import logging
-from utils.args_parser import get_args
-from utils.definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from args_parser import get_args
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD
 from data_preprocessing.create_data_files import get_vocab_info, get_dataset
 from torchvision import transforms
 from PIL import Image
@@ -16,7 +16,7 @@ import numpy as np
 import operator
 from nlgeval import NLGEval
 from models.abtract_model import DecodingType
-from utils.definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
+from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 import json
 
 if __name__ == "__main__":
