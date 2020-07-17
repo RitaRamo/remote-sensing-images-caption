@@ -16,7 +16,7 @@ import inflect
 from collections import Counter, OrderedDict, defaultdict
 
 
-VOCAB_SIZE = 600  # 512
+VOCAB_SIZE = 512
 dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
 
 if __name__ == "__main__":
@@ -125,4 +125,4 @@ if __name__ == "__main__":
         "list_wordid": list_wordid
     }
 
-    torch.save(state, "src/data/RSICD/datasets/classification_dataset_600")
+    torch.save(state, "src/data/RSICD/datasets/classification_dataset")
