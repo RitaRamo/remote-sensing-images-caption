@@ -13,7 +13,13 @@ ENV/
 env.bak/
 venv.bak/
 experiments/results/evaluation_scores/
+experiments/results/evaluation_sentences/
+experiments/results/trained_models/
 coco_results/
 notebook2
 notebook_testes/
 notebook/
+*.pth.tar
+src/lixo/
+src/embeddings/glove.6B/
+src/embeddings/fasttext/
