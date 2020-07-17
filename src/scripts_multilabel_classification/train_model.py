@@ -240,7 +240,6 @@ class ClassificationModel():
 
 
 if __name__ == "__main__":
-    print(ola)
     logging.basicConfig(
         format='%(levelname)s: %(message)s', level=logging.INFO)
 
