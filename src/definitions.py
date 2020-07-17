@@ -1,5 +1,0 @@
-# PATH_RSICD = "src/data/RSICD/"
-# PATH_DATASETS_RSICD = PATH_RSICD+"datasets/"
-# PATH_TRAINED_MODELS = "experiments/results/trained_models/"
-# PATH_EVALUATION_SENTENCES = "experiments/results/evaluation_sentences/"
-# PATH_EVALUATION_SCORES = "experiments/results/evaluation_scores/"
