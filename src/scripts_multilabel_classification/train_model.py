@@ -247,7 +247,7 @@ if __name__ == "__main__":
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
-    classification_state = torch.load("src/data/RSICD/datasets/classification_dataset_600")
+    classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
     classes_to_id = classification_state["classes_to_id"]
     id_to_classes = classification_state["id_to_classes"]
     classification_dataset = classification_state["classification_dataset"]
