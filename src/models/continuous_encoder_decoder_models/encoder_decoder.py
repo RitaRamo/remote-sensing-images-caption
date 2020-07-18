@@ -60,6 +60,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
             dropout=self.args.dropout
         )
 
+        print("args before", self.args)
         print("args normalization", self.args.no_normalization)
         self.decoder.normalize_embeddings(self.args.no_normalization)
 
