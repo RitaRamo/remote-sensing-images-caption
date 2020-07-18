@@ -126,7 +126,6 @@ class Decoder(nn.Module):
         """
         Normalize values of embbedings (ex: makes sense for pretrained embeddings)
         """
-        print("this are args no normalization", no_normalization)
         if no_normalization:
             print("embeddings without normalization")
         else:
