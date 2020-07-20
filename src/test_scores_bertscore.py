@@ -47,7 +47,7 @@ if __name__ == "__main__":
     for dict_image_and_caption in generated_sentences:
         image_id = dict_image_and_caption["image_id"]
         caption = [dict_image_and_caption["caption"]]
-        references = dict_imageid_refs[image_id]
+        references = [dict_imageid_refs[image_id]]
 
         print("image id", image_id)
         print("caption", caption)
