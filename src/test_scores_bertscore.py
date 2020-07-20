@@ -46,7 +46,7 @@ if __name__ == "__main__":
 
     for dict_image_and_caption in generated_sentences:
         image_id = dict_image_and_caption["image_id"]
-        caption = dict_image_and_caption["caption"]
+        caption = [dict_image_and_caption["caption"]]
         references = dict_imageid_refs[image_id]
 
         P_mul, R_mul, F_mul = scorer.score(caption, references)
