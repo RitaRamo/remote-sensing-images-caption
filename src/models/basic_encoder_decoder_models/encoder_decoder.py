@@ -6,6 +6,7 @@ from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from data_preprocessing.preprocess_images import get_image_model
+from data_preprocessing.preprocess_tokens import START_TOKEN
 
 
 class Encoder(nn.Module):
