@@ -58,9 +58,10 @@ if __name__ == "__main__":
         print("P_mul", P_mul)
 
         # calculate bert_score
-        scores[image_id]["BertScore_P"] = P_mul[0]
-        scores[image_id]["BertScore_R"] = R_mul[0]
-        scores[image_id]["BertScore_F"] = F_mul[0]
+        key_image_id = str(image_id)
+        scores[str(key_image_id)]["BertScore_P"] = P_mul[0]
+        scores[key_image_id]["BertScore_R"] = R_mul[0]
+        scores[key_image_id]["BertScore_F"] = F_mul[0]
 
     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
