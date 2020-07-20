@@ -64,6 +64,7 @@ class ContinuousLossesType(Enum):
     COS_NONORM_DIFFICULTY_AVG_SENTENCE_NORM = "cos_nonorm_difficulty_avg_sentence_norm"
     COS_NONORM_AVG_SENTENCE_NORM_AND_INPUT_NONORM = "cos_nonorm_avg_sentence_norm_and_input_nonorm_loss"
     COS_AVG_SENTENCE75 = "cos_avg_sentence75"
+    COS_AVG_SENTENCE50 = "cos_avg_sentence50"
     COS75_AVG_SENTENCE = "cos75_avg_sentence"
 
 
