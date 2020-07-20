@@ -53,16 +53,20 @@ if __name__ == "__main__":
         references = [dict_imageid_refs[image_id]]
 
         P_mul, R_mul, F_mul = scorer.score(caption, references)
-        total_precision += P_mul[0]
-        total_recall += R_mul[0]
-        total_f += F_mul[0]
+        precision = P_mul[0].item()
+        recall = R_mul[0].item()
+        f_measure = F_mul[0].item()
+
+        total_precision += precision
+        total_recall += recall
+        total_f += f_measure
 
         # calculate bert_score
         key_image_id = str(image_id)
-        scores[str(key_image_id)]["BertScore_P"] = P_mul[0]
-        scores[key_image_id]["BertScore_R"] = R_mul[0]
-        scores[key_image_id]["BertScore_F"] = F_mul[0]
-        print("\ncaption and score", caption, F_mul)
+        scores[str(key_image_id)]["BertScore_P"] = precision
+        scores[key_image_id]["BertScore_R"] = recall
+        scores[key_image_id]["BertScore_F"] = f_measure
+        print("\ncaption and score", caption, f_measure)
 
     n_captions = len(generated_sentences)
     scores["avg_metrics"]["BertScore_P"] = total_precision / n_captions
