@@ -305,5 +305,5 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         return current_output_index, h, c
 
     def _convert_prediction_to_output(self, predictions):
-        scores = F.log_softmax(predictions, dim=1)
+        scores = F.log_softmax(predictions, dim=1)[0]
         return scores
