@@ -41,7 +41,7 @@ if __name__ == "__main__":
 
     # get previous generated sentences to calculate bertscore according to refs
     generated_sentences_path = PATH_EVALUATION_SENTENCES + decoding_args
-    with open(generated_sentences_path) as json_file:
+    with open(generated_sentences_path + ".json") as json_file:
         generated_sentences = json.load(json_file)
 
     for dict_image_and_caption in generated_sentences:
