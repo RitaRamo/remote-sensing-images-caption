@@ -49,7 +49,13 @@ if __name__ == "__main__":
         caption = [dict_image_and_caption["caption"]]
         references = dict_imageid_refs[image_id]
 
+        print("image id", image_id)
+        print("caption", caption)
+        print("references", references)
+
         P_mul, R_mul, F_mul = scorer.score(caption, references)
+
+        print("P_mul", P_mul)
 
         # calculate bert_score
         scores[image_id]["BertScore_P"] = P_mul[0]
