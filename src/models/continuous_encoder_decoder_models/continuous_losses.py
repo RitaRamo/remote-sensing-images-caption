@@ -169,6 +169,14 @@ class ContinuousLoss():
             self.loss_method = self.cos_nonorm_and_third_norm_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.COS_AVG_SENTENCE75.value:
+            self.loss_method = self.cos_avg_sentence75_loss
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.COS75_AVG_SENTENCE.value:
+            self.loss_method = self.cos75_avg_sentence_loss
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
     def compute_loss(
         self,
         predictions,
@@ -186,7 +194,7 @@ class ContinuousLoss():
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
         y = torch.ones(target_embeddings.shape[0]).to(self.device)
 
-        return self.criterion(predictions, target_embeddings,  y)
+        return self.criterion(predictions, target_embeddings, y)
 
     def margin_syn_distance_loss(
         self,
@@ -197,7 +205,7 @@ class ContinuousLoss():
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
-        orthogonal_component = (predictions - torch.sum(predictions*target_embeddings,
+        orthogonal_component = (predictions - torch.sum(predictions * target_embeddings,
                                                         dim=1).unsqueeze(1) * target_embeddings)
 
         orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
@@ -213,13 +221,13 @@ class ContinuousLoss():
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
-        orthogonal_component = (predictions - torch.sum(predictions*target_embeddings,
+        orthogonal_component = (predictions - torch.sum(predictions * target_embeddings,
                                                         dim=1).unsqueeze(1) * target_embeddings)
 
         orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
 
-        sim_to_negative = torch.sum(predictions*orthogonal_negative_examples, dim=1)
-        sim_to_target = torch.sum(predictions*target_embeddings, dim=1)
+        sim_to_negative = torch.sum(predictions * orthogonal_negative_examples, dim=1)
+        sim_to_target = torch.sum(predictions * target_embeddings, dim=1)
 
         loss = torch.clamp(self.margin + sim_to_negative - sim_to_target, min=0).mean()
         return loss
@@ -249,7 +257,7 @@ class ContinuousLoss():
 
             negative_examples[i, :] = informative_negative_embedding
 
-        return self.criterion(predictions, target_embeddings,  negative_examples.to(self.device))
+        return self.criterion(predictions, target_embeddings, negative_examples.to(self.device))
 
     def smoothl1_loss(
         self,
@@ -271,7 +279,7 @@ class ContinuousLoss():
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
-        orthogonal_component = (predictions - torch.sum(predictions*target_embeddings,
+        orthogonal_component = (predictions - torch.sum(predictions * target_embeddings,
                                                         dim=1).unsqueeze(1) * target_embeddings)
 
         orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
@@ -325,7 +333,7 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
+        word_loss = word_losses / n_sentences
 
         return word_loss
 
@@ -359,8 +367,8 @@ class ContinuousLoss():
                 sentece_mean_target
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -405,10 +413,10 @@ class ContinuousLoss():
             maximum_similarity, _ = torch.max(pairwise_cosine_similarity, dim=1)
             # torch.sum*pesos/dividindo pelos pesos
 
-            sentence_losses += (1-torch.mean(maximum_similarity))
+            sentence_losses += (1 - torch.mean(maximum_similarity))
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -429,7 +437,7 @@ class ContinuousLoss():
             preds_without_padd = predictions[i, :caption_lengths[i], :]
             targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
 
-            orthogonal_component = (preds_without_padd - torch.sum(preds_without_padd*targets_without_padd,
+            orthogonal_component = (preds_without_padd - torch.sum(preds_without_padd * targets_without_padd,
                                                                    dim=1).unsqueeze(1) * targets_without_padd)
 
             orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
@@ -449,8 +457,8 @@ class ContinuousLoss():
 
             sentence_losses += torch.clamp(self.margin + dist_to_target - dist_to_negative, min=0).mean()
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -497,9 +505,9 @@ class ContinuousLoss():
                 image_embedding
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input_loss = input_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input_loss = input_losses / n_sentences
 
         loss = word_loss + sentence_loss + input_loss
 
@@ -553,10 +561,10 @@ class ContinuousLoss():
                 sentece_mean_target
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -610,10 +618,10 @@ class ContinuousLoss():
                 sentece_mean_target
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -639,14 +647,14 @@ class ContinuousLoss():
             preds_without_padd = predictions[i, :caption_lengths[i], :]
             targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
 
-            orthogonal_component = (preds_without_padd - torch.sum(preds_without_padd*targets_without_padd,
+            orthogonal_component = (preds_without_padd - torch.sum(preds_without_padd * targets_without_padd,
                                                                    dim=1).unsqueeze(1) * targets_without_padd)
             orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
 
             dist_to_negative = self.criterion(preds_without_padd, orthogonal_negative_examples)
             dist_to_target = self.criterion(preds_without_padd, targets_without_padd)
 
-            word_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+            word_losses += torch.log(1 + torch.exp(parameter * (dist_to_target - dist_to_negative)))
 
             # sentence-level loss
             sentence_mean_pred = torch.nn.functional.normalize(
@@ -660,7 +668,7 @@ class ContinuousLoss():
             dist_to_negative = self.criterion(sentence_mean_pred, sentence_mean_ortogonal)
             dist_to_target = self.criterion(sentence_mean_pred, sentece_mean_target)
 
-            sentence_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+            sentence_losses += torch.log(1 + torch.exp(parameter * (dist_to_target - dist_to_negative)))
 
             # 1º input loss (sentence predicted against input image)
             # input1_losses += self.criterion(
@@ -677,7 +685,7 @@ class ContinuousLoss():
             dist_to_negative = self.criterion(sentence_mean_pred, image_negative_example)
             dist_to_target = self.criterion(sentence_mean_pred, image_embedding)
 
-            input1_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+            input1_losses += torch.log(1 + torch.exp(parameter * (dist_to_target - dist_to_negative)))
 
             # 2º input loss (sentence predicted against input image)
             # input2_losses += self.criterion(
@@ -687,12 +695,12 @@ class ContinuousLoss():
             dist_to_negative = self.criterion(image_embedding, sentence_mean_ortogonal)
             dist_to_target = self.criterion(image_embedding, sentece_mean_target)
 
-            input2_losses += torch.log(1+torch.exp(parameter*(dist_to_target-dist_to_negative)))
+            input2_losses += torch.log(1 + torch.exp(parameter * (dist_to_target - dist_to_negative)))
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -729,8 +737,8 @@ class ContinuousLoss():
             # sentence-level loss
             sentence_losses += sink(dmat(preds_without_padd, targets_without_padd), reg=10, cuda=True)
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -790,10 +798,10 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -845,9 +853,9 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss
 
@@ -899,9 +907,9 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input2_loss
 
@@ -941,10 +949,92 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
+
+        return loss
+
+    def cos_avg_sentence75_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0).unsqueeze(0)
+
+            y = torch.ones(1).to(self.device)
+
+            sentence_losses += self.criterion(
+                sentence_mean_pred,
+                sentece_mean_target,
+                y
+            )
+
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+
+        loss = word_loss + 0.75 * sentence_loss
+
+        return loss
+
+    def cos75_avg_sentence_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0).unsqueeze(0)
+
+            y = torch.ones(1).to(self.device)
+
+            sentence_losses += self.criterion(
+                sentence_mean_pred,
+                sentece_mean_target,
+                y
+            )
+
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+
+        loss = 0.75 * word_loss + sentence_loss
 
         return loss
 
@@ -982,8 +1072,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -1026,8 +1116,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + input2_loss
 
@@ -1071,8 +1161,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + input1_loss
 
@@ -1125,9 +1215,9 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + input1_loss + input2_loss
 
@@ -1174,7 +1264,7 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
             # sentence-level loss (sentence predicted agains target sentence)
@@ -1211,10 +1301,10 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -1294,10 +1384,10 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -1380,10 +1470,10 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
@@ -1457,9 +1547,9 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss
 
@@ -1501,11 +1591,11 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
 
-        word_loss = word_losses/n_sentences
+        word_loss = word_losses / n_sentences
 
         return word_loss
 
@@ -1546,7 +1636,7 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
             # sentence-level loss (sentence predicted agains target sentence)
@@ -1567,8 +1657,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -1629,8 +1719,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -1691,8 +1781,8 @@ class ContinuousLoss():
                 y
             ) * torch.mean(normalized_targets_norms)
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -1753,8 +1843,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -1797,7 +1887,7 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
 
@@ -1813,8 +1903,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        sentence_loss = sentence_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
 
         loss = word_loss + sentence_loss
 
@@ -1858,7 +1948,7 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
             # sentence-level loss (sentence predicted agains target sentence)
@@ -1889,9 +1979,9 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
-        input2_loss = input2_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
 
         loss = word_loss + input1_loss + input2_loss
 
@@ -1936,7 +2026,7 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
             # sentence-level loss (sentence predicted agains target sentence)
@@ -1958,8 +2048,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + input1_loss
 
@@ -2004,7 +2094,7 @@ class ContinuousLoss():
                                                   * (param_b - param_a)) / (max_targets_batch_norms - min_targets_batch_norms)
 
             weighted_norm_loss = torch.sum(
-                loss_of_each_word*normalized_targets_norms)/torch.sum(normalized_targets_norms)
+                loss_of_each_word * normalized_targets_norms) / torch.sum(normalized_targets_norms)
 
             word_losses += weighted_norm_loss
             # sentence-level loss (sentence predicted agains target sentence)
@@ -2020,8 +2110,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + input1_loss
 
@@ -2080,8 +2170,8 @@ class ContinuousLoss():
                 y
             )
 
-        word_loss = word_losses/n_sentences
-        input1_loss = input1_losses/n_sentences
+        word_loss = word_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
 
         loss = word_loss + input1_loss
 
