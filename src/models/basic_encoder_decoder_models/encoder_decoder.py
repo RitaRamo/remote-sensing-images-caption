@@ -246,6 +246,55 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         return loss
 
+    def inference_with_greedy(self, image, n_solutions=0):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            while True:
+
+                scores, h, c = self.generate_output_index(
+                    input_word, encoder_output, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+                print("sorted scores", sorted_scores)
+                print("sorted_indices", sorted_indices)
+
+                current_output_index = sorted_indices[0]
+                print("current output index", current_output_index)
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence  # input_caption
+
     def generate_output_index(self, input_word, encoder_out, h, c):
         predictions, h, c = self.decoder(
             input_word, encoder_out, h, c)
