@@ -74,9 +74,9 @@ if __name__ == "__main__":
 
     if args.test_set:
         decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_path = PATH_DATASETS_RSICD + "test_coco_format.json"
+        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
     else:  # validation set
-        test_path = PATH_DATASETS_RSICD + "val_coco_format.json"
+        test_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
         decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
     model_class = globals()[args.model_class_str]
