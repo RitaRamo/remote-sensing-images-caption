@@ -14,11 +14,13 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    # # TODO: REMOVE FROM HERE
-    # decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-    # scores_path = PATH_EVALUATION_SCORES + decoding_args
+    if args.test_set:
+        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+        test_path = PATH_DATASETS_RSICD + "test_coco_format.json"
+    else:  # validation set
+        test_path = PATH_DATASETS_RSICD + "val_coco_format.json"
+        decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
-    test_path = PATH_DATASETS_RSICD + "test_coco_format.json"
     with open(test_path) as json_file:
         test = json.load(json_file)
 
@@ -28,12 +30,7 @@ if __name__ == "__main__":
         caption = ref["caption"]
         dict_imageid_refs[image_id].append(caption)
 
-    # # TODO: REMOVE FROM HERE
-    # with open(scores_path + 'imageidrefs' + '.json', 'w+') as f:
-    #     json.dump(dict_imageid_refs, f, indent=2)
-
     # get previous score of coco metrics (bleu,meteor,etc) to append bert_score
-    decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
     scores_path = PATH_EVALUATION_SCORES + decoding_args
 
     with open(scores_path + '.json') as json_file:
@@ -76,5 +73,5 @@ if __name__ == "__main__":
     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
     # save scores dict to a json
-    with open(scores_path + 'check' + '.json', 'w+') as f:
+    with open(scores_path + '.json', 'w+') as f:
         json.dump(scores, f, indent=2)

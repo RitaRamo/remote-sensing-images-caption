@@ -140,8 +140,12 @@ if __name__ == "__main__":
         # if i == 10:
         #     break
 
-    sentences_path = PATH_EVALUATION_SENTENCES + \
-        args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'  # str(self.args.__dict__)
+    if args.test_set:
+        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+    else:  # validation set
+        decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    sentences_path = PATH_EVALUATION_SENTENCES + decoding_args
 
     with open(sentences_path + '.json', 'w+') as f:
         json.dump(list_hipotheses, f, indent=2)
