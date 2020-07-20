@@ -49,19 +49,14 @@ if __name__ == "__main__":
         caption = [dict_image_and_caption["caption"]]
         references = [dict_imageid_refs[image_id]]
 
-        print("image id", image_id)
-        print("caption", caption)
-        print("references", references)
-
         P_mul, R_mul, F_mul = scorer.score(caption, references)
-
-        print("P_mul", P_mul)
 
         # calculate bert_score
         key_image_id = str(image_id)
         scores[str(key_image_id)]["BertScore_P"] = P_mul[0]
         scores[key_image_id]["BertScore_R"] = R_mul[0]
         scores[key_image_id]["BertScore_F"] = F_mul[0]
+        print("caption and score", caption, scores)
 
     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
