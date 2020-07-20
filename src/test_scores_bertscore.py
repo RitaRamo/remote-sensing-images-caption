@@ -44,19 +44,30 @@ if __name__ == "__main__":
     with open(generated_sentences_path + ".json") as json_file:
         generated_sentences = json.load(json_file)
 
+    total_precision = 0.0
+    total_recall = 0.0
+    total_f = 0.0
     for dict_image_and_caption in generated_sentences:
         image_id = dict_image_and_caption["image_id"]
         caption = [dict_image_and_caption["caption"]]
         references = [dict_imageid_refs[image_id]]
 
         P_mul, R_mul, F_mul = scorer.score(caption, references)
+        total_precision += P_mul[0]
+        total_recall += R_mul[0]
+        total_f += F_mul[0]
 
         # calculate bert_score
         key_image_id = str(image_id)
         scores[str(key_image_id)]["BertScore_P"] = P_mul[0]
         scores[key_image_id]["BertScore_R"] = R_mul[0]
         scores[key_image_id]["BertScore_F"] = F_mul[0]
-        print("caption and score", caption, scores)
+        print("\ncaption and score", caption, F_mul)
+
+    n_captions = len(generated_sentences)
+    scores["avg_metrics"]["BertScore_P"] = total_precision / n_captions
+    scores["avg_metrics"]["BertScore_R"] = total_recall / n_captions
+    scores["avg_metrics"]["BertScore_F"] = total_f / n_captions
 
     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
