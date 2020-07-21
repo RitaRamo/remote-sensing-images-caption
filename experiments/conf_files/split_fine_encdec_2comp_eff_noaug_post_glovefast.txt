@@ -13,7 +13,7 @@ ContinuousEncoderDecoderModel
 --embedding_type
 concatenate_glove_fasttext
 --embed_dim
-300
+600
 --continuous_loss_type
 cos_avg_sentence
 --image_model_type
