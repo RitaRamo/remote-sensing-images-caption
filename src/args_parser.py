@@ -107,6 +107,15 @@ def get_args():
         parser.add_argument('--embed_dim', type=int, default=512,
                             help='define dims of embeddings for words')
 
+    parser.add_argument('--w2', type=float, default=1.0,
+                        help='define w of 4comp loss')
+
+    parser.add_argument('--w3', type=float, default=1.0,
+                        help='define w of 4comp loss')
+
+    parser.add_argument('--w4', type=float, default=1.0,
+                        help='define w of 4comp loss')
+
     args = parser.parse_args()
 
     return args
