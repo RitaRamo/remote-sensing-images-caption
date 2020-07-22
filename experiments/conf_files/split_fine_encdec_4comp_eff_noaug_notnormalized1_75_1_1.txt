@@ -1,7 +1,7 @@
 --file_name
 split_fine_encdec_4comp_eff_noaug_notnormalized1_75_1_1.txt
 --model_class_str
-ContinuousEncoderDecoderImageModel
+ContinuousEncoderDecoderImageWModel
 --batch_size
 8
 --num_workers
@@ -19,3 +19,9 @@ cos_avg_sentence_and_inputs_w_loss
 --image_model_type
 efficient_net
 --no_normalization
+--w2
+0.75
+--w3
+1.0
+--w4
+1
