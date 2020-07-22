@@ -172,7 +172,7 @@ class ContinuousLoss():
         elif loss_type == ContinuousLossesType.COS_AVG_SENTENCE75.value:
             self.loss_method = self.cos_avg_sentence75_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
-        
+
         elif loss_type == ContinuousLossesType.COS_AVG_SENTENCE50.value:
             self.loss_method = self.cos_avg_sentence50_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
@@ -2235,9 +2235,9 @@ class ContinuousLoss():
 
         images_embedding = self.decoder.image_embedding
 
-        w2=0.75
-        w3=1.0
-        w4=1.0
+        w2 = 0.75
+        w3 = 1.0
+        w4 = 1.0
 
         n_sentences = predictions.size()[0]
         for i in range(n_sentences):  # iterate by sentence
@@ -2285,6 +2285,6 @@ class ContinuousLoss():
         input1_loss = input1_losses / n_sentences
         input2_loss = input2_losses / n_sentences
 
-        loss = word_loss + w2*sentence_loss + w3*input1_loss + w4*input2_loss
+        loss = word_loss + w2 * sentence_loss + w3 * input1_loss + w4 * input2_loss
 
         return loss
