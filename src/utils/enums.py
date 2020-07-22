@@ -66,6 +66,7 @@ class ContinuousLossesType(Enum):
     COS_AVG_SENTENCE75 = "cos_avg_sentence75"
     COS_AVG_SENTENCE50 = "cos_avg_sentence50"
     COS75_AVG_SENTENCE = "cos75_avg_sentence"
+    COS_AVG_SENTENCE_AND_INPUTS_W = "cos_avg_sentence_and_inputs_w_loss"
 
 
 class DecodingType(Enum):
