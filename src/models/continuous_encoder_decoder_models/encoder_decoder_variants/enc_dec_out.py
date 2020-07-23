@@ -59,7 +59,7 @@ class VocabAttention(nn.Module):
 
 class ContinuousDecoderWithOut(Decoder):
 
-    def __init__(self, decoder_dim, embed_dim, embedding_type, vocab_size, token_to_id, post_processing,
+    def __init__(self, decoder_dim, embed_dim, embedding_type, vocab_size, token_to_id, post_processing, device,
                  encoder_dim=2048, dropout=0.5):
 
         super(ContinuousDecoderWithOut, self).__init__(decoder_dim, embed_dim,
@@ -116,6 +116,7 @@ class ContinuousEncoderDecoderOutModel(ContinuousEncoderDecoderModel):
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
             post_processing=self.args.post_processing,
+            device=self.device,
             dropout=self.args.dropout
         )
 
