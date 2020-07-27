@@ -3,7 +3,13 @@ import torch
 from torch.autograd import Variable
 
 
-def get_pack_padded_sequences(predictions, targets,  caption_lengths):
+def cdist(x, y):
+    differences = x.unsqueeze(1) - y.unsqueeze(0)
+    distances = torch.sum(differences**2, -1).sqrt()
+    return distances
+
+
+def get_pack_padded_sequences(predictions, targets, caption_lengths):
     predictions = pack_padded_sequence(
         predictions, caption_lengths, batch_first=True)
     targets = pack_padded_sequence(
