@@ -265,112 +265,112 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
 
             return generated_sentence  # input_caption
 
-        def inference_with_beamsearch(self, image, n_solutions=3):
+    def inference_with_beamsearch(self, image, n_solutions=3):
 
-            def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-                return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+        def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
+            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
-            def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
-                current_text = ' '.join(current_text)
-                tokens = self.language_model_tokenizer.encode(current_text)
+        def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
+            current_text = ' '.join(current_text)
+            tokens = self.language_model_tokenizer.encode(current_text)
 
-                input_ids = torch.tensor(tokens).unsqueeze(0)
-                with torch.no_grad():
-                    outputs = self.language_model(input_ids, labels=input_ids)
-                    loss, logits = outputs[:2]
-
-                return math.exp(loss / len(tokens))
-
-            def compute_sim2image(seed_text, seed_prob, sorted_scores, index, current_text):
-                n_tokens = len(current_text)
-                tokens_ids = torch.zeros(1, n_tokens)
-                for i in range(n_tokens):
-                    token = current_text[i]
-                    tokens_ids[0, i] = self.token_to_id[token]
-
-                tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
-
-                sentence_mean = torch.mean(tokens_embeddings, dim=1)
-                images_embedding = self.decoder.image_embedding
-
-                return torch.cosine_similarity(sentence_mean, images_embedding)
-
-            def compute_perplexity_with_sim2image():
-                return 0
-
-            def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, all_cs, time_t, z_context, n_solutions):
-                last_token = seed_text[-1]
-
-                if last_token == END_TOKEN:
-                    return [(seed_text, seed_prob, h, c)]
-
-                top_solutions = []
-                predictions, h, c, z_context = self.decoder(
-                    torch.tensor([self.token_to_id[last_token]]),
-                    encoder_out, h, c, all_cs[:, time_t + 1],
-                    z_context)
-                all_cs[0, time_t + 1, :] = c
-                scores = self._convert_prediction_to_output(predictions)
-
-                sorted_scores, sorted_indices = torch.sort(
-                    scores, descending=True, dim=-1)
-
-                for index in range(n_solutions):
-                    text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
-                    # beam search taking into account lenght of sentence
-                    # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
-                    text_score = compute_score(seed_text, seed_prob, sorted_scores, index, text)
-                    top_solutions.append((text, text_score, h, c, all_cs, z_context))
-
-                return top_solutions
-
-            def get_most_probable(candidates, n_solutions, is_to_reverse):
-                return sorted(candidates, key=operator.itemgetter(1), reverse=is_to_reverse)[:n_solutions]
-
+            input_ids = torch.tensor(tokens).unsqueeze(0)
             with torch.no_grad():
+                outputs = self.language_model(input_ids, labels=input_ids)
+                loss, logits = outputs[:2]
 
-                encoder_output = self.encoder(image)
-                encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-                h, c, z_context = self.decoder.init_hidden_state(encoder_output)
-                all_cs = torch.zeros(1, self.max_len, c.size(1)).to(self.device)
-                all_cs[0, 0, :] = c
+            return math.exp(loss / len(tokens))
 
-                top_solutions = [([START_TOKEN], 0.0, h, c, all_cs, z_context)]
+        def compute_sim2image(seed_text, seed_prob, sorted_scores, index, current_text):
+            n_tokens = len(current_text)
+            tokens_ids = torch.zeros(1, n_tokens)
+            for i in range(n_tokens):
+                token = current_text[i]
+                tokens_ids[0, i] = self.token_to_id[token]
 
-                if self.args.decodying_type == DecodingType.BEAM.value:
-                    compute_score = compute_probability
-                    is_to_reverse = True
+            tokens_embeddings = self.decoder.embedding(tokens_ids.long()).to(self.device)
 
-                elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
-                    compute_score = compute_perplexity
-                    is_to_reverse = False
+            sentence_mean = torch.mean(tokens_embeddings, dim=1)
+            images_embedding = self.decoder.image_embedding
 
-                elif self.args.decodying_type == DecodingType.BEAM_SIM2IMAGE.value:
-                    compute_score = compute_sim2image
+            return torch.cosine_similarity(sentence_mean, images_embedding)
 
-                elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY_SIM2IMAGE.value:
-                    compute_score = compute_perplexity_with_sim2image
+        def compute_perplexity_with_sim2image():
+            return 0
 
-                else:
-                    raise Exception("not available any other decoding type")
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, all_cs, time_t, z_context, n_solutions):
+            last_token = seed_text[-1]
 
-                for i in range(self.max_len):
-                    candidates = []
-                    for sentence, prob, h, c, all_cs, z_context in top_solutions:
-                        candidates.extend(generate_n_solutions(
-                            sentence, prob, encoder_output, h, c, n_solutions, all_cs, i, z_context))
+            if last_token == END_TOKEN:
+                return [(seed_text, seed_prob, h, c)]
 
-                    top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
+            top_solutions = []
+            predictions, h, c, z_context = self.decoder(
+                torch.tensor([self.token_to_id[last_token]]),
+                encoder_out, h, c, all_cs[:, time_t + 1],
+                z_context)
+            all_cs[0, time_t + 1, :] = c
+            scores = self._convert_prediction_to_output(predictions)
 
-                # print("top solutions", [(text, prob)
-                #                         for text, prob, _, _ in top_solutions])
-                best_tokens, prob, h, c, all_cs, z_context = top_solutions[0]
+            sorted_scores, sorted_indices = torch.sort(
+                scores, descending=True, dim=-1)
 
-                if best_tokens[0] == START_TOKEN:
-                    best_tokens = best_tokens[1:]
-                if best_tokens[-1] == END_TOKEN:
-                    best_tokens = best_tokens[:-1]
-                best_sentence = " ".join(best_tokens)
+            for index in range(n_solutions):
+                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
+                # beam search taking into account lenght of sentence
+                # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
+                text_score = compute_score(seed_text, seed_prob, sorted_scores, index, text)
+                top_solutions.append((text, text_score, h, c, all_cs, z_context))
 
-                print("\nbeam decoded sentence:", best_sentence)
-                return best_sentence
+            return top_solutions
+
+        def get_most_probable(candidates, n_solutions, is_to_reverse):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=is_to_reverse)[:n_solutions]
+
+        with torch.no_grad():
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c, z_context = self.decoder.init_hidden_state(encoder_output)
+            all_cs = torch.zeros(1, self.max_len, c.size(1)).to(self.device)
+            all_cs[0, 0, :] = c
+
+            top_solutions = [([START_TOKEN], 0.0, h, c, all_cs, z_context)]
+
+            if self.args.decodying_type == DecodingType.BEAM.value:
+                compute_score = compute_probability
+                is_to_reverse = True
+
+            elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
+                compute_score = compute_perplexity
+                is_to_reverse = False
+
+            elif self.args.decodying_type == DecodingType.BEAM_SIM2IMAGE.value:
+                compute_score = compute_sim2image
+
+            elif self.args.decodying_type == DecodingType.BEAM_PERPLEXITY_SIM2IMAGE.value:
+                compute_score = compute_perplexity_with_sim2image
+
+            else:
+                raise Exception("not available any other decoding type")
+
+            for i in range(self.max_len):
+                candidates = []
+                for sentence, prob, h, c, all_cs, z_context in top_solutions:
+                    candidates.extend(generate_n_solutions(
+                        sentence, prob, encoder_output, h, c, n_solutions, all_cs, i, z_context))
+
+                top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
+
+            # print("top solutions", [(text, prob)
+            #                         for text, prob, _, _ in top_solutions])
+            best_tokens, prob, h, c, all_cs, z_context = top_solutions[0]
+
+            if best_tokens[0] == START_TOKEN:
+                best_tokens = best_tokens[1:]
+            if best_tokens[-1] == END_TOKEN:
+                best_tokens = best_tokens[:-1]
+            best_sentence = " ".join(best_tokens)
+
+            print("\nbeam decoded sentence:", best_sentence)
+            return best_sentence
