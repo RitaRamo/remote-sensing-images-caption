@@ -298,7 +298,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
         def compute_perplexity_with_sim2image():
             return 0
 
-        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, all_cs, time_t, n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, all_cs, time_t, z_context, n_solutions):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -321,7 +321,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
                 # beam search taking into account lenght of sentence
                 # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
                 text_score = compute_score(seed_text, seed_prob, sorted_scores, index, text)
-                top_solutions.append((text, text_score, h, c, all_cs))
+                top_solutions.append((text, text_score, h, c, all_cs, z_context))
 
             return top_solutions
 
@@ -335,7 +335,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
             all_cs = torch.zeros(1, self.max_len, c.size(1)).to(self.device)
             all_cs[0, 0, :] = c
 
-            top_solutions = [([START_TOKEN], 0.0, h, c, all_cs)]
+            top_solutions = [([START_TOKEN], 0.0, h, c, all_cs, z_context)]
 
             if self.args.decodying_type == DecodingType.BEAM.value:
                 compute_score = compute_probability
@@ -358,7 +358,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
                 candidates = []
                 for sentence, prob, h, c, all_cs in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c, all_cs, i, n_solutions))
+                        sentence, prob, encoder_output, h, c, all_cs, i, z_context, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
