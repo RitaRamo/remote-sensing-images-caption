@@ -328,6 +328,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
                 return sorted(candidates, key=operator.itemgetter(1), reverse=is_to_reverse)[:n_solutions]
 
             with torch.no_grad():
+
                 encoder_output = self.encoder(image)
                 encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
                 h, c, z_context = self.decoder.init_hidden_state(encoder_output)
