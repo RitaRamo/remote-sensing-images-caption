@@ -307,7 +307,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
             top_solutions = []
             predictions, h, c, z_context = self.decoder(
                 torch.tensor([self.token_to_id[last_token]]),
-                encoder_out, h, c, all_cs[:, time_t + 1],
+                encoder_out, h, c, all_cs[:, :time_t + 1],
                 z_context)
             all_cs[0, time_t + 1, :] = c
             scores = self._convert_prediction_to_output(predictions)
