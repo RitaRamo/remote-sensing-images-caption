@@ -233,7 +233,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
 
             while True:
 
-                predictions, h, c, z_context = self.decoder(input_word, encoder_output, h, c, all_cs[0, :i], z_context)
+                predictions, h, c, z_context = self.decoder(input_word, encoder_output, h, c, all_cs[:, :i], z_context)
                 all_cs[0, i, :] = c
                 scores = self._convert_prediction_to_output(predictions)
 
