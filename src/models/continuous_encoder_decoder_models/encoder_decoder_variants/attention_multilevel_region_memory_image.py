@@ -302,7 +302,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
-                return [(seed_text, seed_prob, h, c)]
+                return [(seed_text, seed_prob, h, c, all_cs, z_context)]
 
             top_solutions = []
             predictions, h, c, z_context = self.decoder(
