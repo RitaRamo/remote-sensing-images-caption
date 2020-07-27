@@ -303,6 +303,8 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
 
             if last_token == END_TOKEN:
                 return [(seed_text, seed_prob, h, c, all_cs, z_context)]
+            if time_t >= self.max_len - 1:  # until 35
+                return [(seed_text, seed_prob, h, c, all_cs, z_context)]
 
             top_solutions = []
             predictions, h, c, z_context = self.decoder(
