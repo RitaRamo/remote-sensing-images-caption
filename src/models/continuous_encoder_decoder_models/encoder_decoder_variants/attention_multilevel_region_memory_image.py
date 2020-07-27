@@ -358,7 +358,7 @@ class ContinuousAttentionMultilevelRegionMemoryImageModel(ContinuousAttentionMod
                 candidates = []
                 for sentence, prob, h, c, all_cs, z_context in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c, n_solutions, all_cs, i, z_context))
+                        sentence, prob, encoder_output, h, c, all_cs, i, z_context, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
