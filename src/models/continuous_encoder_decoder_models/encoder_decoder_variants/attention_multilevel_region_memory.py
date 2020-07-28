@@ -13,6 +13,8 @@ from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from embeddings.embeddings import EmbeddingsType
 from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from utils.enums import DecodingType
+import operator
 
 
 class MultilevelAttention(nn.Module):
@@ -296,12 +298,14 @@ class ContinuousAttentionMultilevelRegionMemoryModel(ContinuousAttentionModel):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
-                return [(seed_text, seed_prob, h, c)]
+                return [(seed_text, seed_prob, h, c, all_cs, z_context)]
+            if time_t >= self.max_len - 1:  # until 35
+                return [(seed_text, seed_prob, h, c, all_cs, z_context)]
 
             top_solutions = []
             predictions, h, c, z_context = self.decoder(
                 torch.tensor([self.token_to_id[last_token]]),
-                encoder_out, h, c, all_cs[:, time_t + 1],
+                encoder_out, h, c, all_cs[:, :time_t + 1],
                 z_context)
             all_cs[0, time_t + 1, :] = c
             scores = self._convert_prediction_to_output(predictions)
@@ -352,7 +356,7 @@ class ContinuousAttentionMultilevelRegionMemoryModel(ContinuousAttentionModel):
                 candidates = []
                 for sentence, prob, h, c, all_cs, z_context in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c, n_solutions, all_cs, i, z_context))
+                        sentence, prob, encoder_output, h, c, all_cs, i, z_context, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
