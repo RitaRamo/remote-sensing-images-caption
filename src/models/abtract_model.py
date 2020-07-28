@@ -250,34 +250,44 @@ class AbstractEncoderDecoderModel(ABC):
             torch.save(state, self.get_checkpoint_path())
 
     def _load_weights_from_checkpoint(self, load_to_train):
-        checkpoint_path = self.get_checkpoint_path()
-
-        if os.path.exists(checkpoint_path):
-            self.checkpoint_exists = True
-
+        if load_to_train and self.args.checkpoint_model is not None:
+            # get checkpint path of a given model, that you want to keep training with different fine-tuning,etc
+            # ex: get model "enc_dec without fine-tuning", then train again with fine-tuning, saving in a new model "enc_dec with fine-tuning"
+            checkpoint_path = PATH_TRAINED_MODELS + self.args.checkpoint_model + '.pth.tar'
             checkpoint = torch.load(checkpoint_path)
-
-            # load model weights
             self.decoder.load_state_dict(checkpoint['decoder'])
             self.encoder.load_state_dict(checkpoint['encoder'])
+            print("load checkpoint of a different model")
 
-            if load_to_train:
-                # load optimizers and start epoch
-                self.decoder_optimizer.load_state_dict(
-                    checkpoint['decoder_optimizer'])
-                if self.encoder_optimizer:
-                    self.encoder_optimizer.load_state_dict(
-                        checkpoint['encoder_optimizer'])
-                self.checkpoint_start_epoch = checkpoint['epoch'] + 1
-                self.checkpoint_epochs_since_last_improvement = checkpoint[
-                    'epochs_since_last_improvement'] + 1
-                self.checkpoint_val_loss = checkpoint['val_loss']
+        else:  # get path of current args.model
+            checkpoint_path = self.get_checkpoint_path()
 
+            if os.path.exists(checkpoint_path):
+                self.checkpoint_exists = True
+
+                checkpoint = torch.load(checkpoint_path)
+
+                # load model weights
+                self.decoder.load_state_dict(checkpoint['decoder'])
+                self.encoder.load_state_dict(checkpoint['encoder'])
+
+                if load_to_train:
+                    # load optimizers and start epoch
+                    self.decoder_optimizer.load_state_dict(
+                        checkpoint['decoder_optimizer'])
+                    if self.encoder_optimizer:
+                        self.encoder_optimizer.load_state_dict(
+                            checkpoint['encoder_optimizer'])
+                    self.checkpoint_start_epoch = checkpoint['epoch'] + 1
+                    self.checkpoint_epochs_since_last_improvement = checkpoint[
+                        'epochs_since_last_improvement'] + 1
+                    self.checkpoint_val_loss = checkpoint['val_loss']
+
+                    logging.info(
+                        "Restore model from checkpoint. Start epoch %s ", self.checkpoint_start_epoch)
+            else:
                 logging.info(
-                    "Restore model from checkpoint. Start epoch %s ", self.checkpoint_start_epoch)
-        else:
-            logging.info(
-                "No checkpoint. Will start model from beggining\n")
+                    "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
         path = PATH_TRAINED_MODELS + self.args.file_name + '.pth.tar'

@@ -22,6 +22,8 @@ def get_args():
     parser.add_argument('--decodying_type', type=str, default=DecodingType.GREEDY.value,
                         choices=[decoding_type.value for decoding_type in DecodingType])
 
+    parser.add_argument('--checkpoint_model', type=str, default=None)
+
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
 
