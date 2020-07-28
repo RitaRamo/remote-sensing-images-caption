@@ -2307,7 +2307,7 @@ class ContinuousLoss():
             d2_matrix = cdist(preds_without_padd, targets_without_padd)
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
-            sentence_losses += term_1 + term_2
+            sentence_losses += (term_1 + term_2)/2
 
         word_loss = word_losses / n_sentences
         sentence_loss = sentence_losses / n_sentences
