@@ -4,7 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
 from torch.nn import functional
 from torch import nn
-from utils.utils import get_pack_padded_sequences, sink, cdist
+from utils.utils import get_pack_padded_sequences, sink, cdist, sim_matrix
 
 
 class ContinuousLoss():
@@ -2304,7 +2304,7 @@ class ContinuousLoss():
             )
 
             # sentence-level loss (sentence predicted agains target sentence)
-            d2_matrix = cdist(preds_without_padd, targets_without_padd)
+            d2_matrix = 1 - sim_matrix(preds_without_padd, targets_without_padd)
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
             sentence_losses += (term_1 + term_2) / 2
@@ -2312,6 +2312,6 @@ class ContinuousLoss():
         word_loss = word_losses / n_sentences
         sentence_loss = sentence_losses / n_sentences
 
-        loss = word_loss + 0.10 * sentence_loss
+        loss = word_loss + sentence_loss
 
         return loss
