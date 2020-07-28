@@ -257,7 +257,7 @@ class AbstractEncoderDecoderModel(ABC):
             checkpoint = torch.load(checkpoint_path)
             self.decoder.load_state_dict(checkpoint['decoder'])
             self.encoder.load_state_dict(checkpoint['encoder'])
-            print("load checkpoint of a different model")
+            print("load checkpoint of a different model, which will be trained and saved in a new file")
 
         else:  # get path of current args.model
             checkpoint_path = self.get_checkpoint_path()
@@ -426,6 +426,8 @@ class AbstractEncoderDecoderModel(ABC):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
+                if len(seed_text) <= 2:
+                    return [(seed_text, 0, h, c)]
                 return [(seed_text, seed_prob, h, c)]
 
             top_solutions = []
