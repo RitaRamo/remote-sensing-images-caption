@@ -392,7 +392,8 @@ class AbstractEncoderDecoderModel(ABC):
     def inference_with_beamsearch(self, image, n_solutions=3):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+            return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
+            # return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
         def compute_perplexity(seed_text, seed_prob, sorted_scores, index, current_text):
             current_text = ' '.join(current_text)
