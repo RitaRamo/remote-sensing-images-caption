@@ -46,14 +46,7 @@ if __name__ == "__main__":
         for word in vocab_words:
             numerator = model.counts[[prev_word]][word] + 1  # add-1 for laplace smooth
             corpus_bigram_prob[word][prev_word] = numerator / denominator
-            if prev_word == "a":
-                print("word", word)
-                print("numerator", numerator)
-                print("denominator", numerator)
-                print("prob", corpus_bigram_prob[word][prev_word])
 
-        if prev_word == "a":
-            break
     state = {
         "corpus_bigram_prob": corpus_bigram_prob
     }
