@@ -1,3 +1,6 @@
+import sys
+sys.path.append('src/')
+
 from data_preprocessing.create_data_files import get_vocab_info, get_dataset, PATH_DATASETS_RSICD
 from collections import defaultdict
 import spacy
@@ -12,7 +15,6 @@ from nltk.lm import MLE
 
 
 VOCAB_SIZE = 512
-dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
 
 if __name__ == "__main__":
     corpus_bigram_prob = {}
@@ -56,7 +58,7 @@ if __name__ == "__main__":
         "corpus_bigram_prob": corpus_bigram_prob
     }
 
-    #torch.save(state, "src/data/RSICD/datasets/corpus_bigram_prob")
+    torch.save(state, "src/data/RSICD/datasets/corpus_bigram_prob")
 
     # for word in vocab:
     #     corpus_prob[word]={keys:all word;=0}
