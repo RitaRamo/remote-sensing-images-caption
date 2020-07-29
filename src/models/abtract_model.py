@@ -448,6 +448,8 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=is_to_reverse)[:n_solutions]
 
         with torch.no_grad():
+            my_dict = {}
+
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
@@ -471,7 +473,7 @@ class AbstractEncoderDecoderModel(ABC):
             else:
                 raise Exception("not available any other decoding type")
 
-            for _ in range(self.max_len):
+            for time_step in range(self.max_len):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
@@ -479,6 +481,16 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
+                print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
+                # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                print("\ntop", [(text, prob)
+                                for text, prob, _, _ in top_solutions])
+                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+
+            # with open("beam_10.json", 'w+') as f:
+            #     json.dump(my_dict, f, indent=2)
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
             best_tokens, prob, h, c = top_solutions[0]
@@ -490,7 +502,7 @@ class AbstractEncoderDecoderModel(ABC):
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
-            return best_sentence
+            return best_sentence, my_dict
 
     def inference_with_postprocessing_perplexity(self, image, n_solutions=2):
         def compute_perplexity(current_text):
