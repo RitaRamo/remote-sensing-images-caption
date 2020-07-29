@@ -869,6 +869,95 @@ class AbstractEncoderDecoderModel(ABC):
             final_solutions = get_most_probable(final_solutions, n_solutions)
             print("final_solutions", final_solutions)
 
+            best_tokens, prob = final_solutions[0]
+
+            if best_tokens[0] == START_TOKEN:
+                best_tokens = best_tokens[1:]
+            if best_tokens[-1] == END_TOKEN:
+                best_tokens = best_tokens[:-1]
+            best_sentence = " ".join(best_tokens)
+
+            print("\nbeam decoded sentence:", best_sentence)
+            return best_sentence
+
+    def inference_with_beamsearch_ranked_corpus(self, image, n_solutions=3):
+        def compute_bigram_prob(current_text):
+            last_token=current_text[0]
+            text_score =0.0
+            for new_token in current_text[1:]:
+                current_prob = corpus_bigram_prob[new_token][last_token]
+                text_score += np.log(current_prob)
+                last_token = new_token
+            text_score = text_score/ len(current_text[1:])
+
+            return text_score
+
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
+            last_token = seed_text[-1]
+
+            if last_token == END_TOKEN:
+                if len(seed_text) <= 2:
+                    return [(seed_text, -np.inf, h, c)]
+                return [(seed_text, seed_prob, h, c)]
+
+            top_solutions = []
+            scores, h, c = self.generate_output_index(
+                torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
+
+            sorted_scores, sorted_indices = torch.sort(
+                scores, descending=True, dim=-1)
+
+            for index in range(n_solutions):
+                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
+                # beam search taking into account lenght of sentence
+                # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
+                text_score = (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+                top_solutions.append((text, text_score, h, c))
+
+            return top_solutions
+
+        def get_most_probable(candidates, n_solutions):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+
+        with torch.no_grad():
+            #my_dict = {}
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
+
+            for time_step in range(self.max_len):
+                candidates = []
+                for sentence, prob, h, c in top_solutions:
+                    candidates.extend(generate_n_solutions(
+                        sentence, prob, encoder_output, h, c, n_solutions))
+
+                top_solutions = get_most_probable(candidates, n_solutions)
+
+                # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
+                # # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                # print("\ntop", [(text, prob)
+                #                 for text, prob, _, _ in top_solutions])
+                # # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+
+            # with open("beam_10.json", 'w+') as f:
+            #     json.dump(my_dict, f, indent=2)
+            # print("top solutions", [(text, prob)
+            #                         for text, prob, _, _ in top_solutions])
+            print("top before", [(text, prob)
+                                 for text, prob, _, _ in top_solutions])
+            final_solutions = []
+            for sentence, prob, h, c in top_solutions:
+                rank = compute_bigram_prob(sentence)
+                final_solutions.append((sentence, rank))
+
+            final_solutions = get_most_probable(final_solutions, n_solutions)
+            print("final_solutions", final_solutions)
+
             best_tokens, prob, h, c = top_solutions[0]
 
             if best_tokens[0] == START_TOKEN:
@@ -879,6 +968,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
+
 
     @abstractmethod
     def generate_output_index(self, input_word, encoder_out, h, c):
