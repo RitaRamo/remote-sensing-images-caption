@@ -105,17 +105,16 @@ if __name__ == "__main__":
 
     elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
         decoding_method = model.inference_with_perplexity
-    elif args.decodying_type == DecodingType.POSTPROCESSING_PERPLEXITY.value:
-        decoding_method = model.inference_with_postprocessing_perplexity
     elif args.decodying_type == DecodingType.BIGRAM_PROB.value:
         decoding_method = model.inference_with_bigramprob
     elif args.decodying_type == DecodingType.BIGRAM_PROB_IMAGE.value:
         decoding_method = model.inference_with_bigramprob_and_image
-    elif args.decodying_type == DecodingType.POSTPROCESSING_BIGRAM_PROB.value:
-        decoding_method = model.inference_with_postprocessing_bigramprob
     elif args.decodying_type == DecodingType.BIGRAM_PROB_COS.value:
         decoding_method = model.inference_with_bigramprob_and_cos
+    elif args.decodying_type == DecodingType.BEAM_RANKED_IMAGE.value:
+        decoding_method = model.inference_with_beamsearch_ranked_image
     else:
+        print("using beam")
         decoding_method = model.inference_with_beamsearch
 
     list_hipotheses = []
