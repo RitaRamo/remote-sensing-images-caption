@@ -69,6 +69,7 @@ class ContinuousLossesType(Enum):
     COS_AVG_SENTENCE_AND_INPUTS_W = "cos_avg_sentence_and_inputs_w_loss"
     COS_HDSentence = "cos_hausdorffsentence"
     COS_F1HDSentence = "cos_f1hausdorffsentence"
+    COS_D1HDSentence = "cos_d1hausdorffsentence"
     COS_BScoreSentence = "cos_bscoresentence"
 
 

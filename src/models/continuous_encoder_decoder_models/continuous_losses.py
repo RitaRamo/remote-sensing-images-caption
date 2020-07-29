@@ -189,6 +189,10 @@ class ContinuousLoss():
             self.loss_method = self.cos_f1hausdorffsentence_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.COS_D1HDSentence.value:
+            self.loss_method = self.cos_d1hausdorffsentence_loss
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
         elif loss_type == ContinuousLossesType.COS_BScoreSentence.value:
             self.loss_method = self.cos_bscoresentence_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
@@ -2347,6 +2351,40 @@ class ContinuousLoss():
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
             sentence_losses += 2 * term_1 * term_2 / (term_1 + term_2)
+
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+
+        loss = word_loss + sentence_loss
+
+        return loss
+
+    def cos_d1hausdorffsentence_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            d2_matrix = 1 - sim_matrix(preds_without_padd, targets_without_padd)
+            term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
+            sentence_losses += term_1
 
         word_loss = word_losses / n_sentences
         sentence_loss = sentence_losses / n_sentences
