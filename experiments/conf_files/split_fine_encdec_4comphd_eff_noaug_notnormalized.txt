@@ -1,7 +1,7 @@
 --file_name
 split_fine_encdec_4comphd_eff_noaug_notnormalized.txt
 --model_class_str
-ContinuousEncoderDecoderModel
+ContinuousEncoderDecoderImageModel
 --batch_size
 8
 --num_workers
