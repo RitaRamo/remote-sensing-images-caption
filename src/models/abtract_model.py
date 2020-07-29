@@ -626,14 +626,14 @@ class AbstractEncoderDecoderModel(ABC):
                         sentence, prob, encoder_output, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
-                print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
-                my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
-                print("\ntop", [(text, prob)
-                                for text, prob, _, _ in top_solutions])
-                my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
+                # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                # print("\ntop", [(text, prob)
+                #                 for text, prob, _, _ in top_solutions])
+                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
 
-            with open("bigram.json", 'w+') as f:
-                json.dump(my_dict, f, indent=2)
+            # with open("bigram.json", 'w+') as f:
+            #     json.dump(my_dict, f, indent=2)
 
             best_tokens, prob, h, c = top_solutions[0]
 
@@ -788,7 +788,7 @@ class AbstractEncoderDecoderModel(ABC):
             # condierar start and end_token?
             current_text = current_text[1:]  # ignore start token
             if current_text[-1] == END_TOKEN:
-                current_text = best_tokens[:-1]
+                current_text = current_text[:-1]
             n_tokens = len(current_text)
 
             tokens_ids = torch.zeros(1, n_tokens)
