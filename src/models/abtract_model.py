@@ -921,6 +921,7 @@ class AbstractEncoderDecoderModel(ABC):
 
         with torch.no_grad():
             #my_dict = {}
+            corpus_bigram_prob = torch.load('src/data/RSICD/datasets/corpus_bigram_prob')["corpus_bigram_prob"]
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
