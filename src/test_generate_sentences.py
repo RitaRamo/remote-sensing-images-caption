@@ -113,6 +113,8 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_bigramprob_and_cos
     elif args.decodying_type == DecodingType.BEAM_RANKED_IMAGE.value:
         decoding_method = model.inference_with_beamsearch_ranked_image
+    elif args.decodying_type == DecodingType.BEAM_RANKED_BIGRAM.value:
+        decoding_method = model.inference_with_beamsearch_ranked_bigram
     else:
         print("using beam")
         decoding_method = model.inference_with_beamsearch

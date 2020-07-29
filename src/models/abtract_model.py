@@ -880,15 +880,15 @@ class AbstractEncoderDecoderModel(ABC):
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-    def inference_with_beamsearch_ranked_corpus(self, image, n_solutions=3):
+    def inference_with_beamsearch_ranked_bigram(self, image, n_solutions=3):
         def compute_bigram_prob(current_text):
-            last_token=current_text[0]
-            text_score =0.0
+            last_token = current_text[0]
+            text_score = 0.0
             for new_token in current_text[1:]:
                 current_prob = corpus_bigram_prob[new_token][last_token]
                 text_score += np.log(current_prob)
                 last_token = new_token
-            text_score = text_score/ len(current_text[1:])
+            text_score = text_score / len(current_text[1:])
 
             return text_score
 
@@ -958,7 +958,7 @@ class AbstractEncoderDecoderModel(ABC):
             final_solutions = get_most_probable(final_solutions, n_solutions)
             print("final_solutions", final_solutions)
 
-            best_tokens, prob, h, c = top_solutions[0]
+            best_tokens, prob = final_solutions[0]
 
             if best_tokens[0] == START_TOKEN:
                 best_tokens = best_tokens[1:]
@@ -968,7 +968,6 @@ class AbstractEncoderDecoderModel(ABC):
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
-
 
     @abstractmethod
     def generate_output_index(self, input_word, encoder_out, h, c):

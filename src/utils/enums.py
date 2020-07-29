@@ -80,6 +80,7 @@ class DecodingType(Enum):
     GREEDY_SMOOTHL1 = "greedy_smoothl1"
     BEAM = "beam"
     BEAM_RANKED_IMAGE = "beam_ranked_image"
+    BEAM_RANKED_BIGRAM = "beam_ranked_bigram"
     BEAM_PERPLEXITY = "perplexity"
     BEAM_SIM2IMAGE = "sim2image"
     BEAM_PERPLEXITY_SIM2IMAGE = "perplexity_image"
