@@ -165,5 +165,5 @@ if __name__ == "__main__":
             text_generated, beam_results = decoding_method(image, args.n_beam)
             all_results[img_id] = beam_results
 
-    with open("beam_results.json", 'w+') as f:
+    with open(args.file_name + "beam_results.json", 'w+') as f:
         json.dump(all_results, f, indent=2)
