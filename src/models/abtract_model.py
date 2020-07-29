@@ -504,7 +504,7 @@ class AbstractEncoderDecoderModel(ABC):
             best_sentence = " ".join(best_tokens)
 
             #print("\nbeam decoded sentence:", best_sentence)
-            return best_sentence, my_dict
+            return best_sentence
 
     def inference_with_postprocessing_perplexity(self, image, n_solutions=2):
         def compute_perplexity(current_text):
