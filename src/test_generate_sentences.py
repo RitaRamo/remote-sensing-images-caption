@@ -58,6 +58,7 @@ import operator
 from nlgeval import compute_metrics
 from models.abtract_model import DecodingType
 import json
+import cv2
 
 from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
@@ -128,7 +129,8 @@ if __name__ == "__main__":
 
         image_name = PATH_RSICD + \
             "raw_dataset/RSICD_images/" + img_name
-        image = Image.open(image_name)
+        #image = Image.open(image_name)
+        image = cv2.imread(image_name)
         image = transform(image)
         image = image.unsqueeze(0)
 
