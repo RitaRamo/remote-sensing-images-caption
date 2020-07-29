@@ -426,6 +426,8 @@ class AbstractEncoderDecoderModel(ABC):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
+                if len(seed_text) <= 2:
+                    return [(seed_text, -np.inf, h, c)]
                 return [(seed_text, seed_prob, h, c)]
 
             top_solutions = []
