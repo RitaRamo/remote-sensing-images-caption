@@ -1,7 +1,7 @@
 --file_name
 split_fine_encdec_3comp_eff_noaug_scoretanh.txt
 --model_class_str
-ContinuousEncoderDecoderScoreTanhModel
+ContinuousEncoderDecoderScoreTanhImageModel
 --batch_size
 8
 --num_workers
