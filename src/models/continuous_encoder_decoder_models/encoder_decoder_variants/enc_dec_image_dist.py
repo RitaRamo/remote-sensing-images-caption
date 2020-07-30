@@ -34,7 +34,6 @@ class ContinuousDecoderWithImage(Decoder):
 
         h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
         self.image_embedding = self.represent_image(encoder_out)
-        print("embedding size", self.image_embedding)
 
         return h, h
 
