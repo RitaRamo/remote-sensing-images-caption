@@ -14,13 +14,13 @@ from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousE
 from embeddings.embeddings import EmbeddingsType
 
 
-class ContinuousDecoderTanh(Decoder):
+class ContinuousDecoderTanhImage(Decoder):
 
     def __init__(self, decoder_dim, embed_dim, embedding_type, vocab_size, token_to_id, post_processing,
                  encoder_dim=2048, dropout=0.5):
 
-        super(ContinuousDecoderTanh, self).__init__(decoder_dim, embed_dim, embedding_type,
-                                                    vocab_size, token_to_id, post_processing, encoder_dim, dropout)
+        super(ContinuousDecoderTanhImage, self).__init__(decoder_dim, embed_dim, embedding_type,
+                                                         vocab_size, token_to_id, post_processing, encoder_dim, dropout)
 
         # linear layer to find representation of image
         self.represent_image = nn.Linear(encoder_dim, embed_dim)
@@ -29,6 +29,14 @@ class ContinuousDecoderTanh(Decoder):
         # replace softmax with a embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
         self.tanh = nn.Tanh()
+
+    def init_hidden_state(self, encoder_out):
+        mean_encoder_out = encoder_out.mean(dim=1)
+
+        h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
+        self.image_embedding = self.represent_image(mean_encoder_out)
+
+        return h, h
 
     def forward(self, word, encoder_out, decoder_hidden_state, decoder_cell_state):
         embeddings = self.embedding(word)
@@ -42,7 +50,7 @@ class ContinuousDecoderTanh(Decoder):
         return scores, decoder_hidden_state, decoder_cell_state
 
 
-class ContinuousEncoderDecoderScoreTanhModel(ContinuousEncoderDecoderModel):
+class ContinuousEncoderDecoderScoreTanhImageModel(ContinuousEncoderDecoderModel):
 
     def __init__(self,
                  args,
@@ -63,7 +71,7 @@ class ContinuousEncoderDecoderScoreTanhModel(ContinuousEncoderDecoderModel):
         self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
 
-        self.decoder = ContinuousDecoderTanh(
+        self.decoder = ContinuousDecoderTanhImage(
             encoder_dim=self.encoder.encoder_dim,
             decoder_dim=self.args.decoder_dim,
             embedding_type=self.args.embedding_type,
