@@ -72,6 +72,7 @@ class ContinuousLossesType(Enum):
     COS_D1HDSentence = "cos_d1hausdorffsentence"
     COS_BScoreSentence = "cos_bscoresentence"
     COS_HDSENTENCE_AND_INPUTS = "cos_hausdorffsentence_and_inputs"
+    COS_HDSENTENCE_AND_HDINPUTS = "cos_hausdorffsentence_and_hdinputs"
 
 
 class DecodingType(Enum):
