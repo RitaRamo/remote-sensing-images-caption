@@ -1,7 +1,7 @@
 --file_name
 split_fine_adaptativeonly_1comp_eff_noaug_notnormalized.txt
 --model_class_str
-ContinuousAdaptativeAttentionImageOnlyModel
+ContinuousAdaptativeAttentionOnlyImageModel
 --batch_size
 8
 --num_workers
