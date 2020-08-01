@@ -323,7 +323,7 @@ class ContinuousAdaptativeAttentionImageModel(ContinuousAttentionModel):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, global_image, encoder_output, h, c, n_solutions))
+                        sentence, prob, global_image, V_spatial_features, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 

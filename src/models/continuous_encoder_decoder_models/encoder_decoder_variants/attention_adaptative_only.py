@@ -13,6 +13,8 @@ from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention import ContinuousAttentionModel
 from embeddings.embeddings import EmbeddingsType
 from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from utils.enums import DecodingType
+import operator
 
 
 class AdaptativeAttention(nn.Module):
@@ -319,7 +321,7 @@ class ContinuousAdaptativeAttentionOnlyImageModel(ContinuousAttentionModel):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, global_image, encoder_output, h, c, n_solutions))
+                        sentence, prob, global_image, V_spatial_features, h, c, n_solutions))
 
                 top_solutions = get_most_probable(candidates, n_solutions, is_to_reverse)
 
