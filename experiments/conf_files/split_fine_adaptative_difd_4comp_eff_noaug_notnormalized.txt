@@ -1,7 +1,7 @@
 --file_name
 split_fine_adaptative_difd_4comp_eff_noaug_notnormalized.txt
 --model_class_str
-ContinuousAdaptativeAttentionImageModel
+ContinuousAdaptativeAttentionImageCompModel
 --batch_size
 8
 --num_workers
