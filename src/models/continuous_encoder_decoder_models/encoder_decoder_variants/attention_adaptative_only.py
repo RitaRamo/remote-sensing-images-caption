@@ -222,9 +222,9 @@ class ContinuousAdaptativeAttentionOnlyImageModel(ContinuousAttentionModel):
 
         return {"predictions": all_predictions, "alphas": all_alphas, "betas": all_betas}
 
-    def generate_output_index(self, input_word, encoder_out, h, c):
+    def generate_output_index(self, input_word, global_image, encoder_out, h, c):
         predictions, h, c, _, _ = self.decoder(
-            input_word, encoder_out, h, c)
+            input_word, global_image, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output(predictions)
 
