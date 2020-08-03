@@ -17,11 +17,11 @@ list_files = ['split_fine_encdec_1comp_eff_noaug_notnormalized.txt',
               'split_fine_encdec_2comphddiv2_eff_noaug_notnormalized.txt']
 
 for eval_file in list_files:
-    subprocess.Popen(["python3", "src/test_generate_sentences.py", eval_file,
+    subprocess.Popen(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
                       "--decodying_type=beam", "--n_beam=10", "--test_set"])
-    subprocess.Popen(["python2", "src/test_scores_coco.py", eval_file,
+    subprocess.Popen(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
                       "--decodying_type=beam", "--n_beam=10", "--test_set"])
-    subprocess.Popen(["python3", "src/test_scores_bertscore.py", eval_file,
+    subprocess.Popen(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
                       "--decodying_type=beam", "--n_beam=10", "--test_set"])
 
 sys.exit()
