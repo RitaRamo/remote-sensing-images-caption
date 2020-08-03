@@ -70,8 +70,8 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_adaptative_drop import ContinuousAdaptativeAttentionDropModel
 
 
-torch.manual_seed(0)
-np.random.seed(0)
+torch.manual_seed(1)
+np.random.seed(1)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
