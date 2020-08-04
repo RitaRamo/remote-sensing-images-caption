@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 import faiss
 
 
-class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
+class c(ContinuousEncoderDecoderModel):
 
     def __init__(self,
                  args,
@@ -47,7 +47,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         self._initialize_encoder_and_decoder()
         self.encoder.eval()
 
-    def create_index():
+    def create_index(self):
         d = self.args.encoder_dim
         index = faiss.IndexFlatL2(d)
         index_references = []
