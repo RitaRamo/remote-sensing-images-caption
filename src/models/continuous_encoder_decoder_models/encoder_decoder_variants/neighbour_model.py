@@ -55,13 +55,16 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         index = faiss.IndexFlatL2(d)
         images_ids = []
 
-        train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
+        #train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
+        train_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
 
         transform = transforms.Compose([
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
                                  std=[0.229, 0.224, 0.225])
         ])
+
+        i = 0
 
         for values in train_dataset["images"]:
 
@@ -80,6 +83,10 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])
             mean_encoder_output = encoder_output.mean(dim=1)
             index.add(mean_encoder_output.numpy())
+
+            i += 1
+            if i == 10:
+                break
 
         dict_imageid_refs = defaultdict(list)
         all_captions = []
@@ -110,9 +117,18 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             max_counts = 0
             max_counts_ref = nearest_references[0]
             for nearest_ref in nearest_references:
-                if counter_refs[nearest_ref] > 0:
-                    max_counts = counter_refs[nearest_ref]
+                print("neares_ref", nearest_ref)
+                print("counter_refs[nearest_ref]", self.counter_refs[nearest_ref])
+                print("max_counts before", max_counts)
+
+                if self.counter_refs[nearest_ref] > 0:
+                    max_counts = self.counter_refs[nearest_ref]
                     max_counts_ref = nearest_ref
+                    print("actualizei", max_counts, max_counts_ref)
+
+            print("max counts ref", max_counts_ref)
+
+            print(stop)
 
             generated_sentence = max_counts_ref  # pick first ref
 
