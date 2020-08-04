@@ -53,8 +53,8 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         index_references = []
 
         train_dataset_args = (PATH_DATASETS_RSICD + "train_dict.json",
-                              max_len,
-                              token_to_id
+                              self.max_len,
+                              self.token_to_id
                               )
 
         train_dataloader = DataLoader(
