@@ -20,6 +20,7 @@ from toolz import unique
 from data_preprocessing.datasets import NeighbourDataset
 from torch.utils.data import DataLoader
 import faiss
+import logging
 
 
 class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
@@ -45,6 +46,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         self._initialize_encoder_and_decoder()
         self.encoder.eval()
 
+        logging.info("using faiss to create index")
         self.index, self.images_ids = self.create_index()
 
         self.dict_imageid_refs = defaultdict(list)
@@ -83,8 +85,6 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])
             mean_encoder_output = encoder_output.mean(dim=1)
             index.add(mean_encoder_output.numpy())
-
-            print("index total", index.ntotal)
 
         return index, images_ids
 
