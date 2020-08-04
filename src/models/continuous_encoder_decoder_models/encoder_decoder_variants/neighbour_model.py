@@ -97,7 +97,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
                 1, -1, encoder_output.size()[-1])
             mean_encoder_output = encoder_output.mean(dim=1)
 
-            D, I = index.search(mean_encoder_output.numpy(), 1)
+            D, I = self.index.search(mean_encoder_output.numpy(), 1)
 
             print("I most similar vector", I)
             print("I most similar caption", self.images_ids(I[0]))
