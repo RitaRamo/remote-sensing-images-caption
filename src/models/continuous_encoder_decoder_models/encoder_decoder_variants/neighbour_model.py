@@ -103,7 +103,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             print("image 0", I[0][0])  # pick batch 0, then pick first similar
             nearest_img = self.images_ids[I[0][0]]
             print("neares image", nearest_img)
-            generated_sentence = self.dict_imageid_refs[nearest_img]
+            generated_sentence = self.dict_imageid_refs[nearest_img][0]  # first ref
 
             print("nearest caption", generated_sentence)
 
