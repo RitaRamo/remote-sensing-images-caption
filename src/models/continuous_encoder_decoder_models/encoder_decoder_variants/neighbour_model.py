@@ -21,6 +21,7 @@ from data_preprocessing.datasets import NeighbourDataset
 from torch.utils.data import DataLoader
 import faiss
 from collections import defaultdict
+from collections import Counter
 
 
 class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
@@ -47,7 +48,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         self.encoder.eval()
 
         print("using faiss to create index")
-        self.index, self.images_ids, self.dict_imageid_refs = self.create_index()
+        self.index, self.images_ids, self.dict_imageid_refs, self.counter_refs = self.create_index()
 
     def create_index(self):
         d = self.encoder.encoder_dim
@@ -81,12 +82,16 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             index.add(mean_encoder_output.numpy())
 
         dict_imageid_refs = defaultdict(list)
+        all_captions = []
         for ref in train_dataset["annotations"]:
             image_id = ref["image_id"]
             caption = ref["caption"]
+            all_captions.append(caption)
             dict_imageid_refs[image_id].append(caption)
 
-        return index, images_ids, dict_imageid_refs
+        counter_refs = Counter(all_captions)
+
+        return index, images_ids, dict_imageid_refs, counter_refs
 
     def inference_with_greedy(self, image, n_solutions=0):
 
@@ -99,7 +104,17 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
 
             D, I = self.index.search(mean_encoder_output.numpy(), 1)
             nearest_img = self.images_ids[I[0][0]]  # pick first batch -> then pick first neighbour
-            generated_sentence = self.dict_imageid_refs[nearest_img][0]  # pick first ref
+            nearest_references = self.dict_imageid_refs[nearest_img]
+            # generated_sentence = self.dict_imageid_refs[nearest_img][0]  # pick first ref
+
+            max_counts = 0
+            max_counts_ref = nearest_references[0]
+            for nearest_ref in nearest_references:
+                if counter_refs[nearest_ref] > 0:
+                    max_counts = counter_refs[nearest_ref]
+                    max_counts_ref = nearest_ref
+
+            generated_sentence = max_counts_ref  # pick first ref
 
             print("nearest caption", generated_sentence)
 
