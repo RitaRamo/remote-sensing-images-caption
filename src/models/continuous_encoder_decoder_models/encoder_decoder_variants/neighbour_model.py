@@ -15,7 +15,7 @@ from embeddings.embeddings import EmbeddingsType
 from torchvision import transforms
 from definitions import PATH_DATASETS_RSICD, PATH_RSICD
 from data_preprocessing.create_data_files import get_dataset
-from PIL import Image
+import cv2
 from toolz import unique
 from data_preprocessing.datasets import NeighbourDataset
 from torch.utils.data import DataLoader
@@ -41,36 +41,37 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
 
         self.encoder = self.encoder.to(self.device)
 
-        self.index, self.index_references = self.create_index()
-
     def setup_to_test(self):
         self._initialize_encoder_and_decoder()
         self.encoder.eval()
 
+        self.index, self.images_ids = self.create_index()
+
+        self.dict_imageid_refs = defaultdict(list)
+        for ref in test["annotations"]:
+            image_id = ref["image_id"]
+            caption = ref["caption"]
+            self.dict_imageid_refs[image_id].append(caption)
+
     def create_index(self):
         d = self.encoder.encoder_dim
         index = faiss.IndexFlatL2(d)
-        index_references = []
+        images_ids = []
 
-        train_dataset_args = (PATH_DATASETS_RSICD + "train_dict.json",
-                              self.max_len,
-                              self.token_to_id
-                              )
+        train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
 
-        train_dataloader = DataLoader(
-            NeighbourDataset(*train_dataset_args, self.args.augment_data),
-            batch_size=8,
-            shuffle=False,
-            num_workers=self.args.num_workers
-        )
+        for values in train_dataset["images"]:
 
-        for image_name, references in train_dataset.items():
-            image_path = PATH_RSICD + \
-                "raw_dataset/RSICD_images/" + image_name
-            image = Image.open(image_path)
+            img_name = values["file_name"]
+            image_id = values["id"]
+
+            image_name = PATH_RSICD + \
+                "raw_dataset/RSICD_images/" + img_name
+            image = cv2.imread(image_name)
             image = transform(image)
             image = image.unsqueeze(0)
-            index_references.append(references[0])
+
+            images_ids.append(image_id)
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])
@@ -80,7 +81,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             print("index total", index.ntotal)
             print("len dataloader", len(train_dataloader))
 
-        return index, index_references
+        return index, images_ids
 
     def inference_with_greedy(self, image, n_solutions=0):
 
@@ -91,10 +92,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         ])
 
         with torch.no_grad():  # no need to track history
-            image_path = PATH_RSICD + "raw_dataset/RSICD_images/" + image_name
-            image = Image.open(image_path)
-            image = transform(image)
-            image = image.unsqueeze(0)
+
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(
                 1, -1, encoder_output.size()[-1])
@@ -103,7 +101,10 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             D, I = index.search(mean_encoder_output.numpy(), 1)
 
             print("I most similar vector", I)
-            print("I most similar caption", self.references(I[0]))
+            print("I most similar caption", self.images_ids(I[0]))
+
+            nearest_img = self.images_ids(I[0])
+            print("nearest caption", self.dict_imageid_refs[nearest_img])
 
             print(ola)
 
@@ -145,4 +146,4 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
 
             # return generated_sentence  # input_caption
 
-#image: vocab
+# image: vocab
