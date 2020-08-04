@@ -98,12 +98,14 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             mean_encoder_output = encoder_output.mean(dim=1)
 
             D, I = self.index.search(mean_encoder_output.numpy(), 1)
-
+            print("D", D)
             print("I most similar vector", I)
-            print("I most similar caption", self.images_ids[I[0]])
+            print("image 0", I[0][0])  # pick batch 0, then pick first similar
+            nearest_img = self.images_ids[I[0][0]]
+            print("neares image", nearest_img)
+            generated_sentence = self.dict_imageid_refs[nearest_img]
 
-            nearest_img = self.images_ids[I[0]]
-            print("nearest caption", self.dict_imageid_refs[nearest_img])
+            print("nearest caption", generated_sentence)
 
             print(ola)
 
