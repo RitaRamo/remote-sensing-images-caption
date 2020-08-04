@@ -21,6 +21,7 @@ from data_preprocessing.datasets import NeighbourDataset
 from torch.utils.data import DataLoader
 import faiss
 import logging
+from collections import defaultdict
 
 
 class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
