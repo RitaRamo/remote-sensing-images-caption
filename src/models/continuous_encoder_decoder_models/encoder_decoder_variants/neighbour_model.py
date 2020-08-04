@@ -20,7 +20,6 @@ from toolz import unique
 from data_preprocessing.datasets import NeighbourDataset
 from torch.utils.data import DataLoader
 import faiss
-import logging
 from collections import defaultdict
 
 
@@ -47,14 +46,8 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         self._initialize_encoder_and_decoder()
         self.encoder.eval()
 
-        logging.info("using faiss to create index")
-        self.index, self.images_ids = self.create_index()
-
-        self.dict_imageid_refs = defaultdict(list)
-        for ref in test["annotations"]:
-            image_id = ref["image_id"]
-            caption = ref["caption"]
-            self.dict_imageid_refs[image_id].append(caption)
+        print("using faiss to create index")
+        self.index, self.images_ids, self.dict_imageid_refs = self.create_index()
 
     def create_index(self):
         d = self.encoder.encoder_dim
@@ -87,7 +80,13 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             mean_encoder_output = encoder_output.mean(dim=1)
             index.add(mean_encoder_output.numpy())
 
-        return index, images_ids
+        dict_imageid_refs = defaultdict(list)
+        for ref in train_dataset["annotations"]:
+            image_id = ref["image_id"]
+            caption = ref["caption"]
+            dict_imageid_refs[image_id].append(caption)
+
+        return index, images_ids, dict_imageid_refs
 
     def inference_with_greedy(self, image, n_solutions=0):
 
