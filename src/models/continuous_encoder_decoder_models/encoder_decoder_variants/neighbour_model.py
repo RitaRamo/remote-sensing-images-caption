@@ -55,8 +55,8 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         index = faiss.IndexFlatL2(d)
         images_ids = []
 
-        #train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
-        train_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
+        train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
+        #train_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
 
         transform = transforms.Compose([
             transforms.ToTensor(),
@@ -106,17 +106,17 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             D, I = self.index.search(mean_encoder_output.numpy(), 1)
             nearest_img = self.images_ids[I[0][0]]  # pick first batch -> then pick first neighbour
             nearest_references = self.dict_imageid_refs[nearest_img]
-            generated_sentence = self.dict_imageid_refs[nearest_img][0]  # pick first ref
+            # generated_sentence = self.dict_imageid_refs[nearest_img][0]  # pick first ref
 
-            # max_counts = 0
-            # max_counts_ref = nearest_references[0]
-            # for nearest_ref in nearest_references:
+            max_counts = 0
+            max_counts_ref = nearest_references[0]
+            for nearest_ref in nearest_references:
 
-            #     if self.counter_refs[nearest_ref] > 0:
-            #         max_counts = self.counter_refs[nearest_ref]
-            #         max_counts_ref = nearest_ref
+                if self.counter_refs[nearest_ref] > 0:
+                    max_counts = self.counter_refs[nearest_ref]
+                    max_counts_ref = nearest_ref
 
-            # generated_sentence = max_counts_ref  # pick first ref
+            generated_sentence = max_counts_ref  # pick first ref
 
             print("nearest caption", generated_sentence)
 
