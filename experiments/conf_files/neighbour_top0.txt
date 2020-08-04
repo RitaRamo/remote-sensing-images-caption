@@ -2,3 +2,5 @@
 neighbour_top0.txt
 --model_class_str
 ContinuousNeighbourModel
+--image_model_type
+efficient_net
