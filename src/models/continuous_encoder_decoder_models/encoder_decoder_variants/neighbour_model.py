@@ -22,7 +22,7 @@ from torch.utils.data import DataLoader
 import faiss
 
 
-class c(ContinuousEncoderDecoderModel):
+class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
 
     def __init__(self,
                  args,
