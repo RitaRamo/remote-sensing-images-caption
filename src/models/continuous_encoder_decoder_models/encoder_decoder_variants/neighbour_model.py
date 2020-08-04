@@ -60,6 +60,12 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
 
         train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
 
+        transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
+                                 std=[0.229, 0.224, 0.225])
+        ])
+
         for values in train_dataset["images"]:
 
             img_name = values["file_name"]
@@ -84,12 +90,6 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         return index, images_ids
 
     def inference_with_greedy(self, image, n_solutions=0):
-
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
-                                 std=[0.229, 0.224, 0.225])
-        ])
 
         with torch.no_grad():  # no need to track history
 
