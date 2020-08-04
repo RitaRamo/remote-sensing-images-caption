@@ -189,6 +189,7 @@ def _save_dataset(raw_dataset, file_dir):
 
     test_coco_format = _get_test_with_coco_format(raw_dataset, split="test")
     val_coco_format = _get_test_with_coco_format(raw_dataset, split="val")
+    train_coco_format = _get_test_with_coco_format(raw_dataset, split="train")
 
     vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
         train_captions_of_tokens
@@ -212,6 +213,7 @@ def _save_dataset(raw_dataset, file_dir):
 
     _dump_dict_to_json(test_coco_format, file_dir, "test_coco_format.json")
     _dump_dict_to_json(val_coco_format, file_dir, "val_coco_format.json")
+    _dump_dict_to_json(val_coco_format, file_dir, "train_coco_format.json")
 
 
 def get_dataset(file_path):
