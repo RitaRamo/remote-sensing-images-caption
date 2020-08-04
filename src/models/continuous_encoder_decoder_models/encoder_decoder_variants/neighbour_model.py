@@ -48,7 +48,7 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
         self.encoder.eval()
 
     def create_index(self):
-        d = self.args.encoder_dim
+        d = self.encoder.encoder_dim
         index = faiss.IndexFlatL2(d)
         index_references = []
 
