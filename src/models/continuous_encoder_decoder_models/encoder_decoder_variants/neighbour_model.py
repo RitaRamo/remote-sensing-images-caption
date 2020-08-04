@@ -98,53 +98,49 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             mean_encoder_output = encoder_output.mean(dim=1)
 
             D, I = self.index.search(mean_encoder_output.numpy(), 1)
-            print("D", D)
-            print("I most similar vector", I)
-            print("image 0", I[0][0])  # pick batch 0, then pick first similar
-            nearest_img = self.images_ids[I[0][0]]
-            print("neares image", nearest_img)
-            generated_sentence = self.dict_imageid_refs[nearest_img][0]  # first ref
+            nearest_img = self.images_ids[I[0][0]]  # pick first batch -> then pick first neighbour
+            generated_sentence = self.dict_imageid_refs[nearest_img][0]  # pick first ref
 
             print("nearest caption", generated_sentence)
 
-            print(ola)
+        return generated_sentence
 
-            # sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
-            # print("sim scores", sim)
-            # scores_similarity.append(sim.item())
-            # image_names.append(image_name)
+        # sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
+        # print("sim scores", sim)
+        # scores_similarity.append(sim.item())
+        # image_names.append(image_name)
 
-            # sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity),  descending=True, dim=-1)
+        # sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity),  descending=True, dim=-1)
 
-            # best_image_index = sorted_indices[0]
-            # best_image_name = image_names[best_image_index]
-            # generated_sentence = train_dataset[best_image_name][0]  # there are 5 captions per image
+        # best_image_index = sorted_indices[0]
+        # best_image_name = image_names[best_image_index]
+        # generated_sentence = train_dataset[best_image_name][0]  # there are 5 captions per image
 
-            # captions = []
-            # for batch_i, (image_name, caption) in enumerate(train_dataloader):
+        # captions = []
+        # for batch_i, (image_name, caption) in enumerate(train_dataloader):
 
-            #     image_path = PATH_RSICD + \
-            #         "raw_dataset/RSICD_images/" + image_name
-            #     image = Image.open(image_path)
-            #     image = transform(image)
-            #     image = image.unsqueeze(0)
+        #     image_path = PATH_RSICD + \
+        #         "raw_dataset/RSICD_images/" + image_name
+        #     image = Image.open(image_path)
+        #     image = transform(image)
+        #     image = image.unsqueeze(0)
 
-            #     encoder_neighbour = self.encoder(image)
-            #     encoder_neighbour = encoder_neighbour.view(1, -1, encoder_neighbour.size()[-1])
-            #     mean_encoder_neighbour = encoder_neighbour.mean(dim=1)
-            #     sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
-            #     print("sim scores", sim)
-            #     scores_similarity.append(sim.item())
-            #     captions.append(caption)
+        #     encoder_neighbour = self.encoder(image)
+        #     encoder_neighbour = encoder_neighbour.view(1, -1, encoder_neighbour.size()[-1])
+        #     mean_encoder_neighbour = encoder_neighbour.mean(dim=1)
+        #     sim = torch.cosine_similarity(mean_encoder_output, mean_encoder_neighbour)
+        #     print("sim scores", sim)
+        #     scores_similarity.append(sim.item())
+        #     captions.append(caption)
 
-            # sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity), descending=True, dim=-1)
+        # sorted_scores, sorted_indices = torch.sort(torch.tensor(scores_similarity), descending=True, dim=-1)
 
-            # best_image_index = sorted_indices[0]
-            # best_image_name = image_names[best_image_index]
-            # generated_sentence = train_dataset[best_image_name][0]  # there are 5 captions per image
+        # best_image_index = sorted_indices[0]
+        # best_image_name = image_names[best_image_index]
+        # generated_sentence = train_dataset[best_image_name][0]  # there are 5 captions per image
 
-            # print("generated sentence", generated_sentence)
+        # print("generated sentence", generated_sentence)
 
-            # return generated_sentence  # input_caption
+        # return generated_sentence  # input_caption
 
 # image: vocab
