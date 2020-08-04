@@ -58,10 +58,10 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
                               )
 
         train_dataloader = DataLoader(
-            NeighbourDataset(*train_dataset_args, args.augment_data),
+            NeighbourDataset(*train_dataset_args, self.args.augment_data),
             batch_size=8,
             shuffle=False,
-            num_workers=args.num_workers
+            num_workers=self.args.num_workers
         )
 
         for image_name, references in train_dataset.items():
