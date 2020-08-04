@@ -2,7 +2,7 @@ import torchvision
 from torch import nn
 import torch
 from torch.nn.utils.rnn import pack_padded_sequence
-from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import Attention, Encoder, DecoderWithAttention
+from models.basic_encoder_decoder_models.encoder_decoder import Encoder
 from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
@@ -85,7 +85,6 @@ class ContinuousNeighbourModel(ContinuousEncoderDecoderModel):
             index.add(mean_encoder_output.numpy())
 
             print("index total", index.ntotal)
-            print("len dataloader", len(train_dataloader))
 
         return index, images_ids
 
