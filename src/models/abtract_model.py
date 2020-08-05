@@ -155,7 +155,7 @@ class AbstractEncoderDecoderModel(ABC):
             self._save_checkpoint(early_stopping.is_current_val_best(),
                                   epoch,
                                   early_stopping.get_number_of_epochs_without_improvement(),
-                                  epoch_val_loss)
+                                  (epoch_val_loss + epoch_loss) / 2)
 
             logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f} -------------\n'.format(
                 epoch, self.args.epochs, epoch_loss, epoch_val_loss))
