@@ -58,7 +58,7 @@ from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
 from nlgeval import NLGEval
-from models.abtract_model import DecodingType
+from utils.enums import DecodingType, EvalDatasetType
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -75,12 +75,18 @@ if __name__ == "__main__":
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    if args.test_set:
-        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
-    else:  # validation set
+    # Choose dataset to evaluate the model:
+    if args.eval_dataset_type == EvalDatasetType.VAL.value:
         test_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
         decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
+        test_dataset = get_dataset(PATH_DATASETS_RSICD + "train_and_val_coco_format.json")
+        decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    else:  # test set
+        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(
@@ -109,17 +115,15 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_greedy_smoothl1
     elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
         decoding_method = model.inference_with_perplexity
-    elif args.decodying_type == DecodingType.POSTPROCESSING_PERPLEXITY.value:
-        decoding_method = model.inference_with_postprocessing_perplexity
     elif args.decodying_type == DecodingType.BIGRAM_PROB.value:
         decoding_method = model.inference_with_bigramprob
     elif args.decodying_type == DecodingType.BIGRAM_PROB_IMAGE.value:
         decoding_method = model.inference_with_bigramprob_and_image
-    elif args.decodying_type == DecodingType.POSTPROCESSING_BIGRAM_PROB.value:
-        decoding_method = model.inference_with_postprocessing_bigramprob
         print("entrei aqui")
     elif args.decodying_type == DecodingType.BIGRAM_PROB_COS.value:
         decoding_method = model.inference_with_bigramprob_and_cos
+    elif args.decodying_type == DecodingType.BEAM_RANKED_IMAGE.value:
+        decoding_method = model.inference_with_beamsearch_ranked_image
     else:
         decoding_method = model.inference_with_beamsearch
 

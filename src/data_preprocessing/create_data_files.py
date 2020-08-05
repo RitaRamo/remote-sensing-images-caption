@@ -67,7 +67,7 @@ def _get_dict_image_and_its_captions(dataset, split="test"):
     return images_captions
 
 
-def _get_test_with_coco_format(raw_dataset, split="test"):
+def _get_test_with_coco_format(raw_dataset, split="test", split2=None):
     images = []
     annotations = []
     id_annotation = 0
@@ -76,7 +76,7 @@ def _get_test_with_coco_format(raw_dataset, split="test"):
     for row in raw_dataset["images"]:
         image_name = row["filename"]
         image_id = row["imgid"]
-        if row["split"] == split:
+        if row["split"] == split or row["split"] == split2:
 
             images.append(
                 {
@@ -190,6 +190,7 @@ def _save_dataset(raw_dataset, file_dir):
     test_coco_format = _get_test_with_coco_format(raw_dataset, split="test")
     val_coco_format = _get_test_with_coco_format(raw_dataset, split="val")
     train_coco_format = _get_test_with_coco_format(raw_dataset, split="train")
+    train_and_val_coco_format = _get_test_with_coco_format(raw_dataset, split="train", split2="val")
 
     vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
         train_captions_of_tokens
@@ -214,6 +215,7 @@ def _save_dataset(raw_dataset, file_dir):
     _dump_dict_to_json(test_coco_format, file_dir, "test_coco_format.json")
     _dump_dict_to_json(val_coco_format, file_dir, "val_coco_format.json")
     _dump_dict_to_json(train_coco_format, file_dir, "train_coco_format.json")
+    _dump_dict_to_json(train_and_val_coco_format, file_dir, "train_and_val_coco_format.json")
 
 
 def get_dataset(file_path):

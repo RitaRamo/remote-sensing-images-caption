@@ -65,9 +65,12 @@ from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
 from nlgeval import compute_metrics
-from models.abtract_model import DecodingType
+#from models.abtract_model import DecodingType
 import json
 import cv2
+
+from utils.enums import DecodingType, EvalDatasetType
+
 
 from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
@@ -86,12 +89,18 @@ if __name__ == "__main__":
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    if args.test_set:
-        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
-    else:  # validation set
+    # Choose dataset to evaluate the model:
+    if args.eval_dataset_type == EvalDatasetType.VAL.value:
         test_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
         decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
+        test_dataset = get_dataset(PATH_DATASETS_RSICD + "train_and_val_coco_format.json")
+        decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    else:  # test set
+        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(

@@ -25,6 +25,12 @@ class OptimizerType(Enum):
     SGD = "sgd"
 
 
+class EvalDatasetType(Enum):
+    TRAIN_AND_VAL = "train_and_val"
+    VAL = "val"
+    TEST = "test"
+
+
 class ContinuousLossesType(Enum):
     COSINE = "cosine"
     MARGIN = "margin"

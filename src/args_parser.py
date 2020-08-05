@@ -1,10 +1,13 @@
 import argparse
-# from embeddings.embeddings import EmbeddingsType
-# from data_preprocessing.preprocess_images import ImageNetModelsPretrained
-# from utils.optimizer import OptimizerType
-# from models.continuous_encoder_decoder_models.continuous_losses import ContinuousLossesType
-# from models.abtract_model import DecodingType
-from utils.enums import EmbeddingsType, ImageNetModelsPretrained, OptimizerType, ContinuousLossesType, DecodingType
+
+from utils.enums import (
+    EmbeddingsType,
+    ImageNetModelsPretrained,
+    OptimizerType,
+    ContinuousLossesType,
+    DecodingType,
+    EvalDatasetType
+)
 
 
 def get_args():
@@ -22,13 +25,17 @@ def get_args():
     parser.add_argument('--decodying_type', type=str, default=DecodingType.GREEDY.value,
                         choices=[decoding_type.value for decoding_type in DecodingType])
 
+    parser.add_argument('--eval_dataset_type', type=str, default=EvalDatasetType.TEST.value,
+                        choices=[dataset_type.value for dataset_type in EvalDatasetType],
+                        help='dataset name for evaluating the model (compute metrics)',)
+
     parser.add_argument('--checkpoint_model', type=str, default=None)
 
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
 
-    parser.add_argument('--test_set', action='store_true',
-                        default=False, help='Set a switch to test set (otherwise validation set)')
+    # parser.add_argument('--test_set', action='store_true',
+    #                     default=False, help='Set a switch to test set (otherwise validation set)')
 
     parser.add_argument('--post_processing', action='store_true',
                         default=False, help='Set a switch to true')
