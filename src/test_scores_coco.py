@@ -14,16 +14,16 @@ if __name__ == "__main__":
 
     # Choose dataset to evaluate the model:
     if args.eval_dataset_type == EvalDatasetType.VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
+        test_path = PATH_DATASETS_RSICD + "val_coco_format.json"
         decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
     elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "train_and_val_coco_format.json")
+        test_path = PATH_DATASETS_RSICD + "train_and_val_coco_format.json"
         decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
     else:  # test set
         decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
+        test_path = PATH_DATASETS_RSICD + "test_coco_format.json"
 
     generated_sentences_path = PATH_EVALUATION_SENTENCES + decoding_args
 
