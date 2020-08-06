@@ -5,6 +5,7 @@ from args_parser import get_args
 from definitions import PATH_RSICD, PATH_DATASETS_RSICD, PATH_EVALUATION_SENTENCES, PATH_EVALUATION_SCORES
 from collections import defaultdict
 from bert_score import BERTScorer
+from utils.enums import EvalDatasetType
 
 
 if __name__ == "__main__":
@@ -14,12 +15,17 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    if args.test_set:
-        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_path = PATH_DATASETS_RSICD + "test_coco_format.json"
-    else:  # validation set
+    if args.eval_dataset_type == EvalDatasetType.VAL.value:
         test_path = PATH_DATASETS_RSICD + "val_coco_format.json"
         decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
+        test_path = PATH_DATASETS_RSICD + "train_and_val_coco_format.json"
+        decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+
+    else:  # test set
+        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+        test_path = PATH_DATASETS_RSICD + "test_coco_format.json"
 
     with open(test_path) as json_file:
         test = json.load(json_file)
