@@ -1,6 +1,7 @@
 from torch.nn.utils.rnn import pack_padded_sequence
 import torch
 from torch.autograd import Variable
+from sklearn.model_selection import ParameterSampler
 
 
 def cdist(x, y):
@@ -73,3 +74,11 @@ def sink(M, reg, numItermax=1000, stopThr=1e-9, cuda=True):
         cpt += 1
 
     return torch.sum(u.view((-1, 1)) * K * v.view((1, -1)) * M)
+
+
+def get_weights_with_parameter_sampler():
+    param_grid = dict(c2=[round(x * 0.1, 1) for x in range(0, 11)],
+                      c3=[round(x * 0.1, 1) for x in range(0, 11)],
+                      c4=[round(x * 0.1, 1) for x in range(0, 11)])
+    param_list = list(ParameterSampler(param_grid, n_iter=15, random_state=42))
+    return param_list
