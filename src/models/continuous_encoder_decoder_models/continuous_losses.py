@@ -2563,10 +2563,11 @@ class ContinuousLoss():
             sentence_losses += (term_1 + term_2 + term_3) / 3
 
             # images losses
-            image_embedding = images_embedding[i]
+            image_regions_embeddings = images_embedding[i]
+            image_embedding = image_regions_embeddings.mean(dim=0).unsqueeze(0)
 
             # 1º input loss (sentence predicted against input image)
-            d2_matrix = 1 - sim_matrix(preds_without_padd, image_embedding)
+            d2_matrix = 1 - sim_matrix(preds_without_padd, image_regions_embeddings)
 
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
@@ -2579,7 +2580,7 @@ class ContinuousLoss():
             input1_losses += (term_1 + term_2 + term_3) / 3
 
             # 2º input loss (sentence predicted against input image)
-            d2_matrix = 1 - sim_matrix(image_embedding, targets_without_padd)
+            d2_matrix = 1 - sim_matrix(image_regions_embeddings, targets_without_padd)
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
             term_3 = self.criterion(  # cosine_embedding_loss (1- sim)
