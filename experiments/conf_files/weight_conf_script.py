@@ -18,7 +18,7 @@ if __name__ == "__main__":
         w2_percentage = "".join(w2.split(".") + ["0"])
         w3_percentage = "".join(w3.split(".") + ["0"])
         w4_percentage = "".join(w4.split(".") + ["0"])
-        file_name = "split_fine_encdec_4comptv_eff_noaug_notnormalized1_" + w2_percentage + "_" + w3_percentage + "_" + w4_percentage + ".txt"
+        file_name = "split_fine_encdec_4comptvearly_eff_noaug_notnormalized1_" + w2_percentage + "_" + w3_percentage + "_" + w4_percentage + ".txt"
         with open('experiments/conf_files/' + file_name, 'w') as f:
             f.write('--file_name\n')
             f.write(file_name + "\n")
