@@ -31,7 +31,6 @@ class ContinuousNeighbourDHModel():
 
     def __init__(self):
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
         self._initialize_encoder_and_decoder()
         self.encoder.eval()
 
@@ -53,28 +52,28 @@ class ContinuousNeighbourDHModel():
     def setup_to_test(self):
         print("entrei aqui no setup")
 
-        train_images = get_train()
-        val_images = get_val()
-        test_images = get_test()
+        train_images = self.get_train()
+        val_images = self.get_val()
+        test_images = self.get_test()
 
         pairwise_sim = cosine_similarity(train_images, val_images)
         print("distance h", distance_h(pairwise_sim))
 
         #self.index, self.images_ids, self.dict_imageid_refs, self.counter_refs = self.create_index()
 
-    def get_train():
+    def get_train(self):
         images_train = np.random.zeros((8734, 2076))
         for i in range(8734):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
 
-    def get_val():
+    def get_val(self):
         images_train = np.random.zeros((1093, 2076))
         for i in range(1093):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
 
-    def get_test():
+    def get_test(self):
         images_train = np.random.zeros((1093, 2076))
         for i in range(1093):
             images_train[i, :] = np.random.random((1, 2076))
