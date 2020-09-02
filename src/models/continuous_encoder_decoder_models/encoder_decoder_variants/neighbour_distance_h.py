@@ -66,9 +66,9 @@ class ContinuousNeighbourDHModel():
         test_images = self.get_images_vectors("test_coco_format.json")
         print("finish loading test")
 
-        pairwise_sim_train_and_val = cosine_similarity(train_images, val_images)
-        pairwise_sim_train_and_test = cosine_similarity(train_images, test_images)
-        pairwise_sim_val_and_test = cosine_similarity(val_images, test_images)
+        pairwise_sim_train_and_val = cosine_similarity(train_images.cpu().numpy(), val_images.cpu().numpy())
+        pairwise_sim_train_and_test = cosine_similarity(train_images.cpu().numpy(), test_images.cpu().numpy())
+        pairwise_sim_val_and_test = cosine_similarity(val_images.cpu().numpy(), test_images.cpu().numpy())
 
         print("distance h train and val", self.distance_h(pairwise_sim_train_and_val))
         print("distance h train and test", self.distance_h(pairwise_sim_train_and_test))
@@ -98,7 +98,7 @@ class ContinuousNeighbourDHModel():
             mean_encoder_output = encoder_output.mean(dim=1)
             images_vectors[i, :] = mean_encoder_output
             i += 1
-
+        print("image vectors", images_vectors)
         return images_vectors
 
 
