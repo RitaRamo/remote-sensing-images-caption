@@ -52,6 +52,12 @@ class ContinuousNeighbourDHModel():
     def setup_to_test(self):
         print("entrei aqui no setup")
 
+        self.transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
+                                 std=[0.229, 0.224, 0.225])
+        ])
+
         train_images = self.get_train()
         val_images = self.get_val()
         test_images = self.get_test()
@@ -62,19 +68,40 @@ class ContinuousNeighbourDHModel():
         #self.index, self.images_ids, self.dict_imageid_refs, self.counter_refs = self.create_index()
 
     def get_train(self):
-        images_train = np.zeros((8734, 2076))
-        for i in range(8734):
-            images_train[i, :] = np.random.random((1, 2076))
+        train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
+        dataset_size = len(train_dataset["images"])
+        images_vectors = np.zeros((dataset_size, self.encoder.encoder_dim))
+
+        i = 0
+        for values in train_dataset["images"]:
+
+            img_name = values["file_name"]
+            image_id = values["id"]
+
+            image_name = PATH_RSICD + \
+                "raw_dataset/RSICD_images/" + img_name
+            image = cv2.imread(image_name)
+            image = transform(image)
+            image = image.unsqueeze(0)
+
+            images_ids.append(image_id)
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])
+            mean_encoder_output = encoder_output.mean(dim=1)
+            images_vectors[i, :] = mean_encoder_output
+            i += 1
+
         return images_train
 
     def get_val(self):
-        images_train = np.zeros((1093, 2076))
+        images_train = np.zeros((1093, self.encoder.encoder_dim))
         for i in range(1093):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
 
     def get_test(self):
-        images_train = np.zeros((1093, 2076))
+        images_train = np.zeros((1093, self.encoder.encoder_dim))
         for i in range(1093):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
