@@ -1,3 +1,6 @@
+import sys
+sys.path.append('src/')
+
 import torchvision
 from torch import nn
 import torch
