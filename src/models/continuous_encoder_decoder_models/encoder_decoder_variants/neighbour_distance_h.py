@@ -58,22 +58,27 @@ class ContinuousNeighbourDHModel():
                                  std=[0.229, 0.224, 0.225])
         ])
 
-        train_images = self.get_train()
-        val_images = self.get_val()
-        test_images = self.get_test()
+        train_images = self.get_images_vectors("train_coco_format.json")
+        val_images = self.get_images_vectors("val_coco_format.json")
+        test_images = self.get_images_vectors("coco_coco_format.json")
 
-        pairwise_sim = cosine_similarity(train_images, val_images)
-        print("distance h", self.distance_h(pairwise_sim))
+        pairwise_sim_train_and_val = cosine_similarity(train_images, val_images)
+        pairwise_sim_train_and_test = cosine_similarity(train_images, test_images)
+        pairwise_sim_val_and_test = cosine_similarity(val_images, test_images)
+
+        print("distance h train and val", self.distance_h(pairwise_sim_train_and_val))
+        print("distance h train and test", self.distance_h(pairwise_sim_train_and_test))
+        print("distance h val and test", self.distance_h(pairwise_sim_val_and_test))
 
         #self.index, self.images_ids, self.dict_imageid_refs, self.counter_refs = self.create_index()
 
-    def get_train(self):
-        train_dataset = get_dataset(PATH_DATASETS_RSICD + "train_coco_format.json")
-        dataset_size = len(train_dataset["images"])
+    def get_images_vectors(self, dataset_name):
+        dataset = get_dataset(PATH_DATASETS_RSICD + dataset_name)
+        dataset_size = len(dataset["images"])
         images_vectors = np.zeros((dataset_size, self.encoder.encoder_dim))
 
         i = 0
-        for values in train_dataset["images"]:
+        for values in dataset["images"]:
 
             img_name = values["file_name"]
             image_id = values["id"]
@@ -81,7 +86,7 @@ class ContinuousNeighbourDHModel():
             image_name = PATH_RSICD + \
                 "raw_dataset/RSICD_images/" + img_name
             image = cv2.imread(image_name)
-            image = transform(image)
+            image = self.transform(image)
             image = image.unsqueeze(0)
 
             images_ids.append(image_id)
@@ -92,19 +97,7 @@ class ContinuousNeighbourDHModel():
             images_vectors[i, :] = mean_encoder_output
             i += 1
 
-        return images_train
-
-    def get_val(self):
-        images_train = np.zeros((1093, self.encoder.encoder_dim))
-        for i in range(1093):
-            images_train[i, :] = np.random.random((1, 2076))
-        return images_train
-
-    def get_test(self):
-        images_train = np.zeros((1093, self.encoder.encoder_dim))
-        for i in range(1093):
-            images_train[i, :] = np.random.random((1, 2076))
-        return images_train
+        return images_vectors
 
 
 if __name__ == "__main__":
