@@ -57,7 +57,7 @@ class ContinuousNeighbourDHModel():
         test_images = self.get_test()
 
         pairwise_sim = cosine_similarity(train_images, val_images)
-        print("distance h", distance_h(pairwise_sim))
+        print("distance h", self.distance_h(pairwise_sim))
 
         #self.index, self.images_ids, self.dict_imageid_refs, self.counter_refs = self.create_index()
 
