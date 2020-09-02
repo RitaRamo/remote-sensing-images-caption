@@ -91,7 +91,7 @@ class ContinuousNeighbourDHModel():
                 "raw_dataset/RSICD_images/" + img_name
             image = cv2.imread(image_name)
             image = self.transform(image)
-            image = image.unsqueeze(0).to(device)
+            image = image.unsqueeze(0).to(self.device)
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])
