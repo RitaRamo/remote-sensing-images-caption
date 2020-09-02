@@ -43,7 +43,7 @@ class ContinuousNeighbourDHModel():
 
         self.encoder = self.encoder.to(self.device)
 
-    def distance_h(pairwise_similarity):
+    def distance_h(self, pairwise_similarity):
         term_1 = np.mean(np.min(1 - pairwise_similarity, 1))
         term_2 = np.mean(np.min(1 - pairwise_similarity, 0))
         dist = (term_1 + term_2) / 2
