@@ -59,8 +59,12 @@ class ContinuousNeighbourDHModel():
         ])
 
         train_images = self.get_images_vectors("train_coco_format.json")
+        print("finish loading train")
         val_images = self.get_images_vectors("val_coco_format.json")
-        test_images = self.get_images_vectors("coco_coco_format.json")
+        print("finish loading val")
+
+        test_images = self.get_images_vectors("test_coco_format.json")
+        print("finish loading test")
 
         pairwise_sim_train_and_val = cosine_similarity(train_images, val_images)
         pairwise_sim_train_and_test = cosine_similarity(train_images, test_images)
