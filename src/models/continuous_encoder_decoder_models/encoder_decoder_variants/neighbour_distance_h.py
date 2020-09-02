@@ -79,7 +79,7 @@ class ContinuousNeighbourDHModel():
     def get_images_vectors(self, dataset_name):
         dataset = get_dataset(PATH_DATASETS_RSICD + dataset_name)
         dataset_size = len(dataset["images"])
-        images_vectors = np.zeros((dataset_size, self.encoder.encoder_dim))
+        images_vectors = torch.zeros((dataset_size, self.encoder.encoder_dim))
 
         i = 0
         for values in dataset["images"]:
