@@ -30,6 +30,8 @@ from collections import Counter
 class ContinuousNeighbourDHModel():
 
     def __init__(self):
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
         self._initialize_encoder_and_decoder()
         self.encoder.eval()
 
