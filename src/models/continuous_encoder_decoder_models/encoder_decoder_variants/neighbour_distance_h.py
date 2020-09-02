@@ -62,19 +62,19 @@ class ContinuousNeighbourDHModel():
         #self.index, self.images_ids, self.dict_imageid_refs, self.counter_refs = self.create_index()
 
     def get_train(self):
-        images_train = np.random.zeros((8734, 2076))
+        images_train = np.zeros((8734, 2076))
         for i in range(8734):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
 
     def get_val(self):
-        images_train = np.random.zeros((1093, 2076))
+        images_train = np.zeros((1093, 2076))
         for i in range(1093):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
 
     def get_test(self):
-        images_train = np.random.zeros((1093, 2076))
+        images_train = np.zeros((1093, 2076))
         for i in range(1093):
             images_train[i, :] = np.random.random((1, 2076))
         return images_train
