@@ -89,8 +89,6 @@ class ContinuousNeighbourDHModel():
             image = self.transform(image)
             image = image.unsqueeze(0)
 
-            images_ids.append(image_id)
-
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])
             mean_encoder_output = encoder_output.mean(dim=1)
