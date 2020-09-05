@@ -150,12 +150,12 @@ class AbstractEncoderDecoderModel(ABC):
             # End validation
             epoch_val_loss = val_total_loss / (batch_i + 1)
 
-            early_stopping.check_improvement((epoch_val_loss + epoch_loss) / 2)
+            early_stopping.check_improvement(epoch_val_loss)
 
             self._save_checkpoint(early_stopping.is_current_val_best(),
                                   epoch,
                                   early_stopping.get_number_of_epochs_without_improvement(),
-                                  (epoch_val_loss + epoch_loss) / 2)
+                                  epoch_val_loss)
 
             logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f} -------------\n'.format(
                 epoch, self.args.epochs, epoch_loss, epoch_val_loss))
