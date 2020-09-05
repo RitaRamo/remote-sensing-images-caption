@@ -6,7 +6,7 @@ import torch
 from torch.utils.data import DataLoader
 
 from args_parser import get_args
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from definitions import PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL, PATH_RSICD
 from data_preprocessing.create_data_files import get_dataset, get_vocab_info
 from data_preprocessing.datasets import CaptionDataset, POSCaptionDataset
 
@@ -75,6 +75,8 @@ np.random.seed(0)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
+# PYTHONHASHSEED=0 python3 src/train.py @experiments/conf_files/<name_of_file>.txt
+
 # apontar que
 
 # nn.Softmax + torch.log + nn.NLLLoss -> might be numerically unstable
@@ -96,18 +98,18 @@ if __name__ == "__main__":
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     logging.info("vocab size %s", vocab_size)
 
-    train_dataset_args = (PATH_DATASETS_RSICD + "train.json",
+    train_dataset_args = (PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train.json",
                           PATH_RSICD + "raw_dataset/RSICD_images/",
                           max_len,
                           token_to_id
                           )
 
-    val_dataset_args = (PATH_DATASETS_RSICD + "val.json",
+    val_dataset_args = (PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val.json",
                         PATH_RSICD + "raw_dataset/RSICD_images/",
                         max_len,
                         token_to_id

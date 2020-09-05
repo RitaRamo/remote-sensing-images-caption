@@ -72,7 +72,7 @@ import cv2
 from utils.enums import DecodingType, EvalDatasetType
 
 
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
+from definitions import PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
@@ -84,23 +84,23 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
+    vocab_info = get_vocab_info(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
     # Choose dataset to evaluate the model:
     if args.eval_dataset_type == EvalDatasetType.VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "val_coco_format.json")
+        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val_coco_format.json")
         decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
     elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "train_and_val_coco_format.json")
+        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train_and_val_coco_format.json")
         decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
     else:  # test set
         decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_dataset = get_dataset(PATH_DATASETS_RSICD + "test_coco_format.json")
+        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "test_coco_format.json")
 
     model_class = globals()[args.model_class_str]
     model = model_class(
