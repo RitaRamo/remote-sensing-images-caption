@@ -1,5 +1,5 @@
 --file_name
-nstv_split_fine_adaptative_3comp_eff_noaug_notnormalized.txt
+nstv_fine_adaptative_3comp_eff_noaug_notnormalized.txt
 --model_class_str
 ContinuousAdaptativeAttentionImageCompModel
 --batch_size
