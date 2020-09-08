@@ -1,7 +1,7 @@
 --file_name
 nstv_fine_attentionsoft_4comp_eff_noaug_notnormalized.txt
 --model_class_str
-ContinuousAttentionModel
+ContinuousAttentionImageModel
 --batch_size
 8
 --num_workers
