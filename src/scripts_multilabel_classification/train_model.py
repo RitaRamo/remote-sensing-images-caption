@@ -91,7 +91,7 @@ class EfficientEmbeddingsNet(nn.Module):
 
     # TODO: Question: as features são para ser usadas + alguma vez??
     # caso não seja enviar apenas image_regions_embeddings
-    def extract_features_conv11(self, inputs):
+    def extract_features(self, inputs):
         features = self.cnn.extract_features(inputs)
         image_regions_embeddings = self._conv11(features)
 
@@ -101,7 +101,7 @@ class EfficientEmbeddingsNet(nn.Module):
     # 1- avg recebe image_regions_embeddings ou as features originais?
     # 2- as features são para ser usadas + alguma vez??
     def forward(self, inputs):
-        image_regions_embeddings = self.extract_features_conv11(inputs)
+        image_regions_embeddings = self.extract_features(inputs)
         # Pooling and final linear layer
         x = self.cnn._avg_pooling(image_regions_embeddings)
 

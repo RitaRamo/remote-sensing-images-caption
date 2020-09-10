@@ -7,6 +7,7 @@ import torch.nn as nn
 import albumentations as A
 import torch
 from efficientnet_pytorch import EfficientNet
+from scripts_multilabel_classification.train_model import EfficientEmbeddingsNet
 
 
 def get_image_model(model_type):
@@ -71,6 +72,7 @@ def get_image_model(model_type):
         return image_model, encoder_dim
 
     elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
         logging.info("image model with efficientnet model (all) with multi-label classification")
 
         checkpoint = torch.load('experiments/results/classification_efficientnet_modifiedrsicd.pth.tar')
@@ -79,6 +81,21 @@ def get_image_model(model_type):
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
         image_model._fc = nn.Linear(encoder_dim, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, encoder_dim
+
+     elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with efficientnet model (all) with multi-label classification")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet_regions.pth.tar')
+        vocab_size = 512
+
+        image_model = EfficientEmbeddingsNet()
+        encoder_dim = 300
+        image_model.cnn._fc = nn.Linear(encoder_dim, vocab_size)
 
         image_model.load_state_dict(checkpoint['model'])
 
