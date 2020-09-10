@@ -19,6 +19,7 @@ DISABLE_STEPS = False
 FILE_NAME = "classification_efficientnet_regions"  # "classification_efficientnet_modifiedrsicd"
 FINE_TUNE = True
 EFFICIENT_NET = True
+PRETRAIN_IMAGE_REGIONS = True
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -70,10 +71,18 @@ if __name__ == "__main__":
     checkpoint = torch.load('experiments/results/' + FILE_NAME + '.pth.tar')
     print("checkpoint loaded")
     if EFFICIENT_NET:
-        image_model = EfficientNet.from_pretrained('efficientnet-b5')
-        num_features = image_model._fc.in_features
-        image_model._fc = nn.Linear(num_features, vocab_size)
-        print("image model loaded")
+        if PRETRAIN_IMAGE_REGIONS:
+            image_model = EfficientEmbeddingsNet()
+            #print("image model childern", list(image_model.children())[:-5])
+            #num_features = image_model.cnn._fc.in_features
+            embedding_size = 300
+            image_model.cnn._fc = nn.Linear(embedding_size, vocab_size)
+            print("new image model", image_model)
+        else:
+            image_model = EfficientNet.from_pretrained('efficientnet-b5')
+            num_features = image_model._fc.in_features
+            image_model._fc = nn.Linear(num_features, vocab_size)
+            print("image model loaded")
     else:
         image_model = models.densenet201(pretrained=True)
         num_features = image_model.classifier.in_features
