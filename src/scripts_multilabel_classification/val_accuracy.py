@@ -14,6 +14,8 @@ import os
 import numpy as np
 import time
 from efficientnet_pytorch import EfficientNet
+from src.scripts_multilabel_classification.train_model import EfficientEmbeddingsNet
+
 
 DISABLE_STEPS = False
 FILE_NAME = "classification_efficientnet_regions"  # "classification_efficientnet_modifiedrsicd"
