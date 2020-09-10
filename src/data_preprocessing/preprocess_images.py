@@ -86,7 +86,7 @@ def get_image_model(model_type):
 
         return image_model, encoder_dim
 
-     elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
         logging.info("image model with efficientnet model (all) with multi-label classification")
 
