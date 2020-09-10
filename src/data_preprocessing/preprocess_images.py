@@ -7,7 +7,33 @@ import torch.nn as nn
 import albumentations as A
 import torch
 from efficientnet_pytorch import EfficientNet
-from scripts_multilabel_classification.train_model import EfficientEmbeddingsNet
+
+
+class EfficientEmbeddingsNet(nn.Module):
+    def __init__(self, embeddings_dim=300):
+        super(EfficientEmbeddingsNet, self).__init__()
+        self.cnn = EfficientNet.from_pretrained('efficientnet-b5')
+
+        previous_out_channels = self.cnn._conv_head.out_channels
+        self._conv11 = nn.Conv2d(previous_out_channels, embeddings_dim, kernel_size=1, bias=False)
+
+    def extract_features(self, inputs):
+        features = self.cnn.extract_features(inputs)
+        image_regions_embeddings = self._conv11(features)
+
+        return image_regions_embeddings
+
+    def forward(self, inputs):
+        image_regions_embeddings = self.extract_features(inputs)
+        # Pooling and final linear layer
+        x = self.cnn._avg_pooling(image_regions_embeddings)
+
+        x = x.flatten(start_dim=1)
+
+        x = self.cnn._dropout(x)
+        x = self.cnn._fc(x)
+
+        return x
 
 
 def get_image_model(model_type):
