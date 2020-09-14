@@ -7,6 +7,8 @@ from collections import defaultdict
 from bert_score import BERTScorer
 from utils.enums import EvalDatasetType
 
+from definitions_datasets import get_dataset_paths, get_test_path
+
 
 if __name__ == "__main__":
     # add bert_scores to coco metrics
