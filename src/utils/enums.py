@@ -26,6 +26,13 @@ class OptimizerType(Enum):
     SGD = "sgd"
 
 
+class Datasets(Enum):
+    RSICD = "rsicd"
+    RSICD_NEW_SPLITS_TRAIN_VAL = "rsicd_new_splits"
+    SIDNEY = "sidney"
+    UCM = "ucm"
+
+
 class EvalDatasetType(Enum):
     TRAIN_AND_VAL = "train_and_val"
     VAL = "val"
