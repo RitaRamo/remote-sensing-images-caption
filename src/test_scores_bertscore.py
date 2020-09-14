@@ -27,7 +27,8 @@ if __name__ == "__main__":
     #     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
     #     test_path = PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "test_coco_format.json"
 
-    test_path, decoding_args = get_test_path(args)
+    dataset_folder, dataset_jsons = get_dataset_paths(args.dataset)
+    test_path, decoding_args = get_test_path(args, dataset_jsons)
     generated_sentences_path = PATH_EVALUATION_SENTENCES + decoding_args
 
     with open(test_path) as json_file:
