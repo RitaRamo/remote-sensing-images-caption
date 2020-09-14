@@ -4,7 +4,7 @@ from coco_caption.pycocoevalcap.eval import COCOEvalCap
 from args_parser import get_args
 
 from definitions import PATH_RSICD, PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL, PATH_EVALUATION_SENTENCES, PATH_EVALUATION_SCORES
-from utils.enums import EvalDatasetType
+#from utils.enums import EvalDatasetType
 from utils.dataset_selection import get_dataset_paths, get_test_path
 
 
