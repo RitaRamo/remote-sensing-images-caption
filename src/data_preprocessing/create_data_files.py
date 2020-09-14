@@ -10,8 +10,9 @@ from sklearn.utils import shuffle
 from collections import defaultdict
 from data_preprocessing.preprocess_tokens import END_TOKEN, START_TOKEN, preprocess_tokens
 import re
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from definitions import PATH_RSICD, PATH_DATASETS_RSICD, PATH_UCM, PATH_DATASETS_UCM
 from datetime import datetime
+#from utils.dataset_selection import get_dataset_paths
 
 
 def _get_images_and_captions(dataset):
@@ -196,10 +197,6 @@ def _save_dataset(raw_dataset, file_dir):
         train_captions_of_tokens
     )  # preprocess should be done with trainset
 
-    vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
-        train_captions_of_tokens
-    )  # preprocess should be done with trainset
-
     # save vocab and datasets
     _dump_vocab_to_json(vocab_size, token_to_id,
                         id_to_token, max_len, file_dir)
@@ -239,11 +236,14 @@ if __name__ == "__main__":
     logging.basicConfig(
         format='%(levelname)s: %(message)s', level=logging.INFO)
 
-    logging.info("start to save datasets and vocab of of RSCID")
+    logging.info("start to save datasets and vocab of RSCID")
     nltk.download('wordnet')
     tokenizer = nltk.tokenize.WordPunctTokenizer()
 
     raw_dataset = pd.read_json(PATH_RSICD + "raw_dataset/dataset_rsicd.json")
     _save_dataset(raw_dataset, PATH_DATASETS_RSICD)
+
+    raw_dataset = pd.read_json(PATH_UCM + "raw_dataset/dataset_ucm.json")
+    _save_dataset(raw_dataset, PATH_DATASETS_UCM)
 
     logging.info("saved datasets and vocab")
