@@ -35,8 +35,7 @@ def get_train_and_val_paths(dataset):
     return vocab_path, train_json_path, train_images_path, val_json_path, val_images_path
 
 
-def get_test_path(args):
-    dataset_folder, dataset_jsons = get_dataset_paths(args.dataset)
+def get_test_path(args, dataset_jsons):
 
     if args.eval_dataset_type == EvalDatasetType.VAL.value:
         test_path = dataset_jsons + "val_coco_format.json"

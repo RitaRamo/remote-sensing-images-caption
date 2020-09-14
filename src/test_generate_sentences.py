@@ -85,7 +85,9 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "vocab_info.json")
+    dataset_folder, dataset_jsons = get_dataset_paths(args.dataset)
+
+    vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
@@ -102,7 +104,8 @@ if __name__ == "__main__":
     # else:  # test set
     #     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
     #     test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "test_coco_format.json")
-    test_path, decoding_args = get_test_path(args)
+
+    test_path, decoding_args = get_test_path(args, dataset_jsons)
     print("test path", test_path)
     test_dataset = get_dataset(test_path)
 
