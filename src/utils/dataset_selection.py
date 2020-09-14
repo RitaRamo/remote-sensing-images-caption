@@ -1,4 +1,5 @@
-from utils.enums import Datasets, EvalDatasetType
+
+from enums import Datasets, EvalDatasetType
 
 PATH_RSICD = "src/data/RSICD/"
 PATH_DATASETS_RSICD = PATH_RSICD + "datasets/"
