@@ -6,7 +6,8 @@ from utils.enums import (
     OptimizerType,
     ContinuousLossesType,
     DecodingType,
-    EvalDatasetType
+    EvalDatasetType,
+    Datasets
 )
 
 
@@ -33,6 +34,9 @@ def get_args():
 
     parser.add_argument('--augment_data', action='store_true',
                         default=False, help='Set a switch to true')
+
+    parser.add_argument('--dataset', type=str, default=Datasets.RSICD.value,
+                        choices=[dataset.value for dataset in Datasets])
 
     # parser.add_argument('--test_set', action='store_true',
     #                     default=False, help='Set a switch to test set (otherwise validation set)')

@@ -71,7 +71,7 @@ import json
 import cv2
 
 from utils.enums import DecodingType, EvalDatasetType
-
+from utils.dataset_selection import get_test_path
 
 from definitions import PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
@@ -91,17 +91,20 @@ if __name__ == "__main__":
     print("vocab size", vocab_size)
 
     # Choose dataset to evaluate the model:
-    if args.eval_dataset_type == EvalDatasetType.VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val_coco_format.json")
-        decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+    # if args.eval_dataset_type == EvalDatasetType.VAL.value:
+    #     test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val_coco_format.json")
+    #     decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
-    elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train_and_val_coco_format.json")
-        decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+    # elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
+    #     test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train_and_val_coco_format.json")
+    #     decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
 
-    else:  # test set
-        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "test_coco_format.json")
+    # else:  # test set
+    #     decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
+    #     test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "test_coco_format.json")
+    test_path, decoding_args = get_test_path(args)
+    print("test path", test_path)
+    test_dataset = get_dataset(test_path)
 
     model_class = globals()[args.model_class_str]
     model = model_class(
