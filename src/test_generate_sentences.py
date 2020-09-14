@@ -71,7 +71,7 @@ import json
 import cv2
 
 from utils.enums import DecodingType, EvalDatasetType
-from utils.dataset_selection import get_test_path
+from utils.dataset_selection import get_dataset_paths, get_test_path
 
 from definitions import PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL, PATH_RSICD, PATH_EVALUATION_SENTENCES
 
