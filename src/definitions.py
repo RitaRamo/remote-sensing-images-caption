@@ -1,5 +1,7 @@
 PATH_RSICD = "src/data/RSICD/"
 PATH_DATASETS_RSICD = PATH_RSICD + "datasets/"
+PATH_UCM = "src/data/UCM/"
+PATH_DATASETS_UCM = PATH_UCM + "datasets/"
 PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL = PATH_RSICD + "datasets_new_train_and_val/"
 PATH_TRAINED_MODELS = "experiments/results/trained_models/"
 PATH_EVALUATION_SENTENCES = "experiments/results/evaluation_sentences/"
