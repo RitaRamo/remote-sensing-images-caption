@@ -70,6 +70,7 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_adaptative_drop import ContinuousAdaptativeAttentionDropModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.enc_dec_image_emb import ContinuousEncoderDecoderImageEmbModel
 
+from definitions_datasets import get_dataset_paths
 
 torch.manual_seed(0)
 np.random.seed(0)
@@ -99,22 +100,42 @@ if __name__ == "__main__":
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "vocab_info.json")
+    dataset_folder, dataset_jsons = get_dataset_paths(args.dataset)
+    logging.info("dataset folder %s", dataset_folder)
+
+    vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     logging.info("vocab size %s", vocab_size)
 
-    train_dataset_args = (PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train.json",
-                          PATH_RSICD + "raw_dataset/RSICD_images/",
+    train_dataset_args = (dataset_jsons + "train.json",
+                          dataset_folder + "raw_dataset/images/",
                           max_len,
                           token_to_id
                           )
 
-    val_dataset_args = (PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val.json",
-                        PATH_RSICD + "raw_dataset/RSICD_images/",
+    val_dataset_args = (dataset_jsons + "val.json",
+                        dataset_folder + "raw_dataset/images/",
                         max_len,
                         token_to_id
                         )
+
+    # vocab_info = get_vocab_info(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "vocab_info.json")
+    # vocab_size, token_to_id, id_to_token, max_len = vocab_info[
+    #     "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
+    # logging.info("vocab size %s", vocab_size)
+
+    # train_dataset_args = (PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train.json",
+    #                       PATH_RSICD + "raw_dataset/RSICD_images/",
+    #                       max_len,
+    #                       token_to_id
+    #                       )
+
+    # val_dataset_args = (PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val.json",
+    #                     PATH_RSICD + "raw_dataset/RSICD_images/",
+    #                     max_len,
+    #                     token_to_id
+    #                     )
 
     if args.pos_tag_dataset:
         train_dataloader = DataLoader(

@@ -23,17 +23,6 @@ def get_dataset_paths(dataset):
         raise "Invalid dataset"
 
 
-def get_train_and_val_paths(dataset):
-
-    vocab_path = dataset_jsons + "vocab_info.json"
-    train_json_path = dataset_jsons + "train.json"
-    train_images_path = dataset_folder + "raw_dataset/RSICD_images/"
-    val_json_path = dataset_jsons + "val.json"
-    val_images_path = dataset_folder + "raw_dataset/RSICD_images/"
-
-    return vocab_path, train_json_path, train_images_path, val_json_path, val_images_path
-
-
 def get_test_path(args, dataset_jsons):
 
     if args.eval_dataset_type == EvalDatasetType.VAL.value:
