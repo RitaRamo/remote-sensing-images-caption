@@ -152,8 +152,8 @@ if __name__ == "__main__":
         img_name = values["file_name"]
         img_id = values["id"]
 
-        image_name = PATH_RSICD + \
-            "raw_dataset/RSICD_images/" + img_name
+        image_name = dataset_folder + \
+            "raw_dataset/images/" + img_name
         #image = Image.open(image_name)
         image = cv2.imread(image_name)
         image = transform(image)
