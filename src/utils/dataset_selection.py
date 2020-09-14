@@ -1,5 +1,7 @@
+import sys
+sys.path.append('src/')
 
-from enums import Datasets, EvalDatasetType
+from utils.enums import Datasets, EvalDatasetType
 
 PATH_RSICD = "src/data/RSICD/"
 PATH_DATASETS_RSICD = PATH_RSICD + "datasets/"
