@@ -136,4 +136,5 @@ if __name__ == "__main__":
     if DATASET == Datasets.RSICD.value:
         torch.save(state, dataset_jsons + "classification_dataset")
     elif DATASET == Datasets.UCM.value:
+        print("len", len(list_wordid))
         torch.save(state, dataset_jsons + "classification_dataset_ucm")
