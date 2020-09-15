@@ -16,7 +16,7 @@ from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
 from torchvision import transforms
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from definitions_datasets import PATH_DATASETS_RSICD, PATH_RSICD
 from data_preprocessing.create_data_files import get_dataset
 import cv2
 from toolz import unique
@@ -88,7 +88,7 @@ class ContinuousNeighbourDHModel():
             image_id = values["id"]
 
             image_name = PATH_RSICD + \
-                "raw_dataset/RSICD_images/" + img_name
+                "raw_dataset/images/" + img_name
             image = cv2.imread(image_name)
             image = self.transform(image)
             image = image.unsqueeze(0).to(self.device)

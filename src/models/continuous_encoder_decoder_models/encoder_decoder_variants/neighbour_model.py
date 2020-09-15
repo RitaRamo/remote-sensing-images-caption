@@ -13,13 +13,13 @@ from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
 from torchvision import transforms
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD
+from definitions_datasets import PATH_DATASETS_RSICD, PATH_RSICD
 from data_preprocessing.create_data_files import get_dataset
 import cv2
 from toolz import unique
 from data_preprocessing.datasets import NeighbourDataset
 from torch.utils.data import DataLoader
-import faiss
+#import faiss
 from collections import defaultdict
 from collections import Counter
 

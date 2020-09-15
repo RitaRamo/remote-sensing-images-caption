@@ -1,7 +1,7 @@
 import sys
 sys.path.append('src/')
 
-from definitions import PATH_RSICD
+from definitions_datasets import PATH_RSICD
 import torch
 from torchvision import transforms, models
 from torch import nn
@@ -68,38 +68,12 @@ class EfficientEmbeddingsNet(nn.Module):
         previous_out_channels = self.cnn._conv_head.out_channels
         self._conv11 = nn.Conv2d(previous_out_channels, embeddings_dim, kernel_size=1, bias=False)
 
-        # self.bn1 = self.cnn._bn1
-        # self.avg_pooling = self.cnn._avg_pooling
-        # self.dropout = self.cnn._dropout
-        # self.fc = self.cnn._fc
-        # self.swish = self.cnn._swish
-
-        # print("criei self.bn1", self.bn1)
-        # print("criei self.fc", self.fc)
-
-        # self.cnn._bn1 = MyIdentity()
-        # self.cnn._avg_pooling = MyIdentity()
-        # self.cnn._dropout = MyIdentity()
-        # self.cnn._fc = MyIdentity()
-        # self.cnn._swish = MyIdentity()
-
-        # print("identity self.cnn._bn1", self.cnn._bn1)
-        # print("identity self.cnn._fc", self.cnn._fc)
-
-        # print("voltado ao q criei self.cnn._bn1", self.bn1)
-        # print("voltado ao q criei  self.cnn._fc", self.fc)
-
-    # TODO: Question: as features são para ser usadas + alguma vez??
-    # caso não seja enviar apenas image_regions_embeddings
     def extract_features(self, inputs):
         features = self.cnn.extract_features(inputs)
         image_regions_embeddings = self._conv11(features)
 
         return image_regions_embeddings
 
-    # TODO: Question:
-    # 1- avg recebe image_regions_embeddings ou as features originais?
-    # 2- as features são para ser usadas + alguma vez??
     def forward(self, inputs):
         image_regions_embeddings = self.extract_features(inputs)
         # Pooling and final linear layer
@@ -111,73 +85,6 @@ class EfficientEmbeddingsNet(nn.Module):
         x = self.cnn._fc(x)
 
         return x
-
-    # def forward(self, image):
-    #     # image size torch.Size([8, 3, 224, 224])
-    #     # cnn x output torch.Size([8, 1000])
-    #     print("image size", image.size())
-    #     x = self.cnn(image)  # com fc 1000
-    #     print("cnn x output", x.size())
-    #     # x = self._conv11(x)
-    #     # print("conv1 x output", x.size())
-
-    #     # x = self.bn1(x)
-    #     # print("b1 x output", x.size())
-
-    #     # x = self.avg_pooling(x)
-    #     # print("avg pool", x.size())
-
-    #     # x = self.dropout(x)
-    #     # x = self.fc(x)
-    #     # x = self.swich(x)
-    #     # print("fc pool", x.size())
-
-    #     return x
-
-# class EfficientEmbeddingsNet(EfficientNet):
-#     def __init__(self, blocks_args=None, global_params=None, embeddings_dim=300):
-#         super(EfficientEmbeddingsNet, self).__init__(blocks_args, global_params)
-#         previous_out_channels = self._conv_head.out_channels
-#         self._conv11 = nn.Conv2d(previous_out_channels, embeddings_dim, kernel_size=1, bias=False)
-#         print("entrei na conv11")
-
-#     def extract_features(self, inputs):
-
-#         # Stem
-#         x = self._swish(self._bn0(self._conv_stem(inputs)))
-
-#         # Blocks
-#         for idx, block in enumerate(self._blocks):
-#             drop_connect_rate = self._global_params.drop_connect_rate
-#             if drop_connect_rate:
-#                 drop_connect_rate *= float(idx) / len(self._blocks)  # scale drop connect_rate
-#             x = block(x, drop_connect_rate=drop_connect_rate)
-
-#         # Head
-#         #x = self._swish(self._bn1(self._conv_head(x)))
-#         x = self._conv_head(x)
-#         x = self._swish(self._bn1(self._conv11(x)))
-
-#         return x
-
-#     def extract_features_and_conv11(self, inputs):
-
-#         # Stem
-#         x = self._swish(self._bn0(self._conv_stem(inputs)))
-
-#         # Blocks
-#         for idx, block in enumerate(self._blocks):
-#             drop_connect_rate = self._global_params.drop_connect_rate
-#             if drop_connect_rate:
-#                 drop_connect_rate *= float(idx) / len(self._blocks)  # scale drop connect_rate
-#             x = block(x, drop_connect_rate=drop_connect_rate)
-
-#         # Head
-#         #x = self._swish(self._bn1(self._conv_head(x)))
-#         features = self._conv_head(x)
-#         image_regions_embeddings = self._swish(self._bn1(self._conv11(x)))
-
-#         return features, image_regions_embeddings
 
 
 class ClassificationModel():
@@ -400,8 +307,8 @@ if __name__ == "__main__":
     classification_train = dict(list(classification_dataset.items())[split_ratio:])
     classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
-    train_dataset_args = (classification_train, PATH_RSICD + "raw_dataset/RSICD_images/", classes_to_id)
-    val_dataset_args = (classification_val, PATH_RSICD + "raw_dataset/RSICD_images/", classes_to_id)
+    train_dataset_args = (classification_train, PATH_RSICD + "raw_dataset/images/", classes_to_id)
+    val_dataset_args = (classification_val, PATH_RSICD + "raw_dataset/images/", classes_to_id)
 
     train_dataloader = DataLoader(
         ClassificationDataset(*train_dataset_args),

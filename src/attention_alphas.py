@@ -7,7 +7,6 @@ import os
 import torch
 import logging
 from args_parser import get_args
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD
 from data_preprocessing.create_data_files import get_vocab_info, get_dataset
 from torchvision import transforms
 from PIL import Image
@@ -16,7 +15,7 @@ import numpy as np
 import operator
 from nlgeval import NLGEval
 from models.abtract_model import DecodingType
-from definitions import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
+from definitions_datasets import PATH_DATASETS_RSICD, PATH_RSICD, PATH_EVALUATION_SENTENCES
 import json
 
 if __name__ == "__main__":
@@ -120,7 +119,7 @@ if __name__ == "__main__":
         img_name = img_names[j]
         img_id = img_ids[j]
 
-        image_name = PATH_RSICD + "raw_dataset/RSICD_images/" + img_name
+        image_name = PATH_RSICD + "raw_dataset/images/" + img_name
         image = Image.open(image_name)
         image = transform(image)
         image = image.unsqueeze(0)

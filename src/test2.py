@@ -2,7 +2,7 @@ import os
 import torch
 import logging
 from args_parser import get_args
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL
+from definitions_datasets import PATH_RSICD, PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL
 from data_preprocessing.create_data_files import get_vocab_info, get_dataset
 from models.basic_encoder_decoder_models.encoder_decoder import BasicEncoderDecoderModel
 from models.basic_encoder_decoder_models.encoder_decoder_variants.attention import BasicAttentionModel
@@ -157,7 +157,7 @@ if __name__ == "__main__":
             print("entrei aqui")
 
             image_name = PATH_RSICD + \
-                "raw_dataset/RSICD_images/" + img_name
+                "raw_dataset/images/" + img_name
             image = Image.open(image_name)
             image = transform(image)
             image = image.unsqueeze(0)

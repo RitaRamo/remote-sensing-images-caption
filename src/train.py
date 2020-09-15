@@ -6,7 +6,6 @@ import torch
 from torch.utils.data import DataLoader
 
 from args_parser import get_args
-from definitions import PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL, PATH_RSICD
 from data_preprocessing.create_data_files import get_dataset, get_vocab_info
 from data_preprocessing.datasets import CaptionDataset, POSCaptionDataset
 
