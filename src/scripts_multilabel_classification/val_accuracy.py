@@ -18,10 +18,12 @@ from scripts_multilabel_classification.train_model import EfficientEmbeddingsNet
 
 
 DISABLE_STEPS = False
-FILE_NAME = "classification_efficientnet_regions"  # "classification_efficientnet_modifiedrsicd"
+DATASET = "ucm"
+
+FILE_NAME = "classification_efficientnet_ucm"  # "classification_efficientnet_modifiedrsicd"
 FINE_TUNE = True
 EFFICIENT_NET = True
-PRETRAIN_IMAGE_REGIONS = True
+PRETRAIN_IMAGE_REGIONS = False
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -39,7 +41,19 @@ if __name__ == "__main__":
     logging.info("Device: %s \nCount %i gpus",
                  device, torch.cuda.device_count())
 
-    classification_state = torch.load("src/data/RSICD/datasets/classification_dataset")
+    if DATASET == Datasets.RSICD.value:
+        CLASSIFICATION_DATASET_PATH = "classification_dataset"
+    elif DATASET == Datasets.UCM.value:
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm"
+    else:
+        raise Exception("Invalid dataset")
+
+    print("Path of classificaion dataset", CLASSIFICATION_DATASET_PATH)
+
+    dataset_folder, dataset_jsons = get_dataset_paths(DATASET)
+    print("dataset folder", dataset_folder)
+
+    classification_state = torch.load("src/data/RSICD/datasets/" + CLASSIFICATION_DATASET_PATH)
     classes_to_id = classification_state["classes_to_id"]
     id_to_classes = classification_state["id_to_classes"]
     classification_dataset = classification_state["classification_dataset"]
@@ -50,8 +64,8 @@ if __name__ == "__main__":
     classification_train = dict(list(classification_dataset.items())[split_ratio:])
     classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
-    train_dataset_args = (classification_train, PATH_RSICD + "raw_dataset/images/", classes_to_id)
-    val_dataset_args = (classification_val, PATH_RSICD + "raw_dataset/images/", classes_to_id)
+    train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/", classes_to_id)
+    val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/", classes_to_id)
 
     train_dataloader = DataLoader(
         ClassificationDataset(*train_dataset_args),
