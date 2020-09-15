@@ -15,7 +15,8 @@ import numpy as np
 import time
 from efficientnet_pytorch import EfficientNet
 from scripts_multilabel_classification.train_model import EfficientEmbeddingsNet
-
+from utils.enums import Datasets
+from definitions_datasets import get_dataset_paths
 
 DISABLE_STEPS = False
 DATASET = "ucm"
