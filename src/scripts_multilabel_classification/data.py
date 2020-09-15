@@ -18,7 +18,7 @@ from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 
 DATASET = "ucm"
-vocab_size_limit = {"rsicd": 512, "ucm": 200}
+vocab_size_limit = {"rsicd": 512, "ucm": 197}
 dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
 
 if __name__ == "__main__":

@@ -111,10 +111,10 @@ class ClassificationModel():
                 image_model = EfficientNet.from_pretrained('efficientnet-b5')
                 num_features = image_model._fc.in_features
                 image_model._fc = nn.Linear(num_features, vocab_size)
-                print("image model", image_model)
+                #print("image model", image_model)
         else:  # use densenet
             image_model = models.densenet201(pretrained=True)
-            print("list image model", list(image_model.children()))
+            #print("list image model", list(image_model.children()))
             num_features = image_model.classifier.in_features
             image_model.classifier = nn.Linear(num_features, vocab_size)
 
