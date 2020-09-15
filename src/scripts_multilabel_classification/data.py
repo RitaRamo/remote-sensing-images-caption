@@ -14,9 +14,11 @@ import torch
 import spacy
 import inflect
 from collections import Counter, OrderedDict, defaultdict
+from utils.enums import Datasets
+from definitions_datasets import get_dataset_paths
 
-
-VOCAB_SIZE = 512
+DATASET = "ucm"
+vocab_size_limit = {"rsicd": 512, "ucm": 200}
 dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
 
 if __name__ == "__main__":
@@ -25,8 +27,11 @@ if __name__ == "__main__":
     nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
     p = inflect.engine()
 
-    train_dataset = get_dataset(PATH_DATASETS_RSICD + "train.json")
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD + "vocab_info.json")
+    dataset_folder, dataset_jsons = get_dataset_paths(DATASET)
+    print("dataset folder", dataset_folder)
+
+    train_dataset = get_dataset(dataset_jsons + "train.json")
+    vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
 
@@ -89,7 +94,10 @@ if __name__ == "__main__":
     lists_categories = list(image_categories.values())
     all_words = [item for sublist in lists_categories for item in sublist]
 
-    vocab_words, counts = list(zip(*Counter(all_words).most_common(VOCAB_SIZE)))
+    print("len of all words", all_words)
+    print("limit of classes", vocab_size_limit[DATASET])
+
+    vocab_words, counts = list(zip(*Counter(all_words).most_common(vocab_size_limit[DATASET])))
     classes_to_id = OrderedDict([(value, index)
                                  for index, value in enumerate(vocab_words)])
 
@@ -125,4 +133,7 @@ if __name__ == "__main__":
         "list_wordid": list_wordid
     }
 
-    torch.save(state, "src/data/RSICD/datasets/classification_dataset")
+    if DATASET == Datasets.RSICD.value:
+        torch.save(state, dataset_jsons + "classification_dataset")
+    elif DATASET == Datasets.UCM.value:
+        torch.save(state, dataset_jsons + "classification_dataset_ucm")
