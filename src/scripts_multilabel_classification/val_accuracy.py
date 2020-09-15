@@ -54,7 +54,7 @@ if __name__ == "__main__":
     dataset_folder, dataset_jsons = get_dataset_paths(DATASET)
     print("dataset folder", dataset_folder)
 
-    classification_state = torch.load("src/data/RSICD/datasets/" + CLASSIFICATION_DATASET_PATH)
+    classification_state = torch.load(dataset_jsons + CLASSIFICATION_DATASET_PATH)
     classes_to_id = classification_state["classes_to_id"]
     id_to_classes = classification_state["id_to_classes"]
     classification_dataset = classification_state["classification_dataset"]
