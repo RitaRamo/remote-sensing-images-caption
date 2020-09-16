@@ -101,6 +101,7 @@ if __name__ == "__main__":
 
     dataset_folder, dataset_jsons = get_dataset_paths(args.dataset)
     logging.info("dataset folder %s", dataset_folder)
+    logging.info("dataset jsons %s", dataset_jsons)
 
     vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
