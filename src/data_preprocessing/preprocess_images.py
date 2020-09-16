@@ -114,7 +114,7 @@ def get_image_model(model_type):
 
     elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
-        logging.info("image model with efficientnet model (all) with multi-label classification")
+        logging.info("image model with efficientnet multi-label classification with conv11")
 
         checkpoint = torch.load('experiments/results/classification_efficientnet_regions.pth.tar')
         vocab_size = 512
