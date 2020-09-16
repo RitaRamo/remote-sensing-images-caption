@@ -17,6 +17,7 @@ class ImageNetModelsPretrained(Enum):
     MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
     MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
     EFFICIENCENET_EMBEDDINGS = "efficient_net_embeddings"
+    EFFICIENCENET_UCM = "efficient_net_ucm"
 
 
 class OptimizerType(Enum):

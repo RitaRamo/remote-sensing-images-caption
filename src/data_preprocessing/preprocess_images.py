@@ -127,6 +127,21 @@ def get_image_model(model_type):
 
         return image_model, encoder_dim
 
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_UCM.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with UCM efficientnet model (all) with multi-label classification")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet_ucm.pth.tar')
+        vocab_size = 197
+
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
+        encoder_dim = image_model._fc.in_features
+        image_model._fc = nn.Linear(encoder_dim, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, encoder_dim
+
     return nn.Sequential(*modules), encoder_dim
 
 
