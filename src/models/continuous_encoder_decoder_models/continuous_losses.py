@@ -2453,9 +2453,7 @@ class ContinuousLoss():
 
             # 1º input loss (sentence predicted against input image)
             d2_matrix = 1 - sim_matrix(preds_without_padd, image_embedding)
-            print("p", preds_without_padd.size())
-            print("image_embedding", image_embedding.size())
-            print("d2", d2_matrix.size())
+
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
             input1_losses += (term_1 + term_2) / 2
