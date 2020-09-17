@@ -10,10 +10,8 @@ from sklearn.utils import shuffle
 from collections import defaultdict
 from data_preprocessing.preprocess_tokens import END_TOKEN, START_TOKEN, preprocess_tokens
 import re
-#from definitions import PATH_RSICD, PATH_DATASETS_RSICD, PATH_UCM, PATH_DATASETS_UCM
 from definitions_datasets import get_dataset_paths
 from datetime import datetime
-#from utils.dataset_selection import get_dataset_paths
 
 
 def _get_images_and_captions(dataset):
@@ -34,7 +32,7 @@ def _get_images_and_captions(dataset):
             else:
                 caption_tokens = caption["tokens"]
 
-            tokens = [START_TOKEN] + caption_tokens + [END_TOKEN]
+            tokens = [START_TOKEN] + [token.lower() for token in caption_tokens] + [END_TOKEN]
 
             print("this is the token for image fianl", tokens, image_name)
 
@@ -61,7 +59,7 @@ def _get_dict_image_and_its_captions(dataset, split="test"):
                         #caption_tokens = caption["tokens"][:-1]
                 else:
                     caption_tokens = caption["tokens"]
-                tokens = caption_tokens
+                tokens = [token.lower() for token in caption_tokens]
                 tokens = " ".join(tokens)
 
                 images_captions[image_name].append(tokens)
@@ -104,7 +102,7 @@ def _get_test_with_coco_format(raw_dataset, split="test", split2=None):
                         # caption_tokens = caption["tokens"][:-1]
                 else:
                     caption_tokens = caption["tokens"]
-                tokens = caption_tokens
+                tokens = [token.lower() for token in caption_tokens]
                 tokens = " ".join(tokens)
 
                 annotations.append(
@@ -191,8 +189,8 @@ def _save_dataset(raw_dataset, file_dir):
 
     test_coco_format = _get_test_with_coco_format(raw_dataset, split="test")
     val_coco_format = _get_test_with_coco_format(raw_dataset, split="val")
-    train_coco_format = _get_test_with_coco_format(raw_dataset, split="train")
-    train_and_val_coco_format = _get_test_with_coco_format(raw_dataset, split="train", split2="val")
+    #train_coco_format = _get_test_with_coco_format(raw_dataset, split="train")
+    #train_and_val_coco_format = _get_test_with_coco_format(raw_dataset, split="train", split2="val")
 
     vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
         train_captions_of_tokens
@@ -212,8 +210,8 @@ def _save_dataset(raw_dataset, file_dir):
 
     _dump_dict_to_json(test_coco_format, file_dir, "test_coco_format.json")
     _dump_dict_to_json(val_coco_format, file_dir, "val_coco_format.json")
-    _dump_dict_to_json(train_coco_format, file_dir, "train_coco_format.json")
-    _dump_dict_to_json(train_and_val_coco_format, file_dir, "train_and_val_coco_format.json")
+    #_dump_dict_to_json(train_coco_format, file_dir, "train_coco_format.json")
+    #_dump_dict_to_json(train_and_val_coco_format, file_dir, "train_and_val_coco_format.json")
 
 
 def get_dataset(file_path):

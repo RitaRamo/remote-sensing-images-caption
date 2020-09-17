@@ -1054,7 +1054,7 @@
   "captions_tokens": [
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -1072,7 +1072,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -1093,7 +1093,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -1113,7 +1113,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "dark",
       "green",
@@ -1126,7 +1126,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -1136,7 +1136,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -1151,7 +1151,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "triangular",
@@ -1166,7 +1166,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -1175,7 +1175,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -1186,7 +1186,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -1202,7 +1202,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -1220,7 +1220,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -1235,7 +1235,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "mixed",
@@ -1246,7 +1246,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -1271,7 +1271,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "freeways",
       "closed",
       "together",
@@ -1284,7 +1284,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -1302,7 +1302,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -1317,7 +1317,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -1331,7 +1331,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -1345,7 +1345,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -1367,14 +1367,14 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "and",
       "cars",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -1387,7 +1387,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -1399,7 +1399,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -1415,7 +1415,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -1427,7 +1427,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "airplanes",
       "are",
       "stopped",
@@ -1439,7 +1439,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -1447,7 +1447,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "airplanes",
@@ -1459,7 +1459,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "dense",
@@ -1474,7 +1474,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "plants",
       "and",
       "people",
@@ -1485,7 +1485,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "an",
       "old",
@@ -1499,7 +1499,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -1514,7 +1514,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -1532,7 +1532,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "wide",
       "river",
       "with",
@@ -1548,7 +1548,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -1562,7 +1562,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -1578,7 +1578,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -1591,7 +1591,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -1612,7 +1612,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "big",
@@ -1625,7 +1625,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -1650,7 +1650,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -1662,7 +1662,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -1673,7 +1673,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -1689,7 +1689,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -1711,7 +1711,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "different",
       "kinds",
       "of",
@@ -1725,7 +1725,7 @@
     ],
     [
       "<start_seq>",
-      "Waves",
+      "waves",
       "slapping",
       "the",
       "white",
@@ -1739,7 +1739,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "different",
       "kinds",
       "of",
@@ -1753,7 +1753,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "white",
       "straight",
       "freeways",
@@ -1763,7 +1763,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -1778,7 +1778,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -1795,7 +1795,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "three",
       "tennis",
@@ -1813,7 +1813,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -1828,7 +1828,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -1845,7 +1845,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -1864,14 +1864,14 @@
       "and",
       "a",
       "letter",
-      "R",
+      "r",
       "on",
       "it",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -1888,7 +1888,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -1900,7 +1900,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -1910,7 +1910,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "triangular",
       "building",
       "and",
@@ -1919,7 +1919,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "desolate",
       "intersection",
       "with",
@@ -1931,7 +1931,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -1946,7 +1946,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -1959,7 +1959,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "freeways",
       "closed",
       "together",
@@ -1972,7 +1972,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -1988,7 +1988,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "with",
       "lawn",
@@ -2002,7 +2002,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -2012,7 +2012,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -2028,7 +2028,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -2042,7 +2042,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -2057,7 +2057,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -2072,7 +2072,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -2086,7 +2086,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -2099,7 +2099,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -2114,7 +2114,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -2133,7 +2133,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "go",
       "through",
@@ -2144,7 +2144,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "busy",
       "intersection",
       "only",
@@ -2158,7 +2158,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -2173,7 +2173,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "is",
@@ -2191,7 +2191,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -2204,7 +2204,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -2222,7 +2222,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -2237,7 +2237,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "airplanes",
       "scattered",
       "at",
@@ -2247,7 +2247,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -2261,7 +2261,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -2274,7 +2274,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "hexagonal",
@@ -2286,7 +2286,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "curved",
       "freeways",
       "closed",
@@ -2300,7 +2300,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -2312,7 +2312,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "small",
       "storage",
       "tank",
@@ -2328,7 +2328,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "is",
       "surrounded",
@@ -2345,7 +2345,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -2358,7 +2358,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -2372,7 +2372,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "airplanes",
       "arranged",
       "neatly",
@@ -2383,7 +2383,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "cross",
       "two",
@@ -2399,7 +2399,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "an",
       "old",
@@ -2413,7 +2413,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -2426,7 +2426,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -2443,7 +2443,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -2456,7 +2456,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -2471,7 +2471,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -2484,7 +2484,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -2492,7 +2492,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -2508,7 +2508,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -2518,7 +2518,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -2528,7 +2528,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -2548,7 +2548,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "wide",
@@ -2566,7 +2566,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "white",
       "airplane",
       "is",
@@ -2578,7 +2578,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -2588,7 +2588,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -2607,7 +2607,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -2617,7 +2617,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -2632,7 +2632,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -2655,7 +2655,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "storage",
@@ -2671,7 +2671,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -2689,7 +2689,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -2699,7 +2699,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -2707,7 +2707,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -2724,7 +2724,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -2736,7 +2736,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -2750,7 +2750,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -2762,7 +2762,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -2776,7 +2776,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -2791,7 +2791,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -2801,7 +2801,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -2819,7 +2819,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -2831,7 +2831,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -2844,7 +2844,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "plants",
       "and",
       "people",
@@ -2855,7 +2855,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -2872,7 +2872,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "airplanes",
       "stopped",
       "are",
@@ -2883,7 +2883,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -2891,7 +2891,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "airplanes",
       "stopped",
       "are",
@@ -2902,7 +2902,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "parked",
       "in",
@@ -2920,7 +2920,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -2931,7 +2931,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -2941,7 +2941,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "are",
@@ -2959,7 +2959,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "pressed",
@@ -2974,7 +2974,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -2988,7 +2988,7 @@
     ],
     [
       "<start_seq>",
-      "Blue-green",
+      "blue-green",
       "sea",
       "and",
       "white",
@@ -3003,7 +3003,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -3018,7 +3018,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -3032,7 +3032,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "old",
       "baseball",
       "diamond",
@@ -3045,7 +3045,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -3060,7 +3060,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "mixed",
@@ -3071,7 +3071,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "airplane",
       "is",
       "taxiing",
@@ -3082,7 +3082,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -3093,7 +3093,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "airplane",
       "is",
       "taxiing",
@@ -3104,7 +3104,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -3119,7 +3119,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -3129,7 +3129,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -3141,7 +3141,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -3156,7 +3156,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -3168,7 +3168,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -3181,7 +3181,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -3193,7 +3193,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -3208,7 +3208,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -3219,7 +3219,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -3237,7 +3237,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -3255,7 +3255,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -3270,7 +3270,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -3282,7 +3282,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -3302,7 +3302,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -3322,7 +3322,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -3334,7 +3334,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -3345,7 +3345,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "a",
@@ -3358,7 +3358,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -3368,7 +3368,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "wide",
@@ -3380,7 +3380,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -3396,7 +3396,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -3414,7 +3414,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -3428,7 +3428,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -3448,7 +3448,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -3466,7 +3466,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -3482,7 +3482,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -3501,7 +3501,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -3517,7 +3517,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -3532,7 +3532,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "busy",
       "intersection",
       "with",
@@ -3548,7 +3548,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -3561,7 +3561,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "only",
       "with",
@@ -3576,7 +3576,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -3594,7 +3594,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -3610,7 +3610,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -3623,7 +3623,7 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "with",
       "grey",
       "roofs",
@@ -3631,7 +3631,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -3646,7 +3646,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -3659,7 +3659,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -3675,7 +3675,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -3691,7 +3691,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "orange",
@@ -3711,7 +3711,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -3726,7 +3726,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -3740,7 +3740,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -3756,7 +3756,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "airplanes",
@@ -3768,7 +3768,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "big",
@@ -3778,7 +3778,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -3791,7 +3791,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -3801,7 +3801,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "airplanes",
       "are",
       "stopped",
@@ -3813,7 +3813,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "arranged",
@@ -3826,7 +3826,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -3836,7 +3836,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -3852,7 +3852,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -3870,7 +3870,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -3882,7 +3882,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -3898,7 +3898,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -3915,7 +3915,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -3934,7 +3934,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "tennis",
       "courts",
       "are",
@@ -3951,7 +3951,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "with",
@@ -3964,7 +3964,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -3973,7 +3973,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -3992,7 +3992,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -4009,7 +4009,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "with",
@@ -4024,7 +4024,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -4038,7 +4038,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -4055,14 +4055,14 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "and",
       "cars",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -4082,7 +4082,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "small",
@@ -4103,7 +4103,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -4119,7 +4119,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -4133,7 +4133,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -4145,7 +4145,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "airplanes",
@@ -4157,7 +4157,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -4169,7 +4169,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -4186,7 +4186,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "airplanes",
       "are",
       "stopped",
@@ -4197,7 +4197,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -4214,7 +4214,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -4230,7 +4230,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -4247,7 +4247,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "big",
@@ -4260,7 +4260,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -4283,7 +4283,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -4299,7 +4299,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -4314,7 +4314,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -4326,7 +4326,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -4339,7 +4339,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -4352,7 +4352,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -4369,7 +4369,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -4383,7 +4383,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -4400,7 +4400,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "tennis",
@@ -4423,7 +4423,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -4436,7 +4436,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "beautiful",
       "beach",
       "with",
@@ -4448,7 +4448,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "cross",
       "the",
@@ -4464,7 +4464,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -4474,7 +4474,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "with",
@@ -4488,7 +4488,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -4505,7 +4505,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -4522,7 +4522,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -4536,7 +4536,7 @@
       "and",
       "a",
       "letter",
-      "R",
+      "r",
       "on",
       "the",
       "straight",
@@ -4545,7 +4545,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "sands",
@@ -4561,7 +4561,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -4581,7 +4581,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -4593,7 +4593,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -4607,7 +4607,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -4624,7 +4624,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -4641,7 +4641,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -4654,7 +4654,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -4671,7 +4671,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "building",
@@ -4682,7 +4682,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -4692,7 +4692,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -4700,7 +4700,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -4721,7 +4721,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "wide",
@@ -4733,7 +4733,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "are",
@@ -4743,7 +4743,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -4756,7 +4756,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "an",
       "old",
@@ -4766,7 +4766,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -4776,7 +4776,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -4789,7 +4789,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -4802,7 +4802,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -4815,7 +4815,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -4827,7 +4827,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -4837,7 +4837,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -4851,7 +4851,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -4864,7 +4864,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -4878,7 +4878,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -4893,7 +4893,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -4908,7 +4908,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "houses",
@@ -4924,7 +4924,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -4934,7 +4934,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -4947,7 +4947,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -4959,7 +4959,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -4972,7 +4972,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -4985,7 +4985,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -4998,7 +4998,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "cross",
       "the",
@@ -5014,7 +5014,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -5031,7 +5031,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "brown",
@@ -5042,7 +5042,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -5055,7 +5055,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -5069,7 +5069,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -5088,7 +5088,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "wide",
@@ -5100,7 +5100,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -5113,7 +5113,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -5128,7 +5128,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -5141,7 +5141,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "desolate",
       "intersection",
       "with",
@@ -5153,7 +5153,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -5163,7 +5163,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "different",
       "kinds",
       "of",
@@ -5177,7 +5177,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "different",
       "kinds",
       "of",
@@ -5191,7 +5191,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -5201,7 +5201,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -5221,7 +5221,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -5234,14 +5234,14 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "and",
       "cars",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -5255,7 +5255,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -5269,7 +5269,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -5282,7 +5282,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "airplanes",
       "are",
       "stopped",
@@ -5294,7 +5294,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "white",
       "airplanes",
       "is",
@@ -5306,7 +5306,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -5321,7 +5321,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "airplane",
       "is",
       "stopped",
@@ -5332,7 +5332,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -5349,7 +5349,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -5363,7 +5363,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -5377,7 +5377,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -5389,7 +5389,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -5407,7 +5407,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -5420,7 +5420,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -5436,7 +5436,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -5446,7 +5446,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -5466,7 +5466,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -5481,7 +5481,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -5492,7 +5492,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -5505,7 +5505,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "parked",
       "neatly",
@@ -5522,7 +5522,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -5536,7 +5536,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "sands",
@@ -5552,7 +5552,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -5563,7 +5563,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -5574,7 +5574,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "with",
@@ -5589,7 +5589,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -5598,7 +5598,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "dense",
@@ -5614,7 +5614,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -5634,7 +5634,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "storage",
@@ -5650,7 +5650,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "some",
@@ -5665,7 +5665,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -5679,7 +5679,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -5694,7 +5694,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -5702,7 +5702,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -5717,7 +5717,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -5731,7 +5731,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -5751,7 +5751,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -5761,7 +5761,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -5775,7 +5775,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "triangular",
       "building",
       "with",
@@ -5785,7 +5785,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -5801,7 +5801,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "white",
       "airplanes",
       "is",
@@ -5813,7 +5813,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -5828,7 +5828,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "with",
       "different",
@@ -5842,7 +5842,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -5863,14 +5863,14 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "and",
       "cars",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "curved",
@@ -5886,7 +5886,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "white",
@@ -5897,7 +5897,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -5911,7 +5911,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -5928,7 +5928,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -5948,7 +5948,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -5958,7 +5958,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -5975,7 +5975,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -5985,7 +5985,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -5999,7 +5999,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "beautiful",
       "beach",
       "with",
@@ -6011,7 +6011,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "are",
@@ -6025,7 +6025,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -6045,7 +6045,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -6054,7 +6054,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -6071,7 +6071,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -6086,7 +6086,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -6103,7 +6103,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -6125,7 +6125,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -6135,7 +6135,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -6149,7 +6149,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -6167,7 +6167,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -6182,7 +6182,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "buildings",
       "and",
@@ -6192,7 +6192,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -6209,7 +6209,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "with",
       "plants",
@@ -6223,7 +6223,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -6237,7 +6237,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -6253,7 +6253,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -6265,7 +6265,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "are",
@@ -6283,7 +6283,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -6304,7 +6304,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "arranged",
@@ -6319,7 +6319,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "goes",
       "through",
@@ -6341,7 +6341,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -6356,7 +6356,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -6370,7 +6370,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "arranged",
       "neatly",
@@ -6386,7 +6386,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -6399,7 +6399,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "small",
@@ -6413,7 +6413,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "mixed",
@@ -6424,7 +6424,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "grey",
@@ -6436,7 +6436,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -6455,7 +6455,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -6469,7 +6469,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -6482,7 +6482,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "very",
@@ -6501,7 +6501,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "grey",
       "airplanes",
       "and",
@@ -6517,7 +6517,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "mixed",
@@ -6528,7 +6528,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -6545,7 +6545,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -6554,7 +6554,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -6577,7 +6577,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -6596,7 +6596,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "dense",
@@ -6611,7 +6611,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -6621,7 +6621,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -6637,7 +6637,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -6651,7 +6651,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -6664,7 +6664,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -6680,7 +6680,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -6696,7 +6696,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -6718,7 +6718,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -6730,7 +6730,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "go",
       "through",
@@ -6741,7 +6741,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "a",
@@ -6759,7 +6759,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -6769,7 +6769,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -6782,7 +6782,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -6799,7 +6799,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -6815,7 +6815,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -6829,7 +6829,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -6843,7 +6843,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -6860,7 +6860,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -6878,7 +6878,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "three",
       "tennis",
@@ -6894,7 +6894,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -6911,7 +6911,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "beautiful",
       "beach",
       "with",
@@ -6923,7 +6923,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "big",
@@ -6933,7 +6933,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -6955,7 +6955,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -6975,7 +6975,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "four",
@@ -6987,7 +6987,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "storage",
@@ -7003,7 +7003,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "airplanes",
@@ -7014,7 +7014,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "tennis",
       "court",
       "next",
@@ -7032,7 +7032,7 @@
     ],
     [
       "<start_seq>",
-      "Waves",
+      "waves",
       "slapping",
       "a",
       "white",
@@ -7046,7 +7046,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -7063,7 +7063,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -7076,7 +7076,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -7089,7 +7089,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -7107,7 +7107,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -7120,7 +7120,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -7131,7 +7131,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "new",
@@ -7145,7 +7145,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -7155,7 +7155,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -7173,7 +7173,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -7198,7 +7198,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "old",
       "baseball",
       "diamond",
@@ -7211,7 +7211,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "tennis",
       "courts",
       "arranged",
@@ -7224,7 +7224,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -7244,7 +7244,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -7257,7 +7257,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "baseball",
@@ -7266,7 +7266,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "storage",
@@ -7282,7 +7282,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -7297,7 +7297,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "melt",
@@ -7309,7 +7309,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -7319,7 +7319,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -7340,7 +7340,7 @@
     ],
     [
       "<start_seq>",
-      "Beautiful",
+      "beautiful",
       "beach",
       "with",
       "blue-green",
@@ -7352,7 +7352,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "villa",
       "with",
       "grey",
@@ -7374,7 +7374,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -7389,7 +7389,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "freeways",
       "closed",
       "together",
@@ -7402,7 +7402,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -7414,7 +7414,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "melt",
@@ -7426,7 +7426,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -7439,7 +7439,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "baseball",
@@ -7448,7 +7448,7 @@
     ],
     [
       "<start_seq>",
-      "Blue-green",
+      "blue-green",
       "sea",
       "and",
       "white",
@@ -7463,7 +7463,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -7473,7 +7473,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "very",
@@ -7492,7 +7492,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "with",
@@ -7506,7 +7506,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "storage",
@@ -7522,7 +7522,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -7537,7 +7537,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "airplanes",
       "scattered",
       "at",
@@ -7547,7 +7547,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -7562,7 +7562,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -7580,7 +7580,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "cars",
@@ -7592,7 +7592,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -7606,7 +7606,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -7619,7 +7619,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "are",
       "pressed",
@@ -7628,7 +7628,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -7641,14 +7641,14 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "and",
       "cars",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -7668,7 +7668,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "regular",
@@ -7678,7 +7678,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -7693,7 +7693,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -7711,7 +7711,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -7729,7 +7729,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -7743,7 +7743,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -7757,7 +7757,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -7767,7 +7767,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -7780,7 +7780,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -7790,7 +7790,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -7800,7 +7800,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "different",
       "kinds",
       "of",
@@ -7814,7 +7814,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -7830,7 +7830,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -7844,7 +7844,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -7858,7 +7858,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -7874,7 +7874,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -7892,7 +7892,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -7901,7 +7901,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -7911,7 +7911,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -7931,7 +7931,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -7942,7 +7942,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -7960,7 +7960,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -7976,7 +7976,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "are",
@@ -7990,7 +7990,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -8005,7 +8005,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -8020,7 +8020,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "white",
       "airplane",
       "is",
@@ -8032,7 +8032,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -8049,7 +8049,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -8062,7 +8062,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -8074,7 +8074,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -8090,7 +8090,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "small",
       "storage",
       "tank",
@@ -8102,7 +8102,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -8115,7 +8115,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -8132,7 +8132,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -8149,7 +8149,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "cross",
       "the",
@@ -8165,7 +8165,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -8179,7 +8179,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -8194,7 +8194,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -8207,7 +8207,7 @@
     ],
     [
       "<start_seq>",
-      "Waves",
+      "waves",
       "slapping",
       "a",
       "white",
@@ -8221,7 +8221,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -8231,7 +8231,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -8243,7 +8243,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "with",
       "different",
@@ -8257,7 +8257,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "with",
       "plants",
@@ -8271,7 +8271,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "a",
@@ -8284,7 +8284,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -8301,7 +8301,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "white",
       "airplanes",
       "is",
@@ -8313,7 +8313,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "different",
       "kinds",
       "of",
@@ -8327,7 +8327,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -8347,7 +8347,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -8359,7 +8359,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -8367,7 +8367,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -8380,7 +8380,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "dense",
@@ -8396,7 +8396,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "small",
@@ -8410,7 +8410,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -8423,7 +8423,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -8440,7 +8440,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -8460,7 +8460,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "houses",
       "with",
       "plants",
@@ -8474,7 +8474,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -8487,7 +8487,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -8503,7 +8503,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -8518,7 +8518,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "white",
@@ -8535,7 +8535,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -8552,7 +8552,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -8573,7 +8573,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -8590,7 +8590,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -8603,7 +8603,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "curved",
       "freeways",
       "closed",
@@ -8617,7 +8617,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "different",
       "airplanes",
       "are",
@@ -8630,7 +8630,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "white",
@@ -8652,7 +8652,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -8670,7 +8670,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -8685,7 +8685,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -8700,7 +8700,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "curved",
       "freeways",
       "closed",
@@ -8714,7 +8714,7 @@
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "different",
       "airplanes",
       "are",
@@ -8727,7 +8727,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "small",
       "storage",
       "tank",
@@ -8739,7 +8739,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -8754,7 +8754,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -8771,14 +8771,14 @@
       "and",
       "a",
       "letter",
-      "R",
+      "r",
       "on",
       "it",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -8792,7 +8792,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -8802,7 +8802,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "and",
@@ -8817,7 +8817,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "no",
@@ -8828,7 +8828,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -8838,7 +8838,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -8850,7 +8850,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "curved",
@@ -8866,7 +8866,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -8881,7 +8881,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -8895,7 +8895,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -8915,7 +8915,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -8930,7 +8930,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "arranged",
@@ -8943,7 +8943,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "villa",
       "with",
       "plants",
@@ -8960,7 +8960,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -8977,7 +8977,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -8989,7 +8989,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -9003,7 +9003,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -9013,7 +9013,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -9035,7 +9035,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -9052,7 +9052,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "plants",
       "on",
       "both",
@@ -9064,7 +9064,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "brown",
@@ -9075,7 +9075,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "plants",
       "and",
       "people",
@@ -9086,7 +9086,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -9101,7 +9101,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -9113,7 +9113,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -9123,7 +9123,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -9140,7 +9140,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -9151,7 +9151,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -9166,7 +9166,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -9179,7 +9179,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -9192,7 +9192,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -9206,7 +9206,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "no",
@@ -9217,7 +9217,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -9233,7 +9233,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -9246,7 +9246,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -9263,7 +9263,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "airplanes",
       "stopped",
       "at",
@@ -9279,7 +9279,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -9292,7 +9292,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "white",
       "airplane",
       "is",
@@ -9304,7 +9304,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "white",
@@ -9321,7 +9321,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -9334,7 +9334,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -9349,7 +9349,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -9363,7 +9363,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "mixed",
@@ -9374,7 +9374,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "three",
       "airplanes",
@@ -9386,7 +9386,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -9406,7 +9406,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "many",
@@ -9418,7 +9418,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "wide",
@@ -9436,7 +9436,7 @@
     ],
     [
       "<start_seq>",
-      "Blue-green",
+      "blue-green",
       "sea",
       "and",
       "white",
@@ -9451,7 +9451,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -9462,7 +9462,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "different",
@@ -9473,7 +9473,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -9489,7 +9489,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -9502,7 +9502,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "regular",
@@ -9512,7 +9512,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -9527,7 +9527,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -9544,7 +9544,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "desolate",
       "intersection",
       "only",
@@ -9558,7 +9558,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "houses",
       "with",
       "plants",
@@ -9572,7 +9572,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "new",
@@ -9586,7 +9586,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "new",
@@ -9600,7 +9600,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -9617,7 +9617,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -9634,7 +9634,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "white",
       "airplanes",
       "are",
@@ -9647,7 +9647,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -9664,7 +9664,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -9676,7 +9676,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -9688,7 +9688,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -9701,7 +9701,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -9711,7 +9711,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "dense",
@@ -9726,7 +9726,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "triangular",
@@ -9738,7 +9738,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -9749,7 +9749,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -9763,7 +9763,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "narrow",
       "road",
       "go",
@@ -9775,7 +9775,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -9791,7 +9791,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -9804,7 +9804,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -9813,7 +9813,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "arranged",
       "in",
@@ -9826,7 +9826,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -9841,7 +9841,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -9856,7 +9856,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -9874,7 +9874,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -9891,7 +9891,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "melt",
@@ -9903,7 +9903,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -9917,7 +9917,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "dense",
@@ -9932,7 +9932,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -9947,7 +9947,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "an",
       "airplanes",
@@ -9959,7 +9959,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -9975,7 +9975,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -9988,7 +9988,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "an",
       "old",
@@ -9998,7 +9998,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -10023,7 +10023,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -10033,7 +10033,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "sands",
@@ -10049,7 +10049,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -10063,7 +10063,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -10073,7 +10073,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -10090,7 +10090,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -10105,7 +10105,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -10119,7 +10119,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -10136,7 +10136,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -10153,7 +10153,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -10174,7 +10174,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -10184,7 +10184,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -10198,7 +10198,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -10206,7 +10206,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -10219,7 +10219,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "cross",
       "the",
@@ -10235,7 +10235,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -10250,7 +10250,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -10261,7 +10261,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "melt",
@@ -10273,7 +10273,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "with",
       "plants",
@@ -10287,7 +10287,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -10299,7 +10299,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -10313,7 +10313,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -10334,7 +10334,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -10347,7 +10347,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "a",
@@ -10365,7 +10365,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -10375,7 +10375,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "regular",
@@ -10385,7 +10385,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -10405,7 +10405,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -10413,7 +10413,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -10427,7 +10427,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -10442,7 +10442,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -10456,7 +10456,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "big",
@@ -10466,7 +10466,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -10480,7 +10480,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -10492,7 +10492,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -10506,7 +10506,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "dense",
@@ -10527,7 +10527,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "very",
       "wide",
       "river",
@@ -10540,7 +10540,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "villa",
       "with",
       "grey",
@@ -10559,7 +10559,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -10576,7 +10576,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -10592,7 +10592,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -10603,7 +10603,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "neatly",
@@ -10620,7 +10620,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -10637,7 +10637,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -10647,7 +10647,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -10659,7 +10659,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -10671,7 +10671,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -10684,7 +10684,7 @@
     ],
     [
       "<start_seq>",
-      "Waves",
+      "waves",
       "slapping",
       "a",
       "white",
@@ -10698,7 +10698,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -10708,7 +10708,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -10720,7 +10720,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -10730,7 +10730,7 @@
     ],
     [
       "<start_seq>",
-      "Waves",
+      "waves",
       "slapping",
       "a",
       "white",
@@ -10740,7 +10740,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "orange",
@@ -10760,7 +10760,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -10777,7 +10777,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -10796,7 +10796,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "narrow",
       "road",
       "go",
@@ -10808,7 +10808,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -10826,7 +10826,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -10839,7 +10839,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -10851,7 +10851,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -10871,7 +10871,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -10882,7 +10882,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -10892,7 +10892,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -10905,7 +10905,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -10919,7 +10919,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -10934,7 +10934,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -10946,7 +10946,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "are",
       "pressed",
@@ -10955,7 +10955,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -10965,7 +10965,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -10985,7 +10985,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -11001,7 +11001,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -11013,7 +11013,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -11028,7 +11028,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "arranged",
@@ -11041,7 +11041,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -11057,7 +11057,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -11075,7 +11075,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -11089,7 +11089,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -11103,7 +11103,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "beach",
       "is",
       "composed",
@@ -11118,7 +11118,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "orange",
@@ -11138,7 +11138,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "is",
       "surrounded",
@@ -11155,7 +11155,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -11176,7 +11176,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "are",
@@ -11192,7 +11192,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -11207,7 +11207,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -11220,7 +11220,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -11234,7 +11234,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -11249,7 +11249,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -11261,7 +11261,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -11272,7 +11272,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -11286,7 +11286,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -11298,7 +11298,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -11318,7 +11318,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -11330,7 +11330,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "goes",
       "through",
@@ -11352,7 +11352,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -11366,7 +11366,7 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "with",
       "grey",
       "roofs",
@@ -11374,7 +11374,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -11390,7 +11390,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -11400,7 +11400,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -11414,7 +11414,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "curved",
       "freeways",
       "with",
@@ -11426,7 +11426,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -11441,7 +11441,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -11455,7 +11455,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "tennis",
       "court",
       "next",
@@ -11477,7 +11477,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -11493,7 +11493,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -11507,7 +11507,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "white",
       "airplane",
       "is",
@@ -11519,7 +11519,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -11531,7 +11531,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -11548,7 +11548,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "are",
@@ -11562,7 +11562,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -11575,7 +11575,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -11597,7 +11597,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -11608,7 +11608,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -11621,7 +11621,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -11631,7 +11631,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -11645,7 +11645,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -11655,7 +11655,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -11670,7 +11670,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -11687,7 +11687,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -11700,7 +11700,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "with",
@@ -11718,7 +11718,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "orange",
@@ -11738,7 +11738,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -11752,7 +11752,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "arranged",
       "neatly",
@@ -11768,7 +11768,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -11780,7 +11780,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -11795,7 +11795,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -11807,7 +11807,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -11817,7 +11817,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -11834,7 +11834,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "curved",
       "freeways",
       "with",
@@ -11846,7 +11846,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -11860,7 +11860,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -11875,7 +11875,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -11885,7 +11885,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "small",
@@ -11902,7 +11902,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -11919,7 +11919,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -11932,7 +11932,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -11948,7 +11948,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -11959,7 +11959,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -11971,7 +11971,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -11983,7 +11983,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -11996,7 +11996,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "three",
       "tennis",
@@ -12014,7 +12014,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -12030,7 +12030,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "small",
       "storage",
       "tanks",
@@ -12042,7 +12042,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -12062,7 +12062,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -12077,7 +12077,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -12091,7 +12091,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -12105,7 +12105,7 @@
     ],
     [
       "<start_seq>",
-      "Waves",
+      "waves",
       "slapping",
       "a",
       "white",
@@ -12119,7 +12119,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -12133,7 +12133,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -12144,7 +12144,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "houses",
       "with",
       "plants",
@@ -12158,7 +12158,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "old",
       "small",
       "baseball",
@@ -12172,7 +12172,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -12186,7 +12186,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -12200,7 +12200,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "triangular",
       "building",
       "with",
@@ -12216,7 +12216,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -12228,7 +12228,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -12241,7 +12241,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -12254,7 +12254,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -12267,7 +12267,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -12282,7 +12282,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "regular",
@@ -12292,7 +12292,7 @@
     ],
     [
       "<start_seq>",
-      "Blue-green",
+      "blue-green",
       "sea",
       "and",
       "white",
@@ -12307,7 +12307,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -12320,7 +12320,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "freeways",
       "closed",
       "together",
@@ -12333,7 +12333,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -12344,7 +12344,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "curved",
@@ -12355,7 +12355,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "dense",
@@ -12370,7 +12370,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "very",
       "wide",
       "river",
@@ -12383,7 +12383,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -12398,7 +12398,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -12412,7 +12412,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "storage",
       "tanks",
       "are",
@@ -12427,7 +12427,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -12441,7 +12441,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -12454,7 +12454,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -12471,7 +12471,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "go",
       "through",
@@ -12482,7 +12482,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -12499,7 +12499,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -12510,7 +12510,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "one",
       "big",
@@ -12523,7 +12523,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "hexagonal",
       "building",
       "with",
@@ -12533,7 +12533,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -12546,7 +12546,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -12559,7 +12559,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -12579,7 +12579,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -12592,7 +12592,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -12605,7 +12605,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -12620,7 +12620,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "villa",
       "with",
       "plants",
@@ -12634,7 +12634,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "go",
       "through",
@@ -12647,7 +12647,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -12662,7 +12662,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -12679,7 +12679,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "a",
@@ -12697,7 +12697,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -12717,7 +12717,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -12729,7 +12729,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -12742,7 +12742,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "wide",
@@ -12760,7 +12760,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -12783,7 +12783,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "small",
@@ -12794,7 +12794,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -12816,7 +12816,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -12826,7 +12826,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "is",
       "surrounded",
@@ -12843,7 +12843,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -12856,7 +12856,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -12873,7 +12873,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -12890,7 +12890,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -12911,7 +12911,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -12928,7 +12928,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "grey",
@@ -12940,7 +12940,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "small",
@@ -12964,7 +12964,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -12981,7 +12981,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -12999,7 +12999,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -13013,7 +13013,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "houses",
       "with",
       "plants",
@@ -13027,7 +13027,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "curved",
@@ -13038,7 +13038,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "with",
@@ -13049,7 +13049,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -13065,7 +13065,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -13081,7 +13081,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -13094,7 +13094,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -13110,7 +13110,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -13127,7 +13127,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -13140,7 +13140,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -13152,7 +13152,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -13171,7 +13171,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -13183,14 +13183,14 @@
     ],
     [
       "<start_seq>",
-      "Buildings",
+      "buildings",
       "and",
       "plants",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "are",
@@ -13204,7 +13204,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -13217,7 +13217,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -13240,7 +13240,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -13257,7 +13257,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -13275,7 +13275,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -13290,7 +13290,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "arranged",
@@ -13306,7 +13306,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "arranged",
       "in",
@@ -13319,7 +13319,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -13334,7 +13334,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -13351,7 +13351,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "medium",
@@ -13366,7 +13366,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "small",
       "storage",
       "tanks",
@@ -13382,7 +13382,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -13396,7 +13396,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -13406,7 +13406,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -13423,7 +13423,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -13437,7 +13437,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -13455,7 +13455,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "desolate",
       "intersection",
       "only",
@@ -13469,7 +13469,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -13483,7 +13483,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "three",
       "airplanes",
@@ -13494,7 +13494,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -13510,7 +13510,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -13531,7 +13531,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "is",
       "surrounded",
@@ -13548,7 +13548,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sand",
       "beach",
       "melt",
@@ -13560,7 +13560,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -13572,7 +13572,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -13582,7 +13582,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -13599,7 +13599,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "beach",
@@ -13613,7 +13613,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -13633,7 +13633,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "with",
@@ -13644,7 +13644,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -13661,7 +13661,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -13678,7 +13678,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "arranged",
@@ -13691,7 +13691,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -13708,7 +13708,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -13718,7 +13718,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -13731,7 +13731,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -13744,7 +13744,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -13759,7 +13759,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -13775,7 +13775,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -13788,7 +13788,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -13803,7 +13803,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "part",
@@ -13821,7 +13821,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "boats",
       "docked",
       "in",
@@ -13840,7 +13840,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -13853,7 +13853,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "sands",
@@ -13869,7 +13869,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "white",
@@ -13880,7 +13880,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -13897,7 +13897,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -13909,7 +13909,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -13924,14 +13924,14 @@
       "and",
       "a",
       "letter",
-      "R",
+      "r",
       "on",
       "it",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -13948,7 +13948,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -13962,7 +13962,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "plants",
@@ -13973,7 +13973,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "hexagonal",
@@ -13988,7 +13988,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -13998,7 +13998,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -14012,7 +14012,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -14028,7 +14028,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "storage",
       "tank",
       "is",
@@ -14043,7 +14043,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -14056,7 +14056,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "cross",
       "the",
@@ -14072,7 +14072,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -14085,7 +14085,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -14096,7 +14096,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -14108,7 +14108,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "arranged",
@@ -14130,7 +14130,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -14140,7 +14140,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "goes",
       "through",
@@ -14162,7 +14162,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -14177,7 +14177,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -14190,7 +14190,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "and",
@@ -14205,7 +14205,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -14221,7 +14221,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -14231,7 +14231,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -14241,7 +14241,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -14253,7 +14253,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "go",
       "through",
@@ -14264,7 +14264,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -14277,7 +14277,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -14291,7 +14291,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -14301,7 +14301,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -14319,7 +14319,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -14330,7 +14330,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -14345,7 +14345,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "are",
       "densely",
@@ -14358,7 +14358,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -14375,7 +14375,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -14388,7 +14388,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "curved",
       "freeways",
       "closed",
@@ -14402,7 +14402,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -14422,7 +14422,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "and",
@@ -14437,7 +14437,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "only",
       "with",
@@ -14452,7 +14452,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -14473,7 +14473,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "old",
       "small",
       "baseball",
@@ -14487,7 +14487,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "white",
       "airplanes",
       "are",
@@ -14500,7 +14500,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -14519,7 +14519,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -14535,7 +14535,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "regular",
       "baseball",
       "diamond",
@@ -14549,7 +14549,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "arranged",
@@ -14565,7 +14565,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -14582,7 +14582,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -14597,7 +14597,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "tennis",
       "courts",
       "are",
@@ -14613,7 +14613,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "airplanes",
       "are",
       "stopped",
@@ -14625,7 +14625,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "plants",
       "flourish",
       "on",
@@ -14638,7 +14638,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -14648,7 +14648,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -14660,7 +14660,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -14670,7 +14670,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -14686,7 +14686,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "plants",
@@ -14698,7 +14698,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "beautiful",
       "beach",
       "with",
@@ -14710,7 +14710,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "parking",
@@ -14724,7 +14724,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "grey",
@@ -14739,7 +14739,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -14757,7 +14757,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -14771,7 +14771,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "white",
@@ -14784,7 +14784,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -14800,7 +14800,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -14816,7 +14816,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -14833,7 +14833,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -14849,7 +14849,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "go",
       "across",
@@ -14865,7 +14865,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -14879,7 +14879,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -14897,7 +14897,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -14908,7 +14908,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -14928,7 +14928,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -14944,7 +14944,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "white",
@@ -14956,7 +14956,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "chaparral",
@@ -14964,7 +14964,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -14981,7 +14981,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -14994,7 +14994,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "grey",
       "plants",
       "are",
@@ -15007,7 +15007,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "two",
       "tennis",
@@ -15022,7 +15022,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "white",
@@ -15033,7 +15033,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -15045,7 +15045,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -15057,7 +15057,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "overpass",
       "with",
       "a",
@@ -15076,7 +15076,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "green",
       "and",
@@ -15091,7 +15091,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -15106,7 +15106,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -15125,7 +15125,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "wide",
       "river",
       "with",
@@ -15141,7 +15141,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -15155,7 +15155,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "old",
@@ -15165,7 +15165,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -15177,7 +15177,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "dark",
       "green",
@@ -15190,7 +15190,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -15200,7 +15200,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -15215,7 +15215,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -15230,7 +15230,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -15244,7 +15244,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "sparse",
@@ -15262,7 +15262,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "an",
       "airplane",
@@ -15274,7 +15274,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "buildings",
@@ -15287,7 +15287,7 @@
     ],
     [
       "<start_seq>",
-      "Here",
+      "here",
       "is",
       "a",
       "piece",
@@ -15297,7 +15297,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "house",
       "with",
       "bushes",
@@ -15312,7 +15312,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "are",
@@ -15329,7 +15329,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "turfs",
       "and",
@@ -15350,7 +15350,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "closed",
@@ -15364,7 +15364,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -15378,7 +15378,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -15395,7 +15395,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -15414,7 +15414,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "different",
       "kinds",
       "of",
@@ -15428,7 +15428,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "houses",
       "arranged",
@@ -15443,7 +15443,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "mark",
@@ -15456,7 +15456,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "two",
@@ -15469,7 +15469,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -15482,7 +15482,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "cars",
       "parked",
@@ -15496,7 +15496,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "buildings",
       "with",
       "different",
@@ -15507,7 +15507,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "piece",
@@ -15517,7 +15517,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -15531,7 +15531,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "medium",
@@ -15541,7 +15541,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "lots",
       "of",
@@ -15556,7 +15556,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "grey",
@@ -15569,7 +15569,7 @@
     ],
     [
       "<start_seq>",
-      "The",
+      "the",
       "sea",
       "water",
       "melt",
@@ -15581,7 +15581,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -15598,7 +15598,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -15608,7 +15608,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "medium",
       "residential",
       "area",
@@ -15621,7 +15621,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "plants",
       "are",
       "on",
@@ -15634,7 +15634,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -15647,7 +15647,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -15662,7 +15662,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -15682,7 +15682,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "river",
       "with",
       "dense",
@@ -15697,7 +15697,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "some",
       "cars",
@@ -15709,7 +15709,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -15723,7 +15723,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
@@ -15738,7 +15738,7 @@
     ],
     [
       "<start_seq>",
-      "An",
+      "an",
       "intersection",
       "with",
       "some",
@@ -15752,7 +15752,7 @@
     ],
     [
       "<start_seq>",
-      "Four",
+      "four",
       "tennis",
       "courts",
       "arranged",
@@ -15764,7 +15764,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "mobile",
       "homes",
       "are",
@@ -15782,7 +15782,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "small",
       "white",
       "storage",
@@ -15799,7 +15799,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "plants",
       "and",
       "people",
@@ -15810,7 +15810,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "big",
       "storage",
       "tank",
@@ -15822,7 +15822,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "mobile",
       "homes",
@@ -15839,7 +15839,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "boats",
       "docked",
@@ -15856,7 +15856,7 @@
     ],
     [
       "<start_seq>",
-      "Green",
+      "green",
       "turfs",
       "and",
       "some",
@@ -15876,7 +15876,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -15889,7 +15889,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "road",
       "go",
       "across",
@@ -15904,7 +15904,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -15916,7 +15916,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "is",
       "a",
       "piece",
@@ -15926,7 +15926,7 @@
     ],
     [
       "<start_seq>",
-      "Two",
+      "two",
       "straight",
       "freeways",
       "parallel",
@@ -15940,7 +15940,7 @@
     ],
     [
       "<start_seq>",
-      "Lots",
+      "lots",
       "of",
       "plants",
       "scattered",
@@ -15951,7 +15951,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "small",
       "white",
       "storage",
@@ -15968,7 +15968,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -15983,7 +15983,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "river",
@@ -16003,7 +16003,7 @@
     ],
     [
       "<start_seq>",
-      "Some",
+      "some",
       "houses",
       "arranged",
       "neatly",
@@ -16017,7 +16017,7 @@
     ],
     [
       "<start_seq>",
-      "Many",
+      "many",
       "cars",
       "densely",
       "arranged",
@@ -16029,7 +16029,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "big",
@@ -16039,7 +16039,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "straight",
       "runway",
       "with",
@@ -16055,14 +16055,14 @@
       "and",
       "a",
       "letter",
-      "R",
+      "r",
       "on",
       "it",
       "<end_seq>"
     ],
     [
       "<start_seq>",
-      "Three",
+      "three",
       "airplanes",
       "are",
       "stopped",
@@ -16073,7 +16073,7 @@
     ],
     [
       "<start_seq>",
-      "This",
+      "this",
       "is",
       "a",
       "dense",
@@ -16087,7 +16087,7 @@
     ],
     [
       "<start_seq>",
-      "A",
+      "a",
       "part",
       "of",
       "a",
@@ -16105,7 +16105,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "new",
@@ -16119,7 +16119,7 @@
     ],
     [
       "<start_seq>",
-      "There",
+      "there",
       "are",
       "four",
       "tennis",
@@ -16137,7 +16137,7 @@
     ],
     [
       "<start_seq>",
-      "It",
+      "it",
       "is",
       "a",
       "straight",
