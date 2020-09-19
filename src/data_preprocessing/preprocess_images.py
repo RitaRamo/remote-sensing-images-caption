@@ -132,7 +132,7 @@ def get_image_model(model_type):
         logging.info("image model with UCM efficientnet model (all) with multi-label classification")
 
         checkpoint = torch.load('experiments/results/classification_efficientnet_ucm.pth.tar')
-        vocab_size = 197
+        vocab_size = 187
 
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
