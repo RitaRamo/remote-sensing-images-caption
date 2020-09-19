@@ -7,6 +7,7 @@ import torch.nn as nn
 import albumentations as A
 import torch
 from efficientnet_pytorch import EfficientNet
+from definitions_datasets import PATH_DATASETS_UCM
 
 
 class EfficientEmbeddingsNet(nn.Module):
@@ -132,6 +133,9 @@ def get_image_model(model_type):
         logging.info("image model with UCM efficientnet model (all) with multi-label classification")
 
         checkpoint = torch.load('experiments/results/classification_efficientnet_ucm.pth.tar')
+        classification_data_state = torch.load(PATH_DATASETS_UCM + CLASSIFICATION_DATASET_PATH)
+        vocab_size = len(classification_data_state["classes_to_id"])
+
         vocab_size = 187
 
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
