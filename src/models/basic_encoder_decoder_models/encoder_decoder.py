@@ -6,6 +6,7 @@ from models.abtract_model import AbstractEncoderDecoderModel
 import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from data_preprocessing.preprocess_images import get_image_model
+from utils.enums import ImageNetModelsPretrained
 
 
 class Encoder(nn.Module):
@@ -16,6 +17,7 @@ class Encoder(nn.Module):
     def __init__(self, model_type, encoded_image_size=14, enable_fine_tuning=False):
         super(Encoder, self).__init__()
         self.enc_image_size = encoded_image_size
+        self.model_type = model_type
 
         self.model, self.encoder_dim = get_image_model(model_type)
 
@@ -64,10 +66,17 @@ class Encoder(nn.Module):
         Allow or prevent the computation of gradients for convolutional blocks 2 through 4 of the encoder.
         :param fine_tune: Allow?
         """
-        # If fine-tuning, only fine-tune convolutional blocks 2 through 4
-        for c in list(self.model.children()):  # [5:]:#toda!!!
-            for p in c.parameters():
-                p.requires_grad = enable_fine_tuning
+        print("fine-tuning")
+        if self.model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
+            for c in list(self.model.children())[-6:-1]:
+                print("unfreezing eff, layer", c)
+                for p in c.parameters():
+                    p.requires_grad = enable_fine_tuning
+        else:  # All layers
+            for c in list(self.model.children()):
+                print("unfreezing layer", c)
+                for p in c.parameters():
+                    p.requires_grad = enable_fine_tuning
 
 
 class Decoder(nn.Module):
