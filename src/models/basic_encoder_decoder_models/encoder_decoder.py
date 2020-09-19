@@ -66,17 +66,18 @@ class Encoder(nn.Module):
         Allow or prevent the computation of gradients for convolutional blocks 2 through 4 of the encoder.
         :param fine_tune: Allow?
         """
-        print("fine-tuning")
-        if self.model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
-            for c in list(self.model.children())[-6:-1]:
-                print("unfreezing eff, layer", c)
-                for p in c.parameters():
-                    p.requires_grad = enable_fine_tuning
-        else:  # All layers
-            for c in list(self.model.children()):
-                print("unfreezing layer", c)
-                for p in c.parameters():
-                    p.requires_grad = enable_fine_tuning
+        if enable_fine_tuning:
+            print("fine-tuning encoder")
+            if self.model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
+                for c in list(self.model.children())[-6:-1]:
+                    print("unfreezing eff, layer", c)
+                    for p in c.parameters():
+                        p.requires_grad = enable_fine_tuning
+            else:  # All layers
+                for c in list(self.model.children()):
+                    print("unfreezing layer", c)
+                    for p in c.parameters():
+                        p.requires_grad = enable_fine_tuning
 
 
 class Decoder(nn.Module):
