@@ -1,5 +1,6 @@
-import os
 import sys
+import subprocess
+
 
 eval_file = sys.argv[0]
 print("File that will be evaluated", eval_file)
