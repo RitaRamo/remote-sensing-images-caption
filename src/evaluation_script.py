@@ -2,7 +2,7 @@ import sys
 import subprocess
 
 
-eval_file = sys.argv[0]
+eval_file = sys.argv[1]
 print("File that will be evaluated", eval_file)
 
 subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
