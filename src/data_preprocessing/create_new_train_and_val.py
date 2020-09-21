@@ -3,7 +3,7 @@ import sys
 sys.path.append('src/')
 import json
 import logging
-from definitions import PATH_RSICD, PATH_DATASETS_RSICD
+from definitions_datasets import PATH_RSICD, PATH_DATASETS_RSICD
 from data_preprocessing.preprocess_tokens import END_TOKEN, START_TOKEN, preprocess_tokens
 from data_preprocessing.create_data_files import get_dataset, _dump_data_to_json, _dump_vocab_to_json
 from sklearn.model_selection import train_test_split

@@ -105,12 +105,21 @@ class ClassificationModel():
                 embedding_size = 300
                 image_model.cnn._fc = nn.Linear(embedding_size, vocab_size)
                 print("new image model", image_model)
+
+                for c in list(image_model.children())[1:]:
+                    print("this is c", c)
+                print(stop)
                 # print(stop)
 
             else:
                 image_model = EfficientNet.from_pretrained('efficientnet-b5')
+                #print("image model este", image_model)
                 num_features = image_model._fc.in_features
                 image_model._fc = nn.Linear(num_features, vocab_size)
+                print("FINAL ", list(image_model.children())[-6:-1])
+                for c in list(image_model.children())[-6:-1]:
+                    print("ENTREI AQUI sthis is c", c)
+                print(stop)
                 #print("image model", image_model)
         else:  # use densenet
             image_model = models.densenet201(pretrained=True)
