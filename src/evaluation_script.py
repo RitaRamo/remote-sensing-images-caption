@@ -5,8 +5,7 @@ import subprocess
 import sys
 import time
 
-list_files = ['
-              'ucml_fine_encdec_3comp_eff_noaug_notnormalized.txt',
+list_files = ['ucml_fine_encdec_3comp_eff_noaug_notnormalized.txt',
               'xasa.txt']
 
 for eval_file in list_files:
