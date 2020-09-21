@@ -52,7 +52,6 @@ class AdaptativeAttention(nn.Module):
         :return: attention weighted encoding, weights
         """
 
-        #TODO: DROPOUT
         hidden = self.linear_h(self.dropout(decoder_hidden))  # (batch_size, attention_dim)
         # eq 6 - 8 (attention to image regions)
         v = self.linear_v(self.dropout(encoder_out))
