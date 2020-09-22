@@ -69,8 +69,14 @@ class Encoder(nn.Module):
         if enable_fine_tuning:
             print("fine-tuning encoder")
             if self.model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
-                for c in list(self.model.children())[-6:-1]:
+                for c in list(self.model.children())[-6:-4]:  # [-6:-1]
                     print("unfreezing eff, layer", c)
+                    for p in c.parameters():
+                        p.requires_grad = enable_fine_tuning
+
+            elif self.model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
+                for c in list(self.model.children())[-1:]:  # [5:]:#toda!!!
+                    print("unfreezing layer:", c)
                     for p in c.parameters():
                         p.requires_grad = enable_fine_tuning
             else:  # All layers
