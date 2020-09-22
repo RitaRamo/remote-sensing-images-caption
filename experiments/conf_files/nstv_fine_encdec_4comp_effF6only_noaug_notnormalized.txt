@@ -1,5 +1,5 @@
 --file_name
-nstv_fine_encdec_4comp_effF65_noaug_notnormalized.txt
+nstv_fine_encdec_4comp_effF6only_noaug_notnormalized.txt
 --model_class_str
 ContinuousEncoderDecoderImageModel
 --batch_size
