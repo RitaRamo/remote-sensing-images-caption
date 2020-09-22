@@ -302,6 +302,8 @@ if __name__ == "__main__":
         CLASSIFICATION_DATASET_PATH = "classification_dataset"
     elif DATASET == Datasets.UCM.value:
         CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm"
+    elif DATASET == Datasets.FLICKR8K.value:
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_flickr8k"
     else:
         raise Exception("Invalid dataset")
 
