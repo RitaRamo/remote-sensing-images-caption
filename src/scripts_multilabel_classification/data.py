@@ -97,7 +97,7 @@ if __name__ == "__main__":
     all_words = [item for sublist in lists_categories for item in sublist]
 
     print("all words", all_words)
-    print("len of all words", len(all_words))
+    print("len of all unique words", len(Counter(all_words)))
     print("limit of classes", vocab_size_limit[DATASET])
 
     vocab_words, counts = list(zip(*Counter(all_words).most_common(vocab_size_limit[DATASET])))
