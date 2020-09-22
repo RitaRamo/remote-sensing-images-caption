@@ -257,4 +257,10 @@ if __name__ == "__main__":
     raw_dataset = pd.read_json(dataset_folder + "raw_dataset/dataset.json")
     _save_dataset(raw_dataset, dataset_jsons)
 
+    logging.info("saving datasets and vocab of Flickr8k")
+
+    dataset_folder, dataset_jsons = get_dataset_paths("flickr8k")
+    raw_dataset = pd.read_json(dataset_folder + "raw_dataset/dataset.json")
+    _save_dataset(raw_dataset, dataset_jsons)
+
     logging.info("saved datasets and vocab")

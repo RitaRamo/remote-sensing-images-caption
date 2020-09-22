@@ -32,6 +32,7 @@ class Datasets(Enum):
     RSICD_NEW_SPLITS_TRAIN_VAL = "rsicd_new_splits"
     SIDNEY = "sidney"
     UCM = "ucm"
+    FLICKR8K = "flickr8k"
 
 
 class EvalDatasetType(Enum):
