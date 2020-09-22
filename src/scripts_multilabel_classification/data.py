@@ -17,9 +17,8 @@ from collections import Counter, OrderedDict, defaultdict
 from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 
-DATASET = "ucm"
-vocab_size_limit = {"rsicd": 512, "ucm": 187}
-dataset_path = "src/data/RSICD/datasets/pos_tagging_dataset"
+DATASET = "flickr8k"
+vocab_size_limit = {"rsicd": 512, "ucm": 187, "flickr8k": 1024}
 
 if __name__ == "__main__":
 
@@ -40,34 +39,36 @@ if __name__ == "__main__":
 
     image_categories = defaultdict(list)
     classes = []
+
     for i in range(len(images_names)):
         name = images_names[i]
 
-        # append image class (obtained by the name ex: farmleand_111.jpeg)
-        name_splited = name.split("_")
-        if len(name_splited) > 1:
-            img_class = name_splited[0]
-            # image_categories[name].append(img_class)
-            classes.append(img_class)
-            print("class", img_class)
-            if img_class == "sparseresidential":
-                image_categories[name].append("sparse")
-                image_categories[name].append("residential")
-            elif img_class == "mediumresidential":
-                image_categories[name].append("medium")
-                image_categories[name].append("residential")
-            elif img_class == "denseresidential":
-                image_categories[name].append("dense")
-                image_categories[name].append("residential")
-            elif img_class == "storagetanks":
-                image_categories[name].append("storage")
-                image_categories[name].append("tanks")
-            elif img_class == "railwaystation":
-                image_categories[name].append("station")
-                image_categories[name].append("railway")
-            elif img_class == "baseballfield":
-                image_categories[name].append("baseball")
-                image_categories[name].append("field")
+        if DATASET == "rsicd":
+            # append image class name (obtained by the name of image ex: farmleand_111.jpeg)
+            name_splited = name.split("_")
+            if len(name_splited) > 1:
+                img_class = name_splited[0]
+                # image_categories[name].append(img_class)
+                classes.append(img_class)
+                print("class", img_class)
+                if img_class == "sparseresidential":
+                    image_categories[name].append("sparse")
+                    image_categories[name].append("residential")
+                elif img_class == "mediumresidential":
+                    image_categories[name].append("medium")
+                    image_categories[name].append("residential")
+                elif img_class == "denseresidential":
+                    image_categories[name].append("dense")
+                    image_categories[name].append("residential")
+                elif img_class == "storagetanks":
+                    image_categories[name].append("storage")
+                    image_categories[name].append("tanks")
+                elif img_class == "railwaystation":
+                    image_categories[name].append("station")
+                    image_categories[name].append("railway")
+                elif img_class == "baseballfield":
+                    image_categories[name].append("baseball")
+                    image_categories[name].append("field")
 
         # append words that are Nouns or Adjectives (converted to singular)
         caption = captions_of_tokens[i]
@@ -89,12 +90,14 @@ if __name__ == "__main__":
 
         #print("image category",  image_categories[name])
     print("all class", classes)
+    print("n of classes", len(classes))
 
     # Each image has list of words/categories from all the captions
     lists_categories = list(image_categories.values())
     all_words = [item for sublist in lists_categories for item in sublist]
 
-    print("len of all words", all_words)
+    print("all words", all_words)
+    print("len of all words", len(all_words))
     print("limit of classes", vocab_size_limit[DATASET])
 
     vocab_words, counts = list(zip(*Counter(all_words).most_common(vocab_size_limit[DATASET])))
@@ -138,3 +141,8 @@ if __name__ == "__main__":
     elif DATASET == Datasets.UCM.value:
         print("len", len(list_wordid))
         torch.save(state, dataset_jsons + "classification_dataset_ucm")
+    elif DATASET == Datasets.FLICKR8K.value:
+        print("len", len(list_wordid))
+        torch.save(state, dataset_jsons + "classification_dataset_flickr8k")
+    else:
+        raise Exception("unknown dataset to save")
