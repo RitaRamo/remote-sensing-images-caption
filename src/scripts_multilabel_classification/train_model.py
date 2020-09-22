@@ -28,7 +28,7 @@ PRETRAIN_IMAGE_REGIONS = False
 
 FOCAL_LOSS = False
 EPOCHS = 300
-BATCH_SIZE = 16
+BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
 
 
@@ -341,9 +341,6 @@ if __name__ == "__main__":
     )
 
     vocab_size = len(classes_to_id)
-
-    print("len train", len(train_dataloader))
-    print("len train", len(val_dataloader))
 
     model = ClassificationModel(vocab_size, device)
     model.setup_to_train()
