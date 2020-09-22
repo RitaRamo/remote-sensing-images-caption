@@ -24,4 +24,4 @@ src/lixo/
 src/embeddings/glove.6B/
 src/embeddings/fasttext/
 src/data/UCM/raw_dataset/images/
-src/data/FLICKR8k/raw_dataset/images/
+src/data/FLICKR8k/raw_dataset/images/*.jpg
