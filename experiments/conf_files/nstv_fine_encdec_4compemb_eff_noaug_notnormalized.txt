@@ -19,3 +19,5 @@ cos_avg_sentence_and_inputs_loss
 --image_model_type
 efficient_net_embeddings
 --no_normalization
+--dataset
+rsicd_new_splits
