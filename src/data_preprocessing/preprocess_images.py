@@ -98,6 +98,17 @@ def get_image_model(model_type):
         encoder_dim = 512
         return image_model, encoder_dim
 
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_IMAGENET.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with efficientnet model pre-trained on imagenet")
+
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
+        encoder_dim = image_model._fc.in_features
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, encoder_dim
+
     elif model_type == ImageNetModelsPretrained.MULTILABEL_ALL_EFFICIENCENET.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
         logging.info("image model with efficientnet model (all) with multi-label classification")

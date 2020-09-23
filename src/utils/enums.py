@@ -19,6 +19,7 @@ class ImageNetModelsPretrained(Enum):
     EFFICIENCENET_EMBEDDINGS = "efficient_net_embeddings"
     EFFICIENCENET_UCM = "efficient_net_ucm"
     EFFICIENCENET_FLICKR8K = "efficient_net_flickr8k"
+    EFFICIENCENET_IMAGENET = "efficient_net_imagenet"
 
 
 class OptimizerType(Enum):
