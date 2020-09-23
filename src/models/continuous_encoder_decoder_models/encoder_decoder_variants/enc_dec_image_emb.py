@@ -64,10 +64,11 @@ class Encoder(nn.Module):
         :param fine_tune: Allow?
         """
         # If fine-tuning, only fine-tune convolutional blocks 2 through 4
-        for c in list(self.model.children())[-1:]:  # [5:]:#toda!!!
-            print("Lets fine tune this childreen:", c)
-            for p in c.parameters():
-                p.requires_grad = enable_fine_tuning
+        if enable_fine_tuning:
+            for c in list(self.model.children())[-1:]:  # [5:]:#toda!!!
+                print("Lets fine tune this childreen:", c)
+                for p in c.parameters():
+                    p.requires_grad = enable_fine_tuning
 
 
 class ContinuousDecoderWithImage(Decoder):
