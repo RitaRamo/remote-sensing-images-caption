@@ -143,6 +143,8 @@ def get_image_model(model_type):
 
         image_model.load_state_dict(checkpoint['model'])
 
+        return image_model, encoder_dim
+
     elif model_type == ImageNetModelsPretrained.EFFICIENCENET_FLICKR8K.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
         logging.info("image model with Flickr8k efficientnet model (all) with multi-label classification")
