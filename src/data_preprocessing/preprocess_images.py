@@ -7,7 +7,7 @@ import torch.nn as nn
 import albumentations as A
 import torch
 from efficientnet_pytorch import EfficientNet
-from definitions_datasets import PATH_DATASETS_UCM
+from definitions_datasets import PATH_DATASETS_UCM, PATH_DATASETS_FLICKR8K
 
 
 class EfficientEmbeddingsNet(nn.Module):
@@ -135,8 +135,22 @@ def get_image_model(model_type):
         checkpoint = torch.load('experiments/results/classification_efficientnet_ucm.pth.tar')
         classification_data_state = torch.load(PATH_DATASETS_UCM + "classification_dataset_ucm")
         vocab_size = len(classification_data_state["classes_to_id"])
+        print("n classes", vocab_size)
 
-        vocab_size = 187
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
+        encoder_dim = image_model._fc.in_features
+        image_model._fc = nn.Linear(encoder_dim, vocab_size)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_FLICKR8K.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with Flickr8k efficientnet model (all) with multi-label classification")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet_flickr8k.pth.tar')
+        classification_data_state = torch.load(PATH_DATASETS_FLICKR8K + "classification_dataset_flickr8k")
+        vocab_size = len(classification_data_state["classes_to_id"])
+        print("n classes", vocab_size)
 
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
