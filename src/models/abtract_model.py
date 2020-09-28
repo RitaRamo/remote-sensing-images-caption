@@ -408,6 +408,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             with open("beam_outro.json", 'w+') as f:
                 json.dump(my_dict, f, indent=2)
+                print(stop)
             print("top solutions", [(text, prob)
                                     for text, prob, _, _ in top_solutions])
             best_tokens, prob, h, c = top_solutions[0]
