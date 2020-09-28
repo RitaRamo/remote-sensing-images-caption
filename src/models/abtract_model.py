@@ -12,16 +12,16 @@ import time
 from utils.early_stop import EarlyStopping
 from nlgeval import NLGEval
 from utils.optimizer import get_optimizer, clip_gradient
-#from enum import Enum
+# from enum import Enum
 from utils.enums import DecodingType
-#from transformers import GPT2Tokenizer, GPT2LMHeadModel
+# from transformers import GPT2Tokenizer, GPT2LMHeadModel
 import math
 from definitions_datasets import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
 
 
 class AbstractEncoderDecoderModel(ABC):
 
-    #MODEL_DIRECTORY = "experiments/results/"
+    # MODEL_DIRECTORY = "experiments/results/"
 
     def __init__(
         self,
@@ -352,58 +352,64 @@ class AbstractEncoderDecoderModel(ABC):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
             # return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
+            print("\nseed_text", seed_text)
+            print("sorted index", sorted_scores[index].item())
+            print("np log index", np.log(sorted_scores[index].item())))
+            print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
+
+
             return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
-            last_token = seed_text[-1]
+            last_token=seed_text[-1]
 
             if last_token == END_TOKEN:
                 if len(seed_text) <= min_len:
                     return [(seed_text, -np.inf, h, c)]
                 return [(seed_text, seed_prob, h, c)]
 
-            top_solutions = []
-            scores, h, c = self.generate_output_index(
+            top_solutions=[]
+            scores, h, c=self.generate_output_index(
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices = torch.sort(
-                scores, descending=True, dim=-1)
+            sorted_scores, sorted_indices=torch.sort(
+                scores, descending = True, dim = -1)
 
             for index in range(n_solutions):
-                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
+                text=seed_text + [self.id_to_token[sorted_indices[index].item()]]
                 # beam search taking into account lenght of sentence
                 # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
-                text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
+                text_score=compute_probability(seed_text, seed_prob, sorted_scores, index, text)
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+            return sorted(candidates, key = operator.itemgetter(1), reverse = True)[:n_solutions]
 
         with torch.no_grad():
-            my_dict = {}
+            my_dict={}
 
-            encoder_output = self.encoder(image)
-            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-            h, c = self.decoder.init_hidden_state(encoder_output)
+            encoder_output=self.encoder(image)
+            encoder_output=encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c=self.decoder.init_hidden_state(encoder_output)
 
-            top_solutions = [([START_TOKEN], 0.0, h, c)]
+            top_solutions=[([START_TOKEN], 0.0, h, c)]
 
             for time_step in range(self.max_len):
-                candidates = []
+                candidates=[]
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c, n_solutions))
 
-                top_solutions = get_most_probable(candidates, n_solutions)
+                top_solutions=get_most_probable(candidates, n_solutions)
 
                 # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
                 # # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
                 # print("\ntop", [(text, prob)
                 #                 for text, prob, _, _ in top_solutions])
                 # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                my_dict[time_step]={"cand": [(text, prob) for text, prob, _, _ in candidates],
                                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
             with open("beam_outro.json", 'w+') as f:
@@ -424,7 +430,7 @@ class AbstractEncoderDecoderModel(ABC):
 
     def inference_with_beamsearch_ranked_image(self, image, n_solutions=3):
         def compute_sim2image(current_text):
-            #TODO: MELHORAR
+            # TODO: MELHORAR
             # condierar start and end_token?
             current_text = current_text[1:]  # ignore start token
             if current_text[-1] == END_TOKEN:
@@ -455,37 +461,37 @@ class AbstractEncoderDecoderModel(ABC):
             scores, h, c = self.generate_output_index(
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices = torch.sort(
-                scores, descending=True, dim=-1)
+            sorted_scores, sorted_indices=torch.sort(
+                scores, descending = True, dim = -1)
 
             for index in range(n_solutions):
-                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
+                text=seed_text + [self.id_to_token[sorted_indices[index].item()]]
                 # beam search taking into account lenght of sentence
                 # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
-                text_score = (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+                text_score=(seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
                 top_solutions.append((text, text_score, h, c))
 
             return top_solutions
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+            return sorted(candidates, key = operator.itemgetter(1), reverse = True)[:n_solutions]
 
         with torch.no_grad():
-            #my_dict = {}
+            # my_dict = {}
 
-            encoder_output = self.encoder(image)
-            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
-            h, c = self.decoder.init_hidden_state(encoder_output)
+            encoder_output=self.encoder(image)
+            encoder_output=encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c=self.decoder.init_hidden_state(encoder_output)
 
-            top_solutions = [([START_TOKEN], 0.0, h, c)]
+            top_solutions=[([START_TOKEN], 0.0, h, c)]
 
             for time_step in range(self.max_len):
-                candidates = []
+                candidates=[]
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
                         sentence, prob, encoder_output, h, c, n_solutions))
 
-                top_solutions = get_most_probable(candidates, n_solutions)
+                top_solutions=get_most_probable(candidates, n_solutions)
 
                 # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
                 # # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
@@ -501,21 +507,21 @@ class AbstractEncoderDecoderModel(ABC):
             #                         for text, prob, _, _ in top_solutions])
             print("top before", [(text, prob)
                                  for text, prob, _, _ in top_solutions])
-            final_solutions = []
+            final_solutions=[]
             for sentence, prob, h, c in top_solutions:
-                image_rank = compute_sim2image(sentence)
+                image_rank=compute_sim2image(sentence)
                 final_solutions.append((sentence, image_rank))
 
-            final_solutions = get_most_probable(final_solutions, n_solutions)
+            final_solutions=get_most_probable(final_solutions, n_solutions)
             print("final_solutions", final_solutions)
 
-            best_tokens, prob = final_solutions[0]
+            best_tokens, prob=final_solutions[0]
 
             if best_tokens[0] == START_TOKEN:
-                best_tokens = best_tokens[1:]
+                best_tokens=best_tokens[1:]
             if best_tokens[-1] == END_TOKEN:
-                best_tokens = best_tokens[:-1]
-            best_sentence = " ".join(best_tokens)
+                best_tokens=best_tokens[:-1]
+            best_sentence=" ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
