@@ -345,6 +345,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             generated_sentence = " ".join(decoder_sentence)
             print("\ngenerated sentence:", generated_sentence)
+            print(stop)
 
             return generated_sentence  # input_caption
 
