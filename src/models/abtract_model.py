@@ -353,10 +353,10 @@ class AbstractEncoderDecoderModel(ABC):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
             # return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
-            print("\nseed_text", seed_text)
-            print("sorted index", sorted_scores[index].item())
-            print("np log index", np.log(sorted_scores[index].item()))
-            print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
+            # print("\nseed_text", seed_text)
+            # print("sorted index", sorted_scores[index].item())
+            # print("np log index", np.log(sorted_scores[index].item()))
+            # print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
 
             return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
@@ -388,7 +388,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            my_dict = {}
+            #my_dict = {}
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
@@ -409,14 +409,14 @@ class AbstractEncoderDecoderModel(ABC):
                 # print("\ntop", [(text, prob)
                 #                 for text, prob, _, _ in top_solutions])
                 # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+            #     my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+            #                           "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-            with open("beam_outro.json", 'w+') as f:
-                json.dump(my_dict, f, indent=2)
-                print(stop)
-            print("top solutions", [(text, prob)
-                                    for text, prob, _, _ in top_solutions])
+            # with open("beam_outro.json", 'w+') as f:
+            #     json.dump(my_dict, f, indent=2)
+            #     print(stop)
+            # print("top solutions", [(text, prob)
+            #                         for text, prob, _, _ in top_solutions])
             best_tokens, prob, h, c = top_solutions[0]
 
             if best_tokens[0] == START_TOKEN:
