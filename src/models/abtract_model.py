@@ -382,7 +382,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            #my_dict = {}
+            my_dict = {}
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
@@ -398,18 +398,18 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-                # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
-                # # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
-                # print("\ntop", [(text, prob)
-                #                 for text, prob, _, _ in top_solutions])
-                # # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
+                # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                print("\ntop", [(text, prob)
+                                for text, prob, _, _ in top_solutions])
+                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-            # with open("beam_10.json", 'w+') as f:
-            #     json.dump(my_dict, f, indent=2)
-            # print("top solutions", [(text, prob)
-            #                         for text, prob, _, _ in top_solutions])
+            with open("beam_10.json", 'w+') as f:
+                json.dump(my_dict, f, indent=2)
+            print("top solutions", [(text, prob)
+                                    for text, prob, _, _ in top_solutions])
             best_tokens, prob, h, c = top_solutions[0]
 
             if best_tokens[0] == START_TOKEN:
