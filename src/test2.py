@@ -165,9 +165,11 @@ if __name__ == "__main__":
         # model.encoder.eval()
 
         text_generated, beam_results = decoding_method(image, args.n_beam)
-        all_results[img_id] = beam_results
+
         i += 1
-        if i == 10:
+        if i > 10:
+            all_results[img_id] = beam_results
+        if i == 20:
             break
 
     with open(args.file_name + "SEMLOGbeam_results_cos.json", 'w+') as f:
