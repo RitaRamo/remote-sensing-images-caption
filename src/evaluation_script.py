@@ -34,7 +34,7 @@ for eval_file in [
     #     subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
     #                     "--decodying_type=beam", "--n_beam=" + n_beam, "--eval_dataset_type=val"])
 
-    n_beam = 10
+    n_beam = "10"
     for min_len in [2, 3, 5, 7, 10]:
         min_len = str(min_len)
         subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
@@ -44,7 +44,7 @@ for eval_file in [
         subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
                         "--decodying_type=beam", "--n_beam=" + n_beam, "--min_len=" + min_len, "--eval_dataset_type=val"])
 
-
+        print(stop)
 # greedy
 # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file])
 # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file])
