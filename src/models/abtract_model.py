@@ -349,7 +349,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             return generated_sentence  # input_caption
 
-    def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetitions_window=0):
+    def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetition_window=100):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
             # return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
@@ -358,7 +358,9 @@ class AbstractEncoderDecoderModel(ABC):
             # print("np log index", np.log(sorted_scores[index].item()))
             # print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
 
-            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+            # return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+
+            return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
@@ -381,6 +383,25 @@ class AbstractEncoderDecoderModel(ABC):
                 # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
                 text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
                 top_solutions.append((text, text_score, h, c))
+
+            # n = 0
+            # index = 0
+            # len_seed_text = len(seed_text)
+            # while n < n_solutions:
+            #     current_word = self.id_to_token[sorted_indices[index].item()]
+            #     if current_word == END_TOKEN:
+            #         if len(seed_text) <= min_len:
+            #             index += 1
+            #             continue
+            #     elif current_word in seed_text[max(len_seed_text - repetition_window, 0):]:
+            #         index += 1
+            #         continue
+
+            #     text = seed_text + [current_word]
+            #     text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
+            #     top_solutions.append((text, text_score, h, c))
+            #     index += 1
+            #     n += 1
 
             return top_solutions
 
@@ -477,7 +498,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            # my_dict = {}
+            my_dict = {}
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
@@ -493,13 +514,13 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-                # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
-                # # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
-                # print("\ntop", [(text, prob)
-                #                 for text, prob, _, _ in top_solutions])
-                # # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
+                # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                print("\ntop", [(text, prob)
+                                for text, prob, _, _ in top_solutions])
+                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
             # with open("beam_10.json", 'w+') as f:
             #     json.dump(my_dict, f, indent=2)
