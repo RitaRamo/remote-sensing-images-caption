@@ -360,7 +360,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             # return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
-            return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
+            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
