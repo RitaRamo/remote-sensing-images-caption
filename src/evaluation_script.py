@@ -7,7 +7,7 @@ import subprocess
 #print("File that will be evaluated", eval_file)
 
 for eval_file in [
-    "flick_fine_encdec_discrete_effimgnt_noaug_notnormalized.txt",
+    # "flick_fine_encdec_discrete_effimgnt_noaug_notnormalized.txt",
     # "flick_fine_encdec_discrete_effflick_noaug_notnormalized.txt",
     "flickr_fine_encdec_1comp_effflickr_noaug_notnormalized.txt",
     # "flickr_fine_encdec_4comp_effuflickr_noaug_notnormalized.txt"
