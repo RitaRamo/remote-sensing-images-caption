@@ -426,13 +426,13 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-                # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
-                my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
-                # print("\ntop", [(text, prob)
-                #                 for text, prob, _, _ in top_solutions])
-                my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                # # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
+                # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                # # print("\ntop", [(text, prob)
+                # #                 for text, prob, _, _ in top_solutions])
+                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
