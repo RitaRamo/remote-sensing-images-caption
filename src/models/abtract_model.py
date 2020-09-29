@@ -358,10 +358,10 @@ class AbstractEncoderDecoderModel(ABC):
             # print("np log index", np.log(sorted_scores[index].item()))
             # print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
 
-            # return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
             # return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
-            return (seed_prob + np.log(sorted_scores[index].item()))
+            # return (seed_prob + np.log(sorted_scores[index].item()))
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
@@ -410,7 +410,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            #my_dict = {}
+            my_dict = {}
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
@@ -427,19 +427,21 @@ class AbstractEncoderDecoderModel(ABC):
                 top_solutions = get_most_probable(candidates, n_solutions)
 
                 # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
-                # # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
                 # print("\ntop", [(text, prob)
                 #                 for text, prob, _, _ in top_solutions])
-                # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-            #     my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-            #                           "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
+                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-            # with open("beam_outro.json", 'w+') as f:
-            #     json.dump(my_dict, f, indent=2)
-            #     print(stop)
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
             best_tokens, prob, h, c = top_solutions[0]
+
+            if "it it" in " ".join(best_tokens):
+                with open("beam_con.json", 'w+') as f:
+                    json.dump(my_dict, f, indent=2)
+                    print(stop)
 
             if best_tokens[0] == START_TOKEN:
                 best_tokens = best_tokens[1:]
