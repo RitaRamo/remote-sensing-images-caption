@@ -358,7 +358,7 @@ class AbstractEncoderDecoderModel(ABC):
             # print("np log index", np.log(sorted_scores[index].item()))
             # print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
 
-            return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
+            return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
 
             # return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
             # return (seed_prob + np.log(sorted_scores[index].item()))
