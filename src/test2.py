@@ -167,7 +167,7 @@ if __name__ == "__main__":
         text_generated, beam_results = decoding_method(image, args.n_beam)
         all_results[img_id] = beam_results
         i += 1
-        if i == 3:
+        if i == 10:
             break
 
     with open(args.file_name + "beam_results_cos.json", 'w+') as f:
