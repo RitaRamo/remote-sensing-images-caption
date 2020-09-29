@@ -436,10 +436,11 @@ class AbstractEncoderDecoderModel(ABC):
 
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
+
             best_tokens, prob, h, c = top_solutions[0]
 
-            if "it it" in " ".join(best_tokens):
-                with open("beam_con.json", 'w+') as f:
+            if np.isnan(prob):
+                with open("beam_conMesmo.json", 'w+') as f:
                     json.dump(my_dict, f, indent=2)
                     print(stop)
 
