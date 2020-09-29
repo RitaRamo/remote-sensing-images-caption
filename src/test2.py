@@ -167,9 +167,9 @@ if __name__ == "__main__":
         text_generated, beam_results = decoding_method(image, args.n_beam)
 
         i += 1
-        if i > 10:
-            all_results[img_id] = beam_results
-        if i == 20:
+        # if i >= 10:
+        all_results[img_id] = beam_results
+        if i == 10:
             break
 
     with open(args.file_name + "SEMLOGbeam_results_cos.json", 'w+') as f:
