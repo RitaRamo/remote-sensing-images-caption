@@ -427,22 +427,22 @@ class AbstractEncoderDecoderModel(ABC):
                 top_solutions = get_most_probable(candidates, n_solutions)
 
                 # # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
-                # my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
+                #my_dict["cand"].append([(text, prob) for text, prob, _, _ in candidates])
                 # # print("\ntop", [(text, prob)
                 # #                 for text, prob, _, _ in top_solutions])
                 # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
             # print("top solutions", [(text, prob)
             #                         for text, prob, _, _ in top_solutions])
 
             best_tokens, prob, h, c = top_solutions[0]
 
-            if np.isnan(prob):
-                with open("beam_conMesmo.json", 'w+') as f:
-                    json.dump(my_dict, f, indent=2)
-                    print(stop)
+            # if np.isnan(prob):
+            #     with open("beam_conMesmo.json", 'w+') as f:
+            #         json.dump(my_dict, f, indent=2)
+            #         print(stop)
 
             if best_tokens[0] == START_TOKEN:
                 best_tokens = best_tokens[1:]
@@ -451,7 +451,7 @@ class AbstractEncoderDecoderModel(ABC):
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
-            return best_sentence
+            return best_sentence, my_dict
 
     def inference_with_beamsearch_ranked_image(self, image, n_solutions=3):
         def compute_sim2image(current_text):

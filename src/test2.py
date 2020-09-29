@@ -54,6 +54,8 @@ import json
 
 from torchvision import transforms
 from PIL import Image
+import cv2
+
 from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
@@ -62,6 +64,7 @@ from utils.enums import DecodingType, EvalDatasetType
 
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 os.environ['PYTHONHASHSEED'] = '0'
+from definitions_datasets import get_dataset_paths, get_test_path, PATH_EVALUATION_SENTENCES
 
 
 if __name__ == "__main__":
@@ -70,23 +73,16 @@ if __name__ == "__main__":
     args = get_args()
     print(args.__dict__)
 
-    vocab_info = get_vocab_info(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "vocab_info.json")
+    dataset_folder, dataset_jsons = get_dataset_paths(args.dataset)
+
+    vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     print("vocab size", vocab_size)
 
-    # Choose dataset to evaluate the model:
-    if args.eval_dataset_type == EvalDatasetType.VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "val_coco_format.json")
-        decoding_args = args.file_name + "_v_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-
-    elif args.eval_dataset_type == EvalDatasetType.TRAIN_AND_VAL.value:
-        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "train_and_val_coco_format.json")
-        decoding_args = args.file_name + "_tv_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-
-    else:  # test set
-        decoding_args = args.file_name + "_" + args.decodying_type + "_" + str(args.n_beam) + '_coco'
-        test_dataset = get_dataset(PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL + "test_coco_format.json")
+    test_path, decoding_args = get_test_path(args, dataset_jsons)
+    print("test path", test_path)
+    test_dataset = get_dataset(test_path)
 
     model_class = globals()[args.model_class_str]
     model = model_class(
@@ -143,9 +139,10 @@ if __name__ == "__main__":
     #     text_generated = decoding_method(image, args.n_beam)
     #     break
 
-    images_ids = [1251, 1252, 1260, 1263, 1266, 1269, 1275, 1274, 1277, 1280, 1281, 1287]
+    #images_ids = [1251, 1252, 1260, 1263, 1266, 1269, 1275, 1274, 1277, 1280, 1281, 1287]
     #images_ids = ["1251", "1252", "1260", "1263", "1266", "1269", "1275", "1274", "1277", "1280", "1281"," 1287"]
     all_results = {}
+    i = 0
     for values in test_dataset["images"]:
 
         img_name = values["file_name"]
@@ -153,21 +150,25 @@ if __name__ == "__main__":
         #print("img_id", type(img_id))
         # break
 
-        if img_id in images_ids:
-            print("entrei aqui")
+        # if img_id in images_ids:
+        print("entrei aqui")
 
-            image_name = PATH_RSICD + \
-                "raw_dataset/images/" + img_name
-            image = Image.open(image_name)
-            image = transform(image)
-            image = image.unsqueeze(0)
+        image_name = dataset_folder + \
+            "raw_dataset/images/" + img_name
+        #image = Image.open(image_name)
+        image = cv2.imread(image_name)
+        image = transform(image)
+        image = image.unsqueeze(0)
 
-            # know the eval is inside the model.setup_to_test()
-            # model.decoder.eval()
-            # model.encoder.eval()
+        # know the eval is inside the model.setup_to_test()
+        # model.decoder.eval()
+        # model.encoder.eval()
 
-            text_generated, beam_results = decoding_method(image, args.n_beam)
-            all_results[img_id] = beam_results
+        text_generated, beam_results = decoding_method(image, args.n_beam)
+        all_results[img_id] = beam_results
+        i += 1
+        if i == 3:
+            break
 
-    with open(args.file_name + "beam_results.json", 'w+') as f:
+    with open(args.file_name + "beam_results_cos.json", 'w+') as f:
         json.dump(all_results, f, indent=2)
