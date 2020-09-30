@@ -149,8 +149,7 @@ if __name__ == "__main__":
         # model.decoder.eval()
         # model.encoder.eval()
 
-        text_generated = decoding_method(image, args.n_beam, args.min_len)
-        #print("FOI ISTO", text_generated)
+        text_generated = decoding_method(image, args.n_beam, args.min_len, args.rep_window)
 
         list_hipotheses.append({
             "image_id": img_id,
