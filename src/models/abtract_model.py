@@ -363,10 +363,8 @@ class AbstractEncoderDecoderModel(ABC):
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
-            # if last_token == END_TOKEN:
-            #     if len(seed_text) <= min_len:
-            #         return [(seed_text, -np.inf, h, c)]
-            #     return [(seed_text, seed_prob, h, c)]
+            if last_token == END_TOKEN:
+                return [(seed_text, seed_prob, h, c)]
 
             if len(seed_text) > max_len:
                 return [(seed_text, seed_prob, h, c)]
