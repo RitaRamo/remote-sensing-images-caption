@@ -352,12 +352,19 @@ class AbstractEncoderDecoderModel(ABC):
     def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetition_window=100):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
+            print("\ncurrent current_text", current_text)
+            print("current word", current_text[-1])
+            print("prob sorted score", sorted_scores[index].item())
+            print("log sorted score", np.log(sorted_scores[index].item()))
+            print("previous score", seed_prob * len(seed_text))
+            print("total", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
+
             # return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
             # print("\nseed_text", seed_text)
             # print("sorted index", sorted_scores[index].item())
             # print("np log index", np.log(sorted_scores[index].item()))
             # print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
-
+            #print("log, ")
             return (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1)
 
             # return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
@@ -384,6 +391,10 @@ class AbstractEncoderDecoderModel(ABC):
                 # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
                 text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
                 top_solutions.append((text, text_score, h, c))
+                if text == ["<start_seq>", "another", "man"]:
+                    print(stop)
+                if len(text) > 3:
+                    print(stop)
 
             # n = 0
             # index = 0
