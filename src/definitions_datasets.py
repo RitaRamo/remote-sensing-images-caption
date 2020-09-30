@@ -35,11 +35,11 @@ def get_test_path(args, dataset_jsons):
     if args.eval_dataset_type == EvalDatasetType.VAL.value:
         test_path = dataset_jsons + "val_coco_format.json"
         decoding_args = args.file_name + "nw_v_" + args.decodying_type + \
-            "_" + str(args.n_beam) + "_" + str(args.min_len) "_" + str(args.rep_window) + '_coco'
+            "_" + str(args.n_beam) + "_" + str(args.min_len) + "_" + str(args.rep_window) + '_coco'
 
     else:  # test set
         test_path = dataset_jsons + "test_coco_format.json"
         decoding_args = args.file_name + "nw_" + args.decodying_type + \
-            "_" + str(args.n_beam) + "_" + str(args.min_len) "_" + str(args.rep_window) + '_coco'
+            "_" + str(args.n_beam) + "_" + str(args.min_len) + "_" + str(args.rep_window) + '_coco'
 
     return test_path, decoding_args
