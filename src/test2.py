@@ -172,5 +172,5 @@ if __name__ == "__main__":
         if i == 10:
             break
 
-    with open(args.file_name + "SEMLOGbeam_results_cos.json", 'w+') as f:
+    with open(args.file_name + "ComLOGbeam_results_cos.json", 'w+') as f:
         json.dump(all_results, f, indent=2)
