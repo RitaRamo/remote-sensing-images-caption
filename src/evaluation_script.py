@@ -10,7 +10,7 @@ for eval_file in [
     # "flick_fine_encdec_discrete_effimgnt_noaug_notnormalized.txt",
     # "flick_fine_encdec_discrete_effflick_noaug_notnormalized.txt",
     "flickr_fine_encdec_1comp_effflickr_noaug_notnormalized.txt",
-    # "flickr_fine_encdec_3comp_effuflickr_noaug_notnormalized.txt",
+    "flickr_fine_encdec_3comp_effuflickr_noaug_notnormalized.txt",
     # "flickr_fine_encdec_4comp_effuflickr_noaug_notnormalized.txt"
 ]:
 
@@ -42,7 +42,7 @@ for eval_file in [
     # subprocess.run(["python3", "src/test_scores_bertscore.py",
     #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
 
-        for rep_window in [1, 2]:
+        for rep_window in [1, 2, 3, 5]:
             rep_window = str(rep_window)
             for max_len in [10, 15, 20]:
                 max_len = str(max_len)
