@@ -349,7 +349,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             return generated_sentence  # input_caption
 
-    def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetition_window=0):
+    def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
             # return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
@@ -363,9 +363,12 @@ class AbstractEncoderDecoderModel(ABC):
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
 
-            if last_token == END_TOKEN:
-                if len(seed_text) <= min_len:
-                    return [(seed_text, -np.inf, h, c)]
+            # if last_token == END_TOKEN:
+            #     if len(seed_text) <= min_len:
+            #         return [(seed_text, -np.inf, h, c)]
+            #     return [(seed_text, seed_prob, h, c)]
+
+            if len(seed_text) > 5:
                 return [(seed_text, seed_prob, h, c)]
 
             top_solutions = []

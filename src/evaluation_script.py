@@ -42,18 +42,22 @@ for eval_file in [
     # subprocess.run(["python3", "src/test_scores_bertscore.py",
     #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
 
-        for rep_window in [1, 2, 3, 5]:
+        for rep_window in [1, 2]:
             rep_window = str(rep_window)
-
-            subprocess.run(
-                ["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                 "--decodying_type=beam", "--n_beam=" + n_beam, "--rep_window=" + rep_window, "--eval_dataset_type=val"])
-            subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                            "--decodying_type=beam", "--n_beam=" + n_beam, "--rep_window=" + rep_window,
-                            "--eval_dataset_type=val"])
-            subprocess.run(
-                ["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
-                 "--decodying_type=beam", "--n_beam=" + n_beam, "--rep_window=" + rep_window, "--eval_dataset_type=val"])
+            for max_len in [10, 15, 20]:
+                max_len = str(max_len)
+                subprocess.run(
+                    ["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                     "--decodying_type=beam", "--n_beam=" + n_beam, "--max_len=" + max_len, "--rep_window=" + rep_window,
+                     "--eval_dataset_type=val"])
+                subprocess.run(
+                    ["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                     "--decodying_type=beam", "--n_beam=" + n_beam, "--max_len=" + max_len, "--rep_window=" + rep_window,
+                     "--eval_dataset_type=val"])
+                subprocess.run(
+                    ["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
+                     "--decodying_type=beam", "--n_beam=" + n_beam, "--max_len=" + max_len, "--rep_window=" + rep_window,
+                     "--eval_dataset_type=val"])
 # greedy
 # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file])
 # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file])
