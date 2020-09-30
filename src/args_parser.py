@@ -56,6 +56,9 @@ def get_args():
     parser.add_argument('--min_len', type=int, default=2,
                         help='define min lenght for inference')
 
+    parser.add_argument('--rep_window', type=int, default=0,
+                        help='define min lenght for inference')
+
     parser.add_argument('--num_workers', type=int, default=1,
                         help='define num_works to dataloader')
 

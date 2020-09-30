@@ -375,31 +375,31 @@ class AbstractEncoderDecoderModel(ABC):
             sorted_scores, sorted_indices = torch.sort(
                 scores, descending=True, dim=-1)
 
-            for index in range(n_solutions):
-                text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
-                # beam search taking into account lenght of sentence
-                # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
-                text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
-                top_solutions.append((text, text_score, h, c))
-
-            # n = 0
-            # index = 0
-            # len_seed_text = len(seed_text)
-            # while n < n_solutions:
-            #     current_word = self.id_to_token[sorted_indices[index].item()]
-            #     if current_word == END_TOKEN:
-            #         if len(seed_text) <= min_len:
-            #             index += 1
-            #             continue
-            #     elif current_word in seed_text[max(len_seed_text - repetition_window, 0):]:
-            #         index += 1
-            #         continue
-
-            #     text = seed_text + [current_word]
+            # for index in range(n_solutions):
+            #     text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
+            #     # beam search taking into account lenght of sentence
+            #     # prob = (seed_prob*len(seed_text) + np.log(sorted_scores[index].item()) / (len(seed_text)+1))
             #     text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
             #     top_solutions.append((text, text_score, h, c))
-            #     index += 1
-            #     n += 1
+
+            n = 0
+            index = 0
+            len_seed_text = len(seed_text)
+            while n < n_solutions:
+                current_word = self.id_to_token[sorted_indices[index].item()]
+                if current_word == END_TOKEN:
+                    if len(seed_text) <= min_len:
+                        index += 1
+                        continue
+                elif current_word in seed_text[max(len_seed_text - repetition_window, 0):]:
+                    index += 1
+                    continue
+
+                text = seed_text + [current_word]
+                text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
+                top_solutions.append((text, text_score, h, c))
+                index += 1
+                n += 1
 
             return top_solutions
 
