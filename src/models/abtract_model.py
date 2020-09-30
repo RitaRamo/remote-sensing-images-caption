@@ -368,7 +368,7 @@ class AbstractEncoderDecoderModel(ABC):
             #         return [(seed_text, -np.inf, h, c)]
             #     return [(seed_text, seed_prob, h, c)]
 
-            if len(seed_text) > 5:
+            if len(seed_text) > max_len:
                 return [(seed_text, seed_prob, h, c)]
 
             top_solutions = []
