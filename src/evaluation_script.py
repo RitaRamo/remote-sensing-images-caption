@@ -7,12 +7,12 @@ import subprocess
 #print("File that will be evaluated", eval_file)
 
 for eval_file in [
-    "flick_fine_encdec_discrete_effimgnt_noaug_notnormalized.txt",
-    "flick_fine_encdec_discrete_effflick_noaug_notnormalized.txt",
-    "flickr_fine_encdec_1comp_effflickr_noaug_notnormalized.txt",
-    "flickr_fine_encdec_2comp_effuflickr_noaug_notnormalized",
-    "flickr_fine_encdec_3comp_effuflickr_noaug_notnormalized.txt",
-    "flickr_fine_encdec_4comp_effuflickr_noaug_notnormalized.txt",
+    "flickr_fine_encdec_2comp_effuflickr_noaug_notnormalized.txt",
+    "ucml_fine_encdec_discrete_effucm_noaug_notnormalized.txt",
+    "ucml_fine_encdec_1comp_effucm_noaug_notnormalized.txt",
+    "ucml_fine_encdec_2comp_effucm_noaug_notnormalized.txt",
+    "ucml_fine_encdec_3comp_effucm_noaug_notnormalized.txt",
+    "ucml_fine_encdec_4comp_effucm_noaug_notnormalized.txt",
 ]:
 
     print("File that will be evaluated", eval_file)
