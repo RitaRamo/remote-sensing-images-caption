@@ -302,7 +302,7 @@ class AbstractEncoderDecoderModel(ABC):
         with open(scores_path + '.json', 'w+') as f:
             json.dump(scores, f, indent=2)
 
-    def inference_with_greedy(self, image, n_solutions=0, min_len=0):
+    def inference_with_greedy(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
         with torch.no_grad():  # no need to track history
 
             decoder_sentence = []
@@ -345,19 +345,12 @@ class AbstractEncoderDecoderModel(ABC):
 
             generated_sentence = " ".join(decoder_sentence)
             print("\ngenerated sentence:", generated_sentence)
-            print(stop)
 
             return generated_sentence  # input_caption
 
     def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            # return (seed_prob * (len(seed_text)**0.75) + np.log(sorted_scores[index].item())) / ((len(seed_text) + 1)**0.75)
-            # print("\nseed_text", seed_text)
-            # print("sorted index", sorted_scores[index].item())
-            # print("np log index", np.log(sorted_scores[index].item()))
-            # print("final", (seed_prob * len(seed_text) + np.log(sorted_scores[index].item())) / (len(seed_text) + 1))
-            #print("log, ")
             return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
