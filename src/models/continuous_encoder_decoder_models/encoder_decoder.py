@@ -119,6 +119,6 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
     def _convert_prediction_to_output(self, predictions):
         output = torch.cosine_similarity(
-            self.decoder.embedding.weight.data, predictions)
+            self.decoder.embedding.weight.data, predictions.unsqueeze(1), dim=-1)
 
         return output
