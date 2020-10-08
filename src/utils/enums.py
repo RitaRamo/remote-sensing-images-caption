@@ -100,6 +100,10 @@ class DecodingType(Enum):
     GREEDY_EMBEDDING = "greedy_embedding"
     GREEDY_SMOOTHL1 = "greedy_smoothl1"
     BEAM = "beam"
+    BEAM_WITHOUT_REFINEMENT = "beam_wt_refinement"
+    BEAM_TUTORIAL = "beam_tutorial"
+    BEAM_COMP = "beam_comp"
+
     BEAM_RANKED_IMAGE = "beam_ranked_image"
     BEAM_RANKED_BIGRAM = "beam_ranked_bigram"
     BEAM_PERPLEXITY = "perplexity"
