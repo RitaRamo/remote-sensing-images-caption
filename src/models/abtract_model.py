@@ -325,7 +325,7 @@ class AbstractEncoderDecoderModel(ABC):
 
                 sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
-                current_output_index = sorted_indices[0]
+                current_output_index = sorted_indices.squeeze()[0]
 
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
@@ -345,6 +345,7 @@ class AbstractEncoderDecoderModel(ABC):
                 i += 1
 
             generated_sentence = " ".join(decoder_sentence)
+            # print("beam_t decoded sentence:", generated_sentence)
             print("\ngenerated sentence:", generated_sentence)
 
             return generated_sentence  # input_caption
@@ -415,7 +416,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             top_solutions = [([START_TOKEN], 0.0, h, c)]
 
-            for time_step in range(self.max_len):
+            for time_step in range(self.max_len - 1):
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
                     candidates.extend(generate_n_solutions(
@@ -513,7 +514,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             top_solutions = [([START_TOKEN], 0.0, h, c)]
 
-            for time_step in range(self.max_len):
+            for time_step in range(self.max_len - 1):
                 #print("\nnew time step")
                 candidates = []
                 for sentence, prob, h, c in top_solutions:
@@ -672,7 +673,7 @@ class AbstractEncoderDecoderModel(ABC):
             #print("k_prev_words", next_word_inds[incomplete_inds].unsqueeze(1))
 
             # Break if things have been going on too long
-            if step > self.max_len - 1:
+            if step >= self.max_len - 1:
                 #print("I reached max len")
                 #complete_seqs = seqs
                 break
@@ -749,7 +750,7 @@ class AbstractEncoderDecoderModel(ABC):
         decoder_hidden_state, decoder_cell_state = self.decoder.init_hidden_state(encoder_output)
         states = [decoder_hidden_state, decoder_cell_state]
         # Start decoding
-        for step in range(0, self.max_len):
+        for step in range(0, self.max_len - 1):
             prev_words = top_k_sequences[:, step]
             #print("prev word size", prev_words.size())
             #print("\nvou começar para estas palavras", prev_words)
