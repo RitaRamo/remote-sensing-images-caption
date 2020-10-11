@@ -13,7 +13,9 @@ class SATDecoder(DecoderWithAttention):
     Decoder.
     """
 
-    def __init__(self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim=2048, dropout=0.5):
+    def __init__(
+            self, attention_dim, embedding_type, embed_dim, decoder_dim, vocab_size, token_to_id, post_processing,
+            encoder_dim=2048, dropout=0.5):
         """
         :param attention_dim: size of attention network
         :param embed_dim: embedding size
@@ -22,8 +24,8 @@ class SATDecoder(DecoderWithAttention):
         :param encoder_dim: feature size of encoded images
         :param dropout: dropout
         """
-        super(SATDecoder, self).__init__(attention_dim, embedding_type,
-                                         embed_dim, decoder_dim, vocab_size, token_to_id, encoder_dim, dropout)
+        super(SATDecoder, self).__init__(attention_dim, embedding_type, embed_dim,
+                                         decoder_dim, vocab_size, token_to_id, post_processing, encoder_dim, dropout)
 
        # linear layer to create a sigmoid-activated gate
         self.f_beta = nn.Linear(decoder_dim, encoder_dim)
@@ -70,6 +72,7 @@ class BasicShowAttendAndTellModel(BasicAttentionModel):
         self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
 
+        print("self encoder dim", self.encoder.encoder_dim)
         self.decoder = SATDecoder(
             encoder_dim=self.encoder.encoder_dim,
             attention_dim=self.args.attention_dim,
@@ -78,6 +81,7 @@ class BasicShowAttendAndTellModel(BasicAttentionModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
+            post_processing=self.args.post_processing,
             dropout=self.args.dropout
         )
 
