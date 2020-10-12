@@ -88,3 +88,11 @@ class BasicShowAttendAndTellModel(BasicAttentionModel):
         self.encoder = self.encoder.to(self.device)
 
         self.decoder = self.decoder.to(self.device)
+
+    def _calculate_loss(self, predict_output, caps, caption_lengths):
+        loss = super()._calculate_loss(predict_output, caps, caption_lengths)
+
+        alphas = predict_output["alphas"]
+        # Add doubly stochastic attention regularization
+        loss += ((1. - alphas.sum(dim=1)) ** 2).mean()
+        return loss
