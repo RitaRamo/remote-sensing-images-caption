@@ -20,6 +20,7 @@ class Encoder(nn.Module):
         self.model_type = model_type
 
         self.model, self.encoder_dim = get_image_model(model_type)
+        print("self encoder dim of enc", self.encoder_dim)
 
         # resnet = torchvision.models.resnet101(
         #     pretrained=True)  # pretrained ImageNet ResNet-101
@@ -46,10 +47,10 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        out = self.model(
-            images)  # (batch_size, 2048, image_size/32, image_size/32)
+        # out = self.model(
+        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        # out = self.model.extract_features(images)
+        out = self.model.extract_features(images)
         # #print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
