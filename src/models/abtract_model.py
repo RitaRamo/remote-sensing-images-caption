@@ -551,8 +551,8 @@ class AbstractEncoderDecoderModel(ABC):
                 # # print("\ntop", [(text, prob)
                 # #                 for text, prob, _, _ in top_solutions])
                 # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                my_dict[time_step] = {"cand": [(text, prob.item()) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob.item()) for text, prob, _, _ in top_solutions]}
 
             print("top solutions", [(text, prob)
                                     for text, prob, _, _ in top_solutions])
