@@ -688,11 +688,6 @@ class AbstractEncoderDecoderModel(ABC):
 
             # TODO:REMOVE YOUR CODE
             # if step > 1:
-            my_dict[step] = {
-                "cand": cands,
-                "top": my_top_of_cand
-            }
-            print("\n FINAL dict", my_dict)
 
             # Which sequences are incomplete (didn't reach <end>)?
             incomplete_inds = [ind for ind, next_word in enumerate(next_word_inds) if
@@ -705,8 +700,18 @@ class AbstractEncoderDecoderModel(ABC):
             if len(complete_inds) > 0:
                 complete_seqs.extend(seqs[complete_inds].tolist())
                 complete_seqs_scores.extend(top_k_scores[complete_inds])
-            k -= len(complete_inds)  # reduce beam length accordingly
 
+                #TODO: remover
+                my_top_of_cand.append(([self.id_to_token[index.item()]
+                                        for index in seqs[complete_inds]], top_k_scores[complete_inds].item()))
+            k -= len(complete_inds)  # reduce beam length accordingly
+            
+            
+            my_dict[step] = {
+                "cand": cands,
+                "top": my_top_of_cand
+            }
+            print("\n FINAL dict", my_dict)
             # Proceed with incomplete sequences
             if k == 0:
                 # print("entrei aqui")
