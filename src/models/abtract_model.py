@@ -647,6 +647,8 @@ class AbstractEncoderDecoderModel(ABC):
                 top_k_scores, top_k_words = scores[0].topk(k, 0, True, True)  # (s)
                 print("setp 1 top_k_scores", top_k_scores)
                 print("setp 1 top_k_words", top_k_words)
+                print("setp 1 top_k_scores item", top_k_scores[0].item())
+
                 print(stop)
 
             else:
