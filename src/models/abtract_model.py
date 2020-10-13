@@ -488,16 +488,19 @@ class AbstractEncoderDecoderModel(ABC):
             top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
 
             print("top ksie", top_k_scores.size())
-            top_k_zero = torch.zeros(top_k_scores.size()[0])
+            print("scores size", scores.size())
+
+            top_k_zero = torch.zeros(scores.squeeze().size()[0])
             print("top k zero", top_k_zero)
             print("setp 1 top_k_scores", top_k_scores)
             print("setp 1 top_k_words", top_k_words)
             print("ste1 tok j score without item", 0.0 + top_k_scores[0])
             print("ste1 tok j score item", 0.0 + top_k_scores[0].item())
             print("ste1 tok j score item without 0 ", top_k_scores[0].item())
-            print("ste1 top_k_zero score item", (top_k_zero + top_k_scores)[0].item())
-            print("ste1 top_k_zero score item", (top_k_zero + scores.squeeze()
-                                                 ).topk(n_solutions, 0, True, True)[0].item())
+            #print("ste1 top_k_zero score item", (top_k_zero + top_k_scores)[0].item())
+            print("ste1 top_k_zero score item", (top_k_zero + scores.squeeze()).topk(n_solutions, 0, True, True))
+
+            print("wit it", (top_k_zero + scores.squeeze()).topk(n_solutions, 0, True, True)[0][0].item())
 
             print("sorted scores 0", sorted_scores[0])
             print("sorted_indices 0", sorted_indices[0])
