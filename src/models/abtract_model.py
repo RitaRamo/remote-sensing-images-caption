@@ -527,7 +527,7 @@ class AbstractEncoderDecoderModel(ABC):
             return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
 
         with torch.no_grad():
-            # my_dict = {}
+            my_dict = {}
 
             encoder_output = self.encoder(image)
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
@@ -551,8 +551,8 @@ class AbstractEncoderDecoderModel(ABC):
                 # # print("\ntop", [(text, prob)
                 # #                 for text, prob, _, _ in top_solutions])
                 # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+                my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                                      "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
             print("top solutions", [(text, prob)
                                     for text, prob, _, _ in top_solutions])
@@ -571,7 +571,7 @@ class AbstractEncoderDecoderModel(ABC):
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
-            return best_sentence  # , my_dict
+            return best_sentence, my_dict
 
     def inference_beam_tutorial(self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
         my_dict = {}
