@@ -455,11 +455,12 @@ class AbstractEncoderDecoderModel(ABC):
             self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            # print("\nseed text", seed_text)
-            # print("current_text text", current_text)
-            # print("previous seed prob", seed_prob)
-            # print("now prob", sorted_scores[index].item())
-            # print("final prob", seed_prob + sorted_scores[index].item())
+            print("\nseed text", seed_text)
+            print("current_text text", current_text)
+            print("previous seed prob", seed_prob)
+            print("now prob", sorted_scores[index].item())
+            print("final prob", seed_prob + sorted_scores[index].item())
+            print(stop)
             return seed_prob + sorted_scores[index]  # .item()
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
@@ -479,12 +480,12 @@ class AbstractEncoderDecoderModel(ABC):
                 scores.squeeze(), descending=True, dim=-1)
 
             #sorted_scores, sorted_indices = scores.squeeze().topk(n_solutions, 0, True, True)
-            # print("sorted scores", sorted_scores)
-            # print("sorted_indices", sorted_indices)
+            print("sorted scores", sorted_scores)
+            print("sorted_indices", sorted_indices)
 
-            # top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
-            # print("setp 1 top_k_scores", top_k_scores)
-            # print("setp 1 top_k_words", top_k_words)
+            top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
+            print("setp 1 top_k_scores", top_k_scores)
+            print("setp 1 top_k_words", top_k_words)
 
             # print("sorted scores 0", sorted_scores[0])
             # print("sorted_indices 0", sorted_indices[0])
