@@ -477,6 +477,20 @@ class AbstractEncoderDecoderModel(ABC):
 
             sorted_scores, sorted_indices = torch.sort(
                 scores.squeeze(), descending=True, dim=-1)
+            print("sorted scores", sorted_scores)
+            print("sorted_indices", sorted_indices)
+
+            top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
+            print("setp 1 top_k_scores", top_k_scores)
+            print("setp 1 top_k_words", top_k_words)
+
+            print("sorted scores 0", sorted_scores[0])
+            print("sorted_indices 0", sorted_indices[0])
+
+            top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
+            print("setp 1 top_k_scores 0", top_k_scores[0])
+            print("setp 1 top_k_words 0", top_k_words[0])
+            print(stop)
 
             # for index in range(n_solutions):
             #     text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
