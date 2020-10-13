@@ -481,7 +481,7 @@ class AbstractEncoderDecoderModel(ABC):
             sorted_scores, sorted_indices = torch.sort(
                 scores.squeeze(), descending=True, dim=-1)
 
-            sorted_scores, sorted_indices = scores.squeeze().topk(n_solutions * 1000, 0, True, True)
+            sorted_scores, sorted_indices = scores.squeeze().topk(self.vocab_size, 0, True, True)
             # print("sorted scores", sorted_scores)
             # print("sorted_indices", sorted_indices)
 
