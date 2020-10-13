@@ -488,8 +488,8 @@ class AbstractEncoderDecoderModel(ABC):
             top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
             print("setp 1 top_k_scores", top_k_scores)
             print("setp 1 top_k_words", top_k_words)
-            print("ste1 tok j score without item", 0.0 + top_k_scores)
-            print("ste1 tok j score item", 0.0 + top_k_scores.item())
+            print("ste1 tok j score without item", 0.0 + top_k_scores[0])
+            print("ste1 tok j score item", 0.0 + top_k_scores[0].item())
 
             # print("sorted scores 0", sorted_scores[0])
             # print("sorted_indices 0", sorted_indices[0])
