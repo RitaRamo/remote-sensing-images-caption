@@ -702,11 +702,11 @@ class AbstractEncoderDecoderModel(ABC):
                 complete_seqs_scores.extend(top_k_scores[complete_inds])
 
                 #TODO: remover
-                my_top_of_cand.append(([self.id_to_token[index.item()]
-                                        for index in seqs[complete_inds]], top_k_scores[complete_inds].item()))
+                for c_i in complete_inds:
+                    my_top_of_cand.append(([self.id_to_token[index.item()]
+                                            for index in seqs[c_i]], top_k_scores[c_i].item()))
             k -= len(complete_inds)  # reduce beam length accordingly
-            
-            
+
             my_dict[step] = {
                 "cand": cands,
                 "top": my_top_of_cand
