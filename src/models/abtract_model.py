@@ -460,7 +460,7 @@ class AbstractEncoderDecoderModel(ABC):
             # print("previous seed prob", seed_prob)
             # print("now prob", sorted_scores[index].item())
             # print("final prob", seed_prob + sorted_scores[index].item())
-            return seed_prob + sorted_scores[index].item()
+            return seed_prob + sorted_scores[index]  # .item()
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
             last_token = seed_text[-1]
@@ -475,10 +475,10 @@ class AbstractEncoderDecoderModel(ABC):
             scores, h, c = self.generate_output_index(
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            # sorted_scores, sorted_indices = torch.sort(
-            #     scores.squeeze(), descending=True, dim=-1)
+            sorted_scores, sorted_indices = torch.sort(
+                scores.squeeze(), descending=True, dim=-1)
 
-            sorted_scores, sorted_indices = scores.squeeze().topk(n_solutions, 0, True, True)
+            #sorted_scores, sorted_indices = scores.squeeze().topk(n_solutions, 0, True, True)
             # print("sorted scores", sorted_scores)
             # print("sorted_indices", sorted_indices)
 
@@ -554,8 +554,8 @@ class AbstractEncoderDecoderModel(ABC):
                 # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
                 #                       "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-            # print("top solutions", [(text, prob)
-            #                         for text, prob, _, _ in top_solutions])
+            print("top solutions", [(text, prob)
+                                    for text, prob, _, _ in top_solutions])
 
             best_tokens, prob, h, c = top_solutions[0]
 
