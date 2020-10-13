@@ -490,7 +490,7 @@ class AbstractEncoderDecoderModel(ABC):
             print("top ksie", top_k_scores.size())
             print("scores size", scores.size())
 
-            top_k_zero = torch.zeros(scores.squeeze().size()[0])
+            top_k_zero = torch.zeros(scores.squeeze().size()[0]).to(self.device)
             print("top k zero", top_k_zero)
             print("setp 1 top_k_scores", top_k_scores)
             print("setp 1 top_k_words", top_k_words)
@@ -545,7 +545,7 @@ class AbstractEncoderDecoderModel(ABC):
         with torch.no_grad():
             my_dict = {}
 
-            encoder_output = self.encoder(image)
+            encoder_output = self.encoder(image.to(self.device))
             encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
 
