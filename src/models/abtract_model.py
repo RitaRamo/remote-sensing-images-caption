@@ -544,8 +544,6 @@ class AbstractEncoderDecoderModel(ABC):
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
-                if time_step == 2:
-                    print(stop)
                 # print("\ntop", [(text, prob) for text, prob, _, _ in top_solutions])
 
                 # # print("\nall candidates", [(text, prob) for text, prob, _, _ in candidates])
