@@ -647,6 +647,7 @@ class AbstractEncoderDecoderModel(ABC):
                 top_k_scores, top_k_words = scores[0].topk(k, 0, True, True)  # (s)
                 print("setp 1 top_k_scores", top_k_scores)
                 print("setp 1 top_k_words", top_k_words)
+                print(stop)
 
             else:
                 # Unroll and find top scores, and their unrolled indices
