@@ -636,30 +636,30 @@ class AbstractEncoderDecoderModel(ABC):
                 print("setp 2 top_k_scores", top_k_scores)
                 print("setp 2 top_k_words", top_k_words)
 
-                # your code TODO:REMOVE
-                cands = []
-                id_score = 0
-                for score in scores:
-                    # PRINT ISTO SÃO OS CANIDATOS COMO TENS NO TEU!!
-                    fake_top_k_scores, fake_top_k_words = score.topk(k, 0, True, True)  # (s)
-                    print("fake top_k_scores", fake_top_k_scores)
-                    print("fake top_k_words", fake_top_k_words)
-                    # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                    # "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+            # your code TODO:REMOVE
+            cands = []
+            id_score = 0
+            for score in scores:
+                # PRINT ISTO SÃO OS CANIDATOS COMO TENS NO TEU!!
+                fake_top_k_scores, fake_top_k_words = score.topk(k, 0, True, True)  # (s)
+                print("fake top_k_scores", fake_top_k_scores)
+                print("fake top_k_words", fake_top_k_words)
+                # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+                # "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-                    for n_possibles in range(k):
-                        print("n poss", n_possibles)
-                        cand_sentence = [self.id_to_token[index.item()] for index in seqs[id_score]
-                                         ] + [self.id_to_token[fake_top_k_words[n_possibles].item()]]
-                        cand_sentence_score = fake_top_k_scores[n_possibles].item()
-                        cands.append((cand_sentence, cand_sentence_score))
-                        print("this is cand sente", (cand_sentence, cand_sentence_score))
+                for n_possibles in range(k):
+                    print("n poss", n_possibles)
+                    cand_sentence = [self.id_to_token[index.item()] for index in seqs[id_score]
+                                     ] + [self.id_to_token[fake_top_k_words[n_possibles].item()]]
+                    cand_sentence_score = fake_top_k_scores[n_possibles].item()
+                    cands.append((cand_sentence, cand_sentence_score))
+                    print("this is cand sente", (cand_sentence, cand_sentence_score))
 
-                    print("all cands", cands)
+                print("all cands", cands)
 
-                    # "top": [(text, prob) for text, prob, _, _ in top_solutions]
-                    id_score += 1
-                    # print(stop)
+                # "top": [(text, prob) for text, prob, _, _ in top_solutions]
+                id_score += 1
+                # print(stop)
 
             # Convert unrolled indices to actual indices of scores
             # print("top k word", top_k_words)
@@ -687,12 +687,12 @@ class AbstractEncoderDecoderModel(ABC):
                 id_score += 1
 
             # TODO:REMOVE YOUR CODE
-            if step > 1:
-                my_dict[step] = {
-                    "cand": cands,
-                    "top": my_top_of_cand
-                }
-                print("\n FINAL dict", my_dict)
+            # if step > 1:
+            my_dict[step] = {
+                "cand": cands,
+                "top": my_top_of_cand
+            }
+            print("\n FINAL dict", my_dict)
 
             # Which sequences are incomplete (didn't reach <end>)?
             incomplete_inds = [ind for ind, next_word in enumerate(next_word_inds) if
