@@ -459,7 +459,9 @@ class AbstractEncoderDecoderModel(ABC):
             print("current_text text", current_text)
             print("previous seed prob", seed_prob)
             print("now prob", sorted_scores[index].item())
-            print("final prob", seed_prob + sorted_scores[index].item())
+            print("final prob", seed_prob + sorted_scores[index])
+            print("final prob with item", seed_prob + sorted_scores[index].item())
+
             print(stop)
             return seed_prob + sorted_scores[index]  # .item()
 
@@ -486,6 +488,8 @@ class AbstractEncoderDecoderModel(ABC):
             top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
             print("setp 1 top_k_scores", top_k_scores)
             print("setp 1 top_k_words", top_k_words)
+            print("ste1 tok j score without item", 0.0 + top_k_scores)
+            print("ste1 tok j score item", 0.0 + top_k_scores.item())
 
             # print("sorted scores 0", sorted_scores[0])
             # print("sorted_indices 0", sorted_indices[0])
