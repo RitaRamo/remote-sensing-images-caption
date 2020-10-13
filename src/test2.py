@@ -120,6 +120,12 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_bigramprob_and_cos
     elif args.decodying_type == DecodingType.BEAM_RANKED_IMAGE.value:
         decoding_method = model.inference_with_beamsearch_ranked_image
+    elif args.decodying_type == DecodingType.BEAM_TUTORIAL.value:
+        decoding_method = model.inference_beam_tutorial
+    elif args.decodying_type == DecodingType.BEAM_COMP.value:
+        decoding_method = model.inference_beam_comp
+    elif args.decodying_type == DecodingType.BEAM_WITHOUT_REFINEMENT.value:
+        decoding_method = model.inference_beam_without_refinement
     else:
         decoding_method = model.inference_with_beamsearch
 
@@ -139,8 +145,8 @@ if __name__ == "__main__":
     #     text_generated = decoding_method(image, args.n_beam)
     #     break
 
-    #images_ids = [1251, 1252, 1260, 1263, 1266, 1269, 1275, 1274, 1277, 1280, 1281, 1287]
-    #images_ids = ["1251", "1252", "1260", "1263", "1266", "1269", "1275", "1274", "1277", "1280", "1281"," 1287"]
+    images_ids = [6176, 6000, 6001, 6116]
+    #images_ids = ["6176", "6000", "6001", "6116"]
     all_results = {}
     i = 0
     for values in test_dataset["images"]:
@@ -150,27 +156,27 @@ if __name__ == "__main__":
         #print("img_id", type(img_id))
         # break
 
-        # if img_id in images_ids:
-        print("entrei aqui")
+        if img_id in images_ids:
+            print("entrei aqui")
 
-        image_name = dataset_folder + \
-            "raw_dataset/images/" + img_name
-        #image = Image.open(image_name)
-        image = cv2.imread(image_name)
-        image = transform(image)
-        image = image.unsqueeze(0)
+            image_name = dataset_folder + \
+                "raw_dataset/images/" + img_name
+            #image = Image.open(image_name)
+            image = cv2.imread(image_name)
+            image = transform(image)
+            image = image.unsqueeze(0)
 
-        # know the eval is inside the model.setup_to_test()
-        # model.decoder.eval()
-        # model.encoder.eval()
+            # know the eval is inside the model.setup_to_test()
+            # model.decoder.eval()
+            # model.encoder.eval()
 
-        text_generated, beam_results = decoding_method(image, args.n_beam)
+            text_generated, beam_results = decoding_method(image, args.n_beam)
 
-        i += 1
-        # if i >= 10:
-        all_results[img_id] = beam_results
-        if i == 10:
-            break
+            i += 1
+            # if i >= 10:
+            all_results[img_id] = beam_results
+            if i == 10:
+                break
 
     with open(args.file_name + "ComLOGbeam_results_cos.json", 'w+') as f:
         json.dump(all_results, f, indent=2)
