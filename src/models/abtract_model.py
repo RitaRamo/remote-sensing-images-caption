@@ -849,7 +849,7 @@ class AbstractEncoderDecoderModel(ABC):
                     # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
                     # "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-                    for n_possibles in range(n_solutions):
+                    for n_possibles in range(current_beam_width):
                         print("n poss", n_possibles)
                         cand_sentence = [self.id_to_token[index.item()] for index in top_k_sequences[id_score]
                                          ] + [self.id_to_token[fake_top_k_words[n_possibles].item()]]
