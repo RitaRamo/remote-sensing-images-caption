@@ -744,6 +744,7 @@ class AbstractEncoderDecoderModel(ABC):
         print("completed seq", complete_seqs)
         for seq in complete_seqs:
             print("final comleted", [self.id_to_token[index] for index in seq])
+        print("comple complete_seqs_scores", complete_seqs_scores)
         print("i completed seq score", i)
 
         if best_tokens[0] == START_TOKEN:
