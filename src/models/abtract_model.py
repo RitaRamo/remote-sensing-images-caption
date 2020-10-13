@@ -455,14 +455,14 @@ class AbstractEncoderDecoderModel(ABC):
             self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            print("\nseed text", seed_text)
-            print("current_text text", current_text)
-            print("previous seed prob", seed_prob)
-            print("now prob", sorted_scores[index].item())
-            print("final prob", seed_prob + sorted_scores[index])
-            print("final prob with item", seed_prob + sorted_scores[index].item())
+            # print("\nseed text", seed_text)
+            # print("current_text text", current_text)
+            # print("previous seed prob", seed_prob)
+            # print("now prob", sorted_scores[index].item())
+            # print("final prob", seed_prob + sorted_scores[index])
+            # print("final prob with item", seed_prob + sorted_scores[index].item())
 
-            print(stop)
+            # print(stop)
             return seed_prob + sorted_scores[index]  # .item()
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
@@ -481,21 +481,21 @@ class AbstractEncoderDecoderModel(ABC):
             sorted_scores, sorted_indices = torch.sort(
                 scores.squeeze(), descending=True, dim=-1)
 
-            #sorted_scores, sorted_indices = scores.squeeze().topk(n_solutions, 0, True, True)
-            print("sorted scores", sorted_scores)
-            print("sorted_indices", sorted_indices)
+            sorted_scores, sorted_indices = scores.squeeze().topk(n_solutions * 1000, 0, True, True)
+            # print("sorted scores", sorted_scores)
+            # print("sorted_indices", sorted_indices)
 
-            top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
+            # top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
 
-            print("top ksie", top_k_scores.size())
-            top_k_zero = torch.zeros(top_k_scores.size()[0])
-            print("top k zero", top_k_zero)
-            print("setp 1 top_k_scores", top_k_scores)
-            print("setp 1 top_k_words", top_k_words)
-            print("ste1 tok j score without item", 0.0 + top_k_scores[0])
-            print("ste1 tok j score item", 0.0 + top_k_scores[0].item())
-            print("ste1 tok j score item without 0 ", top_k_scores[0].item())
-            print("ste1 top_k_zero score item", (top_k_zero + top_k_scores)[0].item())
+            # print("top ksie", top_k_scores.size())
+            # top_k_zero = torch.zeros(top_k_scores.size()[0])
+            # print("top k zero", top_k_zero)
+            # print("setp 1 top_k_scores", top_k_scores)
+            # print("setp 1 top_k_words", top_k_words)
+            # print("ste1 tok j score without item", 0.0 + top_k_scores[0])
+            # print("ste1 tok j score item", 0.0 + top_k_scores[0].item())
+            # print("ste1 tok j score item without 0 ", top_k_scores[0].item())
+            # print("ste1 top_k_zero score item", (top_k_zero + top_k_scores)[0].item())
 
             # print("sorted scores 0", sorted_scores[0])
             # print("sorted_indices 0", sorted_indices[0])
