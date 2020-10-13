@@ -455,11 +455,11 @@ class AbstractEncoderDecoderModel(ABC):
             self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
-            print("\nseed text", seed_text)
-            print("current_text text", current_text)
-            print("previous seed prob", seed_prob)
-            print("now prob", sorted_scores[index].item())
-            print("final prob", seed_prob + sorted_scores[index].item())
+            # print("\nseed text", seed_text)
+            # print("current_text text", current_text)
+            # print("previous seed prob", seed_prob)
+            # print("now prob", sorted_scores[index].item())
+            # print("final prob", seed_prob + sorted_scores[index].item())
             return seed_prob + sorted_scores[index].item()
 
         def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
