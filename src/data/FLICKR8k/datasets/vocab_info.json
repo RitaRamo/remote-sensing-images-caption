@@ -3442,7 +3442,7 @@
     "mottled": 3439,
     "sloping": 3440,
     "lockers": 3441,
-    "#": 0,
+    "#": 3442,
     "gauges": 3443,
     "blitz": 3444,
     "mechanical": 3445,
@@ -7377,7 +7377,8 @@
     "tawny": 7374,
     "jumpinjg": 7375,
     "elbow": 7376,
-    "propeller": 7377
+    "propeller": 7377,
+    "<#>": 0
   },
   "id_to_token": {
     "1": "<start_seq>",
@@ -14757,7 +14758,7 @@
     "7375": "jumpinjg",
     "7376": "elbow",
     "7377": "propeller",
-    "0": "#"
+    "0": "<#>"
   },
   "max_len": 39
 }
