@@ -298,7 +298,7 @@ class ContinuousLoss():
         caption_lengths
     ):
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        #predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         return self.criterion(predictions, target_embeddings)
 
@@ -556,7 +556,6 @@ class ContinuousLoss():
         input1_losses = 0.0
         input2_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -613,7 +612,6 @@ class ContinuousLoss():
         input1_losses = 0.0
         input2_losses = 0.0
 
-        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
@@ -2453,7 +2451,6 @@ class ContinuousLoss():
 
             # 1º input loss (sentence predicted against input image)
             d2_matrix = 1 - sim_matrix(preds_without_padd, image_embedding)
-
             term_1 = torch.mean(torch.min(d2_matrix, 1)[0])
             term_2 = torch.mean(torch.min(d2_matrix, 0)[0])
             input1_losses += (term_1 + term_2) / 2
