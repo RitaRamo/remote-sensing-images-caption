@@ -122,3 +122,17 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
             self.decoder.embedding.weight.data, predictions.unsqueeze(1), dim=-1)
 
         return output
+
+    def generate_output_index_smoothl1(self, input_word, encoder_out, h, c):
+        predictions, h, c = self.decoder(
+            input_word, encoder_out, h, c)
+
+        current_output_index = self._convert_prediction_to_output_smoothl1(predictions)
+
+        return current_output_index, h, c
+
+    def _convert_prediction_to_output_smoothl1(self, predictions):
+        output = torch.nn.SmoothL1Loss()(
+            self.decoder.embedding.weight.data, predictions.unsqueeze(1), dim=-1)
+
+        return output

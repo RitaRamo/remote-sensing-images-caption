@@ -350,6 +350,55 @@ class AbstractEncoderDecoderModel(ABC):
 
             return generated_sentence  # input_caption
 
+    def inference_with_greedy_smoothl1(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            criteria = torch.nn.SmoothL1Loss(reduction="none")
+
+            while True:
+
+                scores, h, c = self.generate_output_index_smoothl1(criteria,
+                                                                   input_word, encoder_output, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=False, dim=-1)
+
+                current_output_index = sorted_indices.squeeze()[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            # print("beam_t decoded sentence:", generated_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence  # input_caption
+
     def inference_with_beamsearch(self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
