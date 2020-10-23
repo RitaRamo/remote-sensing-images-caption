@@ -348,8 +348,6 @@ class ContinuousLoss():
         loss = torch.sum(loss, dim=-1)
         loss = torch.mean(loss)
 
-        print("redu mean size", loss)
-
         #predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         return loss
