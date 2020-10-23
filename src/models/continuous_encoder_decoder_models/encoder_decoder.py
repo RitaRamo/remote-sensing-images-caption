@@ -138,7 +138,6 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         #print("my predictions extend", predictions.expand_as(self.decoder.embedding.weight.data).size())
         #print("my predictions before", predictions.size())
-        output = criteria(
-            self.decoder.embedding.weight.data, predictions.expand_as(self.decoder.embedding.weight.data))
+        output = criteria(predictions.expand_as(self.decoder.embedding.weight.data), self.decoder.embedding.weight.data)
 
         return output.mean(1)
