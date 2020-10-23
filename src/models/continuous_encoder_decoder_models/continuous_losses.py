@@ -5,6 +5,7 @@ import numpy as np
 from torch.nn import functional
 from torch import nn
 from utils.utils import get_pack_padded_sequences, sink, cdist, sim_matrix
+import math
 
 
 class ContinuousLoss():
@@ -34,6 +35,30 @@ class ContinuousLoss():
         elif loss_type == ContinuousLossesType.SMOOTHL1.value:
             self.loss_method = self.smoothl1_loss
             self.criterion = nn.SmoothL1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_SUM_MEAN.value:
+            self.loss_method = self.smoothl1_sum_mean_loss
+            self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
+
+        elif loss_type == ContinuousLossesType.TSS_LOSS.value:
+            self.loss_method = self.tss_loss
+            #self.criterion = nn.L1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.L1_LOSS.value:
+            self.loss_method = self.l_loss
+            self.criterion = nn.L1Loss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.L1_SUM_MEAN.value:
+            self.loss_method = self.smoothl1_sum_mean_loss
+            self.criterion = nn.L1Loss(reduction='none').to(self.device)
+
+        elif loss_type == ContinuousLossesType.L2_LOSS.value:
+            self.loss_method = self.l_loss
+            self.criterion = nn.MSELoss().to(self.device)
+
+        elif loss_type == ContinuousLossesType.L2_SUM_MEAN.value:
+            self.loss_method = self.smoothl1_sum_mean_loss
+            self.criterion = nn.MSELoss(reduction='none').to(self.device)
 
         elif loss_type == ContinuousLossesType.SMOOTHL1_TRIPLET.value:
             self.loss_method = self.smoothl1_triplet_loss
@@ -291,6 +316,16 @@ class ContinuousLoss():
 
         return self.criterion(predictions, target_embeddings, negative_examples.to(self.device))
 
+    def l_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
+
+        return self.criterion(predictions, target_embeddings)
+
     def smoothl1_loss(
         self,
         predictions,
@@ -301,6 +336,23 @@ class ContinuousLoss():
         #predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
 
         return self.criterion(predictions, target_embeddings)
+
+    def smoothl1_sum_mean_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
+        loss = self.criterion(predictions, target_embeddings)
+        loss = torch.sum(loss, dim=-1)
+        loss = torch.mean(loss)
+
+        print("redu mean size", loss)
+
+        #predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
+        return loss
 
     def smoothl1_triplet_loss(
         self,
@@ -2596,3 +2648,56 @@ class ContinuousLoss():
         loss = word_loss + sentence_loss + input1_loss + input2_loss
 
         return loss
+
+    def tss_loss(self, predictions, target_embeddings, caption_lengths):
+        def Cosine(vec1, vec2):
+            #torch.cosine_similarity(vec1, vec2)
+            #result = InnerProduct(vec1, vec2) / (VectorSize(vec1) * VectorSize(vec2))
+            return torch.cosine_similarity(vec1, vec2, dim=-1)
+        # following obtain by: https://github.com/taki0112/Vector_Similarity/blob/master/python/TS_SS/Vector_Similarity.py
+
+        def VectorSize(vec):
+            return math.sqrt(sum(math.pow(v, 2) for v in vec))
+
+        def InnerProduct(vec1, vec2):
+            return sum(v1 * v2 for v1, v2 in zip(vec1, vec2))
+
+        def Euclidean(vec1, vec2):
+            return math.sqrt(sum(math.pow((v1 - v2), 2) for v1, v2 in zip(vec1, vec2)))
+
+        def Theta(vec1, vec2):
+            return math.acos(Cosine(vec1, vec2)) + math.radians(10)
+
+        def Triangle(vec1, vec2):
+            theta = math.radians(Theta(vec1, vec2))
+            return (VectorSize(vec1) * VectorSize(vec2) * math.sin(theta)) / 2
+
+        def Magnitude_Difference(vec1, vec2):
+            return abs(VectorSize(vec1) - VectorSize(vec2))
+
+        def Sector(vec1, vec2):
+            ED = Euclidean(vec1, vec2)
+            MD = Magnitude_Difference(vec1, vec2)
+            theta = Theta(vec1, vec2)
+            return math.pi * math.pow((ED + MD), 2) * theta / 360
+
+        def TS_SS(vec1, vec2):
+            print(Triangle(vec1, vec2))
+            return Triangle(vec1, vec2) * Sector(vec1, vec2)
+
+        loss_sim = 0
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+            y = torch.ones(targets_without_padd.shape[0]).to(self.device)
+
+            for j in range(preds_without_padd.size()[0]):
+                print("preds_without_padd sim", preds_without_padd)
+
+                loss_sim += TS_SS(preds_without_padd[j], targets_without_padd[j])
+                print("loss sim", loss_sim)
+            loss_sim = loss_sim / preds_without_padd.size()[0]  # mean by preds
+        loss_sim = loss_sim / loss_sim  # mean by batch
+
+        return 1 - loss_sim
