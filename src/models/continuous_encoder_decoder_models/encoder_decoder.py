@@ -131,6 +131,17 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         return current_output_index, h, c
 
+    # def _convert_prediction_to_output_smoothl1(self, criteria, predictions):
+
+    #     #print("my predictions extend", predictions.expand_as(self.decoder.embedding.weight.data))
+    #     #print("my predictions before", predictions)
+
+    #     #print("my predictions extend", predictions.expand_as(self.decoder.embedding.weight.data).size())
+    #     #print("my predictions before", predictions.size())
+    #     output = criteria(predictions.expand_as(self.decoder.embedding.weight.data), self.decoder.embedding.weight.data)
+
+    #     return output.mean(1)
+
     def _convert_prediction_to_output_smoothl1(self, criteria, predictions):
 
         #print("my predictions extend", predictions.expand_as(self.decoder.embedding.weight.data))
@@ -138,6 +149,9 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         #print("my predictions extend", predictions.expand_as(self.decoder.embedding.weight.data).size())
         #print("my predictions before", predictions.size())
-        output = criteria(predictions.expand_as(self.decoder.embedding.weight.data), self.decoder.embedding.weight.data)
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        targets = torch.nn.functional.normalize(self.decoder.embedding.weight.data, p=2, dim=-1)
+
+        output = criteria(predictions.expand_as(self.decoder.embedding.weight.data), targets)
 
         return output.mean(1)
