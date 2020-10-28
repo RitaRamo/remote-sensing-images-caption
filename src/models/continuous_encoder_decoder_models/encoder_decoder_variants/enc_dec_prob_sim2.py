@@ -177,29 +177,29 @@ class ContinuousEncoderDecoderProbSim2Model(ContinuousEncoderDecoderModel):
 
         return loss
 
-    # def generate_output_index(self, input_word, encoder_out, h, c):
-    #     predictions1, predictions2, h, c = self.decoder(
-    #         input_word, encoder_out, h, c)
-
-    #     current_output_index = self._convert_prediction_to_output(predictions1)
-
-    #     return current_output_index, h, c
-
-    # def _convert_prediction_to_output(self, predictions):
-    #     scores = F.log_softmax(predictions, dim=1)  # more stable
-    #     # scores = F.softmax(predictions, dim=1)[0]  # actually probs
-    #     return scores
-
     def generate_output_index(self, input_word, encoder_out, h, c):
         predictions1, predictions2, h, c = self.decoder(
             input_word, encoder_out, h, c)
 
-        current_output_index = self._convert_prediction_to_output(predictions2)
+        current_output_index = self._convert_prediction_to_output(predictions1)
 
         return current_output_index, h, c
 
     def _convert_prediction_to_output(self, predictions):
-        output = torch.cosine_similarity(
-            self.decoder.embedding.weight.data, predictions.unsqueeze(1), dim=-1)
+        scores = F.log_softmax(predictions, dim=1)  # more stable
         # scores = F.softmax(predictions, dim=1)[0]  # actually probs
-        return output
+        return scores
+
+    # def generate_output_index(self, input_word, encoder_out, h, c):
+    #     predictions1, predictions2, h, c = self.decoder(
+    #         input_word, encoder_out, h, c)
+
+    #     current_output_index = self._convert_prediction_to_output(predictions2)
+
+    #     return current_output_index, h, c
+
+    # def _convert_prediction_to_output(self, predictions):
+    #     output = torch.cosine_similarity(
+    #         self.decoder.embedding.weight.data, predictions.unsqueeze(1), dim=-1)
+    #     # scores = F.softmax(predictions, dim=1)[0]  # actually probs
+    #     return output
