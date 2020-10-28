@@ -1,5 +1,5 @@
 import operator
-from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN, PAD_TOKEN
 from torchvision import transforms
 from PIL import Image
 from abc import ABC, abstractmethod
@@ -373,8 +373,19 @@ class AbstractEncoderDecoderModel(ABC):
                                                                    input_word, encoder_output, h, c)
 
                 sorted_scores, sorted_indices = torch.sort(scores, descending=False, dim=-1)
+                # print("this are the sorted_scores", sorted_scores)
+                # print("this are the sorted_indices", sorted_indices)
+                # k_l = 0
+                # for indi in sorted_indices:
+                #     print(self.id_to_token[indi.item()], sorted_scores[k_l])
+                #     k_l += 1
+                #     if k_l > 5:
+                #         break
 
                 current_output_index = sorted_indices.squeeze()[0]
+                # print("current output index", current_output_index)
+                # if current_output_index.item() == self.token_to_id[PAD_TOKEN]:
+                #     current_output_index = sorted_indices.squeeze()[1]
 
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
@@ -527,37 +538,37 @@ class AbstractEncoderDecoderModel(ABC):
             scores, h, c = self.generate_output_index(
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            # sorted_scores, sorted_indices = torch.sort(
-            #     scores.squeeze(), descending=True, dim=-1)
+            sorted_scores, sorted_indices = torch.sort(
+                scores.squeeze(), descending=True, dim=-1)
 
-            sorted_scores, sorted_indices = scores.squeeze().topk(self.vocab_size, 0, True, True)
+            #sorted_scores, sorted_indices = scores.squeeze().topk(self.vocab_size, 0, True, True)
             # print("sorted scores", sorted_scores)
             # print("sorted_indices", sorted_indices)
 
-            top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
+            # top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
 
-            print("top ksie", top_k_scores.size())
-            print("scores size", scores.size())
+            # # print("top ksie", top_k_scores.size())
+            # # print("scores size", scores.size())
 
-            top_k_zero = torch.zeros(scores.squeeze().size()[0]).to(self.device)
-            print("top k zero", top_k_zero)
-            print("setp 1 top_k_scores", top_k_scores)
-            print("setp 1 top_k_words", top_k_words)
-            print("ste1 tok j score without item", 0.0 + top_k_scores[0])
-            print("ste1 tok j score item", 0.0 + top_k_scores[0].item())
-            print("ste1 tok j score item without 0 ", top_k_scores[0].item())
-            #print("ste1 top_k_zero score item", (top_k_zero + top_k_scores)[0].item())
-            print("ste1 top_k_zero score item", (top_k_zero + scores.squeeze()).topk(n_solutions, 0, True, True))
+            # top_k_zero = torch.zeros(scores.squeeze().size()[0]).to(self.device)
+            # print("top k zero", top_k_zero)
+            # print("setp 1 top_k_scores", top_k_scores)
+            # print("setp 1 top_k_words", top_k_words)
+            # print("ste1 tok j score without item", 0.0 + top_k_scores[0])
+            # print("ste1 tok j score item", 0.0 + top_k_scores[0].item())
+            # print("ste1 tok j score item without 0 ", top_k_scores[0].item())
+            # #print("ste1 top_k_zero score item", (top_k_zero + top_k_scores)[0].item())
+            # print("ste1 top_k_zero score item", (top_k_zero + scores.squeeze()).topk(n_solutions, 0, True, True))
 
-            print("wit it", (top_k_zero + scores.squeeze()).topk(n_solutions, 0, True, True)[0][0].item())
+            # print("wit it", (top_k_zero + scores.squeeze()).topk(n_solutions, 0, True, True)[0][0].item())
 
-            print("sorted scores 0", sorted_scores[0])
-            print("sorted_indices 0", sorted_indices[0])
+            # print("sorted scores 0", sorted_scores[0])
+            # print("sorted_indices 0", sorted_indices[0])
 
-            top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
-            print("setp 1 top_k_scores 0", top_k_scores[0])
-            print("setp 1 top_k_words 0", top_k_words[0])
-            print(stop)
+            # top_k_scores, top_k_words = scores.squeeze().topk(n_solutions, 0, True, True)  # (s)
+            # print("setp 1 top_k_scores 0", top_k_scores[0])
+            # print("setp 1 top_k_words 0", top_k_words[0])
+            # print(stop)
 
             # for index in range(n_solutions):
             #     text = seed_text + [self.id_to_token[sorted_indices[index].item()]]
@@ -616,11 +627,11 @@ class AbstractEncoderDecoderModel(ABC):
                 # # print("\ntop", [(text, prob)
                 # #                 for text, prob, _, _ in top_solutions])
                 # my_dict["top"].append([(text, prob) for text, prob, _, _ in top_solutions])
-                my_dict[time_step] = {"cand": [(text, prob.item()) for text, prob, _, _ in candidates],
-                                      "top": [(text, prob.item()) for text, prob, _, _ in top_solutions]}
+                # my_dict[time_step] = {"cand": [(text, prob.item()) for text, prob, _, _ in candidates],
+                #                       "top": [(text, prob.item()) for text, prob, _, _ in top_solutions]}
 
-            print("top solutions", [(text, prob)
-                                    for text, prob, _, _ in top_solutions])
+            # print("top solutions", [(text, prob)
+            #                         for text, prob, _, _ in top_solutions])
 
             best_tokens, prob, h, c = top_solutions[0]
 
@@ -696,27 +707,27 @@ class AbstractEncoderDecoderModel(ABC):
 
             # scores = F.log_softmax(scores, dim=1)
             # Add
-            print("\nscores do log", scores.size())
-            print("scores do log", scores)
+            # print("\nscores do log", scores.size())
+            # print("scores do log", scores)
             scores = top_k_scores.expand_as(scores) + scores  # (s, vocab_size)
-            print("expand top k scores", top_k_scores.expand_as(scores))
-            print("final scores do top k (sum expand com scores log)", scores)
+            # print("expand top k scores", top_k_scores.expand_as(scores))
+            # print("final scores do top k (sum expand com scores log)", scores)
 
             # For the first step, all k points will have the same scores (since same k previous words, h, c)
             if step == 1:
                 top_k_scores, top_k_words = scores[0].topk(k, 0, True, True)  # (s)
-                print("setp 1 top_k_scores", top_k_scores)
-                print("setp 1 top_k_words", top_k_words)
-                print("setp 1 top_k_scores item", top_k_scores[0].item())
+                # print("setp 1 top_k_scores", top_k_scores)
+                # print("setp 1 top_k_words", top_k_words)
+                # print("setp 1 top_k_scores item", top_k_scores[0].item())
 
-                print(stop)
+                # print(stop)
 
             else:
                 # Unroll and find top scores, and their unrolled indices
                 top_k_scores, top_k_words = scores.view(-1).topk(k, 0, True, True)  # (s)
-                print("scores view", scores.view(-1))
-                print("setp 2 top_k_scores", top_k_scores)
-                print("setp 2 top_k_words", top_k_words)
+                # print("scores view", scores.view(-1))
+                # print("setp 2 top_k_scores", top_k_scores)
+                # print("setp 2 top_k_words", top_k_words)
 
             # your code TODO:REMOVE
             cands = []
@@ -724,20 +735,20 @@ class AbstractEncoderDecoderModel(ABC):
             for score in scores:
                 # PRINT ISTO SÃO OS CANIDATOS COMO TENS NO TEU!!
                 fake_top_k_scores, fake_top_k_words = score.topk(k, 0, True, True)  # (s)
-                print("fake top_k_scores", fake_top_k_scores)
-                print("fake top_k_words", fake_top_k_words)
+                # print("fake top_k_scores", fake_top_k_scores)
+                # print("fake top_k_words", fake_top_k_words)
                 # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
                 # "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
                 for n_possibles in range(k):
-                    print("n poss", n_possibles)
+                    #print("n poss", n_possibles)
                     cand_sentence = [self.id_to_token[index.item()] for index in seqs[id_score]
                                      ] + [self.id_to_token[fake_top_k_words[n_possibles].item()]]
                     cand_sentence_score = fake_top_k_scores[n_possibles].item()
                     cands.append((cand_sentence, cand_sentence_score))
-                    print("this is cand sente", (cand_sentence, cand_sentence_score))
+                    #print("this is cand sente", (cand_sentence, cand_sentence_score))
 
-                print("all cands", cands)
+                #print("all cands", cands)
 
                 # "top": [(text, prob) for text, prob, _, _ in top_solutions]
                 id_score += 1
@@ -750,18 +761,18 @@ class AbstractEncoderDecoderModel(ABC):
             next_word_inds = top_k_words % self.vocab_size  # (s)
             # print("what is next_word_inds", next_word_inds)
 
-            print("seqs[prev_word_inds]", seqs[prev_word_inds])
-            print("word ind uns", next_word_inds.unsqueeze(1))
+            #print("seqs[prev_word_inds]", seqs[prev_word_inds])
+            #print("word ind uns", next_word_inds.unsqueeze(1))
 
             # Add new words to sequences
             seqs = torch.cat([seqs[prev_word_inds], next_word_inds.unsqueeze(1)], dim=1)  # (s, step+1)
-            print("cat seqs", seqs)
+            #print("cat seqs", seqs)
 
             # MINE
             my_top_of_cand = []
             id_score = 0
             for seq in seqs:
-                print("printed seq", [self.id_to_token[index.item()] for index in seq])
+                #print("printed seq", [self.id_to_token[index.item()] for index in seq])
 
                 # YOUR CODE:TODO REMOVE
                 my_top_of_cand.append(([self.id_to_token[index.item()]
@@ -775,8 +786,8 @@ class AbstractEncoderDecoderModel(ABC):
             incomplete_inds = [ind for ind, next_word in enumerate(next_word_inds) if
                                next_word != self.token_to_id[END_TOKEN]]
             complete_inds = list(set(range(len(next_word_inds))) - set(incomplete_inds))
-            print("incomplete_inds", incomplete_inds)
-            print("completed", complete_inds)
+            #print("incomplete_inds", incomplete_inds)
+            #print("completed", complete_inds)
 
             # Set aside complete sequences
             if len(complete_inds) > 0:
@@ -789,11 +800,11 @@ class AbstractEncoderDecoderModel(ABC):
                                             for index in seqs[c_i]], top_k_scores[c_i].item()))
             k -= len(complete_inds)  # reduce beam length accordingly
 
-            my_dict[step] = {
-                "cand": cands,
-                "top": my_top_of_cand
-            }
-            print("\n FINAL dict", my_dict)
+            # my_dict[step] = {
+            #     "cand": cands,
+            #     "top": my_top_of_cand
+            # }
+            # print("\n FINAL dict", my_dict)
             # Proceed with incomplete sequences
             if k == 0:
                 # print("entrei aqui")
@@ -803,12 +814,12 @@ class AbstractEncoderDecoderModel(ABC):
             h = h[prev_word_inds[incomplete_inds]]
             c = c[prev_word_inds[incomplete_inds]]
             encoder_out = encoder_out[prev_word_inds[incomplete_inds]]
-            print("top k scores before transformed", top_k_scores)
-            print("top k scores will be transformer", top_k_scores[incomplete_inds].unsqueeze(1))
+            #print("top k scores before transformed", top_k_scores)
+            #print("top k scores will be transformer", top_k_scores[incomplete_inds].unsqueeze(1))
 
             top_k_scores = top_k_scores[incomplete_inds].unsqueeze(1)
             k_prev_words = next_word_inds[incomplete_inds].unsqueeze(1)
-            print("k_prev_words", next_word_inds[incomplete_inds].unsqueeze(1))
+            #print("k_prev_words", next_word_inds[incomplete_inds].unsqueeze(1))
 
             # Break if things have been going on too long
             if step >= self.max_len - 1:
@@ -828,11 +839,11 @@ class AbstractEncoderDecoderModel(ABC):
         seq_index = complete_seqs[i]
         best_tokens = [self.id_to_token[index] for index in seq_index]
 
-        print("completed seq", complete_seqs)
-        for seq in complete_seqs:
-            print("final comleted", [self.id_to_token[index] for index in seq])
-        print("comple complete_seqs_scores", complete_seqs_scores)
-        print("i completed seq score", i)
+        #print("completed seq", complete_seqs)
+        # for seq in complete_seqs:
+        #print("final comleted", [self.id_to_token[index] for index in seq])
+        #print("comple complete_seqs_scores", complete_seqs_scores)
+        #print("i completed seq score", i)
 
         if best_tokens[0] == START_TOKEN:
             best_tokens = best_tokens[1:]
