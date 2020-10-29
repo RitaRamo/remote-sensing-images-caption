@@ -647,7 +647,7 @@ class AbstractEncoderDecoderModel(ABC):
             best_sentence = " ".join(best_tokens)
 
             print("\nbeam decoded sentence:", best_sentence)
-            return best_sentence, my_dict
+            return best_sentence
 
     def inference_beam_tutorial(self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
         my_dict = {}
@@ -853,7 +853,7 @@ class AbstractEncoderDecoderModel(ABC):
 
         print("beam_t decoded sentence:", best_sentence)
 
-        return best_sentence, my_dict
+        return best_sentence
 
     def inference_beam_comp(
         self,
@@ -1087,7 +1087,7 @@ class AbstractEncoderDecoderModel(ABC):
 
         print("beam_t decoded sentence:", best_sentence)
 
-        return best_sentence, my_dict
+        return best_sentence
 
     def inference_with_beamsearch_ranked_image(self, image, n_solutions=3):
         def compute_sim2image(current_text):
