@@ -1,5 +1,5 @@
 --file_name
-nstv_fine_encdec_probsim_effflickr_noaug_notnormalized.txt
+nstv_fine_encdec_probsim_eff_noaug_notnormalized.txt
 --model_class_str
 ContinuousEncoderDecoderProbSimModel
 --batch_size
