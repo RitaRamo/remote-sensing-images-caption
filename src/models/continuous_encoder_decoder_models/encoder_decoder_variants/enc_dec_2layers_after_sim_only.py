@@ -147,7 +147,13 @@ class ContinuousEncoderDecoder2LayersAfterSimOnlyModel(ContinuousEncoderDecoderM
 
         return current_output_index, h, c
 
+    # def _convert_prediction_to_output(self, predictions):
+    #     scores = F.log_softmax(predictions, dim=1)  # more stable
+    #     # scores = F.softmax(predictions, dim=1)[0]  # actually probs
+    #     return scores
+
     def _convert_prediction_to_output(self, predictions):
-        scores = F.log_softmax(predictions, dim=1)  # more stable
-        # scores = F.softmax(predictions, dim=1)[0]  # actually probs
-        return scores
+        output = torch.cosine_similarity(
+            self.decoder.embedding.weight.data, predictions.unsqueeze(1), dim=-1)
+
+        return output
