@@ -173,7 +173,7 @@ class ContinuousEncoderDecoderProbSim2Model(ContinuousEncoderDecoderModel):
         word_loss = word_losses / n_sentences
         sentence_loss = sentence_losses / n_sentences
 
-        loss = word_ce_loss + word_loss + sentence_loss
+        loss = word_ce_loss + self.args.w2 * word_loss + sentence_loss
 
         return loss
 
