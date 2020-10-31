@@ -124,11 +124,6 @@ class ContinuousEncoderDecoderKL300EmbModel(ContinuousEncoderDecoderModel):
         targets_probs = self.softmax_lastdim(target_embeddings.data)
         predictions_log = F.log_softmax(predictions.data, dim=-1)
 
-        print("torch sie", targets_probs.size())
-        print("torch sie", targets_probs.sum(dim=-1))
-
-        print("predictions_log sie", predictions_log.size())
-
         loss_kl = self.criterion_kl(predictions_log, targets_probs)
 
         return loss_kl
