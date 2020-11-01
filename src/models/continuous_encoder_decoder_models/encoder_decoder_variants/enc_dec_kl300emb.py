@@ -137,6 +137,8 @@ class ContinuousEncoderDecoderKL300EmbModel(ContinuousEncoderDecoderModel):
         return current_output_index, h, c
 
     def _convert_prediction_to_output(self, predictions):
-        scores = F.log_softmax(predictions, dim=1)  # more stable
+        targets_probs = self.softmax_lastdim(self.decoder.embedding.weight.data)
+        predictions_log = F.log_softmax(predictions, dim=-1)
+        scores = self.criterion_kl(predictions_log, targets_probs)  # more stable
         # scores = F.softmax(predictions, dim=1)[0]  # actually probs
-        return scores
+        return 1 - scores
