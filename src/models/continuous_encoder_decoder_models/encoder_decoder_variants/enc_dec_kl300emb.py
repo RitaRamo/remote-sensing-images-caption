@@ -116,6 +116,10 @@ class ContinuousEncoderDecoderKL300EmbModel(ContinuousEncoderDecoderModel):
         targets = caps[:, 1:]  # targets doesnt have stark token
         target_embeddings = self.decoder.embedding(targets).to(self.device)
 
+        if self.args.no_normalization == False:
+            # when target embeddings start normalized, predictions should also be normalized
+            predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+
         predictions = pack_padded_sequence(
             predictions, caption_lengths, batch_first=True)
         target_embeddings = pack_padded_sequence(
