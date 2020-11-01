@@ -137,7 +137,10 @@ class ContinuousEncoderDecoderKL300EmbModel(ContinuousEncoderDecoderModel):
         return current_output_index, h, c
 
     def _convert_prediction_to_output(self, predictions):
-        targets_probs = nn.Softmax(dim=-1)(self.decoder.embedding.weight.data)
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        targets = torch.nn.functional.normalize(self.decoder.embedding.weight.data, p=2, dim=-1)
+
+        targets_probs = nn.Softmax(dim=-1)(targets)
         predictions_log = F.log_softmax(predictions, dim=-1)
 
         scores = nn.KLDivLoss(
