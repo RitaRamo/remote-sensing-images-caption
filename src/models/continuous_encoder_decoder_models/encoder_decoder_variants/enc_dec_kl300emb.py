@@ -139,6 +139,10 @@ class ContinuousEncoderDecoderKL300EmbModel(ContinuousEncoderDecoderModel):
     def _convert_prediction_to_output(self, predictions):
         targets_probs = nn.Softmax(dim=-1)(self.decoder.embedding.weight.data)
         predictions_log = F.log_softmax(predictions, dim=-1)
-        scores = nn.KLDivLoss(reduction="batchmean")(predictions_log, targets_probs)  # more stable
+
+        scores = nn.KLDivLoss(
+            reduction="none")(
+            predictions_log.expand_as(targets_probs),
+            targets_probs)  # more stable
         # scores = F.softmax(predictions, dim=1)[0]  # actually probs
-        return 1 - scores
+        return 1 - scores.mean(1)
