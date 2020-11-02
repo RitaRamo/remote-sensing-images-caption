@@ -327,13 +327,9 @@ class AbstractEncoderDecoderModel(ABC):
                 sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
 
                 # debug
-                scores_dict[i] = {"sim": [], "neg_sim": []}
+                scores_dict[i] = {"sim": [], "sentence": []}
                 scores_dict[i]["sim"] = ([(self.id_to_token[top_index.item()], scores.squeeze()[
                                          top_index.item()].item()) for top_index in sorted_indices.squeeze()[:10]])
-
-                scores_dict[i]["neg_sim"] = ([(self.id_to_token[top_index.item()], scores.squeeze()[
-                                             top_index.item()].item()) for top_index in sorted_indices.squeeze()[-10:]])
-                ###
 
                 current_output_index = sorted_indices.squeeze()[0]
 
@@ -341,6 +337,8 @@ class AbstractEncoderDecoderModel(ABC):
                 )]
 
                 decoder_sentence.append(current_output_token)
+
+                scores_dict[i]["sentence"] = decoder_sentence
 
                 if current_output_token == END_TOKEN:
                     # ignore end_token
