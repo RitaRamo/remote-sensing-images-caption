@@ -304,6 +304,64 @@ class AbstractEncoderDecoderModel(ABC):
             json.dump(scores, f, indent=2)
 
     def inference_with_greedy(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
+        scores_dict = {}
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            while True:
+
+                scores, h, c = self.generate_output_index(
+                    input_word, encoder_output, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                # debug
+                scores_dict[i] = {"sim": [], "neg_sim": []}
+                scores_dict[i]["sim"] = ([(self.id_to_token[top_index.item()], scores.squeeze()[
+                                         top_index.item()].item()) for top_index in sorted_indices.squeeze()[:10]])
+
+                scores_dict[i]["neg_sim"] = ([(self.id_to_token[top_index.item()], scores.squeeze()[
+                                             top_index.item()].item()) for top_index in sorted_indices.squeeze()[-10:]])
+                ###
+
+                current_output_index = sorted_indices.squeeze()[0]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            # print("beam_t decoded sentence:", generated_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence, scores_dict  # input_caption
+
+    def inference_with_greedy_debug(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
+        dict = {}
         with torch.no_grad():  # no need to track history
 
             decoder_sentence = []

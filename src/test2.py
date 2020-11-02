@@ -145,7 +145,7 @@ if __name__ == "__main__":
     #     text_generated = decoding_method(image, args.n_beam)
     #     break
 
-    images_ids = [6176, 6000, 6001, 6116]
+    images_ids = [6176, 6001, 6118, 6127, 6135, 6999, 6123, 6124]
     #images_ids = ["6176", "6000", "6001", "6116"]
     all_results = {}
     i = 0
