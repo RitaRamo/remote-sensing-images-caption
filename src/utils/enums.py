@@ -106,6 +106,7 @@ class DecodingType(Enum):
     GREEDY = "greedy"
     GREEDY_EMBEDDING = "greedy_embedding"
     GREEDY_SMOOTHL1 = "greedy_smoothl1"
+    GREEDY_SIM_RANK = "greedy_sim_rank"
     BEAM = "beam"
     BEAM_WITHOUT_REFINEMENT = "beam_wt_refinement"
     BEAM_TUTORIAL = "beam_tutorial"

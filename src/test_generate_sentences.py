@@ -148,6 +148,8 @@ if __name__ == "__main__":
         decoding_method = model.inference_beam_comp
     elif args.decodying_type == DecodingType.BEAM_WITHOUT_REFINEMENT.value:
         decoding_method = model.inference_beam_without_refinement
+    elif args.decodying_type == DecodingType.GREEDY_SIM_RANK.value:
+        decoding_method = model.inference_with_greedy_and_sim_rank
     else:
         print("using beam")
         decoding_method = model.inference_with_beamsearch

@@ -12,6 +12,7 @@ from data_preprocessing.preprocess_tokens import OOV_TOKEN
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN, PAD_TOKEN
 
 
 class ContinuousDecoder(Decoder):
@@ -167,3 +168,63 @@ class ContinuousEncoderDecoderProbSimModel(ContinuousEncoderDecoderModel):
         scores = F.log_softmax(predictions, dim=1)  # more stable
         # scores = F.softmax(predictions, dim=1)[0]  # actually probs
         return scores
+
+    def inference_with_greedy_and_sim_rank(
+            self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output = self.encoder(image)
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            while True:
+
+                predictions1, predictions2, h, c = self.decoder(input_word, encoder_output, h, c)
+
+                scores = F.log_softmax(predictions1, dim=1)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=True, dim=-1)
+
+                most_sim_index = 0
+                highest_sim_score = 0
+                for top_index in sorted_indices.squeeze()[:n_solutions]:
+                    embedding_argmax = self.decoder.embedding(top_index)
+
+                    sim_argmax_embedding_vs_predicted_embedding = torch.cosine_similarity(
+                        embedding_argmax, predictions2, dim=-1)
+
+                    if sim_argmax_embedding_vs_predicted_embedding > highest_sim_score:
+                        most_sim_index = top_index
+                        highest_sim_score = sim_argmax_embedding_vs_predicted_embedding
+
+                current_output_index = most_sim_index
+
+                current_output_token = self.id_to_token[current_output_index.item()]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            # print("beam_t decoded sentence:", generated_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence  # input_caption
