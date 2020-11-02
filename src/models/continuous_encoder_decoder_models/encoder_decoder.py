@@ -139,7 +139,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         # predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         # targets = torch.nn.functional.normalize(self.decoder.embedding.weight.data, p=2, dim=-1)
-
+        targets = self.decoder.embedding.weight.data
         output = criteria(predictions.expand_as(self.decoder.embedding.weight.data), targets)
 
         return output.mean(1)
