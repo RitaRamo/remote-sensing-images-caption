@@ -995,32 +995,32 @@ class AbstractEncoderDecoderModel(ABC):
                 current_beam_width, 0, largest=True, sorted=True
             )
 
-            # YOUR CODE FOR DEBUGGING
-            if step > 0:
-                # MY DEBUG
-                cands = []
-                # top=
-                id_score = 0
-                for score in scores:
-                    # PRINT ISTO SÃO OS CANIDATOS COMO TENS NO TEU!!
-                    fake_top_k_scores, fake_top_k_words = score.topk(current_beam_width, 0, True, True)  # (s)
-                    print("fake top_k_scores", fake_top_k_scores)
-                    print("fake top_k_words", fake_top_k_words)
-                    # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
-                    # "top": [(text, prob) for text, prob, _, _ in top_solutions]}
+            # # YOUR CODE FOR DEBUGGING
+            # if step > 0:
+            #     # MY DEBUG
+            #     cands = []
+            #     # top=
+            #     id_score = 0
+            #     for score in scores:
+            #         # PRINT ISTO SÃO OS CANIDATOS COMO TENS NO TEU!!
+            #         fake_top_k_scores, fake_top_k_words = score.topk(current_beam_width, 0, True, True)  # (s)
+            #         print("fake top_k_scores", fake_top_k_scores)
+            #         print("fake top_k_words", fake_top_k_words)
+            #         # my_dict[time_step] = {"cand": [(text, prob) for text, prob, _, _ in candidates],
+            #         # "top": [(text, prob) for text, prob, _, _ in top_solutions]}
 
-                    for n_possibles in range(current_beam_width):
-                        print("n poss", n_possibles)
-                        cand_sentence = [self.id_to_token[index.item()] for index in top_k_sequences[id_score]
-                                         ] + [self.id_to_token[fake_top_k_words[n_possibles].item()]]
-                        cand_sentence_score = fake_top_k_scores[n_possibles].item()
-                        cands.append((cand_sentence, cand_sentence_score))
-                        print("this is cand sente", (cand_sentence, cand_sentence_score))
+            #         for n_possibles in range(current_beam_width):
+            #             print("n poss", n_possibles)
+            #             cand_sentence = [self.id_to_token[index.item()] for index in top_k_sequences[id_score]
+            #                              ] + [self.id_to_token[fake_top_k_words[n_possibles].item()]]
+            #             cand_sentence_score = fake_top_k_scores[n_possibles].item()
+            #             cands.append((cand_sentence, cand_sentence_score))
+            #             print("this is cand sente", (cand_sentence, cand_sentence_score))
 
-                    print("all cands", cands)
+            #         print("all cands", cands)
 
-                    # "top": [(text, prob) for text, prob, _, _ in top_solutions]
-                    id_score += 1
+            #         # "top": [(text, prob) for text, prob, _, _ in top_solutions]
+            #         id_score += 1
 
             # print("top_k_scores", top_k_scores)
             # print("top_k_words", top_k_words)
@@ -1057,18 +1057,18 @@ class AbstractEncoderDecoderModel(ABC):
             id_score = 0
             my_top_of_cand = []
             for seq in top_k_sequences:
-                print("printed seq", [self.id_to_token[index.item()] for index in seq])
+                #print("printed seq", [self.id_to_token[index.item()] for index in seq])
 
                 my_top_of_cand.append(([self.id_to_token[index.item()]
                                         for index in seq], top_k_scores[id_score].item()))
                 id_score += 1
 
-            if step > 0:
-                my_dict[step] = {
-                    "cand": cands,
-                    "top": my_top_of_cand
-                }
-                print("\n FINAL dict", my_dict)
+            # if step > 0:
+            #     my_dict[step] = {
+            #         "cand": cands,
+            #         "top": my_top_of_cand
+            #     }
+            #     print("\n FINAL dict", my_dict)
 
                 # Store the new alphas
             if store_alphas:
