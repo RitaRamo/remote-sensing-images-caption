@@ -356,7 +356,7 @@ class AbstractEncoderDecoderModel(ABC):
             # print("beam_t decoded sentence:", generated_sentence)
             print("\ngenerated sentence:", generated_sentence)
 
-            return generated_sentence, scores_dict  # input_caption
+            return generated_sentence  # , scores_dict  # input_caption
 
     def inference_with_greedy_debug(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
         dict = {}
