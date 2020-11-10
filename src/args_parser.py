@@ -1,6 +1,7 @@
 import argparse
 
 from utils.enums import (
+    EarlyStopMode,
     EmbeddingsType,
     ImageNetModelsPretrained,
     OptimizerType,
@@ -73,6 +74,9 @@ def get_args():
 
     parser.add_argument('--optimizer_type', type=str, default=OptimizerType.ADAM.value,
                         choices=[optimizer.value for optimizer in OptimizerType])
+
+    parser.add_argument('--early_mode', type=str, default=EarlyStopMode.LOSS.value,
+                        choices=[mode.value for mode in EarlyStopMode])
 
     parser.add_argument('--encoder_lr', type=float, default=1e-4)
 

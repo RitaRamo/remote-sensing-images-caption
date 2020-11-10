@@ -7,6 +7,7 @@ import torch.nn.functional as F
 from embeddings.embeddings import get_embedding_layer
 from data_preprocessing.preprocess_images import get_image_model
 from utils.enums import ImageNetModelsPretrained
+from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN, PAD_TOKEN
 
 
 class Encoder(nn.Module):
@@ -264,6 +265,18 @@ class BasicEncoderDecoderModel(AbstractEncoderDecoderModel):
         # loss = loss_per_sentece/predictions.size()[0]
 
         return loss
+
+    def _calculate_hypotheses(self, predict_output, caps_sorted, caption_lengths):
+        predictions = predict_output["predictions"]
+        targets = caps_sorted[:, 1:]  # targets doesnt have stark token
+        _, preds = torch.max(predictions, dim=-1)
+
+        preds = preds.tolist()
+        preds_without_padding = list()
+        for i in range(len(preds)):
+            preds_without_padding.append(preds[i][:caption_lengths[i]])  # remove pads
+
+        return preds_without_padding
 
     def generate_output_index(self, input_word, encoder_out, h, c):
         predictions, h, c = self.decoder(

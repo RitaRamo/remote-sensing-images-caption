@@ -1,6 +1,11 @@
 from enum import Enum
 
 
+class EarlyStopMode(Enum):
+    LOSS = "loss"
+    METRIC = "metric"
+
+
 class EmbeddingsType(Enum):
     GLOVE = "glove"
     FASTTEXT = "fasttext"

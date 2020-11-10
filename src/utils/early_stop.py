@@ -1,5 +1,7 @@
 import logging
 from utils.optimizer import adjust_learning_rate
+import torch
+import numpy as np
 
 
 class EarlyStopping():
@@ -10,7 +12,8 @@ class EarlyStopping():
         epochs_since_last_improvement,
         baseline, encoder_optimizer,
         decoder_optimizer,
-        period_decay_lr=5
+        period_decay_lr=5,
+        mode="loss"
     ):
         self.epochs_limit_without_improvement = epochs_limit_without_improvement
         self.epochs_since_last_improvement = epochs_since_last_improvement
@@ -21,9 +24,16 @@ class EarlyStopping():
         self.decoder_optimizer = decoder_optimizer
         self.period_decay_lr = period_decay_lr
 
+        if mode == "loss":  # loss -> current value needs to be lesser than previous
+            self.monitor_op = torch.le
+        elif mode == "metric":  # metric -> current value needs to be greater than previous
+            self.monitor_op = np.greater
+        else:
+            raise Exception("unknown mode")
+
     def check_improvement(self, current_loss):
 
-        if current_loss < self.best_loss:
+        if self.monitor_op(current_loss, self.best_loss):
 
             logging.info("melhorei a loss. Current %s %s",
                          current_loss, self.best_loss)
