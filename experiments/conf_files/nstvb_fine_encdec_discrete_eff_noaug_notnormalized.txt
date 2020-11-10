@@ -19,3 +19,5 @@ efficient_net
 --no_normalization
 --dataset
 rsicd_new_splits
+--early_mode
+metric
