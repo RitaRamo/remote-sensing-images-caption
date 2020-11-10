@@ -14,13 +14,45 @@ from definitions_datasets import get_dataset_paths
 from datetime import datetime
 
 
+# def _get_images_and_captions(dataset):
+#     images_names = {"train": [], "val": [], "test": []}
+#     captions_of_tokens = {"train": [], "val": [], "test": []}
+#     for row in dataset["images"]:
+#         image_name = row["filename"]
+#         split = row["split"]
+
+#         for caption in row["sentences"]:
+#             if not caption["tokens"]:
+#                 continue
+#             if caption["tokens"][-1] == ".":
+#                 if len(caption["tokens"][:-1]) > 0:  # len sentence without pont needs to >0 to be considered
+#                     caption_tokens = caption["tokens"][:-1]
+#                 else:
+#                     continue
+#             else:
+#                 caption_tokens = caption["tokens"]
+
+#             tokens = [START_TOKEN] + [token.lower() for token in caption_tokens] + [END_TOKEN]
+
+#             print("this is the token for image fianl", tokens, image_name)
+
+#             captions_of_tokens[split].append(tokens)
+#             images_names[split].append(image_name)
+
+#     return images_names, captions_of_tokens
+
+
 def _get_images_and_captions(dataset):
     images_names = {"train": [], "val": [], "test": []}
     captions_of_tokens = {"train": [], "val": [], "test": []}
+    all_captions_of_tokens = {"train": [], "val": [], "test": []}
+    a = 0
     for row in dataset["images"]:
         image_name = row["filename"]
         split = row["split"]
 
+        all_caps = []
+        n_captions = 0
         for caption in row["sentences"]:
             if not caption["tokens"]:
                 continue
@@ -33,13 +65,24 @@ def _get_images_and_captions(dataset):
                 caption_tokens = caption["tokens"]
 
             tokens = [START_TOKEN] + [token.lower() for token in caption_tokens] + [END_TOKEN]
-
-            print("this is the token for image fianl", tokens, image_name)
+            all_caps.append(tokens)
+            #print("this is the token for image fianl", tokens, image_name)
 
             captions_of_tokens[split].append(tokens)
             images_names[split].append(image_name)
+            n_captions += 1
 
-    return images_names, captions_of_tokens
+        for _ in range(n_captions):  # for each image, and caption, have also 5 captions
+            all_captions_of_tokens[split].append(all_caps)
+
+    print("images_names len", len(images_names["train"]))
+    print("captions len", len(captions_of_tokens["train"]))
+    print("captions len", len(all_captions_of_tokens["train"]))
+
+    print("images_names len v", len(images_names["val"]))
+    print("captions len", len(captions_of_tokens["val"]))
+    print("captions len", len(all_captions_of_tokens["val"]))
+    return images_names, captions_of_tokens, all_captions_of_tokens
 
 
 def _get_dict_image_and_its_captions(dataset, split="test"):
@@ -151,11 +194,18 @@ def _dump_dict_to_json(dict, file_dir, file_name):
         json.dump(dict, f, indent=2)
 
 
-def _dump_data_to_json(images_names, captions_tokens, file_dir, file_name):
-    dataset_dict = {
-        "images_names": images_names,
-        "captions_tokens": captions_tokens
-    }
+def _dump_data_to_json(images_names, captions_tokens, file_dir, file_name, all_captions=None):
+    if all_captions:
+        dataset_dict = {
+            "images_names": images_names,
+            "captions_tokens": captions_tokens,
+            "all_captions_tokens": all_captions
+        }
+    else:
+        dataset_dict = {
+            "images_names": images_names,
+            "captions_tokens": captions_tokens
+        }
     # falta directori
     _dump_dict_to_json(dataset_dict, file_dir, file_name)
     # with open(file_dir+file_name, 'w+') as f:
@@ -177,11 +227,15 @@ def _dump_vocab_to_json(vocab_size, token_to_id, id_to_token, max_len, file_dir)
 
 def _save_dataset(raw_dataset, file_dir):
     # suffle and split dataset into train,val and test
-    images_names, captions_of_tokens = _get_images_and_captions(raw_dataset)
-
+    print("hay")
+    images_names, captions_of_tokens, all_captions_of_tokens = _get_images_and_captions(raw_dataset)
+    print("sai")
     train_images_names, train_captions_of_tokens = shuffle(
         images_names["train"], captions_of_tokens["train"], random_state=42)
-    val_images_names, val_captions_of_tokens = shuffle(images_names["val"], captions_of_tokens["val"], random_state=42)
+    # val_images_names, val_captions_of_tokens = shuffle(
+    #     images_names["val"], captions_of_tokens["val"], random_state=42)
+    val_images_names, val_captions_of_tokens, val_all_captions_of_tokens = shuffle(
+        images_names["val"], captions_of_tokens["val"], all_captions_of_tokens["val"], random_state=42)
 
     test_dict_image_captions = _get_dict_image_and_its_captions(raw_dataset)
     # only for neighbour model
@@ -203,7 +257,7 @@ def _save_dataset(raw_dataset, file_dir):
     _dump_data_to_json(train_images_names, train_captions_of_tokens,
                        file_dir, "train.json")
     _dump_data_to_json(val_images_names, val_captions_of_tokens,
-                       file_dir, "val.json")
+                       file_dir, "val.json", val_all_captions_of_tokens)
 
     _dump_dict_to_json(test_dict_image_captions, file_dir, "test.json")
     _dump_dict_to_json(train_dict_image_captions, file_dir, "train_dict.json")

@@ -1995,7 +1995,7 @@
     "european": 1992,
     "choose": 1993,
     "rightmost": 1994,
-    "#": 0
+    "<#>": 0
   },
   "id_to_token": {
     "1": "<start_seq>",
@@ -3992,7 +3992,7 @@
     "1992": "european",
     "1993": "choose",
     "1994": "rightmost",
-    "0": "#"
+    "0": "<#>"
   },
   "max_len": 36
 }
