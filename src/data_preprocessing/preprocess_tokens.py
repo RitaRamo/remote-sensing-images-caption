@@ -8,7 +8,7 @@ from spacy.tokens import Doc
 
 START_TOKEN = "<start_seq>"
 END_TOKEN = "<end_seq>"
-PAD_TOKEN = "#"
+PAD_TOKEN = "<#>"
 OOV_TOKEN = "<unk>"
 os.environ['PYTHONHASHSEED'] = '0'
 
@@ -20,9 +20,9 @@ def preprocess_tokens(train_captions):
 
     # vocab = list(set(all_tokens))
     vocab = list(unique(all_tokens))
-    token_to_id = OrderedDict([(value, index+1)
+    token_to_id = OrderedDict([(value, index + 1)
                                for index, value in enumerate(vocab)])
-    id_to_token = OrderedDict([(index+1, value)
+    id_to_token = OrderedDict([(index + 1, value)
                                for index, value in enumerate(vocab)])
 
     token_to_id[PAD_TOKEN] = 0
