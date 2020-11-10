@@ -12,6 +12,7 @@ from torchvision import transforms
 import logging
 import os
 from definitions_datasets import PATH_FLICKR8K
+import numpy as np
 
 
 class CaptionDataset(Dataset):
@@ -88,6 +89,41 @@ class CaptionDataset(Dataset):
 
     def __len__(self):
         return self.dataset_size
+
+
+class CaptionValDataset(CaptionDataset):
+
+    def __init__(
+        self,
+        data_folder,
+        images_folder,
+        max_len,
+        token_to_id,
+        augmentation=False
+    ):
+        self.images_folder = images_folder
+        self._init_caption(data_folder, max_len, token_to_id)
+        self._init_images(images_folder, augmentation)
+
+    def _init_caption(self, data_folder, max_len, token_to_id):
+        dataset = get_dataset(data_folder)
+
+        self.images_names, captions_of_tokens, all_captions_of_tokens = dataset[
+            "images_names"], dataset["captions_tokens"], dataset["all_captions_tokens"]
+
+        self.input_captions, self.captions_lengths = convert_captions_to_Y(
+            captions_of_tokens, max_len, token_to_id)
+
+        self.all_captions = []
+        for image_references in all_captions_of_tokens:
+            image_input_captions, _ = convert_captions_to_Y(image_references, max_len, token_to_id)
+            self.all_captions.append(image_input_captions)
+
+    def __getitem__(self, i):
+        image_name, caption, caption_len = super().__getitem__(i)
+        input_all_captions = self.all_captions[i]
+
+        return image_name, caption, caption_len, torch.LongTensor(input_all_captions)
 
 
 class POSCaptionDataset(CaptionDataset):

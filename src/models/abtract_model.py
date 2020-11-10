@@ -18,6 +18,7 @@ from utils.enums import DecodingType
 import math
 from definitions_datasets import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
 import torch.nn.functional as F
+from nltk.translate.bleu_score import corpus_bleu
 
 
 class AbstractEncoderDecoderModel(ABC):
@@ -81,13 +82,19 @@ class AbstractEncoderDecoderModel(ABC):
         pass
 
     def train(self, train_dataloader, val_dataloader, print_freq):
+        if self.args.early_mode == "loss":
+            start_baseline_value = np.Inf
+        elif self.args.early_mode == "metric":
+            start_baseline_value = 0
+
         early_stopping = EarlyStopping(
             epochs_limit_without_improvement=self.args.epochs_limit_without_improvement,
             epochs_since_last_improvement=self.checkpoint_epochs_since_last_improvement
             if self.checkpoint_exists else 0,
-            baseline=self.checkpoint_val_loss if self.checkpoint_exists else np.Inf,
+            baseline=self.checkpoint_val_loss if self.checkpoint_exists else start_baseline_value,
             encoder_optimizer=self.encoder_optimizer,
-            decoder_optimizer=self.decoder_optimizer
+            decoder_optimizer=self.decoder_optimizer,
+            mode=self.args.early_mode
         )
 
         start_epoch = self.checkpoint_start_epoch if self.checkpoint_exists else 0
@@ -133,11 +140,17 @@ class AbstractEncoderDecoderModel(ABC):
             self.encoder.eval()
 
             with torch.no_grad():
+                all_hypotheses = []
+                all_references = []
+                for batch_i, (imgs, caps, caplens, all_captions) in enumerate(val_dataloader):
 
-                for batch_i, (imgs, caps, caplens) in enumerate(val_dataloader):
+                    val_loss, val_hypotheses, val_references = self.val_step(
+                        imgs, caps, caplens, all_captions)
 
-                    val_loss = self.val_step(
-                        imgs, caps, caplens)
+                    all_hypotheses.extend(val_hypotheses)
+                    all_references.extend(val_references)
+                    #print("val hy", val_hypotheses)
+                    #print("val references", val_references)
 
                     self._log_status("VAL", epoch, batch_i,
                                      val_dataloader, val_loss, print_freq)
@@ -151,18 +164,24 @@ class AbstractEncoderDecoderModel(ABC):
             # End validation
             epoch_val_loss = val_total_loss / (batch_i + 1)
 
-            early_stopping.check_improvement(epoch_val_loss)
+            epoch_val_bleu4 = corpus_bleu(all_references, all_hypotheses)
 
+            if self.args.early_mode == "loss":
+                epoch_val_score = epoch_val_loss
+            elif self.args.early_mode == "metric":
+                epoch_val_score = epoch_val_bleu4
+
+            early_stopping.check_improvement(epoch_val_score)
             self._save_checkpoint(early_stopping.is_current_val_best(),
                                   epoch,
                                   early_stopping.get_number_of_epochs_without_improvement(),
-                                  epoch_val_loss)
+                                  epoch_val_score)
 
-            logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f} -------------\n'.format(
-                epoch, self.args.epochs, epoch_loss, epoch_val_loss))
+            logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f}; Val Bleu:{:.3f}; -------------\n'.format(
+                epoch, self.args.epochs, epoch_loss, epoch_val_loss, epoch_val_bleu4))
 
     def train_step(self, imgs, caps_input, cap_len):
-        encoder_out, caps_sorted, caption_lengths = self._prepare_inputs_to_forward_pass(
+        encoder_out, caps_sorted, caption_lengths, sort_ind = self._prepare_inputs_to_forward_pass(
             imgs, caps_input, cap_len)
 
         predict_output = self._predict(
@@ -187,9 +206,10 @@ class AbstractEncoderDecoderModel(ABC):
 
         return loss
 
-    def val_step(self, imgs, caps_input, cap_len):
-        encoder_out, caps_sorted, caption_lengths = self._prepare_inputs_to_forward_pass(
+    def val_step(self, imgs, caps_input, cap_len, all_captions):
+        encoder_out, caps_sorted, caption_lengths, sort_ind = self._prepare_inputs_to_forward_pass(
             imgs, caps_input, cap_len)
+        all_captions_sorted = all_captions[sort_ind]
 
         predict_output = self._predict(
             encoder_out, caps_sorted, caption_lengths)
@@ -197,7 +217,18 @@ class AbstractEncoderDecoderModel(ABC):
         loss = self._calculate_loss(
             predict_output, caps_sorted, caption_lengths)
 
-        return loss
+        hypotheses = self._calculate_hypotheses(predict_output, caps_sorted, caption_lengths)
+
+        all_captions_sorted = all_captions_sorted[:, :, 1:]  # references without start token
+        references_without_padding = list()
+        for i in range(all_captions_sorted.shape[0]):
+            img_captions = all_captions_sorted[i].tolist()
+            img_captions = list(
+                map(lambda c: [w for w in c if w not in {self.token_to_id[PAD_TOKEN]}],
+                    img_captions))
+            references_without_padding.append(img_captions)
+        print("references_without_padding", references_without_padding)
+        return loss, hypotheses, references_without_padding
 
     @abstractmethod
     def _predict(self, predict_output, caps_sorted, caption_lengths):
@@ -226,7 +257,7 @@ class AbstractEncoderDecoderModel(ABC):
         # input captions must not have "end_token"
         caption_lengths = (caption_lengths - 1).tolist()
 
-        return encoder_out, caps_sorted, caption_lengths
+        return encoder_out, caps_sorted, caption_lengths, sort_ind
 
     def _log_status(self, train_or_val, epoch, batch_i, dataloader, loss, print_freq):
         if batch_i % print_freq == 0:

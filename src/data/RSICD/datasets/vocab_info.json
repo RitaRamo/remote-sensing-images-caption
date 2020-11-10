@@ -2080,7 +2080,7 @@
     "shipment": 2077,
     "frame": 2078,
     "mess-distributed": 2079,
-    "#": 0
+    "<#>": 0
   },
   "id_to_token": {
     "1": "<start_seq>",
@@ -4162,7 +4162,7 @@
     "2077": "shipment",
     "2078": "frame",
     "2079": "mess-distributed",
-    "0": "#"
+    "0": "<#>"
   },
   "max_len": 36
 }
