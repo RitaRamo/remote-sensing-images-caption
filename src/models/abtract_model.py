@@ -227,7 +227,7 @@ class AbstractEncoderDecoderModel(ABC):
                 map(lambda c: [w for w in c if w not in {self.token_to_id[PAD_TOKEN]}],
                     img_captions))
             references_without_padding.append(img_captions)
-        print("references_without_padding", references_without_padding)
+
         return loss, hypotheses, references_without_padding
 
     @abstractmethod
