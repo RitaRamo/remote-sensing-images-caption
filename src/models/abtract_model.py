@@ -98,6 +98,9 @@ class AbstractEncoderDecoderModel(ABC):
         )
 
         start_epoch = self.checkpoint_start_epoch if self.checkpoint_exists else 0
+        all_training_losses = []
+        all_validation_loss = []
+        all_validation_bleu = []
 
         # Iterate by epoch
         for epoch in range(start_epoch, self.args.epochs):
@@ -130,6 +133,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             # End training
             epoch_loss = train_total_loss / (batch_i + 1)
+            all_training_losses.append(epoch_loss.item())
             logging.info('Time taken for 1 epoch {:.4f} sec'.format(
                 time.time() - start))
             logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
@@ -163,8 +167,10 @@ class AbstractEncoderDecoderModel(ABC):
 
             # End validation
             epoch_val_loss = val_total_loss / (batch_i + 1)
-
             epoch_val_bleu4 = corpus_bleu(all_references, all_hypotheses)
+
+            all_validation_loss.append(epoch_val_loss.item())
+            all_validation_bleu.append(epoch_val_bleu4)
 
             if self.args.early_mode == "loss":
                 epoch_val_score = epoch_val_loss
@@ -179,6 +185,14 @@ class AbstractEncoderDecoderModel(ABC):
 
             logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f}; Val Bleu:{:.3f}; -------------\n'.format(
                 epoch, self.args.epochs, epoch_loss, epoch_val_loss, epoch_val_bleu4))
+
+        final_dict = {
+            "train_loss": all_training_losses,
+            "val_loss": all_validation_loss,
+            "val_bleu": all_validation_bleu
+        }
+        with open(PATH_TRAINED_MODELS + self.args.file_name + ".json", 'w+') as f:
+            json.dump(final_dict, f, indent=2)
 
     def train_step(self, imgs, caps_input, cap_len):
         encoder_out, caps_sorted, caption_lengths, sort_ind = self._prepare_inputs_to_forward_pass(
@@ -195,9 +209,9 @@ class AbstractEncoderDecoderModel(ABC):
         loss.backward()
 
         # # Clip gradients
-        # clip_gradient(self.decoder_optimizer, 5.)
-        # if self.encoder_optimizer is not None:
-        #     clip_gradient(self.encoder_optimizer, 5.)
+        clip_gradient(self.decoder_optimizer, 5.)
+        if self.encoder_optimizer is not None:
+            clip_gradient(self.encoder_optimizer, 5.)
 
         # Update weights
         self.decoder_optimizer.step()
