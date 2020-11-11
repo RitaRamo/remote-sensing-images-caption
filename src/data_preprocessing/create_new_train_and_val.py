@@ -15,21 +15,35 @@ from datetime import datetime
 def _get_images_and_captions(dataset_train, dataset_val):
     images_names = {"train": [], "val": []}
     captions_of_tokens = {"train": [], "val": []}
+    all_captions_of_tokens = {"train": [], "val": []}
 
     for split, dataset in [("train", dataset_train), ("val", dataset_val)]:
 
         for row in dataset:
             image_name = row[2]
 
+            all_caps = []
+            n_captions = 0
             for caption in row[3]:
 
                 caption_tokens = caption.split()
                 tokens = [START_TOKEN] + caption_tokens + [END_TOKEN]
+                all_caps.append(tokens)
+                n_captions += 1
 
                 captions_of_tokens[split].append(tokens)
                 images_names[split].append(image_name)
 
-    return images_names, captions_of_tokens
+            if split == "val" and n_captions < 5:
+                all_caps.append(tokens)
+                captions_of_tokens[split].append(tokens)
+                images_names[split].append(image_name)
+                n_captions += 1
+
+            for _ in range(n_captions):  # for each image, and caption, have also 5 captions
+                all_captions_of_tokens[split].append(all_caps)
+
+    return images_names, captions_of_tokens, all_captions_of_tokens
 
 
 def _transform_to_coco_format(dataset):
@@ -148,11 +162,17 @@ if __name__ == "__main__":
 
     logging.info("preprocessing train and val (start and end token, suffle data) and vocab")
 
-    images_names, captions_of_tokens = _get_images_and_captions(new_train_dataset, new_val_dataset)
+    images_names, captions_of_tokens, all_captions_of_tokens = _get_images_and_captions(
+        new_train_dataset, new_val_dataset)
 
     train_images_names, train_captions_of_tokens = shuffle(
         images_names["train"], captions_of_tokens["train"], random_state=42)
-    val_images_names, val_captions_of_tokens = shuffle(images_names["val"], captions_of_tokens["val"], random_state=42)
+
+    print('image captions_of_tokens["val"]', len(images_names["val"]))
+    print('captions_of_tokens["val"]', len(captions_of_tokens["val"]))
+    print('all_captions_of_tokens["val"]', len(all_captions_of_tokens["val"]))
+    val_images_names, val_captions_of_tokens, val_all_captions_of_tokens = shuffle(
+        images_names["val"], captions_of_tokens["val"], all_captions_of_tokens["val"], random_state=42)
 
     vocab_size, token_to_id, id_to_token, max_len = preprocess_tokens(
         train_captions_of_tokens
@@ -165,7 +185,7 @@ if __name__ == "__main__":
     _dump_data_to_json(train_images_names, train_captions_of_tokens,
                        PATH_RSICD + "datasets_new_train_and_val/", "train.json")
     _dump_data_to_json(val_images_names, val_captions_of_tokens,
-                       PATH_RSICD + "datasets_new_train_and_val/", "val.json")
+                       PATH_RSICD + "datasets_new_train_and_val/", "val.json", val_all_captions_of_tokens)
 
     logging.info("converting new train and val split into coco format")
     new_train_coco_format = _transform_to_coco_format(new_train_dataset)
