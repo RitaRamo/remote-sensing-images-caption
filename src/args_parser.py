@@ -88,6 +88,8 @@ def get_args():
     parser.add_argument('--epochs_limit_without_improvement', type=int, default=12,
                         help='define the limit epoch of for early_stop')
 
+    parser.add_argument('--period_decay_without_improvement', type=int, default=5)
+
     parser.add_argument(
         '--disable_steps', action='store_true', default=False,
         help='Conf just for testing: make the model run only 1 steps instead of the steps that was supposed')

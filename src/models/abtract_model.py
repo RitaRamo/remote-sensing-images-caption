@@ -94,6 +94,7 @@ class AbstractEncoderDecoderModel(ABC):
             baseline=self.checkpoint_val_loss if self.checkpoint_exists else start_baseline_value,
             encoder_optimizer=self.encoder_optimizer,
             decoder_optimizer=self.decoder_optimizer,
+            period_decay_lr=self.args.period_decay_without_improvement
             mode=self.args.early_mode
         )
 
