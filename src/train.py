@@ -89,8 +89,8 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.enc_dec_o
 
 from definitions_datasets import get_dataset_paths
 
-torch.manual_seed(42)
-np.random.seed(42)
+torch.manual_seed(7)
+np.random.seed(7)
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 
