@@ -249,13 +249,13 @@ class ContinuousEncoderDecoderProbSimModel(ContinuousEncoderDecoderModel):
         # ]
 
         G1R = torch.autograd.grad(
-            loss_ce, self.decoder.fc.parameters(), retain_graph=True
+            loss_ce, self.decoder.fc.parameters(), retain_graph=True, create_graph=True
         )
 
         G1R_flattened = torch.cat([g.view(-1) for g in G1R])
         G1 = torch.norm(self.loss_weight_ce * G1R_flattened.detach(), 2).unsqueeze(0)
 
-        G2R = torch.autograd.grad(loss_sim, self.decoder.fc.parameters(), retain_graph=True)
+        G2R = torch.autograd.grad(loss_sim, self.decoder.fc.parameters())
         G2R_flattened = torch.cat([g.view(-1) for g in G2R])
         G2 = torch.norm(self.loss_weight_sim * G2R_flattened.detach(), 2).unsqueeze(0)
 
