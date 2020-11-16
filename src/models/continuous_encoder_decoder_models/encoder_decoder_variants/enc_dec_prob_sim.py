@@ -186,6 +186,8 @@ class ContinuousEncoderDecoderProbSimModel(ContinuousEncoderDecoderModel):
     def val_step(self, imgs, caps_input, cap_len, all_captions):
         (loss_ce, loss_sim), hypotheses, references_without_padding = super().val_step(imgs, caps_input, cap_len, all_captions)
         loss = self.loss_weight_ce[0].data * loss_ce + self.loss_weight_sim[0].data * loss_sim
+        print("weight ce", self.loss_weight_ce[0].data)
+        print("weight sim", self.loss_weight_sim[0].data)
 
         return loss, hypotheses, references_without_padding
 
