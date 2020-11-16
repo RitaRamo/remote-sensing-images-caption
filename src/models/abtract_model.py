@@ -118,6 +118,7 @@ class AbstractEncoderDecoderModel(ABC):
             self.decoder.train()
             self.encoder.train()
             for batch_i, (imgs, caps, caplens) in enumerate(train_dataloader):
+
                 train_loss = self.train_step(
                     imgs, caps, caplens
                 )
@@ -133,7 +134,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             # End training
             epoch_loss = train_total_loss / (batch_i + 1)
-            all_training_losses.append(epoch_loss.item())
+            all_training_losses.append(epoch_loss.data.item())
             logging.info('Time taken for 1 epoch {:.4f} sec'.format(
                 time.time() - start))
             logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
@@ -278,7 +279,6 @@ class AbstractEncoderDecoderModel(ABC):
         return encoder_out, caps_sorted, caption_lengths, sort_ind
 
     def _log_status(self, train_or_val, epoch, batch_i, dataloader, loss, print_freq):
-
         if batch_i % print_freq == 0:
             logging.info(
                 "{} - Epoch: [{}/{}]; Batch: [{}/{}]\t Loss: {:.4f}\t".format(
