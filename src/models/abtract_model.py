@@ -126,7 +126,8 @@ class AbstractEncoderDecoderModel(ABC):
                 self._log_status("TRAIN", epoch, batch_i,
                                  train_dataloader, train_loss, print_freq)
 
-                train_total_loss += train_loss
+                train_total_loss += train_loss.data.item()
+                del train_loss
 
                 # (only for debug: interrupt val after 1 step)
                 if self.args.disable_steps:
@@ -134,7 +135,7 @@ class AbstractEncoderDecoderModel(ABC):
 
             # End training
             epoch_loss = train_total_loss / (batch_i + 1)
-            all_training_losses.append(epoch_loss.data.item())
+            all_training_losses.append(epoch_loss)
             logging.info('Time taken for 1 epoch {:.4f} sec'.format(
                 time.time() - start))
             logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
