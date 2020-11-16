@@ -118,7 +118,6 @@ class AbstractEncoderDecoderModel(ABC):
             self.decoder.train()
             self.encoder.train()
             for batch_i, (imgs, caps, caplens) in enumerate(train_dataloader):
-
                 train_loss = self.train_step(
                     imgs, caps, caplens
                 )
@@ -168,14 +167,14 @@ class AbstractEncoderDecoderModel(ABC):
 
             # End validation
             epoch_val_loss = val_total_loss / (batch_i + 1)
-            epoch_val_bleu4 = corpus_bleu(all_references, all_hypotheses)
-
             all_validation_loss.append(epoch_val_loss.item())
-            all_validation_bleu.append(epoch_val_bleu4)
 
             if self.args.early_mode == "loss":
                 epoch_val_score = epoch_val_loss
+                epoch_val_bleu4 = -1.0
             elif self.args.early_mode == "metric":
+                epoch_val_bleu4 = corpus_bleu(all_references, all_hypotheses)
+                all_validation_bleu.append(epoch_val_bleu4)
                 epoch_val_score = epoch_val_bleu4
 
             early_stopping.check_improvement(epoch_val_score)
@@ -232,16 +231,20 @@ class AbstractEncoderDecoderModel(ABC):
         loss = self._calculate_loss(
             predict_output, caps_sorted, caption_lengths)
 
-        hypotheses = self._calculate_hypotheses(predict_output, caps_sorted, caption_lengths)
+        if self.args.early_mode == "metric":
+            hypotheses = self._calculate_hypotheses(predict_output, caps_sorted, caption_lengths)
 
-        all_captions_sorted = all_captions_sorted[:, :, 1:]  # references without start token
-        references_without_padding = list()
-        for i in range(all_captions_sorted.shape[0]):
-            img_captions = all_captions_sorted[i].tolist()
-            img_captions = list(
-                map(lambda c: [w for w in c if w not in {self.token_to_id[PAD_TOKEN]}],
-                    img_captions))
-            references_without_padding.append(img_captions)
+            all_captions_sorted = all_captions_sorted[:, :, 1:]  # references without start token
+            references_without_padding = list()
+            for i in range(all_captions_sorted.shape[0]):
+                img_captions = all_captions_sorted[i].tolist()
+                img_captions = list(
+                    map(lambda c: [w for w in c if w not in {self.token_to_id[PAD_TOKEN]}],
+                        img_captions))
+                references_without_padding.append(img_captions)
+        else:
+            hypotheses = []
+            references_without_padding = []
 
         return loss, hypotheses, references_without_padding
 
@@ -275,6 +278,7 @@ class AbstractEncoderDecoderModel(ABC):
         return encoder_out, caps_sorted, caption_lengths, sort_ind
 
     def _log_status(self, train_or_val, epoch, batch_i, dataloader, loss, print_freq):
+
         if batch_i % print_freq == 0:
             logging.info(
                 "{} - Epoch: [{}/{}]; Batch: [{}/{}]\t Loss: {:.4f}\t".format(

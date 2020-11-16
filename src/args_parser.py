@@ -45,6 +45,11 @@ def get_args():
     parser.add_argument('--post_processing', action='store_true',
                         default=False, help='Set a switch to true')
 
+    parser.add_argument('--grad_norm', action='store_true',
+                        default=False, help='Set a switch to true')
+
+    parser.add_argument('--grad_norm_alpha', type=float, default=1.0)
+
     parser.add_argument('--no_normalization', action='store_true',
                         default=False, help='Set a switch to false')
 

@@ -13,6 +13,7 @@ from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
 from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN, PAD_TOKEN
+from utils.optimizer import get_optimizer, clip_gradient
 
 
 class ContinuousDecoder(Decoder):
@@ -95,6 +96,29 @@ class ContinuousEncoderDecoderProbSimModel(ContinuousEncoderDecoderModel):
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
 
+        if self.args.grad_norm:
+            self.loss_weight_ce = torch.ones(
+                1, requires_grad=True, device=self.device, dtype=torch.float
+            )
+            self.loss_weight_sim = torch.ones(
+                1, requires_grad=True, device=self.device, dtype=torch.float
+            )
+            self.gradnorm_optimizer = torch.optim.Adam(
+                [self.loss_weight_ce, self.loss_weight_sim],
+                lr=0.025,
+            )
+            self.gradnorm_loss = nn.L1Loss().to(self.device)
+        else:
+            self.loss_weight_ce = torch.ones(
+                1, device=self.device, dtype=torch.float
+            )
+            self.loss_weight_sim = torch.ones(
+                1, device=self.device, dtype=torch.float
+            )
+        self.initial = False
+        print("AQUI loss weights ce", self.loss_weight_ce.item())
+        print("AWUI loss weights sim", self.loss_weight_sim.item())
+
     def _define_loss_criteria(self):
         self.criterion_ce = nn.CrossEntropyLoss().to(self.device)
         self.criterion_sim = nn.CosineEmbeddingLoss().to(self.device)
@@ -152,9 +176,116 @@ class ContinuousEncoderDecoderProbSimModel(ContinuousEncoderDecoderModel):
 
         loss_sim = self.criterion_sim(predictions_embeddings.data, target_embeddings.data, y)
 
-        loss = loss_ce + loss_sim
+        if self.initial == False:
+            self.initial = True
+            self.initial_ce_loss = loss_ce
+            self.initial_sim_loss = loss_sim
+
+        return loss_ce, loss_sim
+
+    def val_step(self, imgs, caps_input, cap_len, all_captions):
+        (loss_ce, loss_sim), hypotheses, references_without_padding = super().val_step(imgs, caps_input, cap_len, all_captions)
+        loss = self.loss_weight_ce[0].data * loss_ce + self.loss_weight_sim[0].data * loss_sim
+
+        return loss, hypotheses, references_without_padding
+
+    def train_step(self, imgs, caps_input, cap_len):
+        encoder_out, caps_sorted, caption_lengths, sort_ind = self._prepare_inputs_to_forward_pass(
+            imgs, caps_input, cap_len)
+
+        predict_output = self._predict(
+            encoder_out, caps_sorted, caption_lengths)
+
+        loss_ce, loss_sim = self._calculate_loss(
+            predict_output, caps_sorted, caption_lengths)
+
+        loss = self.loss_weight_ce[0] * loss_ce + self.loss_weight_sim[0] * loss_sim
+
+        self.decoder_optimizer.zero_grad()
+        if self.encoder_optimizer is not None:
+            self.encoder_optimizer.zero_grad()
+
+        loss.backward(retain_graph=self.args.grad_norm)
+
+        if self.args.grad_norm:
+            self.apply_grad_norm(loss_ce, loss_sim)
+
+        # # Clip gradients
+        clip_gradient(self.decoder_optimizer, 5.)
+        if self.encoder_optimizer is not None:
+            clip_gradient(self.encoder_optimizer, 5.)
+
+        # Update weights
+        self.decoder_optimizer.step()
+        if self.encoder_optimizer is not None:
+            self.encoder_optimizer.step()
 
         return loss
+
+    def apply_grad_norm(self, loss_ce, loss_sim):
+        # shared_params = self.decoder.named_parameters()
+        # print("shared_parms", list(shared_params))
+        # shared_params = [
+        #     param for param in self.decoder.parameters() if param.requires_grad
+        # ]
+
+        # SHARED_PARAMS = [
+        #     "decode_step.weight_ih",
+        #     "decode_step.weight_hh",
+        #     "decode_step.bias_ih",
+        #     "decode_step.bias_hh",
+        #     "fc.weight",
+        #     "fc.bias"
+        # ]
+
+        # named_params = dict(self.decoder.named_parameters())
+
+        # shared_params = [
+        #     param
+        #     for param_name, param in named_params.items()
+        #     if param_name in SHARED_PARAMS and param.requires_grad
+        # ]
+
+        G1R = torch.autograd.grad(
+            loss_ce, self.decoder.fc.parameters(), retain_graph=True
+        )
+
+        G1R_flattened = torch.cat([g.view(-1) for g in G1R])
+        G1 = torch.norm(self.loss_weight_ce * G1R_flattened.detach(), 2).unsqueeze(0)
+
+        G2R = torch.autograd.grad(loss_sim, self.decoder.fc.parameters(), retain_graph=True)
+        G2R_flattened = torch.cat([g.view(-1) for g in G2R])
+        G2 = torch.norm(self.loss_weight_sim * G2R_flattened.detach(), 2).unsqueeze(0)
+
+        # Calculate the average gradient norm across all tasks
+        G_avg = torch.div(torch.add(G1, G2), 2)
+
+        # Calculate relative losses
+        lhat1 = torch.div(loss_ce.detach(), self.initial_ce_loss)
+        lhat2 = torch.div(loss_sim.detach(), self.initial_sim_loss)
+        lhat_avg = torch.div(torch.add(lhat1, lhat2), 2)
+
+        # Calculate relative inverse training rates
+        inv_rate1 = torch.div(lhat1, lhat_avg)
+        inv_rate2 = torch.div(lhat2, lhat_avg)
+
+        # Calculate the gradient norm target for this batch
+        C1 = G_avg * (inv_rate1 ** self.args.grad_norm_alpha)
+        C2 = G_avg * (inv_rate2 ** self.args.grad_norm_alpha)
+
+        C1 = C1.detach()
+        C2 = C2.detach()
+
+        # Backprop and perform an optimization step
+        self.gradnorm_optimizer.zero_grad()
+        # Calculate the gradnorm loss
+        Lgrad = torch.add(self.gradnorm_loss(G1, C1), self.gradnorm_loss(G2, C2))
+        Lgrad.backward()
+        self.gradnorm_optimizer.step()
+
+        coef = 2 / torch.add(self.loss_weight_ce, self.loss_weight_sim)
+        self.loss_weight_ce.data = coef.data * self.loss_weight_ce.data
+        self.loss_weight_sim.data = coef.data * self.loss_weight_sim.data
 
     def generate_output_index(self, input_word, encoder_out, h, c):
         predictions1, predictions2, h, c = self.decoder(
