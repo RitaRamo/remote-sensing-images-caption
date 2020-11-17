@@ -21,11 +21,11 @@ class ContinuousLoss():
         elif loss_type == ContinuousLossesType.MAX_MARGIN_WORD.value:
             self.loss_method = self.max_margin_word_loss
             self.criterion = nn.TripletMarginLoss(
-                margin=0.5, p=2).to(self.device)
+                margin=1.0, p=2).to(self.device)
 
-        elif loss_type == ContinuousLossesType.MAX_MARGIN_DIST_WORD.value:
-            self.loss_method = self.max_margin_word_loss
-            self.criterion = nn.TripletMarginWithDistanceLoss(distance_function=nn.PairwiseDistance()).to(self.device)
+        elif loss_type == ContinuousLossesType.MAX_MARGIN_COS_WORD.value:
+            self.loss_method = self.max_margin_cos_word_loss
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
         elif loss_type == ContinuousLossesType.MARGIN.value:
             self.loss_method = self.margin_loss
@@ -271,6 +271,8 @@ class ContinuousLoss():
             target_embeddings,
             caption_lengths
     ):
+        print("predicitons", predictions.size())
+
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
 
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
@@ -280,14 +282,43 @@ class ContinuousLoss():
         pretrained_embedding_matrix = self.decoder.embedding.weight.data
 
         for i in range(len(target_embeddings)):
+
             sim_pred_to_all = torch.cosine_similarity(predictions[i], pretrained_embedding_matrix, dim=-1)
             sim_target_to_all = torch.cosine_similarity(target_embeddings[i], pretrained_embedding_matrix, dim=-1)
 
             maxvalues, jmax = torch.max(sim_pred_to_all - sim_target_to_all, dim=-1)
-
             negative_examples[i, :] = pretrained_embedding_matrix[jmax]
 
         return self.criterion(predictions, target_embeddings, negative_examples.to(self.device))
+
+    def max_margin_cos_word_loss(
+            self,
+            predictions,
+            target_embeddings,
+            caption_lengths
+    ):
+        predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
+        predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        target_embeddings = torch.nn.functional.normalize(target_embeddings, p=2, dim=-1)
+        negative_examples = torch.zeros(target_embeddings.size()[0], target_embeddings.size()[1])
+
+        pretrained_embedding_matrix = self.decoder.embedding.weight.data
+
+        for i in range(len(target_embeddings)):
+
+            sim_pred_to_all = torch.cosine_similarity(predictions[i], pretrained_embedding_matrix, dim=-1)
+            sim_target_to_all = torch.cosine_similarity(target_embeddings[i], pretrained_embedding_matrix, dim=-1)
+
+            maxvalues, jmax = torch.max(sim_pred_to_all - sim_target_to_all, dim=-1)
+            negative_examples[i, :] = pretrained_embedding_matrix[jmax]
+
+        y = torch.ones(target_embeddings.shape[0]).to(self.device)
+        dist_to_target = self.criterion(predictions, target_embeddings, y)
+        dist_to_negative = self.criterion(predictions, negative_examples.to(self.device), y)
+
+        loss = torch.clamp(0.5 + dist_to_target - dist_to_negative, min=0).mean()
+
+        return loss
 
     def margin_syn_similarity_loss(
         self,
