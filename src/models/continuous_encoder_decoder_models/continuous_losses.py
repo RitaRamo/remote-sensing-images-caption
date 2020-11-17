@@ -18,6 +18,16 @@ class ContinuousLoss():
             self.loss_method = self.cosine_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
 
+        elif loss_type == ContinuousLossesType.MAX_MARGIN_WORD.value:
+            self.loss_method = self.max_margin_word_loss
+            self.criterion = nn.TripletMarginLoss(
+                margin=1.0, p=2).to(self.device)
+
+        elif loss_type == ContinuousLossesType.MAX_MARGIN_DIST_WORD.value:
+            self.loss_method = self.max_margin_word_loss
+            self.criterion = nn.TripletMarginWithDistanceLoss(
+                margin=1.0, p=2).to(self.device)
+
         elif loss_type == ContinuousLossesType.MARGIN.value:
             self.loss_method = self.margin_loss
             self.criterion = nn.TripletMarginLoss(
@@ -249,25 +259,36 @@ class ContinuousLoss():
             caption_lengths
     ):
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
+        print("predicton size", predictions.size())
+        print("target_embeddings size", target_embeddings.size())
+
         y = torch.ones(target_embeddings.shape[0]).to(self.device)
 
         return self.criterion(predictions, target_embeddings, y)
 
-    def margin_syn_distance_loss(
-        self,
-        predictions,
-        target_embeddings,
-        caption_lengths
+    def max_margin_word_loss(
+            self,
+            predictions,
+            target_embeddings,
+            caption_lengths
     ):
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
+
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+        target_embeddings = torch.nn.functional.normalize(target_embeddings, p=2, dim=-1)
+        negative_examples = torch.zeros(target_embeddings.size()[0], target_embeddings.size()[1])
 
-        orthogonal_component = (predictions - torch.sum(predictions * target_embeddings,
-                                                        dim=1).unsqueeze(1) * target_embeddings)
+        pretrained_embedding_matrix = self.decoder.embedding.weight.data
 
-        orthogonal_negative_examples = torch.nn.functional.normalize(orthogonal_component, p=2, dim=-1)
+        for i in range(len(target_embeddings)):
+            sim_pred_to_all = torch.cosine_similarity(predictions[i], pretrained_embedding_matrix, dim=-1)
+            sim_target_to_all = torch.cosine_similarity(target_embeddings[i], pretrained_embedding_matrix, dim=-1)
 
-        return self.criterion(predictions, target_embeddings, orthogonal_negative_examples.to(self.device))
+            maxvalues, jmax = torch.max(sim_pred_to_all - sim_target_to_all, dim=-1)
+
+            negative_examples[i, :] = pretrained_embedding_matrix[jmax]
+
+        return self.criterion(predictions, target_embeddings, negative_examples.to(self.device))
 
     def margin_syn_similarity_loss(
         self,
@@ -2647,55 +2668,65 @@ class ContinuousLoss():
 
         return loss
 
-    def tss_loss(self, predictions, target_embeddings, caption_lengths):
-        def Cosine(vec1, vec2):
-            #torch.cosine_similarity(vec1, vec2)
-            #result = InnerProduct(vec1, vec2) / (VectorSize(vec1) * VectorSize(vec2))
-            return torch.cosine_similarity(vec1, vec2, dim=-1)
-        # following obtain by: https://github.com/taki0112/Vector_Similarity/blob/master/python/TS_SS/Vector_Similarity.py
+    def NLLvMF_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input1_losses = 0.0
+        input2_losses = 0.0
 
-        def VectorSize(vec):
-            return math.sqrt(sum(math.pow(v, 2) for v in vec))
+        images_embedding = self.decoder.image_embedding
 
-        def InnerProduct(vec1, vec2):
-            return sum(v1 * v2 for v1, v2 in zip(vec1, vec2))
-
-        def Euclidean(vec1, vec2):
-            return math.sqrt(sum(math.pow((v1 - v2), 2) for v1, v2 in zip(vec1, vec2)))
-
-        def Theta(vec1, vec2):
-            return math.acos(Cosine(vec1, vec2)) + math.radians(10)
-
-        def Triangle(vec1, vec2):
-            theta = math.radians(Theta(vec1, vec2))
-            return (VectorSize(vec1) * VectorSize(vec2) * math.sin(theta)) / 2
-
-        def Magnitude_Difference(vec1, vec2):
-            return abs(VectorSize(vec1) - VectorSize(vec2))
-
-        def Sector(vec1, vec2):
-            ED = Euclidean(vec1, vec2)
-            MD = Magnitude_Difference(vec1, vec2)
-            theta = Theta(vec1, vec2)
-            return math.pi * math.pow((ED + MD), 2) * theta / 360
-
-        def TS_SS(vec1, vec2):
-            print(Triangle(vec1, vec2))
-            return Triangle(vec1, vec2) * Sector(vec1, vec2)
-
-        loss_sim = 0
         n_sentences = predictions.size()[0]
         for i in range(n_sentences):  # iterate by sentence
             preds_without_padd = predictions[i, :caption_lengths[i], :]
             targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
             y = torch.ones(targets_without_padd.shape[0]).to(self.device)
 
-            for j in range(preds_without_padd.size()[0]):
-                print("preds_without_padd sim", preds_without_padd)
+            # word-level loss   (each prediction against each target)
+            word_losses += self.criterion(
+                preds_without_padd,
+                targets_without_padd,
+                y
+            )
 
-                loss_sim += TS_SS(preds_without_padd[j], targets_without_padd[j])
-                print("loss sim", loss_sim)
-            loss_sim = loss_sim / preds_without_padd.size()[0]  # mean by preds
-        loss_sim = loss_sim / loss_sim  # mean by batch
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0).unsqueeze(0)
 
-        return 1 - loss_sim
+            y = torch.ones(1).to(self.device)
+
+            sentence_losses += self.criterion(
+                sentence_mean_pred,
+                sentece_mean_target,
+                y
+            )
+
+            image_embedding = images_embedding[i].unsqueeze(0)
+
+            # 1º input loss (sentence predicted against input image)
+            input1_losses += self.criterion(
+                sentence_mean_pred,
+                image_embedding,
+                y
+            )
+
+            # 2º input loss (sentence predicted against input image)
+            input2_losses += self.criterion(
+                image_embedding,
+                sentece_mean_target,
+                y
+            )
+
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+        input2_loss = input2_losses / n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss

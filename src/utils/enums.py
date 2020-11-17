@@ -51,6 +51,8 @@ class EvalDatasetType(Enum):
 class ContinuousLossesType(Enum):
     COSINE = "cosine"
     MARGIN = "margin"
+    MAX_MARGIN_WORD = "max_margin_word"
+    MAX_MARGIN_DIST_WORD = "max_margin_dist_word"
     MARGIN_SYN_DISTANCE = "margin_syn_distance"
     MARGIN_SYN_SIMILARITY = "margin_syn_similarity"
     SMOOTHL1 = "smoothl1"
