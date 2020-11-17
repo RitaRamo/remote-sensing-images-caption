@@ -15,7 +15,7 @@ fasttext
 --embed_dim
 300
 --continuous_loss_type
-max_margin_cos_word
+max_margin_cos_loss
 --image_model_type
 efficient_net_flickr8k
 --no_normalization
