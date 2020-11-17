@@ -21,12 +21,12 @@ class ContinuousLoss():
         elif loss_type == ContinuousLossesType.MAX_MARGIN_WORD.value:
             self.loss_method = self.max_margin_word_loss
             self.criterion = nn.TripletMarginLoss(
-                margin=1.0, p=2).to(self.device)
+                margin=0.5, p=2).to(self.device)
 
         elif loss_type == ContinuousLossesType.MAX_MARGIN_DIST_WORD.value:
             self.loss_method = self.max_margin_word_loss
             self.criterion = nn.TripletMarginWithDistanceLoss(
-                margin=1.0, p=2).to(self.device)
+                margin=0.5).to(self.device)
 
         elif loss_type == ContinuousLossesType.MARGIN.value:
             self.loss_method = self.margin_loss
