@@ -21,6 +21,8 @@ class ImageNetModelsPretrained(Enum):
     MULTILABEL_ALL_600 = "multilabel_all_600"  # classification on remote sensing image with all layers unfreezed
     MULTILABEL_LAST = "multilabel_last"  # classification on remote sensing image with only last layer unfreezed
     MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
+    EFFICIENCENET_RSICD_NOUNSADJS_EMBEDDINGS = "efficient_net_rsicd_na_emb"
+    EFFICIENCENET_RSICD_CAPTION_EMBEDDINGS = "efficient_net_rsicd_caption_emb"
     EFFICIENCENET_EMBEDDINGS = "efficient_net_embeddings"
     EFFICIENCENET_UCM = "efficient_net_ucm"
     EFFICIENCENET_FLICKR8K = "efficient_net_flickr8k"

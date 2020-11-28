@@ -122,20 +122,50 @@ def get_image_model(model_type):
 
         return image_model, encoder_dim
 
-    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_RSICD_NOUNSADJS_EMBEDDINGS.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
-        logging.info("image model with efficientnet multi-label classification with conv11")
+        logging.info("image model with efficientnet RSICD multi-label classification for with emb adjs nouns")
 
-        checkpoint = torch.load('experiments/results/classification_efficientnet_regions.pth.tar')
-        vocab_size = 512
+        checkpoint = torch.load('experiments/results/classification_efficientnet_rsicd_embedding_nouns_adjs.pth.tar')
+        emb_dim = 300
 
         image_model = EfficientEmbeddingsNet()
-        encoder_dim = 300
-        image_model.cnn._fc = nn.Linear(encoder_dim, vocab_size)
+        encoder_dim = image_model._fc.in_features
+        image_model.cnn._fc = nn.Linear(encoder_dim, emb_dim)
 
         image_model.load_state_dict(checkpoint['model'])
 
         return image_model, encoder_dim
+
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_RSICD_CAPTION_EMBEDDINGS.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with efficientnet RSICD multi-label classification with emb caption")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet_rsicd_embedding_caption.pth.tar')
+        emb_dim = 300
+
+        image_model = EfficientEmbeddingsNet()
+        encoder_dim = image_model._fc.in_features
+        image_model.cnn._fc = nn.Linear(encoder_dim, emb_dim)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, encoder_dim
+
+    # elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
+    #     # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+    #     logging.info("image model with efficientnet multi-label classification with conv11")
+
+    #     checkpoint = torch.load('experiments/results/classification_efficientnet_regions.pth.tar')
+    #     vocab_size = 512
+
+    #     image_model = EfficientEmbeddingsNet()
+    #     encoder_dim = 300
+    #     image_model.cnn._fc = nn.Linear(encoder_dim, vocab_size)
+
+    #     image_model.load_state_dict(checkpoint['model'])
+
+    #     return image_model, encoder_dim
 
     elif model_type == ImageNetModelsPretrained.EFFICIENCENET_UCM.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
