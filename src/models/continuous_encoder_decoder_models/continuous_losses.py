@@ -258,8 +258,6 @@ class ContinuousLoss():
             caption_lengths
     ):
         predictions, target_embeddings = get_pack_padded_sequences(predictions, target_embeddings, caption_lengths)
-        print("predicton size", predictions.size())
-        print("target_embeddings size", target_embeddings.size())
 
         y = torch.ones(target_embeddings.shape[0]).to(self.device)
 
