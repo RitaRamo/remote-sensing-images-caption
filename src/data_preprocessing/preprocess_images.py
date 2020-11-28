@@ -129,7 +129,7 @@ def get_image_model(model_type):
         checkpoint = torch.load('experiments/results/classification_efficientnet_rsicd_embedding_nouns_adjs.pth.tar')
         emb_dim = 300
 
-        image_model = EfficientEmbeddingsNet()
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
         image_model.cnn._fc = nn.Linear(encoder_dim, emb_dim)
 
@@ -144,7 +144,7 @@ def get_image_model(model_type):
         checkpoint = torch.load('experiments/results/classification_efficientnet_rsicd_embedding_caption.pth.tar')
         emb_dim = 300
 
-        image_model = EfficientEmbeddingsNet()
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
         image_model.cnn._fc = nn.Linear(encoder_dim, emb_dim)
 
