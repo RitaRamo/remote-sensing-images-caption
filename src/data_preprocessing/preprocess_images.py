@@ -131,7 +131,7 @@ def get_image_model(model_type):
 
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
-        image_model.cnn._fc = nn.Linear(encoder_dim, emb_dim)
+        image_model._fc = nn.Linear(encoder_dim, emb_dim)
 
         image_model.load_state_dict(checkpoint['model'])
 
@@ -146,7 +146,7 @@ def get_image_model(model_type):
 
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
         encoder_dim = image_model._fc.in_features
-        image_model.cnn._fc = nn.Linear(encoder_dim, emb_dim)
+        image_model._fc = nn.Linear(encoder_dim, emb_dim)
 
         image_model.load_state_dict(checkpoint['model'])
 
