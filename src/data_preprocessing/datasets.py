@@ -122,6 +122,9 @@ class CaptionValDataset(CaptionDataset):
     def __getitem__(self, i):
         image_name, caption, caption_len = super().__getitem__(i)
         input_all_captions = self.all_captions[i]
+        print("caption", caption.size())
+
+        print("input_all_captions", torch.LongTensor(input_all_captions).size())
 
         return image_name, caption, caption_len, torch.LongTensor(input_all_captions)
 
@@ -208,6 +211,43 @@ class ClassificationDataset(CaptionDataset):
             categories_to_integer = [classes_to_id[category] for category in categories[i]]
 
             self.categories_tensor[i, [categories_to_integer]] = 1
+
+    def __getitem__(self, i):
+        image_name = self.images_folder + self.images_names[i]
+        image = cv2.imread(image_name)
+        image = self.get_transformed_image(image)
+
+        classes = self.categories_tensor[i]
+
+        return image, classes
+
+
+class ClassificationEmbeddingDataset(CaptionDataset):
+    def __init__(
+        self,
+        data,
+        images_folder,
+        classes_to_id,
+        classesid_to_wordid,
+        embedings_matrix,
+        augmentation=True
+    ):
+        self.images_folder = images_folder
+        self.images_names, categories = zip(*(data.items()))
+        super()._init_images(images_folder, augmentation)
+        self._init_categories(categories, classes_to_id, classesid_to_wordid, embedings_matrix)
+
+    def _init_categories(self, categories, classes_to_id, classesid_to_wordid, embedings_matrix):
+        # categories=items()
+        vocab_size = len(classes_to_id)
+        # tens de faze
+        self.categories_tensor = torch.zeros(self.dataset_size, 300)  # embedded dim size
+
+        for i in range(len(categories)):
+            categories_to_integer = [classes_to_id[category] for category in categories[i]]
+            categories_to_wordid = [classesid_to_wordid[class_id] for class_id in categories_to_integer]
+            self.categories_tensor[i] = embedings_matrix(torch.transpose(
+                torch.tensor(categories_to_wordid).unsqueeze(-1), 0, 1)).mean(dim=1)
 
     def __getitem__(self, i):
         image_name = self.images_folder + self.images_names[i]
