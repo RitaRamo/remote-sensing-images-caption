@@ -6,7 +6,7 @@ import torch
 from torchvision import transforms, models
 from torch import nn
 from data_preprocessing.create_data_files import get_dataset, get_vocab_info
-from data_preprocessing.datasets import ClassificationEmbeddingDataset
+from data_preprocessing.datasets import ClassificationEmbeddingDataset, ClassificationCaptionEmbeddingDataset
 from torch.utils.data import DataLoader
 from utils.early_stop import EarlyStopping
 from utils.optimizer import get_optimizer
@@ -24,6 +24,7 @@ DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
 FILE_NAME = "classification_efficientnet_"
 DATASET = "rsicd"
+DATASET_TYPE = "caption"
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
 FINE_TUNE = True
 EFFICIENT_NET = True
@@ -225,7 +226,10 @@ class ClassificationModel():
                 "No checkpoint. Will start model from beggining\n")
 
     def get_checkpoint_path(self):
-        path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + 'embedding_nouns_adjs.pth.tar'
+        if DATASET_TYPE == "caption":
+            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_caption.pth.tar'
+        else:
+            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_nouns_adjs.pth.tar'
         return path
 
 
@@ -238,13 +242,18 @@ if __name__ == "__main__":
                  device, torch.cuda.device_count())
 
     if DATASET == Datasets.RSICD.value:
-        CLASSIFICATION_DATASET_PATH = "classification_dataset_rsicd_nouns_adjs"
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_rsicd"
     elif DATASET == Datasets.UCM.value:
-        CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm_nouns_adjs"
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm"
     elif DATASET == Datasets.FLICKR8K.value:
-        CLASSIFICATION_DATASET_PATH = "classification_dataset_flickr8k_nouns_adjs"
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_flickr8k"
     else:
         raise Exception("Invalid dataset")
+
+    if DATASET_TYPE == "caption":
+        CLASSIFICATION_DATASET_PATH = CLASSIFICATION_DATASET_PATH + "_caption"
+    else:
+        CLASSIFICATION_DATASET_PATH = CLASSIFICATION_DATASET_PATH + "_nouns_adjs"
 
     print("Path of classificaion dataset", DATASET)
 
@@ -252,9 +261,10 @@ if __name__ == "__main__":
     print("dataset folder", dataset_folder)
 
     classification_state = torch.load(dataset_jsons + CLASSIFICATION_DATASET_PATH)
-    classes_to_id = classification_state["classes_to_id"]
-    id_to_classes = classification_state["id_to_classes"]
-    classid_to_wordid = classification_state["classid_to_wordid"]
+    if DATASET_TYPE != "caption":
+        classes_to_id = classification_state["classes_to_id"]
+        id_to_classes = classification_state["id_to_classes"]
+        classid_to_wordid = classification_state["classid_to_wordid"]
     classification_dataset = classification_state["classification_dataset"]
 
     dataset_len = len(classification_dataset)
@@ -266,27 +276,49 @@ if __name__ == "__main__":
     vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
-    embedding_matrix = get_embedding_layer("glove", EMBED_DIM, vocab_size, token_to_id, False)
+    embedding_matrix = get_embedding_layer("fasttext", EMBED_DIM, vocab_size, token_to_id, False)
     # adicionar aqui coisas classtoword id
 
-    train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
-                          classes_to_id, classid_to_wordid, embedding_matrix)
-    val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
-                        classes_to_id, classid_to_wordid, embedding_matrix)
+    if DATASET_TYPE == "caption":
+        train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
+                              embedding_matrix)
+        val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
+                            embedding_matrix)
 
-    train_dataloader = DataLoader(
-        ClassificationEmbeddingDataset(*train_dataset_args),
-        batch_size=BATCH_SIZE,
-        shuffle=True,
-        num_workers=NUM_WORKERS
-    )
+        train_dataloader = DataLoader(
+            ClassificationCaptionEmbeddingDataset(*train_dataset_args),
+            batch_size=BATCH_SIZE,
+            shuffle=True,
+            num_workers=NUM_WORKERS
+        )
 
-    val_dataloader = DataLoader(
-        ClassificationEmbeddingDataset(*val_dataset_args),
-        batch_size=BATCH_SIZE,
-        shuffle=False,
-        num_workers=NUM_WORKERS
-    )
+        val_dataloader = DataLoader(
+            ClassificationCaptionEmbeddingDataset(*val_dataset_args),
+            batch_size=BATCH_SIZE,
+            shuffle=False,
+            num_workers=NUM_WORKERS
+        )
+
+    else:
+        train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
+                              classes_to_id, classid_to_wordid, embedding_matrix)
+        val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
+                            classes_to_id, classid_to_wordid, embedding_matrix)
+
+        train_dataloader = DataLoader(
+            ClassificationEmbeddingDataset(*train_dataset_args),
+            batch_size=BATCH_SIZE,
+            shuffle=True,
+            num_workers=NUM_WORKERS
+        )
+
+        val_dataloader = DataLoader(
+            ClassificationEmbeddingDataset(*val_dataset_args),
+            batch_size=BATCH_SIZE,
+            shuffle=False,
+            num_workers=NUM_WORKERS
+        )
+
     #TODO: CHANGE
     model = ClassificationModel(device)
     model.setup_to_train()
