@@ -1,5 +1,5 @@
 --file_name
-nstvb_fine_encdec_discrete_eff_noaug_notnormalized.txt
+nti_fine_encdec_discrete_effimgnet_noaug_notnormalized.txt
 --model_class_str
 BasicEncoderDecoderModel
 --batch_size
