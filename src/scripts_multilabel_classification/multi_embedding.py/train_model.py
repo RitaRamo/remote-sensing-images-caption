@@ -89,9 +89,9 @@ class ClassificationModel():
     def val_step(self, imgs, targets):
         imgs = imgs.to(self.device)
         targets = targets.to(self.device)
+        outputs = self.model(imgs)
         y = torch.ones(outputs.shape[0]).to(self.device)
 
-        outputs = self.model(imgs)
         loss = self.criterion(outputs, targets, y)
 
         return loss
