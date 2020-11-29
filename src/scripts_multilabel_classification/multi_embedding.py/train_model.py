@@ -29,7 +29,7 @@ TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
-
+EMBEDDING_TYPE="glove"
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -227,9 +227,9 @@ class ClassificationModel():
 
     def get_checkpoint_path(self):
         if DATASET_TYPE == "caption":
-            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_caption.pth.tar'
+            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET +  '_embedding_caption_'+EMBEDDING_TYPE+'.pth.tar'
         else:
-            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_nouns_adjs.pth.tar'
+            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_nouns_adjs_'+EMBEDDING_TYPE+'.pth.tar'
         return path
 
 
@@ -276,7 +276,7 @@ if __name__ == "__main__":
     vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
-    embedding_matrix = get_embedding_layer("fasttext", EMBED_DIM, vocab_size, token_to_id, False)
+    embedding_matrix = get_embedding_layer(EMBEDDING_TYPE, EMBED_DIM, vocab_size, token_to_id, False)
     # adicionar aqui coisas classtoword id
 
     if DATASET_TYPE == "caption":
