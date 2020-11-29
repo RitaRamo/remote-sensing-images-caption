@@ -64,7 +64,7 @@ class ClassificationModel():
 
     def setup_to_train(self):
         #TODO: CHANGE
-        if LOSS_TYPE= "smoothl1":
+        if LOSS_TYPE == "smoothl1":
             self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
         else:
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
@@ -82,7 +82,7 @@ class ClassificationModel():
         targets = targets.to(self.device)
         outputs = self.model(imgs)
 
-        if LOSS_TYPE= "smoothl1":
+        if LOSS_TYPE == "smoothl1":
             outputs = torch.nn.functional.normalize(outputs, p=2, dim=-1)
             targets = torch.nn.functional.normalize(targets, p=2, dim=-1)
             loss = self.criterion(outputs, targets)
@@ -105,7 +105,7 @@ class ClassificationModel():
         targets = targets.to(self.device)
         outputs = self.model(imgs)
 
-        if LOSS_TYPE= "smoothl1":
+        if LOSS_TYPE == "smoothl1":
             outputs = torch.nn.functional.normalize(outputs, p=2, dim=-1)
             targets = torch.nn.functional.normalize(targets, p=2, dim=-1)
             loss = self.criterion(outputs, targets)
