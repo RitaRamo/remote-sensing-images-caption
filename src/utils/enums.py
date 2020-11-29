@@ -23,6 +23,7 @@ class ImageNetModelsPretrained(Enum):
     MULTILABEL_ALL_EFFICIENCENET = "efficient_net"
     EFFICIENCENET_RSICD_NOUNSADJS_EMBEDDINGS = "efficient_net_rsicd_na_emb"
     EFFICIENCENET_RSICD_CAPTION_EMBEDDINGS = "efficient_net_rsicd_caption_emb"
+    EFFICIENCENET_RSICD_CAPTION_GLOVE_EMBEDDINGS = "efficient_net_rsicd_caption_emb_glove"
     EFFICIENCENET_EMBEDDINGS = "efficient_net_embeddings"
     EFFICIENCENET_UCM = "efficient_net_ucm"
     EFFICIENCENET_FLICKR8K = "efficient_net_flickr8k"

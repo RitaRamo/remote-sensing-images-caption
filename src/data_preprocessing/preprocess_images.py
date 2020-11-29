@@ -152,6 +152,21 @@ def get_image_model(model_type):
 
         return image_model, encoder_dim
 
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENET_RSICD_CAPTION_GLOVE_EMBEDDINGS.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with efficientnet RSICD multi-label classification with emb caption glove")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet_rsicd_embedding_caption_glove.pth.tar')
+        emb_dim = 300
+
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
+        encoder_dim = image_model._fc.in_features
+        image_model._fc = nn.Linear(encoder_dim, emb_dim)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, encoder_dim
+
     # elif model_type == ImageNetModelsPretrained.EFFICIENCENET_EMBEDDINGS.value:
     #     # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
     #     logging.info("image model with efficientnet multi-label classification with conv11")
