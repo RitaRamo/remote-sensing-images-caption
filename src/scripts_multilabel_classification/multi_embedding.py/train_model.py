@@ -26,6 +26,7 @@ FILE_NAME = "classification_efficientnet_"
 DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
+LOSS_TYPE= "smoothl1"
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
@@ -63,7 +64,12 @@ class ClassificationModel():
 
     def setup_to_train(self):
         #TODO: CHANGE
-        self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+        if LOSS_TYPE= "smoothl1":
+            self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
+        else:
+            self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
+
         if FINE_TUNE:
             self.optimizer = get_optimizer(OPTIMIZER_TYPE, self.model.parameters(), OPTIMIZER_LR)
         else:  # ConvNet as fixed feature extractor (freeze all the network except the final layer)
@@ -75,9 +81,16 @@ class ClassificationModel():
         imgs = imgs.to(self.device)
         targets = targets.to(self.device)
         outputs = self.model(imgs)
-        y = torch.ones(outputs.shape[0]).to(self.device)
 
-        loss = self.criterion(outputs, targets, y)
+        if LOSS_TYPE= "smoothl1":
+            outputs = torch.nn.functional.normalize(outputs, p=2, dim=-1)
+            targets = torch.nn.functional.normalize(targets, p=2, dim=-1)
+            loss = self.criterion(outputs, targets)
+            loss = torch.sum(loss, dim=-1)
+            loss = torch.mean(loss)
+        else:
+            y = torch.ones(outputs.shape[0]).to(self.device)
+            loss = self.criterion(outputs, targets, y)
 
         self.model.zero_grad()
         loss.backward()
@@ -91,9 +104,16 @@ class ClassificationModel():
         imgs = imgs.to(self.device)
         targets = targets.to(self.device)
         outputs = self.model(imgs)
-        y = torch.ones(outputs.shape[0]).to(self.device)
 
-        loss = self.criterion(outputs, targets, y)
+        if LOSS_TYPE= "smoothl1":
+            outputs = torch.nn.functional.normalize(outputs, p=2, dim=-1)
+            targets = torch.nn.functional.normalize(targets, p=2, dim=-1)
+            loss = self.criterion(outputs, targets)
+            loss = torch.sum(loss, dim=-1)
+            loss = torch.mean(loss)
+        else:
+            y = torch.ones(outputs.shape[0]).to(self.device)
+            loss = self.criterion(outputs, targets, y)
 
         return loss
 
@@ -227,9 +247,9 @@ class ClassificationModel():
 
     def get_checkpoint_path(self):
         if DATASET_TYPE == "caption":
-            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET +  '_embedding_caption_'+EMBEDDING_TYPE+'.pth.tar'
+            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET +  '_embedding_caption_'+EMBEDDING_TYPE+'_'+LOSS_TYPE+'.pth.tar'
         else:
-            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_nouns_adjs_'+EMBEDDING_TYPE+'.pth.tar'
+            path = self.MODEL_DIRECTORY + FILE_NAME + DATASET + '_embedding_nouns_adjs_'+EMBEDDING_TYPE+'_'+LOSS_TYPE+'.pth.tar'
         return path
 
 
