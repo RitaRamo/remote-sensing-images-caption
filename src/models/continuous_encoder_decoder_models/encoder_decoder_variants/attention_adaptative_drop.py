@@ -349,7 +349,7 @@ class ContinuousAdaptativeAttentionDropModel(ContinuousAttentionModel):
             return best_sentence
 
     def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
-        predictions, h, c,_ = self.decoder(
+        predictions, h, c, _, _  = self.decoder(
             input_word, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output_smoothl1(criteria, predictions)
