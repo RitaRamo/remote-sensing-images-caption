@@ -53,16 +53,16 @@ class AdaptativeAttention(nn.Module):
         """
 
         #TODO: DROPOUT
-        hidden = self.linear_h(self.dropout(decoder_hidden))  # (batch_size, attention_dim)
+        hidden = self.linear_h(decoder_hidden)  # (batch_size, attention_dim)
         # eq 6 - 8 (attention to image regions)
-        v = self.linear_v(self.dropout(encoder_out))
-        z_t = self.linear_att_v(self.dropout(self.tanh(v + hidden.unsqueeze(1)))).squeeze(2)  # eq 6
+        v = self.linear_v(encoder_out)
+        z_t = self.linear_att_v(self.tanh(v + hidden.unsqueeze(1))).squeeze(2)  # eq 6
         alpha_t = self.softmax(z_t)  # eq7
         c_t = (encoder_out * alpha_t.unsqueeze(2)).sum(dim=1)  # eq8
 
         # eq 12
-        s = self.linear_s(self.dropout(st.unsqueeze(1)))
-        s_att = self.linear_att_s(self.dropout(self.tanh(s + hidden.unsqueeze(1)))
+        s = self.linear_s(st.unsqueeze(1))
+        s_att = self.linear_att_s(self.tanh(s + hidden.unsqueeze(1))
                                   ).squeeze(2)  # right part of eq12
         z_t_extended = torch.cat((z_t, s_att), dim=1)
         alpha_t_hat = self.softmax(z_t_extended)  # eq12 completed
@@ -91,8 +91,6 @@ class ContinuousDecoderWithAdaptativeAttention(DecoderWithAttention):
             decoder_dim, attention_dim)  # attention network
 
         self.fc = nn.Linear(decoder_dim, embed_dim)
-        self.represent_image = nn.Linear(encoder_dim, embed_dim)
-        self.image_embedding = None
 
         self.relu = nn.ReLU()
         self.linear_image = nn.Linear(encoder_dim, decoder_dim)
@@ -102,7 +100,7 @@ class ContinuousDecoderWithAdaptativeAttention(DecoderWithAttention):
         self.linear_x = nn.Linear(embed_dim + decoder_dim, decoder_dim)
 
         self.decode_step = nn.LSTMCell(
-            embed_dim + decoder_dim, decoder_dim, bias=True)
+            embed_dim, decoder_dim, bias=True)
 
         self.tanh = nn.Tanh()
         self.sigmoid = nn.Sigmoid()
@@ -118,15 +116,11 @@ class ContinuousDecoderWithAdaptativeAttention(DecoderWithAttention):
         # (batch_size, 2048)
         # transform 2048 (dim image embeddings) in decoder dim
         h = self.init_h(mean_encoder_out)  # (batch_size, decoder_dim)
-        self.image_embedding = self.represent_image(mean_encoder_out)  # 300 512
-
         # c = self.init_c(mean_encoder_out)
 
         # transform V in same size as decoder to then use it in attention to add with sentinel
-        global_image = self.relu(self.linear_image(self.dropout(mean_encoder_out))
-                                 )  # (batch_size, 1, decoder_dim)
-        V_spatial_features = self.relu(self.linear_regions(self.dropout(encoder_out))
-                                       )  # (batch_size, image_size*image_size, decoder_dim)
+        global_image = self.linear_image(mean_encoder_out)  # (batch_size, 1, decoder_dim)
+        V_spatial_features = self.linear_regions(encoder_out)  # (batch_size, image_size*image_size, decoder_dim)
 
         return h, h, global_image, V_spatial_features
 
@@ -137,11 +131,11 @@ class ContinuousDecoderWithAdaptativeAttention(DecoderWithAttention):
         inputs = torch.cat((embeddings, global_image), dim=-1)
 
         #(batch, decoder_dim)
-        gt = self.sigmoid(self.linear_x(self.dropout(inputs)) + self.linear_dec(self.dropout(decoder_hidden_state)))
+        gt = self.sigmoid(self.linear_x(inputs) + self.linear_dec(decoder_hidden_state))
 
         #(batch, decoder_dim)
         decoder_hidden_state, decoder_cell_state = self.decode_step(
-            inputs, (decoder_hidden_state, decoder_cell_state)
+            embeddings, (decoder_hidden_state, decoder_cell_state)
         )
 
         #(batch, decoder_dim)
@@ -157,7 +151,7 @@ class ContinuousDecoderWithAdaptativeAttention(DecoderWithAttention):
         return scores, decoder_hidden_state, decoder_cell_state, alpha, beta
 
 
-class ContinuousAdaptativeAttentionImageCompModel(ContinuousAttentionModel):
+class ContinuousAdaptativeAttentionOnlyImageCompModel(ContinuousAttentionModel):
 
     def __init__(self,
                  args,
@@ -353,11 +347,3 @@ class ContinuousAdaptativeAttentionImageCompModel(ContinuousAttentionModel):
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
-
-    def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
-        predictions, h, c,_ = self.decoder(
-            input_word, encoder_out, h, c)
-
-        current_output_index = self._convert_prediction_to_output_smoothl1(criteria, predictions)
-
-        return current_output_index, h, c
