@@ -101,6 +101,14 @@ class ContinuousAttentionTanhModel(ContinuousEncoderDecoderModel):
         current_output_index = self._convert_prediction_to_output(predictions)
 
         return current_output_index, h, c
+    
+    def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
+        predictions, h, c,_ = self.decoder(
+            input_word, encoder_out, h, c)
+
+        current_output_index = self._convert_prediction_to_output_smoothl1(criteria, predictions)
+
+        return current_output_index, h, c
 
     def generate_output_embedding_with_alphas(self, input_word, encoder_out, h, c):
         predictions, h, c, alphas = self.decoder(
