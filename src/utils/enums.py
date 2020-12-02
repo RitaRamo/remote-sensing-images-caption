@@ -62,6 +62,8 @@ class ContinuousLossesType(Enum):
     MARGIN_SYN_SIMILARITY = "margin_syn_similarity"
     SMOOTHL1 = "smoothl1"
     SMOOTHL1_SUM_MEAN = "smoothl1_sum_mean"
+    SMOOTHL1_REAL_AVG_SENTENCE_AND_INPUT = "smoothl1_real_avg_sentence_and_input"
+    SMOOTHL1_REAL_AVG_SENTENCE = "smoothl1_real_avg_sentence"
     TSS_LOSS = "tss_loss"
     L1_LOSS = "l1"
     L1_SUM_MEAN = "l1_sum_mean"
