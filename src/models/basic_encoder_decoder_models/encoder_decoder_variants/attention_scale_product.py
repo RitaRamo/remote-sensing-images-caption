@@ -181,7 +181,6 @@ class BasicScaleProductAttentionModel(BasicEncoderDecoderModel):
         self.decoder = self.decoder.to(self.device)
 
     def _predict(self, encoder_out, caps, caption_lengths):
-        print("encoder out size", encoder_out.size())
         batch_size = encoder_out.size(0)
         num_pixels = encoder_out.size(1)
 
