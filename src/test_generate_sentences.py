@@ -81,13 +81,14 @@ from models.continuous_encoder_decoder_models.encoder_decoder_variants.enc_dec_p
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.enc_dec_gradnorm_image import ContinuousEncoderDecoderGradNormImageModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_tanh import ContinuousAttentionTanhModel
 from models.continuous_encoder_decoder_models.encoder_decoder_variants.attention_tanh_imghc import ContinuousAttentionTanhImgHCModel
+from models.basic_encoder_decoder_models.encoder_decoder_variants.attention_scale_product import BasicScaleProductAttentionModel
 
 from torchvision import transforms
 from PIL import Image
 from data_preprocessing.preprocess_tokens import START_TOKEN, END_TOKEN
 import numpy as np
 import operator
-from nlgeval import compute_metrics
+#from nlgeval import compute_metrics
 import json
 import cv2
 

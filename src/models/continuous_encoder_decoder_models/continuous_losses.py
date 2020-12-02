@@ -49,6 +49,14 @@ class ContinuousLoss():
             self.loss_method = self.smoothl1_sum_mean_loss
             self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
 
+        elif loss_type == ContinuousLossesType.SMOOTHL1_REAL_AVG_SENTENCE_AND_INPUT.value:
+            self.loss_method = self.smoothl1_real_avg_sentence_and_input_loss
+            self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
+
+        elif loss_type == ContinuousLossesType.SMOOTHL1_REAL_AVG_SENTENCE.value:
+            self.loss_method = self.smoothl1_real_avg_sentence_loss
+            self.criterion = nn.SmoothL1Loss(reduction='none').to(self.device)
+
         elif loss_type == ContinuousLossesType.TSS_LOSS.value:
             self.loss_method = self.tss_loss
             #self.criterion = nn.L1Loss().to(self.device)
@@ -242,6 +250,7 @@ class ContinuousLoss():
         elif loss_type == ContinuousLossesType.COS_AVG_HDSENTENCE_AND_AVG_HDINPUTS.value:
             self.loss_method = self.cos_avg_and_hausdorffsentence_and_avg_hausdorffinputs_loss
             self.criterion = nn.CosineEmbeddingLoss().to(self.device)
+
 
     def compute_loss(
         self,
@@ -2756,5 +2765,110 @@ class ContinuousLoss():
         input2_loss = input2_losses / n_sentences
 
         loss = word_loss + sentence_loss + input1_loss + input2_loss
+
+        return loss
+
+        # loss = self.criterion(predictions, target_embeddings)
+        # loss = torch.sum(loss, dim=-1)
+        # loss = torch.mean(loss)
+
+
+    def smoothl1_real_avg_sentence_and_input_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input1_losses = 0.0
+
+        images_embedding = self.decoder.image_embedding
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+
+            # word-level loss   (each prediction against each target)
+            w_loss = self.criterion(preds_without_padd, targets_without_padd)            
+            w_loss = torch.sum(w_loss, dim=-1)
+            w_loss = torch.mean(w_loss)
+
+            word_losses += w_loss
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0).unsqueeze(0)
+
+            s_loss = self.criterion(sentence_mean_pred, sentece_mean_target)
+            s_loss = torch.sum(s_loss, dim=-1)
+            s_loss = torch.mean(s_loss)
+
+            sentence_losses += s_loss
+
+            # 1º input loss (sentence predicted against input image)
+            image_embedding = images_embedding[i].unsqueeze(0)
+
+            i_loss = self.criterion(sentence_mean_pred, image_embedding)
+            i_loss = torch.sum(i_loss, dim=-1)
+            i_loss = torch.mean(i_loss)
+            input1_losses += i_loss
+
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss
+
+        return loss
+
+    def smoothl1_real_avg_sentence_loss(
+        self,
+        predictions,
+        target_embeddings,
+        caption_lengths
+    ):
+        word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
+        sentence_losses = 0.0
+        input1_losses = 0.0
+
+        images_embedding = self.decoder.image_embedding
+
+        n_sentences = predictions.size()[0]
+        for i in range(n_sentences):  # iterate by sentence
+            preds_without_padd = predictions[i, :caption_lengths[i], :]
+            targets_without_padd = target_embeddings[i, :caption_lengths[i], :]
+
+            # word-level loss   (each prediction against each target)
+            w_loss = self.criterion(preds_without_padd, targets_without_padd)
+            w_loss = torch.sum(w_loss, dim=-1)
+            w_loss = torch.mean(w_loss)
+
+            word_losses += w_loss
+
+            # sentence-level loss (sentence predicted agains target sentence)
+            sentence_mean_pred = torch.mean(preds_without_padd, dim=0).unsqueeze(0)  # ver a dim
+            sentece_mean_target = torch.mean(targets_without_padd, dim=0).unsqueeze(0)
+
+            s_loss = self.criterion(sentence_mean_pred, sentece_mean_target)
+            s_loss = torch.sum(s_loss, dim=-1)
+            s_loss = torch.mean(s_loss)
+
+            sentence_losses += s_loss
+
+            # 1º input loss (sentence predicted against input image)
+            image_embedding = images_embedding[i].unsqueeze(0)
+
+            i_loss = self.criterion(sentence_mean_pred, image_embedding)
+            i_loss = torch.sum(i_loss, dim=-1)
+            i_loss = torch.mean(i_loss)
+            input1_losses += i_loss
+
+        word_loss = word_losses / n_sentences
+        sentence_loss = sentence_losses / n_sentences
+        input1_loss = input1_losses / n_sentences
+
+        loss = word_loss + sentence_loss + input1_loss
 
         return loss
