@@ -2831,9 +2831,6 @@ class ContinuousLoss():
     ):
         word_losses = 0.0  # pred_against_target_loss; #pred_sentence_again_target_sentence;"pred_sentence_agains_image
         sentence_losses = 0.0
-        input1_losses = 0.0
-
-        images_embedding = self.decoder.image_embedding
 
         n_sentences = predictions.size()[0]
         for i in range(n_sentences):  # iterate by sentence
@@ -2857,18 +2854,9 @@ class ContinuousLoss():
 
             sentence_losses += s_loss
 
-            # 1º input loss (sentence predicted against input image)
-            image_embedding = images_embedding[i].unsqueeze(0)
-
-            i_loss = self.criterion(sentence_mean_pred, image_embedding)
-            i_loss = torch.sum(i_loss, dim=-1)
-            i_loss = torch.mean(i_loss)
-            input1_losses += i_loss
-
         word_loss = word_losses / n_sentences
         sentence_loss = sentence_losses / n_sentences
-        input1_loss = input1_losses / n_sentences
 
-        loss = word_loss + sentence_loss + input1_loss
+        loss = word_loss + sentence_loss
 
         return loss
