@@ -181,7 +181,8 @@ class ContinuousScaleProductAttention3CompModel(ContinuousEncoderDecoderModel):
 
     def _predict(self, encoder_results, caps, caption_lengths):
         encoder_out, encoder_attrs = encoder_results
-        self.decoder.image_embedding = encoder_attrs
+        self.decoder.image_embedding = torch.nn.functional.normalize(encoder_attrs, p=2, dim=-1)
+
 
         batch_size = encoder_out.size(0)
         num_pixels = encoder_out.size(1)
@@ -192,7 +193,7 @@ class ContinuousScaleProductAttention3CompModel(ContinuousEncoderDecoderModel):
         all_alphas = torch.zeros(batch_size, max(
             caption_lengths), num_pixels).to(self.device)
 
-        h, c = self.decoder.init_hidden_state(encoder_attrs)
+        h, c = self.decoder.init_hidden_state(encoder_out)
 
         # Predict
         for t in range(max(

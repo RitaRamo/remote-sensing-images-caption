@@ -312,9 +312,6 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
         word_loss = word_losses / n_sentences
         sentence_loss = sentence_losses / n_sentences
         input1_loss = input1_losses / n_sentences
-        print("word loss", word_loss)
-        print("sentence_loss loss", sentence_loss)
-        print("input1_loss loss", input1_loss)
 
         return word_loss, sentence_loss, input1_loss
 
