@@ -122,9 +122,6 @@ class CaptionValDataset(CaptionDataset):
     def __getitem__(self, i):
         image_name, caption, caption_len = super().__getitem__(i)
         input_all_captions = self.all_captions[i]
-        print("caption", caption.size())
-
-        print("input_all_captions", torch.LongTensor(input_all_captions).size())
 
         return image_name, caption, caption_len, torch.LongTensor(input_all_captions)
 
