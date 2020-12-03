@@ -277,7 +277,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
         sentence_losses = 0.0
         input1_losses = 0.0
 
-        images_embedding = self.decoder.image_embedding
+        images_embedding = torch.nn.functional.normalize(self.decoder.image_embedding, p=2, dim=-1)
 
         n_sentences = predictions.size()[0]
         for i in range(n_sentences):  # iterate by sentence
