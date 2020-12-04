@@ -421,6 +421,69 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
         self.loss_weight_sent.data = coef.data * self.loss_weight_sent.data
         self.loss_weight_input1.data = coef.data * self.loss_weight_input1.data
 
+
+    def inference_with_greedy_smoothl1(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output, encoder_attrs = self.encoder(image)
+            self.decoder.image_embedding = torch.nn.functional.normalize(encoder_attrs, p=2, dim=-1)
+
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            criteria = torch.nn.SmoothL1Loss(reduction="none")
+
+            while True:
+
+                scores, h, c = self.generate_output_index_smoothl1(criteria,
+                                                                   input_word, encoder_output, h, c)
+
+                sorted_scores, sorted_indices = torch.sort(scores, descending=False, dim=-1)
+                # print("this are the sorted_scores", sorted_scores)
+                # print("this are the sorted_indices", sorted_indices)
+                # k_l = 0
+                # for indi in sorted_indices:
+                #     print(self.id_to_token[indi.item()], sorted_scores[k_l])
+                #     k_l += 1
+                #     if k_l > 5:
+                #         break
+
+                current_output_index = sorted_indices.squeeze()[0]
+                # print("current output index", current_output_index)
+                # if current_output_index.item() == self.token_to_id[PAD_TOKEN]:
+                #     current_output_index = sorted_indices.squeeze()[1]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            # print("beam_t decoded sentence:", generated_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence  # input_caption
+
     def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
         predictions, h, c,_ = self.decoder(
             input_word, encoder_out, h, c)
