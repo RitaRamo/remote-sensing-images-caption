@@ -179,13 +179,13 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             self.gradnorm_loss = nn.L1Loss().to(self.device)
         else:
             self.loss_weight_word = torch.ones(
-                1, device=self.device, dtype=torch.float
+                self.args.w1, device=self.device, dtype=torch.float
             )
             self.loss_weight_sent = torch.ones(
-                1, device=self.device, dtype=torch.float
+                self.args.w2, device=self.device, dtype=torch.float
             )
             self.loss_weight_input1 = torch.ones(
-                1, device=self.device, dtype=torch.float
+                self.args.w3, device=self.device, dtype=torch.float
             )
 
         self.initial = False
