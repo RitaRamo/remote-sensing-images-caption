@@ -12,6 +12,7 @@ from data_preprocessing.preprocess_tokens import OOV_TOKEN, START_TOKEN, END_TOK
 from embeddings.embeddings import EmbeddingsType
 from models.continuous_encoder_decoder_models.encoder_decoder import ContinuousEncoderDecoderModel
 from embeddings.embeddings import EmbeddingsType
+from data_preprocessing.preprocess_images import get_image_model
 
 class Encoder(nn.Module):
     """
