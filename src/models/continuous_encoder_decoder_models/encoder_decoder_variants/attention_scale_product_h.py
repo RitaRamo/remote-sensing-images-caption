@@ -104,6 +104,8 @@ class ContinuousDecoderWithAttention(DecoderWithAttention):
 
         # replace softmax layer with embedding layer
         self.fc = nn.Linear(decoder_dim, embed_dim)
+        self.init_h = nn.Linear(embed_dim, decoder_dim)
+
 
     def init_hidden_state(self, encoder_attr):
 
