@@ -15,7 +15,11 @@ from embeddings.embeddings import EmbeddingsType
 from data_preprocessing.preprocess_images import get_image_model
 from utils.enums import ContinuousLossesType
 from utils.optimizer import get_optimizer, clip_gradient
-
+from utils.early_stop import EarlyStopping
+import time
+import logging
+from definitions_datasets import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
+import json
 
 class Encoder(nn.Module):
     """
@@ -135,9 +139,9 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
     def _initialize_encoder_and_decoder(self):
 
-        if (self.args.embedding_type not in [embedding.value for embedding in EmbeddingsType]):
-            raise ValueError(
-                "Continuous model should use pretrained embeddings...")
+        # if (self.args.embedding_type not in [embedding.value for embedding in EmbeddingsType]):
+        #     raise ValueError(
+        #         "Continuous model should use pretrained embeddings...")
 
         self.encoder = Encoder(self.args.image_model_type,
                                enable_fine_tuning=self.args.fine_tune_encoder)
@@ -181,7 +185,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             self.loss_weight_word = torch.ones(
                 1, device=self.device, dtype=torch.float
             )*self.args.w1
-            
+
             self.loss_weight_sent = torch.ones(
                 1, device=self.device, dtype=torch.float
             )*self.args.w2
@@ -191,6 +195,138 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             )*self.args.w3
 
         self.initial = False
+
+    def train(self, train_dataloader, val_dataloader, print_freq):
+        if self.args.early_mode == "loss":
+            start_baseline_value = np.Inf
+        elif self.args.early_mode == "metric":
+            start_baseline_value = 0
+
+        early_stopping = EarlyStopping(
+            epochs_limit_without_improvement=self.args.epochs_limit_without_improvement,
+            epochs_since_last_improvement=self.checkpoint_epochs_since_last_improvement
+            if self.checkpoint_exists else 0,
+            baseline=self.checkpoint_val_loss if self.checkpoint_exists else start_baseline_value,
+            encoder_optimizer=self.encoder_optimizer,
+            decoder_optimizer=self.decoder_optimizer,
+            period_decay_lr=self.args.period_decay_without_improvement,
+            mode=self.args.early_mode
+        )
+
+        start_epoch = self.checkpoint_start_epoch if self.checkpoint_exists else 0
+        all_training_losses = []
+        all_validation_loss = []
+        all_validation_bleu = []
+        all_val_best=[]
+        all_w_word=[]
+        all_w_sent=[]
+        all_w_input1=[]
+        all_together=[]
+
+        # Iterate by epoch
+        for epoch in range(start_epoch, self.args.epochs):
+            self.current_epoch = epoch
+
+            if early_stopping.is_to_stop_training_early():
+                break
+
+            start = time.time()
+            train_total_loss = 0.0
+            val_total_loss = 0.0
+
+            # Train by batch
+            self.decoder.train()
+            self.encoder.train()
+            for batch_i, (imgs, caps, caplens) in enumerate(train_dataloader):
+
+                train_loss = self.train_step(
+                    imgs, caps, caplens
+                )
+
+                self._log_status("TRAIN", epoch, batch_i,
+                                 train_dataloader, train_loss, print_freq)
+
+                train_total_loss += train_loss.data.item()
+                del train_loss
+
+                # (only for debug: interrupt val after 1 step)
+                if self.args.disable_steps:
+                    break
+
+            # End training
+            epoch_loss = train_total_loss / (batch_i + 1)
+            all_training_losses.append(epoch_loss)
+            logging.info('Time taken for 1 epoch {:.4f} sec'.format(
+                time.time() - start))
+            logging.info('\n\n-----> TRAIN END! Epoch: {}; Loss: {:.4f}\n'.format(epoch,
+                                                                                  train_total_loss / (batch_i + 1)))
+
+            # Start validation
+            self.decoder.eval()  # eval mode (no dropout or batchnorm)
+            self.encoder.eval()
+
+            with torch.no_grad():
+                all_hypotheses = []
+                all_references = []
+                for batch_i, (imgs, caps, caplens, all_captions) in enumerate(val_dataloader):
+
+                    val_loss, val_hypotheses, val_references = self.val_step(
+                        imgs, caps, caplens, all_captions)
+
+                    all_hypotheses.extend(val_hypotheses)
+                    all_references.extend(val_references)
+                    #print("val hy", val_hypotheses)
+                    #print("val references", val_references)
+
+                    self._log_status("VAL", epoch, batch_i,
+                                     val_dataloader, val_loss, print_freq)
+
+                    val_total_loss += val_loss
+
+                    # (only for debug: interrupt val after 1 step)
+                    if self.args.disable_steps:
+                        break
+
+            # End validation
+            epoch_val_loss = val_total_loss / (batch_i + 1)
+            all_validation_loss.append(epoch_val_loss.item())
+
+            if self.args.early_mode == "loss":
+                epoch_val_score = epoch_val_loss
+                epoch_val_bleu4 = -1.0
+            elif self.args.early_mode == "metric":
+                epoch_val_bleu4 = corpus_bleu(all_references, all_hypotheses)
+                all_validation_bleu.append(epoch_val_bleu4)
+                epoch_val_score = epoch_val_bleu4
+
+            early_stopping.check_improvement(epoch_val_score)
+            self._save_checkpoint(early_stopping.is_current_val_best(),
+                                  epoch,
+                                  early_stopping.get_number_of_epochs_without_improvement(),
+                                  epoch_val_score)
+
+            logging.info('\n-------------- END EPOCH:{}⁄{}; Train Loss:{:.4f}; Val Loss:{:.4f}; Val Bleu:{:.3f}; -------------\n'.format(
+                epoch, self.args.epochs, epoch_loss, epoch_val_loss, epoch_val_bleu4))
+
+            all_val_best.append(early_stopping.is_current_val_best())
+            all_w_word.append(self.loss_weight_word[0].item())
+            all_w_sent.append(self.loss_weight_sent[0].item())
+            all_w_input1.append(self.loss_weight_input1[0].item())
+            all_together.append((epoch_loss, epoch_val_loss.item(), early_stopping.is_current_val_best(), self.loss_weight_word[0].item(),self.loss_weight_sent[0].item(), self.loss_weight_input1[0].item()) )
+
+        final_dict = {
+            "train_loss": all_training_losses,
+            "val_loss": all_validation_loss,
+            "val_bleu": all_validation_bleu,
+            "all_val_best":all_val_best,
+            "all_w_word":all_w_word,
+            "all_w_sent":all_w_sent,
+            "all_w_input1":all_w_input1,
+            "all_together": all_together,
+        }
+
+        with open(PATH_TRAINED_MODELS + self.args.file_name + ".json", 'w+') as f:
+            json.dump(final_dict, f, indent=2)
 
     def _prepare_inputs_to_forward_pass(self, imgs, caps, caption_lengths):
         imgs = imgs.to(self.device)
