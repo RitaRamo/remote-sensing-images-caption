@@ -20,5 +20,3 @@ smoothl1_sum_mean
 efficient_net_rsicd_caption_emb_glove_smoothl1
 --dataset
 rsicd_new_splits
-
-
