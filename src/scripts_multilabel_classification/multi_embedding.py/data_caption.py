@@ -17,7 +17,7 @@ from collections import Counter, OrderedDict, defaultdict
 from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 
-DATASET = "rsicd"
+DATASET = "ucm"
 vocab_size_limit = {"rsicd": 512, "ucm": 187, "flickr8k": 1024}
 
 if __name__ == "__main__":

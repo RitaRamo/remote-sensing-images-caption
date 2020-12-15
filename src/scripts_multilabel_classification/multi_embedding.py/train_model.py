@@ -23,14 +23,14 @@ from embeddings.embeddings import get_embedding_layer
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
 FILE_NAME = "classification_efficientnet_"
-DATASET = "rsicd"
+DATASET = "ucm"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
 LOSS_TYPE= "smoothl1"
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
-EMBEDDING_TYPE="fasttext"
+EMBEDDING_TYPE="glove"
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
