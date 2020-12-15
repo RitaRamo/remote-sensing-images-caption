@@ -18,7 +18,6 @@ from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 
 DATASET = "ucm"
-vocab_size_limit = {"rsicd": 512, "ucm": 187, "flickr8k": 1024}
 
 if __name__ == "__main__":
 
@@ -56,10 +55,8 @@ if __name__ == "__main__":
         torch.save(state, dataset_jsons + "classification_dataset_rsicd_caption")
 
     elif DATASET == Datasets.UCM.value:
-        print("len", len(list_wordid))
         torch.save(state, dataset_jsons + "classification_dataset_ucm_caption")
     elif DATASET == Datasets.FLICKR8K.value:
-        print("len", len(list_wordid))
         torch.save(state, dataset_jsons + "classification_dataset_flickr8k_caption")
     else:
         raise Exception("unknown dataset to save")
