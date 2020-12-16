@@ -1,55 +1,80 @@
 import sys
 import subprocess
 
-
 #eval_file = sys.argv[1]
 
 #print("File that will be evaluated", eval_file)
 
 for eval_file in [
-    "flick_fine_encdec_discrete_effflick_noaug_notnormalized.txt",
-    # "flick_fine_encdec_discrete_effimgnt_noaug_notnormalized.txt",
-    "flickr_fine_encdec_1comp_effflickr_noaug_notnormalized.txt"
+    "nti_fine_attenscaleprod_3compgnr1static_effembcapglovesmoothl1_noaug.txt"
+    "nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
+    "nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
+    "nti_fine_attenscaleprod_1comp_effembcapglovesmoothl1_noaug.txt",
+    "nti_fine_attenscaleprod_3compgn_effembcapglovesmoothl1_noaug.txt",
+    "nti_fine_attenscaleprod_discrete_effimgnet_noaug.txt",
+    "nti_fine_attenscaleprod_discrete_effembcapglovesmoothl1_noaug.txt"
 ]:
 
-    print("File that will be evaluated", eval_file)
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=0", "--rep_window=0"])
 
-    # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file])
-    # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file])
-    # subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file])
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=0", "--rep_window=0"])
 
-    for beam_type in ["beam_comp", "beam_tutorial", "beam", "beam_wt_refinement"]:
+    subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=0", "--rep_window=0"])
 
-        subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=" + beam_type, "--n_beam=10", "--min_len=0", "--rep_window=0",
-                        "--eval_dataset_type=val"])
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                            "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=0", "--rep_window=0",
+                            "--eval_dataset_type=val"])
 
-        subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=" + beam_type, "--n_beam=10", "--min_len=0", "--rep_window=0",
-                        "--eval_dataset_type=val"])
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=0", "--rep_window=0",
+                    "--eval_dataset_type=val"])
 
-        subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=" + beam_type, "--n_beam=10", "--min_len=0", "--rep_window=0",
-                        "--eval_dataset_type=val"])
+    subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=0", "--rep_window=0",
+                    "--eval_dataset_type=val"])
 
-        subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=" + beam_type, "--n_beam=1", "--min_len=0", "--rep_window=0",
-                        "--eval_dataset_type=val"])
 
-        subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=" + beam_type, "--n_beam=1", "--min_len=0", "--rep_window=0",
-                        "--eval_dataset_type=val"])
+    # print("File that will be evaluated", eval_file)
 
-        subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=" + beam_type, "--n_beam=1", "--min_len=0", "--rep_window=0",
-                        "--eval_dataset_type=val"])
+    # # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file])
+    # # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file])
+    # # subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file])
 
-    # subprocess.run(["python3", "src/test_generate_sentences.py",
-    #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
-    # subprocess.run(["python2", "src/test_scores_coco.py",
-    #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
-    # subprocess.run(["python3", "src/test_scores_bertscore.py",
-    #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
+    # for beam_type in ["beam_comp", "beam_tutorial", "beam", "beam_wt_refinement"]:
+
+        # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+        #                 "--decodying_type=" + beam_type, "--n_beam=10", "--min_len=0", "--rep_window=0",
+        #                 "--eval_dataset_type=val"])
+
+        # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+        #                 "--decodying_type=" + beam_type, "--n_beam=10", "--min_len=0", "--rep_window=0",
+        #                 "--eval_dataset_type=val"])
+
+        # subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
+        #                 "--decodying_type=" + beam_type, "--n_beam=10", "--min_len=0", "--rep_window=0",
+        #                 "--eval_dataset_type=val"])
+
+        # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+        #                 "--decodying_type=" + beam_type, "--n_beam=1", "--min_len=0", "--rep_window=0",
+        #                 "--eval_dataset_type=val"])
+
+        # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+        #                 "--decodying_type=" + beam_type, "--n_beam=1", "--min_len=0", "--rep_window=0",
+        #                 "--eval_dataset_type=val"])
+
+        # subprocess.run(["python3", "src/test_scores_bertscore.py", "@experiments/conf_files/" + eval_file,
+        #                 "--decodying_type=" + beam_type, "--n_beam=1", "--min_len=0", "--rep_window=0",
+        #                 "--eval_dataset_type=val"])
+
+        # subprocess.run(["python3", "src/test_generate_sentences.py",
+        #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
+        # subprocess.run(["python2", "src/test_scores_coco.py",
+        #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
+        # subprocess.run(["python3", "src/test_scores_bertscore.py",
+        #                 "@experiments/conf_files/" + eval_file, "--eval_dataset_type=val"])
 
     # for n_beam in [1, 2, 3, 5, 10]:
     #     print("n_beam", n_beam)
