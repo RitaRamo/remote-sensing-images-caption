@@ -102,14 +102,6 @@ class ContinuousScaleProductAttentionModel(ContinuousEncoderDecoderModel):
 
         return current_output_index, h, c   
 
-        def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
-        predictions, h, c,_ = self.decoder(
-            input_word, encoder_out, h, c)
-
-        current_output_index = self._convert_prediction_to_output_smoothl1(criteria, predictions)
-
-        return current_output_index, h, c   
-
     def inference_beam_without_refinement(
             self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
