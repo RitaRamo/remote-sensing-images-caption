@@ -67,6 +67,7 @@ class ContinuousScaleProductAttentionModel(ContinuousEncoderDecoderModel):
 
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
+        self.decodying_criteria = torch.nn.SmoothL1Loss(reduction="none")
 
     def _predict(self, encoder_out, caps, caption_lengths):
         batch_size = encoder_out.size(0)
