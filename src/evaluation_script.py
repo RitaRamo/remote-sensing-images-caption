@@ -6,7 +6,7 @@ import subprocess
 #print("File that will be evaluated", eval_file)
 
 for eval_file in [
-    "nti_fine_attenscaleprod_3compgnr1static_effembcapglovesmoothl1_noaug.txt"
+    "nti_fine_attenscaleprod_3compgnr1static_effembcapglovesmoothl1_noaug.txt",
     "nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
     "nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
     "nti_fine_attenscaleprod_1comp_effembcapglovesmoothl1_noaug.txt",
