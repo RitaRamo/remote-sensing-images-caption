@@ -625,8 +625,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             return generated_sentence  # input_caption
 
     def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
-        predictions, h, c,_ = self.decoder(
-            input_word, encoder_out, h, c)
+        predictions, h, c,_ = self.decoder(input_word, encoder_out, h, c)
 
         current_output_index = self._convert_prediction_to_output_smoothl1(criteria, predictions)
 
@@ -660,7 +659,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
             sorted_scores, sorted_indices = torch.sort(
-                scores.squeeze(), descending=True, dim=-1)
+                scores.squeeze(), descending=False, dim=-1)
 
             n = 0
             index = 0
@@ -723,7 +722,6 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
-
-    # def generate_output_index(self, input_word, encoder_out, h, c):
-    #     current_output_index, h, c = self.generate_output_index_smoothl1(self.decodying_criteria, input_word, encoder_out, h, c)
-    #     return current_output_index, h, c   
+    def generate_output_index(self, input_word, encoder_out, h, c):
+        current_output_index, h, c = self.generate_output_index_smoothl1(self.decodying_criteria, input_word, encoder_out, h, c)
+        return current_output_index, h, c   

@@ -130,7 +130,7 @@ class ContinuousScaleProductAttentionModel(ContinuousEncoderDecoderModel):
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
             sorted_scores, sorted_indices = torch.sort(
-                scores.squeeze(), descending=True, dim=-1)
+                scores.squeeze(), descending=False, dim=-1)
 
             n = 0
             index = 0
