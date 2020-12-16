@@ -684,7 +684,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             return top_solutions
 
         def get_most_probable(candidates, n_solutions):
-            return sorted(candidates, key=operator.itemgetter(1), reverse=True)[:n_solutions]
+            return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
 
         with torch.no_grad():
             my_dict = {}
