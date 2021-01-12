@@ -28,6 +28,6 @@ BasicShowAttendAndTellModel
 resnet
 --no_normalization
 --dataset
-flickr8k
+coco
 --early_mode
 metric
