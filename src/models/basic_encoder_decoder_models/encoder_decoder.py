@@ -56,7 +56,7 @@ class Encoder(nn.Module):
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
-        print("self adptive out", out.size())
+        #print("self adptive out", out.size())
         # # (batch_size, encoded_image_size, encoded_image_size, 2048)
         # # (later on the intermidiate dims are flatten: (prepare_inputs)
         # # (batch_size, encoded_image_size*encoded_image_size, 2048)
