@@ -46,6 +46,7 @@ class Datasets(Enum):
     SIDNEY = "sidney"
     UCM = "ucm"
     FLICKR8K = "flickr8k"
+    COCO = "coco"
 
 
 class EvalDatasetType(Enum):

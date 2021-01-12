@@ -318,3 +318,13 @@ if __name__ == "__main__":
     _save_dataset(raw_dataset, dataset_jsons)
 
     logging.info("saved datasets and vocab")
+
+    logging.info("saving datasets and vocab of COCO")
+
+    dataset_folder, dataset_jsons = get_dataset_paths("COCO")
+    raw_dataset = pd.read_json(dataset_folder + "raw_dataset/dataset.json")
+    _save_dataset(raw_dataset, dataset_jsons)
+
+    logging.info("saved datasets and vocab")
+
+

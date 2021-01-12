@@ -6,6 +6,9 @@ PATH_DATASETS_RSICD_NEW_TRAIN_AND_VAL = PATH_RSICD + "datasets_new_train_and_val
 PATH_UCM = "src/data/UCM/"
 PATH_DATASETS_UCM = PATH_UCM + "datasets/"
 PATH_FLICKR8K = "src/data/FLICKR8k/"
+PATH_COCO = "src/data/COCO/"
+PATH_DATASETS_COCO = PATH_COCO + "datasets/"
+
 PATH_DATASETS_FLICKR8K = PATH_FLICKR8K + "datasets/"
 PATH_TRAINED_MODELS = "experiments/results/trained_models/"
 PATH_EVALUATION_SENTENCES = "experiments/results/evaluation_sentences/"
@@ -25,6 +28,9 @@ def get_dataset_paths(dataset):
 
     elif dataset == Datasets.FLICKR8K.value:
         return PATH_FLICKR8K, PATH_DATASETS_FLICKR8K
+
+    elif dataset == Datasets.COCO.value:
+        return PATH_COCO, PATH_DATASETS_COCO
 
     else:
         raise "Invalid dataset"
