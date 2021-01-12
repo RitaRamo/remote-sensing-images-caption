@@ -73,6 +73,8 @@ def _get_images_and_captions(dataset):
             captions_of_tokens[split].append(tokens)
             images_names[split].append(image_name)
             n_captions += 1
+            if n_captions>=5:
+                break
 
         for _ in range(n_captions):  # for each image, and caption, have also 5 captions
             all_captions_of_tokens[split].append(all_caps)
