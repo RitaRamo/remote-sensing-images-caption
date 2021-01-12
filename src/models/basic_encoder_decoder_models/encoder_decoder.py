@@ -48,14 +48,15 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        # out = self.model(
-        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
+        out = self.model(
+            images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        out = self.model.extract_features(images)
+        # out = self.model.extract_features(images)
         # #print("image size", out.size())
 
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
+        print("self adptive out", out.size())
         # # (batch_size, encoded_image_size, encoded_image_size, 2048)
         # # (later on the intermidiate dims are flatten: (prepare_inputs)
         # # (batch_size, encoded_image_size*encoded_image_size, 2048)
