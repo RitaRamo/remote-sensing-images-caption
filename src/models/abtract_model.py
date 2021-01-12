@@ -118,7 +118,6 @@ class AbstractEncoderDecoderModel(ABC):
             self.decoder.train()
             self.encoder.train()
             for batch_i, (imgs, caps, caplens) in enumerate(train_dataloader):
-                break
 
                 train_loss = self.train_step(
                     imgs, caps, caplens
