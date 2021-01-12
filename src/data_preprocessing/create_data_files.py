@@ -50,6 +50,8 @@ def _get_images_and_captions(dataset):
     for row in dataset["images"]:
         image_name = row["filename"]
         split = row["split"]
+        if split == "restval":
+            split= "train"
 
         all_caps = []
         n_captions = 0
@@ -119,7 +121,11 @@ def _get_test_with_coco_format(raw_dataset, split="test", split2=None):
     for row in raw_dataset["images"]:
         image_name = row["filename"]
         image_id = row["imgid"]
-        if row["split"] == split or row["split"] == split2:
+        row_split = row["split"]
+        if row_split == "restval":
+            row_split= "train"
+
+        if row_split == split or row_split == split2:
 
             images.append(
                 {
