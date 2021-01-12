@@ -11,7 +11,7 @@ import imageio
 from torchvision import transforms
 import logging
 import os
-from definitions_datasets import PATH_FLICKR8K
+from definitions_datasets import PATH_FLICKR8K,PATH_COCO
 import numpy as np
 
 
@@ -51,6 +51,17 @@ class CaptionDataset(Dataset):
                 transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
                                      std=[0.229, 0.224, 0.225])
             ])
+
+        elif self.images_folder == PATH_COCO + "raw_dataset/images/":  # images of flickr8 have different size, hence ensure same size
+            self.transform = transforms.Compose([
+                transforms.ToPILImage(),  # to resize and center crop is necessary to load with PilImage
+                transforms.Resize(256),
+                transforms.CenterCrop(224),
+                transforms.ToTensor(),
+                transforms.Normalize(mean=[0.485, 0.456, 0.406],  # mean=IMAGENET_IMAGES_MEAN, std=IMAGENET_IMAGES_STD
+                                     std=[0.229, 0.224, 0.225])
+            ])
+
 
         else:
             self.transform = transforms.Compose([
