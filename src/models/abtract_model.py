@@ -10,7 +10,7 @@ import logging
 import numpy as np
 import time
 from utils.early_stop import EarlyStopping
-from nlgeval import NLGEval
+#from nlgeval import NLGEval
 from utils.optimizer import get_optimizer, clip_gradient
 # from enum import Enum
 from utils.enums import DecodingType
