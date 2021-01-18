@@ -33,5 +33,3 @@ resnet
 --no_normalization
 --dataset
 coco
---early_mode
-metric
