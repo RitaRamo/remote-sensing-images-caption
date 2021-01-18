@@ -23,14 +23,14 @@ from embeddings.embeddings import get_embedding_layer
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
 FILE_NAME = "classification_efficientnet_"
-DATASET = "ucm"
+DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
 LOSS_TYPE= "smoothl1"
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
-EMBEDDING_TYPE="glove"
+EMBEDDING_TYPE="fasttext"
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -49,7 +49,7 @@ class ClassificationModel():
         self.checkpoint_exists = False
 
         if EFFICIENT_NET:
-            image_model = EfficientNet.from_pretrained('efficientnet-b5')
+            image_model = EfficientNet.from_pretrained('efficientnet-b7')
             num_features = image_model._fc.in_features
             image_model._fc = nn.Linear(num_features, EMBED_DIM)
             #print("image model", image_model)

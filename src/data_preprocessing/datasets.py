@@ -264,6 +264,7 @@ class ClassificationEmbeddingDataset(CaptionDataset):
         return image, classes
 
 
+
 class ClassificationCaptionEmbeddingDataset(CaptionDataset):
     def __init__(
         self,
@@ -273,7 +274,13 @@ class ClassificationCaptionEmbeddingDataset(CaptionDataset):
         augmentation=True
     ):
         self.images_folder = images_folder
-        self.images_names, categories = zip(*(data.items()))
+        self.images_names = data["images_names"]
+        categories =  data["captions"]
+        #self.images_names, categories = zip(*(data.items()))
+
+        #categoresi[""]
+        #self.images_names
+
         super()._init_images(images_folder, augmentation)
         self._init_categories(categories, embedings_matrix)
 
@@ -292,6 +299,36 @@ class ClassificationCaptionEmbeddingDataset(CaptionDataset):
         classes = self.categories_tensor[i]
 
         return image, classes
+
+
+# class ClassificationCaptionEmbeddingDataset(CaptionDataset):
+#     def __init__(
+#         self,
+#         data,
+#         images_folder,
+#         embedings_matrix,
+#         augmentation=True
+#     ):
+#         self.images_folder = images_folder
+#         self.images_names, categories = zip(*(data.items()))
+#         super()._init_images(images_folder, augmentation)
+#         self._init_categories(categories, embedings_matrix)
+
+#     def _init_categories(self, categories, embedings_matrix):
+#         self.categories_tensor = torch.zeros(self.dataset_size, 300)  # embedded dim size
+
+#         for i in range(len(categories)):
+#             self.categories_tensor[i] = embedings_matrix(torch.transpose(
+#                 torch.tensor(categories[i]).unsqueeze(-1), 0, 1)).mean(dim=1)
+
+#     def __getitem__(self, i):
+#         image_name = self.images_folder + self.images_names[i]
+#         image = cv2.imread(image_name)
+#         image = self.get_transformed_image(image)
+
+#         classes = self.categories_tensor[i]
+
+#         return image, classes
 
 
 class ClassificationContinuousDataset(CaptionDataset):
@@ -320,7 +357,6 @@ class ClassificationContinuousDataset(CaptionDataset):
         image_name, caption, caption_len = super().__getitem__(i)
 
         return image_name, caption
-
 
 class NeighbourDataset(Dataset):
 

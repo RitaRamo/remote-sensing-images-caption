@@ -9,10 +9,10 @@ sys.path.append('src/')
 from data_preprocessing.preprocess_tokens import WhitespaceTokenizer
 from definitions_datasets import PATH_DATASETS_RSICD
 from data_preprocessing.create_data_files import get_dataset, get_vocab_info
-from spacy.tokens import Doc
+#from spacy.tokens import Doc
 import torch
-import spacy
-import inflect
+#import spacy
+#import inflect
 from collections import Counter, OrderedDict, defaultdict
 from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
@@ -21,9 +21,9 @@ DATASET = "ucm"
 
 if __name__ == "__main__":
 
-    nlp = spacy.load("en_core_web_sm")
-    nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
-    p = inflect.engine()
+    # nlp = spacy.load("en_core_web_sm")
+    # nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
+    # p = inflect.engine()
 
     dataset_folder, dataset_jsons = get_dataset_paths(DATASET)
     print("dataset folder", dataset_folder)
@@ -36,8 +36,9 @@ if __name__ == "__main__":
     images_names, captions_of_tokens = train_dataset[
         "images_names"], train_dataset["captions_tokens"]
 
-    image_caption = defaultdict(list)
-    classes = []
+    images = []
+    captions = []
+
 
     for i in range(len(images_names)):
         name = images_names[i]
@@ -45,10 +46,17 @@ if __name__ == "__main__":
         # append words that are Nouns or Adjectives (converted to singular)
         caption = captions_of_tokens[i]
         tokens_without_special_tokens = caption[1:-1]
-        image_caption[name] = [token_to_id[token] for token in tokens_without_special_tokens]
+        captions.append([token_to_id[token] for token in tokens_without_special_tokens])
+        images.append(name)
+
+    images_captions={
+        "images_names":images,
+        "captions":captions
+    }
 
     state = {
-        "classification_dataset": image_caption,  # image to word ids of caption
+        "classification_dataset": images_captions,  # image to word ids of caption
+        
     }
 
     if DATASET == Datasets.RSICD.value:
