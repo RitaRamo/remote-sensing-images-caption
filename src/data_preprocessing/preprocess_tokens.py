@@ -3,8 +3,8 @@ import numpy as np
 from collections import OrderedDict
 from toolz.itertoolz import unique
 from enum import Enum
-import spacy
-from spacy.tokens import Doc
+#import spacy
+#from spacy.tokens import Doc
 
 START_TOKEN = "<start_seq>"
 END_TOKEN = "<end_seq>"
