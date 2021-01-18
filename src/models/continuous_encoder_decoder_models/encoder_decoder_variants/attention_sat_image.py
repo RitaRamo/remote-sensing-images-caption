@@ -82,13 +82,15 @@ class ContinuousSATImageModel(ContinuousAttentionImageModel):
             embed_dim=self.args.embed_dim,
             vocab_size=self.vocab_size,
             token_to_id=self.token_to_id,
+            post_processing=self.args.post_processing,
             dropout=self.args.dropout
         )
 
-        self.decoder.normalize_embeddings()
+        self.decoder.normalize_embeddings(self.args.no_normalization)
 
         self.encoder = self.encoder.to(self.device)
         self.decoder = self.decoder.to(self.device)
+
 
     def _calculate_loss(self, predict_output, caps, caption_lengths):
         loss = super()._calculate_loss(predict_output, caps, caption_lengths)
@@ -97,3 +99,11 @@ class ContinuousSATImageModel(ContinuousAttentionImageModel):
         # Add doubly stochastic attention regularization
         loss += ((1. - alphas.sum(dim=1)) ** 2).mean()
         return loss
+
+    def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
+        predictions, h, c,_ = self.decoder(
+            input_word, encoder_out, h, c)
+
+        current_output_index = self._convert_prediction_to_output_smoothl1(criteria, predictions)
+
+        return current_output_index, h, c   
