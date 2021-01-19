@@ -300,14 +300,13 @@ class DenseNetFeatureAndAttrExtractor(nn.Module):
 
 
 class ColorsAugmentation(Enum):
-    LIGHT = 0
-    CLACHE = 1
-    RANDOM_CONSTRACT = 2
-    RANDOM_GAMMA = 3
-    RANDOM_BRIGHTNESS = 4
-    GRAY = 5
-    JPEG_COMPREENSION = 6
-    NO_AUGMENTATION = 7
+    CLACHE = 0
+    RANDOM_CONSTRACT = 1
+    RANDOM_GAMMA = 2
+    RANDOM_BRIGHTNESS = 3
+    GRAY = 4
+    JPEG_COMPREENSION = 5
+    NO_AUGMENTATION = 6
 
 
 def apply_no_transformation(image):
@@ -317,13 +316,7 @@ def apply_no_transformation(image):
 def augment_image_with_color():
     mode = np.random.randint(len(ColorsAugmentation))
 
-    if mode == ColorsAugmentation.LIGHT.value:
-        return A.Compose([
-            A.RandomBrightnessContrast(p=1),
-            A.RandomGamma(p=1),
-            A.CLAHE(p=1),
-        ], p=1)
-    elif mode == ColorsAugmentation.CLACHE.value:
+    if mode == ColorsAugmentation.CLACHE.value:
         return A.CLAHE(p=1)
     elif mode == ColorsAugmentation.RANDOM_CONSTRACT.value:
         return A.RandomContrast(p=1)
