@@ -288,6 +288,7 @@ if __name__ == "__main__":
     classification_dataset = classification_state["classification_dataset"]
 
     dataset_len = len(classification_dataset)
+    print("datset len", dataset_len)
     split_ratio = int(dataset_len * 0.10)
 
     classification_train = dict(list(classification_dataset.items())[split_ratio:])
