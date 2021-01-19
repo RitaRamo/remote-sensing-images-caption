@@ -293,13 +293,13 @@ if __name__ == "__main__":
     split_ratio = int(dataset_len * 0.10)
 
     classification_train = {
-        "images_names": classification_dataset["images_names"][split_ratio:]),
-        "captions": classification_dataset["images_names"][split_ratio:]),
+        "images_names": classification_dataset["images_names"][split_ratio:],
+        "captions": classification_dataset["images_names"][split_ratio:])
     }
 
     classification_val = {
-        "images_names": classification_dataset["images_names"][split_ratio:]),
-        "captions": classification_dataset["images_names"][0:split_ratio]),
+        "images_names": classification_dataset["images_names"][split_ratio:],
+        "captions": classification_dataset["images_names"][0:split_ratio])
     }
     # classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
