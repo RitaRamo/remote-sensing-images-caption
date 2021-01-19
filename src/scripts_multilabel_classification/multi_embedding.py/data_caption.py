@@ -17,7 +17,7 @@ from collections import Counter, OrderedDict, defaultdict
 from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 
-DATASET = "ucm"
+DATASET = "rsicd"
 
 if __name__ == "__main__":
 
