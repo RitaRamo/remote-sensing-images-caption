@@ -287,12 +287,24 @@ if __name__ == "__main__":
         classid_to_wordid = classification_state["classid_to_wordid"]
     classification_dataset = classification_state["classification_dataset"]
 
-    dataset_len = len(classification_dataset)
+    dataset_len = len(classification_dataset["images_names"])
     print("datset len", dataset_len)
+    print("data other", len(classification_dataset["captions"]))
     split_ratio = int(dataset_len * 0.10)
 
-    classification_train = dict(list(classification_dataset.items())[split_ratio:])
-    classification_val = dict(list(classification_dataset.items())[0:split_ratio])
+    classification_train = {
+        "images_names": classification_dataset["images_names"][split_ratio:]),
+        "captions": classification_dataset["images_names"][split_ratio:]),
+    }
+
+    classification_val = {
+        "images_names": classification_dataset["images_names"][split_ratio:]),
+        "captions": classification_dataset["images_names"][0:split_ratio]),
+    }
+    # classification_val = dict(list(classification_dataset.items())[0:split_ratio])
+
+    # classification_train = dict(list(classification_dataset.items())[split_ratio:])
+    # classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
     vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
