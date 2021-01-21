@@ -109,6 +109,34 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         return loss
 
+    # def _calculate_hypotheses(self, predict_output, caps_sorted, caption_lengths):
+    #     predictions = predict_output["predictions"]
+
+    #     predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
+    #     targets_matrix = torch.nn.functional.normalize(self.decoder.embedding.weight.data, p=2, dim=-1)
+
+    #     print("predictions", predictions.size())
+    #     #if cos in cosie function or if smoothl1...
+
+
+    #     all_hypotheses_without_padding = list()
+    #     n_sentences = predictions.size()[0]
+    #     for i in range(n_sentences):  # iterate by sentence
+    #         print("sentences nº", i)
+    #         hypotheses_without_padding = list()
+    #         preds_without_padd = predictions[i, :caption_lengths[i], :]
+    #         print("preds_without_padd", preds_without_padd.size())
+    #         for pred in preds_without_padd:
+    #             print("pred size", pred.size())
+    #             scores = torch.cosine_similarity(self.decoder.embedding.weight.data, pred, dim=-1)
+    #             hypotheses_without_padding.append(scores.argmax().item())
+    #             print("scores", scores.size())
+    #             print("score argmax", scores.argmax())
+    #         all_hypotheses_without_padding.append(hypotheses_without_padding)
+    #     print("\nhypo", all_hypotheses_without_padding)
+
+    #     return all_hypotheses_without_padding
+
     def generate_output_index(self, input_word, encoder_out, h, c):
         predictions, h, c = self.decoder(
             input_word, encoder_out, h, c)
@@ -135,7 +163,7 @@ class ContinuousEncoderDecoderModel(AbstractEncoderDecoderModel):
 
         predictions = torch.nn.functional.normalize(predictions, p=2, dim=-1)
         targets = torch.nn.functional.normalize(self.decoder.embedding.weight.data, p=2, dim=-1)
-        targets = self.decoder.embedding.weight.data
+        #targets = self.decoder.embedding.weight.data
         output = criteria(predictions.expand_as(self.decoder.embedding.weight.data), targets)
 
         return output.mean(1)
