@@ -23,10 +23,10 @@ class Encoder(nn.Module):
         self.model, self.encoder_dim = get_image_model(model_type)
         print("self encoder dim of enc", self.encoder_dim)
 
-        if "efficient" in self.model_type:
-            self.model_forward = self.model.extract_features
-        else:
-            self.model_forward = self.model
+        # if "efficient" in self.model_type:
+        #     self.model_forward = self.model.extract_features
+        # else:
+        #     self.model_forward = self.model
 
         # resnet = torchvision.models.resnet101(
         #     pretrained=True)  # pretrained ImageNet ResNet-101
@@ -53,12 +53,12 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        # out = self.model(
+        out = self.model(
         #     images)  # (batch_size, 2048, image_size/32, image_size/32)
 
         # out = self.model.extract_features(images)
         # # #print("image size", out.size())
-        out = self.model_forward(images)
+        #out = self.model_forward(images)
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
         #print("self adptive out", out.size())
