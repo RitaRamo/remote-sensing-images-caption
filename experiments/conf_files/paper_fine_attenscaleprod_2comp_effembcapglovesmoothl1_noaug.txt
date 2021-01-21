@@ -19,6 +19,6 @@ glove
 --continuous_loss_type
 smoothl1_real_avg_sentence
 --image_model_type
-efficient_net_rsicd_caption_emb_glove_smoothl1
+efficientb7_net_rsicd_caption_emb_glove_smoothl1
 --dataset
 rsicd
