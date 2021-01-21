@@ -53,8 +53,7 @@ class Encoder(nn.Module):
         :param images: images, a tensor of dimensions (batch_size, 3, image_size, image_size)
         :return: encoded images
         """
-        out = self.model(
-        #     images)  # (batch_size, 2048, image_size/32, image_size/32)
+        out = self.model(images)  # (batch_size, 2048, image_size/32, image_size/32)
 
         # out = self.model.extract_features(images)
         # # #print("image size", out.size())
