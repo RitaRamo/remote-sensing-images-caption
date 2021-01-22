@@ -34,8 +34,6 @@ EMBEDDING_TYPE="glove"
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
-
-
 NUM_WORKERS = 0
 OPTIMIZER_TYPE = "adam"
 OPTIMIZER_LR = 1e-4
@@ -298,7 +296,7 @@ if __name__ == "__main__":
     }
 
     classification_val = {
-        "images_names": classification_dataset["images_names"][split_ratio:],
+        "images_names": classification_dataset["images_names"][0:split_ratio],
         "captions": classification_dataset["captions"][0:split_ratio]
     }
     # classification_val = dict(list(classification_dataset.items())[0:split_ratio])
