@@ -55,9 +55,9 @@ class Encoder(nn.Module):
         """
         # out = self.model(images)  # (batch_size, 2048, image_size/32, image_size/32)
 
-        out = self.model.extract_features(images)
+        #out = self.model.extract_features(images)
         # # #print("image size", out.size())
-        #out = self.model_forward(images)
+        out = self.model_forward(images)
         # # (batch_size, 2048, encoded_image_size, encoded_image_size)
         out = self.adaptive_pool(out)
         #print("self adptive out", out.size())
