@@ -31,6 +31,6 @@ resnet
 --continuous_loss_type
 cosine
 --image_model_type
-efficient_net_flickr8k
+resnet
 --dataset
 coco
