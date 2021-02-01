@@ -299,6 +299,7 @@ if __name__ == "__main__":
         "images_names": classification_dataset["images_names"][0:split_ratio],
         "captions": classification_dataset["captions"][0:split_ratio]
     }
+
     # classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
     # classification_train = dict(list(classification_dataset.items())[split_ratio:])
@@ -308,9 +309,15 @@ if __name__ == "__main__":
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     embedding_matrix = get_embedding_layer(EMBEDDING_TYPE, EMBED_DIM, vocab_size, token_to_id, False)
+    embedding_matrix = torch.nn.functional.normalize(embedding_matrix.weight.data, p=2, dim=-1)
+    # embeddings_values = self.embedding.weight.data
+    #         norm = embeddings_values.norm(
+    #             p=2, dim=1, keepdim=True).clamp(min=1e-12)
+    #         self.embedding.weight.data.copy_(embeddings_values.div(norm))
     # adicionar aqui coisas classtoword id
 
     if DATASET_TYPE == "caption":
+        print("entrei no dataset caption")
         train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
                               embedding_matrix)
         val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
@@ -331,6 +338,7 @@ if __name__ == "__main__":
         )
 
     else:
+        print(stop)
         train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
                               classes_to_id, classid_to_wordid, embedding_matrix)
         val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
