@@ -9,6 +9,7 @@ sys.path.append('src/')
 from data_preprocessing.preprocess_tokens import WhitespaceTokenizer
 from definitions_datasets import PATH_DATASETS_RSICD
 from data_preprocessing.create_data_files import get_dataset, get_vocab_info
+from data_preprocessing.preprocess_tokens import OOV_TOKEN
 #from spacy.tokens import Doc
 import torch
 #import spacy
@@ -29,34 +30,44 @@ if __name__ == "__main__":
     print("dataset folder", dataset_folder)
 
     train_dataset = get_dataset(dataset_jsons + "train.json")
+    val_dataset = get_dataset(dataset_jsons + "val.json")
+
     vocab_info = get_vocab_info(dataset_jsons + "vocab_info.json")
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
 
-    images_names, captions_of_tokens = train_dataset[
+    train_images_names, train_captions_of_tokens = train_dataset[
         "images_names"], train_dataset["captions_tokens"]
 
-    images = []
-    captions = []
+    val_images_names, val_captions_of_tokens = val_dataset[
+        "images_names"], val_dataset["captions_tokens"]
 
+    def get_images_and_caps(images_names,captions_of_tokens):
+        images = []
+        captions = []
 
-    for i in range(len(images_names)):
-        name = images_names[i]
+        for i in range(len(images_names)):
+            name = images_names[i]
 
-        # append words that are Nouns or Adjectives (converted to singular)
-        caption = captions_of_tokens[i]
-        tokens_without_special_tokens = caption[1:-1]
-        captions.append([token_to_id[token] for token in tokens_without_special_tokens])
-        images.append(name)
+            # append words that are Nouns or Adjectives (converted to singular)
+            caption = captions_of_tokens[i]
+            tokens_without_special_tokens = caption[1:-1]
+            captions.append([token_to_id.get(token,token_to_id[OOV_TOKEN]) for token in tokens_without_special_tokens])
+            images.append(name)
 
-    images_captions={
-        "images_names":images,
-        "captions":captions
-    }
+        images_captions= {
+            "images_names":images, #5 images
+            "captions":captions #5 caps
+        }
+        
+        return images_captions
+
+    train_data=get_images_and_caps(train_images_names,train_captions_of_tokens)
+    val_data=get_images_and_caps(val_images_names,val_captions_of_tokens)
 
     state = {
-        "classification_dataset": images_captions,  # image to word ids of caption
-        
+        "train_classification_dataset": train_data,  # image to word ids of caption
+        "val_classification_dataset": val_data,
     }
 
     if DATASET == Datasets.RSICD.value:

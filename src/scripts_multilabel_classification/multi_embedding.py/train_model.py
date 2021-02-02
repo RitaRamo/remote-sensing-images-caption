@@ -279,26 +279,15 @@ if __name__ == "__main__":
     print("dataset folder", dataset_folder)
 
     classification_state = torch.load(dataset_jsons + CLASSIFICATION_DATASET_PATH)
-    if DATASET_TYPE != "caption":
-        classes_to_id = classification_state["classes_to_id"]
-        id_to_classes = classification_state["id_to_classes"]
-        classid_to_wordid = classification_state["classid_to_wordid"]
-    classification_dataset = classification_state["classification_dataset"]
+  
+    classification_train = classification_state["train_classification_dataset"]
+    classification_val = classification_state["val_classification_dataset"]
 
-    dataset_len = len(classification_dataset["images_names"])
-    print("datset len", dataset_len)
-    print("data other", len(classification_dataset["captions"]))
-    split_ratio = int(dataset_len * 0.10)
+    # print("classification_train", classification_train["images_names"][:5])
+    # print("classification_train", classification_train["captions"][:5])
 
-    classification_train = {
-        "images_names": classification_dataset["images_names"][split_ratio:],
-        "captions": classification_dataset["captions"][split_ratio:]
-    }
-
-    classification_val = {
-        "images_names": classification_dataset["images_names"][0:split_ratio],
-        "captions": classification_dataset["captions"][0:split_ratio]
-    }
+    # print("train_data", classification_val["images_names"][:5])
+    # print("train_data", classification_val["captions"][:5])
 
     # classification_val = dict(list(classification_dataset.items())[0:split_ratio])
 
@@ -309,12 +298,7 @@ if __name__ == "__main__":
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     embedding_matrix = get_embedding_layer(EMBEDDING_TYPE, EMBED_DIM, vocab_size, token_to_id, False)
-    embedding_matrix = torch.nn.functional.normalize(embedding_matrix.weight.data, p=2, dim=-1)
-    # embeddings_values = self.embedding.weight.data
-    #         norm = embeddings_values.norm(
-    #             p=2, dim=1, keepdim=True).clamp(min=1e-12)
-    #         self.embedding.weight.data.copy_(embeddings_values.div(norm))
-    # adicionar aqui coisas classtoword id
+
 
     if DATASET_TYPE == "caption":
         print("entrei no dataset caption")
