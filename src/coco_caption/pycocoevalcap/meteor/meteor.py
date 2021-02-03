@@ -55,8 +55,8 @@ class Meteor:
         # SCORE ||| reference 1 words ||| reference n words ||| hypothesis words
         hypothesis_str = hypothesis_str.replace('|||', '').replace('  ', ' ')
         score_line = ' ||| '.join(('SCORE', ' ||| '.join(reference_list), hypothesis_str))
-        #self.meteor_p.stdin.write('{}\n'.format(score_line))
-        self.meteor_p.stdin.write('{}\n'.format(eval_line).replace('.',','))
+        self.meteor_p.stdin.write('{}\n'.format(score_line))
+        #self.meteor_p.stdin.write('{}\n'.format(eval_line).replace('.',','))
         return self.meteor_p.stdout.readline().strip()
 
     def _score(self, hypothesis_str, reference_list):
