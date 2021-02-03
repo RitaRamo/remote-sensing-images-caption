@@ -16,6 +16,8 @@ METEOR_JAR = 'meteor-1.5.jar'
 class Meteor:
 
     def __init__(self):
+        d = dict(os.environ.copy())
+        d['LANG'] = 'C'
         self.meteor_cmd = ['java', '-jar', '-Xmx2G', METEOR_JAR,
                            '-', '-', '-stdio', '-l', 'en', '-norm']
         self.meteor_p = subprocess.Popen(self.meteor_cmd,
