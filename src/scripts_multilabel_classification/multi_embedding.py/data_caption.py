@@ -42,9 +42,33 @@ if __name__ == "__main__":
     val_images_names, val_captions_of_tokens = val_dataset[
         "images_names"], val_dataset["captions_tokens"]
 
+    # def get_images_and_caps(images_names,captions_of_tokens):
+    #     images = []
+    #     captions = []
+
+    #     for i in range(len(images_names)):
+    #         name = images_names[i]
+
+    #         # append words that are Nouns or Adjectives (converted to singular)
+    #         caption = captions_of_tokens[i]
+    #         tokens_without_special_tokens = caption[1:-1]
+    #         captions.append([token_to_id.get(token,token_to_id[OOV_TOKEN]) for token in tokens_without_special_tokens])
+    #         images.append(name)
+
+    #     print("len", len(images))
+
+    #     images_captions= {
+    #         "images_names":images, #5 images
+    #         "captions":captions #5 caps
+    #     }
+        
+    #     return images_captions
+
     def get_images_and_caps(images_names,captions_of_tokens):
-        images = []
-        captions = []
+        #images = []
+        #captions = []
+
+        image_caption = {}
 
         for i in range(len(images_names)):
             name = images_names[i]
@@ -52,8 +76,15 @@ if __name__ == "__main__":
             # append words that are Nouns or Adjectives (converted to singular)
             caption = captions_of_tokens[i]
             tokens_without_special_tokens = caption[1:-1]
-            captions.append([token_to_id.get(token,token_to_id[OOV_TOKEN]) for token in tokens_without_special_tokens])
-            images.append(name)
+            #captions.append([token_to_id.get(token,token_to_id[OOV_TOKEN]) for token in tokens_without_special_tokens])
+            #images.append(name)
+            image_caption[name]=[token_to_id.get(token,token_to_id[OOV_TOKEN]) for token in tokens_without_special_tokens]
+
+        images, captions = zip(*(image_caption.items()))
+
+        # print("images", images[:5])
+        # print("captions", captions[:5])
+        print("len", len(images))
 
         images_captions= {
             "images_names":images, #5 images
@@ -69,6 +100,12 @@ if __name__ == "__main__":
         "train_classification_dataset": train_data,  # image to word ids of caption
         "val_classification_dataset": val_data,
     }
+
+    # print("train_data", train_data["images_names"][:5])
+    # print("train_data", train_data["captions"][:5])
+
+    # print("train_data", val_data["images_names"][:5])
+    # print("train_data", val_data["captions"][:5])
 
     if DATASET == Datasets.RSICD.value:
         torch.save(state, dataset_jsons + "classification_dataset_rsicd_caption")
