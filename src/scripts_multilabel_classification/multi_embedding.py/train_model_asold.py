@@ -23,7 +23,7 @@ from embeddings.embeddings import get_embedding_layer
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
 FILE_NAME = "classification_efficientnet_b5old_one"
-DATASET = "ucm"
+DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
 LOSS_TYPE= "smoothl1"
