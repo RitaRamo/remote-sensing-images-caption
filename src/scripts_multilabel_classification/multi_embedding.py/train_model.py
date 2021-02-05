@@ -22,11 +22,11 @@ from embeddings.embeddings import get_embedding_layer
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet_b5one_"
+FILE_NAME = "classification_efficientnet_b5oneSPLIT_"
 DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
-LOSS_TYPE= "cosine"
+LOSS_TYPE= "smoothl1"
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
@@ -285,8 +285,15 @@ if __name__ == "__main__":
 
     classification_state = torch.load(dataset_jsons + CLASSIFICATION_DATASET_PATH)
   
-    classification_train = classification_state["train_classification_dataset"]
-    classification_val = classification_state["val_classification_dataset"]
+    classification_dataset = classification_state["train_classification_dataset"]
+
+    dataset_len = len(classification_dataset)
+    split_ratio = int(dataset_len * 0.10)
+
+    classification_train = dict(list(classification_dataset.items())[split_ratio:])
+    classification_val = dict(list(classification_dataset.items())[0:split_ratio])
+
+    #classification_val = classification_state["val_classification_dataset"]
 
     # print("classification_train", classification_train["images_names"][:5])
     # print("classification_train", classification_train["captions"][:5])
