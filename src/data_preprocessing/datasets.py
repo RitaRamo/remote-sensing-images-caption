@@ -11,7 +11,7 @@ import imageio
 from torchvision import transforms
 import logging
 import os
-from definitions_datasets import PATH_FLICKR8K,PATH_COCO
+from definitions_datasets import PATH_FLICKR8K, PATH_COCO
 import numpy as np
 
 
@@ -264,7 +264,6 @@ class ClassificationEmbeddingDataset(CaptionDataset):
         return image, classes
 
 
-
 class ClassificationCaptionEmbeddingDataset(CaptionDataset):
     def __init__(
         self,
@@ -274,13 +273,7 @@ class ClassificationCaptionEmbeddingDataset(CaptionDataset):
         augmentation=True
     ):
         self.images_folder = images_folder
-        self.images_names = data["images_names"]
-        categories =  data["captions"]
-        #self.images_names, categories = zip(*(data.items()))
-
-        #categoresi[""]
-        #self.images_names
-
+        self.images_names, categories = zip(*(data.items()))
         super()._init_images(images_folder, augmentation)
         self._init_categories(categories, embedings_matrix)
 
@@ -310,7 +303,13 @@ class ClassificationCaptionEmbeddingDataset(CaptionDataset):
 #         augmentation=True
 #     ):
 #         self.images_folder = images_folder
-#         self.images_names, categories = zip(*(data.items()))
+#         self.images_names = data["images_names"]
+#         categories =  data["captions"]
+#         #self.images_names, categories = zip(*(data.items()))
+
+#         #categoresi[""]
+#         #self.images_names
+
 #         super()._init_images(images_folder, augmentation)
 #         self._init_categories(categories, embedings_matrix)
 
@@ -329,6 +328,7 @@ class ClassificationCaptionEmbeddingDataset(CaptionDataset):
 #         classes = self.categories_tensor[i]
 
 #         return image, classes
+
 
 
 class ClassificationContinuousDataset(CaptionDataset):
@@ -357,6 +357,7 @@ class ClassificationContinuousDataset(CaptionDataset):
         image_name, caption, caption_len = super().__getitem__(i)
 
         return image_name, caption
+
 
 class NeighbourDataset(Dataset):
 
