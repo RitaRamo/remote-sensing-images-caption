@@ -26,7 +26,7 @@ FILE_NAME = "classification_efficientnet_b5one_"
 DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
-LOSS_TYPE= "smoothl1"
+LOSS_TYPE= "cosine"
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
@@ -47,6 +47,7 @@ class ClassificationModel():
         self.checkpoint_exists = False
 
         if EFFICIENT_NET:
+            print("eficientnet")
             image_model = EfficientNet.from_pretrained('efficientnet-b5')
             num_features = image_model._fc.in_features
             image_model._fc = nn.Linear(num_features, EMBED_DIM)
@@ -260,15 +261,19 @@ if __name__ == "__main__":
                  device, torch.cuda.device_count())
 
     if DATASET == Datasets.RSICD.value:
+        print("rsicd")
         CLASSIFICATION_DATASET_PATH = "classification_dataset_rsicd"
     elif DATASET == Datasets.UCM.value:
+        print("ucm")
         CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm"
     elif DATASET == Datasets.FLICKR8K.value:
+        print("flick8k")
         CLASSIFICATION_DATASET_PATH = "classification_dataset_flickr8k"
     else:
         raise Exception("Invalid dataset")
 
     if DATASET_TYPE == "caption":
+        print("caption")
         CLASSIFICATION_DATASET_PATH = CLASSIFICATION_DATASET_PATH + "_caption"
     else:
         CLASSIFICATION_DATASET_PATH = CLASSIFICATION_DATASET_PATH + "_nouns_adjs"
@@ -298,7 +303,7 @@ if __name__ == "__main__":
     vocab_size, token_to_id, id_to_token, max_len = vocab_info[
         "vocab_size"], vocab_info["token_to_id"], vocab_info["id_to_token"], vocab_info["max_len"]
     embedding_matrix = get_embedding_layer(EMBEDDING_TYPE, EMBED_DIM, vocab_size, token_to_id, False)
-
+    print("emb matrix requires grad", embedding_matrix.weight.requires_grad)
 
     if DATASET_TYPE == "caption":
         print("entrei no dataset caption")
