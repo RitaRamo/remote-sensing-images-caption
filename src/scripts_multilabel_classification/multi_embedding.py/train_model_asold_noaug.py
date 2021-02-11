@@ -302,8 +302,7 @@ if __name__ == "__main__":
     if DATASET_TYPE == "caption":
         train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
                               embedding_matrix,
-                            augmentation=False
-)
+                            augmentation=False)
         val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
                             embedding_matrix,
                             augmentation=False)
