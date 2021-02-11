@@ -31,3 +31,11 @@ if __name__ == "__main__":
     print("\npaperr_newsplit_fine_attenscaleprod_1compr_eff")
     path='experiments/results/classification_efficientnet_b7_rsicd_embedding_caption_glove_smoothl1.pth.tar'
     _load_weights_from_checkpoint(path)
+
+    print("\nb5 TI")
+    path='experiments/results/classification_efficientnet_rsicd_embedding_caption_glove_smoothl1.pth.tar'
+    _load_weights_from_checkpoint(path)
+
+    print("\nb5 new old com o codigo backup")
+    path='experiments/results/classification_efficientnet_b5old_onersicd_embedding_caption_glove_smoothl1.pth.tar'
+    _load_weights_from_checkpoint(path)
