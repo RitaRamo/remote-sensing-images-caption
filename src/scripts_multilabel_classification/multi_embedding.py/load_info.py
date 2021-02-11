@@ -5,7 +5,6 @@ def _load_weights_from_checkpoint(checkpoint_path):
 
     if os.path.exists(checkpoint_path):
         print("checkpoint_path", checkpoint_path)
-        self.checkpoint_exists = True
 
         checkpoint = torch.load(checkpoint_path)
         print("checkpoint['epoch']", checkpoint['epoch'])
