@@ -38,8 +38,8 @@ class Meteor:
             stat = self._stat(res[i][0], gts[i])
             eval_line += ' ||| {}'.format(stat)
 
-        self.meteor_p.stdin.write('{}\n'.format(eval_line))
-        #self.meteor_p.stdin.write('{}\n'.format(eval_line).replace('.', ','))
+        #self.meteor_p.stdin.write('{}\n'.format(eval_line))
+        self.meteor_p.stdin.write('{}\n'.format(eval_line).replace('.', ','))
         for i in range(0, len(imgIds)):
             scores.append(float(self.meteor_p.stdout.readline().strip()))
         score = float(self.meteor_p.stdout.readline().strip())
