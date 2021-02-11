@@ -301,24 +301,25 @@ if __name__ == "__main__":
 
     if DATASET_TYPE == "caption":
         train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/",
-                              embedding_matrix)
+                              embedding_matrix,
+                            augmentation=False
+)
         val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/",
-                            embedding_matrix)
+                            embedding_matrix,
+                            augmentation=False)
 
         train_dataloader = DataLoader(
             ClassificationCaptionEmbeddingDataset(*train_dataset_args),
             batch_size=BATCH_SIZE,
             shuffle=True,
             num_workers=NUM_WORKERS,
-            augmentation=False
         )
 
         val_dataloader = DataLoader(
             ClassificationCaptionEmbeddingDataset(*val_dataset_args),
             batch_size=BATCH_SIZE,
             shuffle=False,
-            num_workers=NUM_WORKERS,
-            augmentation=False
+            num_workers=NUM_WORKERS
         )
 
     else:
