@@ -27,7 +27,7 @@ torch.backends.cudnn.benchmark = False
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet_b5old_one_noaug"
+FILE_NAME = "classification_efficientnet_b7old_one_noaug"
 DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
@@ -54,7 +54,7 @@ class ClassificationModel():
         self.checkpoint_exists = False
 
         if EFFICIENT_NET:
-            image_model = EfficientNet.from_pretrained('efficientnet-b5')
+            image_model = EfficientNet.from_pretrained('efficientnet-b7')
             num_features = image_model._fc.in_features
             image_model._fc = nn.Linear(num_features, EMBED_DIM)
             #print("image model", image_model)
