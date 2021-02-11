@@ -20,9 +20,14 @@ from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 from embeddings.embeddings import get_embedding_layer
 
+torch.manual_seed(0)
+np.random.seed(0)
+torch.backends.cudnn.deterministic = True
+torch.backends.cudnn.benchmark = False
+
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet_b7old_one"
+FILE_NAME = "classification_efficientnet_b7oldseed_one"
 DATASET = "rsicd"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
