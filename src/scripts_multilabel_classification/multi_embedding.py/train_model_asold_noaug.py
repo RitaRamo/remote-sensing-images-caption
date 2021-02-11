@@ -300,8 +300,8 @@ if __name__ == "__main__":
     # adicionar aqui coisas classtoword id
 
     if DATASET_TYPE == "caption":
-        train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/", embedding_matrix,augmentation=False)
-        val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/", embedding_matrix, augmentation=False)
+        train_dataset_args = (classification_train, dataset_folder + "raw_dataset/images/", embedding_matrix,False)
+        val_dataset_args = (classification_val, dataset_folder + "raw_dataset/images/", embedding_matrix, False)
 
         train_dataloader = DataLoader(
             ClassificationCaptionEmbeddingDataset(*train_dataset_args),
