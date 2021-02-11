@@ -1,7 +1,7 @@
 import os 
 import torch
     
-def _load_weights_from_checkpoint(self, checkpoint_path):
+def _load_weights_from_checkpoint(checkpoint_path):
 
     if os.path.exists(checkpoint_path):
         print("checkpoint_path", checkpoint_path)
