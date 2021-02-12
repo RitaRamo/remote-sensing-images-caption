@@ -272,7 +272,7 @@ def get_image_model(model_type):
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
         logging.info("image model with efficientnet B7 RSICD OONE multi-label classification with emb caption glove smoorhl1")
 
-        checkpoint = torch.load('experiments/results/classification_efficientnet_b7oldseed_one_embedding_caption_glove_smoothl1.pth.tar')
+        checkpoint = torch.load('experiments/results/classification_efficientnet_b7oldseed_onersicd_embedding_caption_glove_smoothl1.pth.tar')
         emb_dim = 300
 
         image_model = EfficientNet.from_pretrained('efficientnet-b7')
