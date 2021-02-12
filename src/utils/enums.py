@@ -30,7 +30,7 @@ class ImageNetModelsPretrained(Enum):
     EFFICIENCENETB5_OONE_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb5oone_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENETB7_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENETB7_OONE_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7oone_net_rsicd_caption_emb_glove_smoothl1"
-    EFFICIENCENETB7_OONE_SEED_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7oone_seed_net_rsicd_caption_emb_glove_smoothl1"
+    EFFICIENCENETB7_OONE_SEED_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7ooneseed_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENET_RSICD_CAPTION_FASTTEXT_EMBEDDINGS_SMOOTHL1 = "efficient_net_rsicd_caption_emb_fasttext_smoothl1"
     EFFICIENCENET_UCM_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficient_net_ucm_caption_emb_glove_smoothl1"
     EFFICIENCENET_EMBEDDINGS = "efficient_net_embeddings"
