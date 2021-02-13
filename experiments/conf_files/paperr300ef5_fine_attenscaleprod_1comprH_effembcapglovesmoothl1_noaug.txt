@@ -17,7 +17,7 @@ glove
 --attention_dim
 300
 --continuous_loss_type
-smoothl1_real_avg_sentence_and_input
+smoothl1_sum_mean
 --image_model_type
 efficient_net_rsicd_caption_emb_glove_smoothl1
 --dataset
