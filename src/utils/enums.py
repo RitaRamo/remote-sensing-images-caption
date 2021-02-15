@@ -28,6 +28,7 @@ class ImageNetModelsPretrained(Enum):
     EFFICIENCENETB5_RSICD_ALLCAPTIONS_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb5_net_rsicd_allcaptions_emb_glove_smoothl1"
     EFFICIENCENETB5_RSICD_ONECAPTIONS_GLOVE_EMBEDDINGS_SMOOTHL1  = "efficientb5one_net_rsicd_allcaptions_emb_glove_smoothl1"
     EFFICIENCENETB5_OONE_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb5oone_net_rsicd_caption_emb_glove_smoothl1"
+    EFFICIENCENETB5_OONE_SEED_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb5ooneseed_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENETB7_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENETB7_OONE_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7oone_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENETB7_OONE_SEED_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7ooneseed_net_rsicd_caption_emb_glove_smoothl1"
@@ -53,6 +54,7 @@ class Datasets(Enum):
     UCM = "ucm"
     FLICKR8K = "flickr8k"
     COCO = "coco"
+    SYDNEY = "sydney"
 
 
 class EvalDatasetType(Enum):
