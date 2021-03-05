@@ -11,18 +11,21 @@ from data_preprocessing.create_data_files import get_dataset, get_vocab_info
 from spacy.tokens import Doc
 import torch
 import spacy
-import inflect
+#import inflect
 from collections import Counter, OrderedDict, defaultdict
 from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
+from gensim.models import Word2Vec
 
 DATASET = "rsicd"
 
+
+
 if __name__ == "__main__":
 
-    nlp = spacy.load("en_core_web_sm")
-    nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
-    p = inflect.engine()
+    # nlp = spacy.load("en_core_web_sm")
+    # nlp.tokenizer = WhitespaceTokenizer(nlp.vocab)
+    # p = inflect.engine()
 
     dataset_folder, dataset_jsons = get_dataset_paths(DATASET)
     print("dataset folder", dataset_folder)
@@ -34,6 +37,21 @@ if __name__ == "__main__":
 
     images_names, captions_of_tokens = train_dataset[
         "images_names"], train_dataset["captions_tokens"]
+
+    class MyIter:
+        def __iter__(self):
+            for i in range(len(captions_of_tokens)):
+                yield captions_of_tokens[i]
+
+    print("len train", len(captions_of_tokens))
+    print("My iter", next(iter(MyIter())))
+
+    w2v_model = Word2Vec(size=300, window=3, min_count=2)
+    w2v_model.build_vocab(sentences=MyIter())
+    total_examples = w2v_model.corpus_count
+    print("total exam", total_examples)
+    w2v_model.train(sentences=MyIter(), total_examples=total_examples, epochs=5)
+    w2v_model.save('src/embeddings/trained_embeddings.txt')
 
     image_caption = defaultdict(list)
     classes = []
