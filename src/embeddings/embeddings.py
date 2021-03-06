@@ -193,7 +193,7 @@ def _get_trained_embeddings_matrix(vocab_size, embedding_size, token_to_id):
     # reduce the matrix of pretrained:embeddings according to dataset vocab
     print("trained embeddings")
 
-    w2v_model = FastText.load('src/embeddings/trained_embeddings.txt')
+    w2v_model = Word2Vec.load('trained_embeddings.txt')
 
     embeddings_matrix = np.zeros(
         (vocab_size, embedding_size))
