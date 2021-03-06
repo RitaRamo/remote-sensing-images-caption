@@ -11,6 +11,8 @@ class EmbeddingsType(Enum):
     FASTTEXT = "fasttext"
     CONCATENATE_GLOVE_FASTTEXT = "concatenate_glove_fasttext"
     BERT = "bert"
+    TRAINED_WORD2VEC = "trained_word2vec"
+
 
 
 class ImageNetModelsPretrained(Enum):

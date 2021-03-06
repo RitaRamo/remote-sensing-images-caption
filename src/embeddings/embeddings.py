@@ -8,7 +8,7 @@ import io
 import logging
 import fasttext
 from sklearn.decomposition import PCA
-
+from gensim.models import Word2Vec
 
 def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id, post_processing):
     embedding_layer = nn.Embedding(vocab_size, embed_dim)  # embedding layer
@@ -62,6 +62,13 @@ def get_embedding_layer(embedding_type, embed_dim, vocab_size, token_to_id, post
 
         elif embedding_type == EmbeddingsType.BERT.value:
             pretrained_embeddings = torch.load(get_bert_path())["pretrained_embeddings_matrix"].data.numpy()
+
+        elif embedding_type == EmbeddingsType.TRAINED_WORD2VEC.value:
+            pretrained_embeddings = _get_trained_embeddings_matrix(
+                vocab_size, embed_dim, token_to_id)
+
+        else:
+            raise Exception("this type of embedding does not exist", embedding_type)
 
         if post_processing:
             logging.info("post-processing embeddings")
@@ -146,11 +153,19 @@ def _get_embeddings_matrix(embeddings, vocab_size, embedding_size, token_to_id):
     embeddings_matrix = np.zeros(
         (vocab_size, embedding_size))
 
+    n_unkown = 0
+    unkowns_list = []
+
     for word, id in token_to_id.items():
         try:
             embeddings_matrix[id] = embeddings[word]
         except:
             embeddings_matrix[id] = mean_embeddings_unknown
+            n_unkown += 1
+            #print("unknow", word)
+            unkowns_list.append((word, id))
+    # print("number of unknow embeddings", n_unkown)
+    # print("unkow list", unkowns_list)
 
     embeddings_matrix[token_to_id[END_TOKEN]] = embeddings["."]
 
@@ -173,6 +188,31 @@ def _get_fasttext_embeddings_matrix(embeddings, vocab_size, embedding_size, toke
 
     return embeddings_matrix
 
+
+def _get_trained_embeddings_matrix(vocab_size, embedding_size, token_to_id):
+    # reduce the matrix of pretrained:embeddings according to dataset vocab
+    print("trained embeddings")
+
+    w2v_model = FastText.load('src/embeddings/trained_embeddings.txt')
+
+    embeddings_matrix = np.zeros(
+        (vocab_size, embedding_size))
+
+    count_unk=0
+    count_known=0
+    for word, id in token_to_id.items():
+        try:
+            embeddings_matrix[id] = w2v_model[word]
+            count_known+=1
+        except:
+            print("word unkown", word)
+            count_unk+=1
+            pass
+
+    print("cont unk", count_unk)
+    print("cont known", count_known)
+
+    return embeddings_matrix
 
 # def _get_glove_embeddings_matrix(vocab_size, embedding_size, token_to_id):
 #     glove_path = _get_glove_path(embedding_size)
