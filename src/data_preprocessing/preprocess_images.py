@@ -236,7 +236,7 @@ def get_image_model(model_type):
         
     elif model_type == ImageNetModelsPretrained.EFFICIENCENETB5_OONE_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1.value:
         # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
-        logging.info("image model with efficientnet B7 RSICD OONE multi-label classification with emb caption glove smoorhl1")
+        logging.info("image model with efficientnet B5 RSICD OONE multi-label classification with emb caption glove smoorhl1")
 
         checkpoint = torch.load('experiments/results/classification_efficientnet_b5old_onersicd_embedding_caption_glove_smoothl1.pth.tar')
         emb_dim = 300
@@ -256,6 +256,23 @@ def get_image_model(model_type):
         logging.info("image model with efficientnet B5 RSICD OONE seed multi-label classification with emb caption glove smoorhl1")
 
         checkpoint = torch.load('experiments/results/classification_efficientnet_b5oldseed_onersicd_embedding_caption_glove_smoothl1.pth.tar')
+        emb_dim = 300
+
+        image_model = EfficientNet.from_pretrained('efficientnet-b5')
+        encoder_dim = image_model._fc.in_features
+        image_model._fc = nn.Linear(encoder_dim, emb_dim)
+
+        print("encoder dim", encoder_dim)
+
+        image_model.load_state_dict(checkpoint['model'])
+
+        return image_model, encoder_dim
+
+    elif model_type == ImageNetModelsPretrained.EFFICIENCENETB5_OONE_SEED_RSICD_CAPTION_WORD2VEC_EMBEDDINGS_SMOOTHL1.value:
+        # https://github.com/lukemelas/EfficientNet-PyTorch/pull/194
+        logging.info("image model with efficientnet B5 RSICD OONE seed trained word2 vec multi-label classification with emb caption w2v smoorhl1")
+
+        checkpoint = torch.load('experiments/results/classification_efficientnet_b5oldseed_onersicd_embedding_caption_trained_word2vec_smoothl1.pth.tar')
         emb_dim = 300
 
         image_model = EfficientNet.from_pretrained('efficientnet-b5')
