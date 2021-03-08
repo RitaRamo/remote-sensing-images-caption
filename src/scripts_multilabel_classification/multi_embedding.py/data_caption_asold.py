@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     #w2v_model = Word2Vec(size=300, window=3, min_count=2)
 
-    glove_input_file = 'src/embeddings/glove.6B.300d.txt'
+    glove_input_file = 'src/embeddings/glove.6B/glove.6B.300d.txt'
     word2vec_output_file = 'glove.6B.300d.txt.word2vec'
     glove2word2vec(glove_input_file, word2vec_output_file)
 
