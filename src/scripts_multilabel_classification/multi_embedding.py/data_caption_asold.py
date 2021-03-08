@@ -17,6 +17,7 @@ from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 from gensim.models import Word2Vec
 from gensim.scripts.glove2word2vec import glove2word2vec
+from gensim.models import KeyedVectors
 
 DATASET = "rsicd"
 
