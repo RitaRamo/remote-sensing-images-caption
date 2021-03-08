@@ -53,7 +53,7 @@ if __name__ == "__main__":
     word2vec_output_file = 'glove.6B.300d.txt.word2vec'
     glove2word2vec(glove_input_file, word2vec_output_file)
 
-    w2v_model = Word2Vec.load_word2vec_format(word2vec_output_file)
+    w2v_model = KeyedVectors.load_word2vec_format(word2vec_output_file)
     print(".wv.vocab", w2v_model.wv.vocab)
     w2v_model.build_vocab(sentences=MyIter(), update=True)
     total_examples = w2v_model.corpus_count
