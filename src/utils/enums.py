@@ -43,6 +43,7 @@ class ImageNetModelsPretrained(Enum):
 
 class OptimizerType(Enum):
     ADAM = "adam"
+    ADAMW = "adamW"
     ADAGRAD = "adagrad"
     ADADELTA = "adadelta"
     SGD = "sgd"

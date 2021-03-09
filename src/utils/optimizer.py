@@ -10,6 +10,8 @@ def get_optimizer(optimizer_type, model_params, learning_rate):
 
     if optimizer_type == OptimizerType.ADAM.value:
         return optim.Adam(*optimizer_args)
+    elif optimizer_type == OptimizerType.ADAMW.value:
+        return optim.AdamW(*optimizer_args)
     elif optimizer_type == OptimizerType.ADAGRAD.value:
         return optim.Adagrad(*optimizer_args)
     elif optimizer_type == OptimizerType.ADADELTA.value:
