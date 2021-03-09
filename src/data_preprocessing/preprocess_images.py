@@ -435,32 +435,58 @@ class DenseNetFeatureAndAttrExtractor(nn.Module):
 
         return features, attrs
 
-
-class ColorsAugmentation(Enum):
-    LIGHT = 0
-    CLACHE = 1
-    RANDOM_CONSTRACT = 2
-    RANDOM_GAMMA = 3
-    RANDOM_BRIGHTNESS = 4
-    GRAY = 5
-    JPEG_COMPREENSION = 6
-    NO_AUGMENTATION = 7
-
-
 def apply_no_transformation(image):
     return {"image": image}
 
+# class ColorsAugmentation(Enum):
+#     LIGHT = 0
+#     CLACHE = 1
+#     RANDOM_CONSTRACT = 2
+#     RANDOM_GAMMA = 3
+#     RANDOM_BRIGHTNESS = 4
+#     GRAY = 5
+#     JPEG_COMPREENSION = 6
+#     NO_AUGMENTATION = 7
+
+# def augment_image_with_color():
+#     mode = np.random.randint(len(ColorsAugmentation))
+
+#     if mode == ColorsAugmentation.LIGHT.value:
+#         return A.Compose([
+#             A.RandomBrightnessContrast(p=1),
+#             A.RandomGamma(p=1),
+#             A.CLAHE(p=1),
+#         ], p=1)
+#     elif mode == ColorsAugmentation.CLACHE.value:
+#         return A.CLAHE(p=1)
+#     elif mode == ColorsAugmentation.RANDOM_CONSTRACT.value:
+#         return A.RandomContrast(p=1)
+#     elif mode == ColorsAugmentation.RANDOM_GAMMA.value:
+#         return A.RandomGamma(p=1)
+#     elif mode == ColorsAugmentation.RANDOM_BRIGHTNESS.value:
+#         return A.RandomBrightness(p=1)
+#     elif mode == ColorsAugmentation.GRAY.value:
+#         return A.ToGray(p=1)
+#     elif mode == ColorsAugmentation.JPEG_COMPREENSION.value:
+#         return A.JpegCompression(p=1)
+#     elif mode == ColorsAugmentation.NO_AUGMENTATION.value:
+#         return apply_no_transformation
+#     else:
+#         raise ValueError(
+#             "Mode should be equal to 0-6 (see ENUM ColorsAugmentation).")
+
+class ColorsAugmentation(Enum):
+    CLACHE = 0
+    RANDOM_CONSTRACT = 1
+    RANDOM_GAMMA = 2
+    RANDOM_BRIGHTNESS = 3
+    JPEG_COMPREENSION = 4
+    NO_AUGMENTATION = 5
 
 def augment_image_with_color():
     mode = np.random.randint(len(ColorsAugmentation))
 
-    if mode == ColorsAugmentation.LIGHT.value:
-        return A.Compose([
-            A.RandomBrightnessContrast(p=1),
-            A.RandomGamma(p=1),
-            A.CLAHE(p=1),
-        ], p=1)
-    elif mode == ColorsAugmentation.CLACHE.value:
+    if mode == ColorsAugmentation.CLACHE.value:
         return A.CLAHE(p=1)
     elif mode == ColorsAugmentation.RANDOM_CONSTRACT.value:
         return A.RandomContrast(p=1)
@@ -468,15 +494,13 @@ def augment_image_with_color():
         return A.RandomGamma(p=1)
     elif mode == ColorsAugmentation.RANDOM_BRIGHTNESS.value:
         return A.RandomBrightness(p=1)
-    elif mode == ColorsAugmentation.GRAY.value:
-        return A.ToGray(p=1)
     elif mode == ColorsAugmentation.JPEG_COMPREENSION.value:
         return A.JpegCompression(p=1)
     elif mode == ColorsAugmentation.NO_AUGMENTATION.value:
         return apply_no_transformation
     else:
         raise ValueError(
-            "Mode should be equal to 0-6 (see ENUM ColorsAugmentation).")
+            "Mode should be equal to 0-5 (see ENUM ColorsAugmentation).")
 
 
 class FlipsAndRotations(Enum):
