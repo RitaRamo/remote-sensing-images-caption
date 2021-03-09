@@ -22,5 +22,3 @@ smoothl1_real_avg_sentence_and_input
 efficient_net_rsicd_caption_emb_glove_smoothl1
 --dataset
 rsicd
-
-
