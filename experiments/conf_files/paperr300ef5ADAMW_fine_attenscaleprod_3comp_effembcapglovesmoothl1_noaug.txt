@@ -13,7 +13,7 @@ ContinuousScaleProductAttention3CompGradNormModel
 --embedding_type
 glove
 --optimizer_type
-adamw
+adamW
 --embed_dim
 300
 --attention_dim
