@@ -20,6 +20,7 @@ from gensim.scripts.glove2word2vec import glove2word2vec
 from gensim.models import KeyedVectors
 import csv 
 import operator
+import numpy as np
 
 DATASET = "rsicd"
 
