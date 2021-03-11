@@ -73,6 +73,7 @@ if __name__ == "__main__":
     # print(".wv.vocab", w2v_model.wv.vocab)
 
 
+    print("Populating vocab_freq_dict and token2id from glove vocab.")
 
     token2id = {}
     vocab_freq_dict = {}
@@ -90,7 +91,7 @@ if __name__ == "__main__":
     #print("vocab_freq_dict to id", vocab_freq_dict)
     #print(stop)
 
-    # Populating vocab_freq_dict and token2id from glove vocab.
+    print("Populating vocab_freq_dict and token2id from glove vocab.")
     embedding_name = "src/embeddings/glove.6B/glove.6B.300d.txt"
     max_id = max(token2id.items(), key=operator.itemgetter(1))[0]
     max_token_id = token2id[max_id]
@@ -106,11 +107,8 @@ if __name__ == "__main__":
                 
     #with open("vocab_freq_dict","wb") as vocab_file: pickle.dump(vocab_freq_dict, vocab_file)
     #with open("token2id", "wb") as token2id_file: pickle.dump(token2id, token2id_file)
-    print("\nnew token to id", token2id)
-    print("\nnew vocab_freq_dict to id", vocab_freq_dict)
-    print(stop)
 
-    # converting vectors to keyedvectors format for gensim
+    print("converting vectors to keyedvectors format for gensim")
     def load_vectors(token2id, path,  limit=None):
         embed_shape = (len(token2id), 300)
         freqs = np.zeros((len(token2id)), dtype='f')
