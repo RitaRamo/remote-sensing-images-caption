@@ -43,7 +43,7 @@ class ImageNetModelsPretrained(Enum):
 
 class OptimizerType(Enum):
     ADAM = "adam"
-    ADAMW = "adamW"
+    ADAMW = "adamw"
     ADAGRAD = "adagrad"
     ADADELTA = "adadelta"
     SGD = "sgd"
@@ -132,6 +132,7 @@ class DecodingType(Enum):
     GREEDY = "greedy"
     GREEDY_EMBEDDING = "greedy_embedding"
     GREEDY_SMOOTHL1 = "greedy_smoothl1"
+    GREEDY_SMOOTHL1_NO_REPS = "greedy_smoothl1_no_reps"
     GREEDY_SIM_RANK = "greedy_sim_rank"
     BEAM = "beam"
     BEAM_WITHOUT_REFINEMENT = "beam_wt_refinement"
