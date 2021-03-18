@@ -133,6 +133,7 @@ class DecodingType(Enum):
     GREEDY_EMBEDDING = "greedy_embedding"
     GREEDY_SMOOTHL1 = "greedy_smoothl1"
     GREEDY_SMOOTHL1_NO_REPS = "greedy_smoothl1_no_reps"
+    GREEDY_SMOOTHL1_MMR= "greedy_smoothl1_mmr"
     GREEDY_SIM_RANK = "greedy_sim_rank"
     BEAM = "beam"
     BEAM_WITHOUT_REFINEMENT = "beam_wt_refinement"

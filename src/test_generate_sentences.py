@@ -143,6 +143,8 @@ if __name__ == "__main__":
         decoding_method = model.inference_with_greedy_smoothl1
     elif args.decodying_type == DecodingType.GREEDY_SMOOTHL1_NO_REPS.value:
         decoding_method = model.inference_with_greedy_smoothl1_no_reps
+    elif args.decodying_type == DecodingType.GREEDY_SMOOTHL1_MMR.value:
+        decoding_method = model.inference_with_greedy_smoothl1_mmr
     elif args.decodying_type == DecodingType.BEAM_PERPLEXITY.value:
         decoding_method = model.inference_with_perplexity
     elif args.decodying_type == DecodingType.BIGRAM_PROB.value:
