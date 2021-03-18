@@ -695,6 +695,104 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
             return generated_sentence  # input_caption
 
+    def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
+        alpha=0.95
+        with torch.no_grad():  # no need to track history
+
+            decoder_sentence = []
+
+            input_word = torch.tensor([self.token_to_id[START_TOKEN]])
+
+            i = 1
+
+            encoder_output, encoder_attrs = self.encoder(image)
+            self.decoder.image_embedding = torch.nn.functional.normalize(encoder_attrs, p=2, dim=-1)
+
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            criteria = torch.nn.SmoothL1Loss(reduction="none")
+
+            all_prev_tokens=self.decoder.embedding(torch.tensor([self.token_to_id[START_TOKEN]]))
+
+            while True:
+
+                scores, h, c = self.generate_output_index_smoothl1(criteria,
+                                                                   input_word, encoder_output, h, c)
+
+                #embeddings against previous generated words -> to have a score of diversity
+                n_prev_tokens= len(all_prev_tokens)
+                scores_second_part = torch.zeros(len(scores), n_prev_tokens) 
+                #print("scores before", scores_second_part.size())
+
+                for j in range(n_prev_tokens):
+                    #print("mean1", criteria(self.decoder.embedding.weight.data, all_prev_tokens[j].expand_as(self.decoder.embedding.weight.data)).mean(1))
+                    scores_second_part[:, j] = criteria(self.decoder.embedding.weight.data, all_prev_tokens[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+                
+                # print("scores after", scores_second_part)
+                # print("scores just first", scores_second_part[0,:])
+
+                #scores_second_part = torch.clamp(scores_second_part, min=0)
+                scores_diversity, diversity_index= torch.min(scores_second_part, dim=-1)
+                # print("scores diversity size", scores_diversity.size())
+                # print("scores_diversity", scores_diversity)
+                # print("scores_diversity 0", scores_diversity[0])
+
+                # scores = alpha*scores - (1-alpha)*scores_diversity
+                # print("scores mmr", scores.size())
+
+                # sorted_scores, sorted_indices = torch.sort(scores, descending=False, dim=-1)
+                # print("sorted ind", sorted_indices)
+                # print("sorted values", scores)
+
+                # print("mmr", alpha*scores - (1-alpha)*scores_diversity)
+                sorted_scores, sorted_indices = torch.sort(alpha*scores - (1-alpha)*scores_diversity, descending=False, dim=-1)
+                #print("sorted ind mmr", sorted_indices)
+                #print(stop)
+
+                # print("this are the sorted_scores", sorted_scores)
+                # print("this are the sorted_indices", sorted_indices)
+                # k_l = 0
+                # for indi in sorted_indices:
+                #     print(self.id_to_token[indi.item()], sorted_scores[k_l])
+                #     k_l += 1
+                #     if k_l > 5:
+                #         break
+
+                current_output_index = sorted_indices.squeeze()[0]
+
+                # print("current output index", current_output_index)
+                # if current_output_index.item() == self.token_to_id[PAD_TOKEN]:
+                #     current_output_index = sorted_indices.squeeze()[1]
+
+                current_output_token = self.id_to_token[current_output_index.item(
+                )]
+
+                all_prev_tokens = torch.cat((all_prev_tokens, self.decoder.embedding(torch.tensor([current_output_index.item(
+                )]))), 0) 
+
+                decoder_sentence.append(current_output_token)
+
+                if current_output_token == END_TOKEN:
+                    # ignore end_token
+                    decoder_sentence = decoder_sentence[:-1]
+                    break
+
+                if i >= self.max_len - 1:  # until 35
+                    break
+
+                input_word[0] = current_output_index.item()
+
+                i += 1
+
+            generated_sentence = " ".join(decoder_sentence)
+            # print("beam_t decoded sentence:", generated_sentence)
+            print("\ngenerated sentence:", generated_sentence)
+
+            return generated_sentence  # input_caption
+
     def generate_output_index_smoothl1(self, criteria, input_word, encoder_out, h, c):
         predictions, h, c,_ = self.decoder(input_word, encoder_out, h, c)
 
