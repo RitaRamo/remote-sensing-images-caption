@@ -673,6 +673,11 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
                     current_output_token = self.id_to_token[current_output_index.item(
                     )]
 
+                if current_output_token == END_TOKEN and i<=min_len: #sentences with min len
+                    current_output_index = sorted_indices.squeeze()[1]
+                    current_output_token = self.id_to_token[current_output_index.item(
+                    )]
+
                 previous_output_token = current_output_token
 
                 decoder_sentence.append(current_output_token)
@@ -769,6 +774,11 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
+
+                if current_output_token == END_TOKEN and i<=min_len: #sentences with min len
+                    current_output_index = sorted_indices.squeeze()[1]
+                    current_output_token = self.id_to_token[current_output_index.item(
+                    )]
 
                 all_prev_tokens = torch.cat((all_prev_tokens, self.decoder.embedding(torch.tensor([current_output_index.item(
                 )]))), 0) 
