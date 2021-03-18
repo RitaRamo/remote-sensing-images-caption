@@ -697,7 +697,7 @@ class AbstractEncoderDecoderModel(ABC):
 
     def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
         #Maximal Marginal Relevance
-        alpha=0.95
+        alpha=0.97
         with torch.no_grad():  # no need to track history
 
             decoder_sentence = []
@@ -771,6 +771,11 @@ class AbstractEncoderDecoderModel(ABC):
 
                 current_output_token = self.id_to_token[current_output_index.item(
                 )]
+
+                if current_output_token == END_TOKEN and i<=min_len: #sentences with min len
+                    current_output_index = sorted_indices.squeeze()[1]
+                    current_output_token = self.id_to_token[current_output_index.item(
+                    )]
 
                 all_prev_tokens = torch.cat((all_prev_tokens, self.decoder.embedding(torch.tensor([current_output_index.item(
                 )]))), 0) 
