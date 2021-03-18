@@ -52,7 +52,7 @@ class OptimizerType(Enum):
 class Datasets(Enum):
     RSICD = "rsicd"
     RSICD_NEW_SPLITS_TRAIN_VAL = "rsicd_new_splits"
-    SIDNEY = "sidney"
+    SYDNEY = "sidney"
     UCM = "ucm"
     FLICKR8K = "flickr8k"
     COCO = "coco"
