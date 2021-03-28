@@ -19,7 +19,7 @@ from gensim.models import Word2Vec
 from gensim.scripts.glove2word2vec import glove2word2vec
 from gensim.models import KeyedVectors
 
-DATASET = "rsicd"
+DATASET = "sidney"
 
 
 
@@ -39,29 +39,6 @@ if __name__ == "__main__":
 
     images_names, captions_of_tokens = train_dataset[
         "images_names"], train_dataset["captions_tokens"]
-
-    class MyIter:
-        def __iter__(self):
-            for i in range(len(captions_of_tokens)):
-                yield captions_of_tokens[i]
-
-    print("len train", len(captions_of_tokens))
-    #print("My iter", next(iter(MyIter())))
-
-    #w2v_model = Word2Vec(size=300, window=3, min_count=2)
-
-    glove_input_file = 'src/embeddings/glove.6B/glove.6B.300d.txt'
-    word2vec_output_file = 'glove.6B.300d.txt.word2vec'
-    glove2word2vec(glove_input_file, word2vec_output_file)
-
-    w2v_model = KeyedVectors.load_word2vec_format(word2vec_output_file)
-    print(".wv.vocab", w2v_model.wv.vocab)
-    w2v_model.build_vocab(sentences=MyIter(), update=True)
-    total_examples = w2v_model.corpus_count
-    print("total exam", total_examples)
-    w2v_model.train(sentences=MyIter(), total_examples=total_examples, epochs=5)
-    w2v_model.save('src/embeddings/trained_embeddings.txt')
-    print(".wv.vocab", w2v_model.wv.vocab)
 
     image_caption = defaultdict(list)
     classes = []
@@ -83,6 +60,8 @@ if __name__ == "__main__":
 
     elif DATASET == Datasets.UCM.value:
         torch.save(state, dataset_jsons + "classification_dataset_ucm_caption")
+    elif DATASET == Datasets.SYDNEY.value:
+        torch.save(state, dataset_jsons + "classification_dataset_sydney_caption")
     elif DATASET == Datasets.FLICKR8K.value:
         torch.save(state, dataset_jsons + "classification_dataset_flickr8k_caption")
     else:
