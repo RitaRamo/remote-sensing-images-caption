@@ -20,22 +20,22 @@ from utils.enums import Datasets
 from definitions_datasets import get_dataset_paths
 from embeddings.embeddings import get_embedding_layer
 
-torch.manual_seed(0)
-np.random.seed(0)
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
+#torch.manual_seed(0)
+#np.random.seed(0)
+#torch.backends.cudnn.deterministic = True
+#torch.backends.cudnn.benchmark = False
 
 DISABLE_STEPS = False
 #FILE_NAME = "classification_efficientnet_focalloss"
-FILE_NAME = "classification_efficientnet_b5oldseed_one"
-DATASET = "rsicd"
+FILE_NAME = "classification_efficientnet_b5_"
+DATASET = "sidney"
 DATASET_TYPE = "caption"  # caption
 TYPE_OF_MULTIMODAL = "embedding"  # sigmoid
 LOSS_TYPE= "smoothl1"
 FINE_TUNE = True
 EFFICIENT_NET = True
 EMBED_DIM = 300
-EMBEDDING_TYPE="trained_word2vec"
+EMBEDDING_TYPE="glove"
 EPOCHS = 300
 BATCH_SIZE = 8
 EPOCHS_LIMIT_WITHOUT_IMPROVEMENT = 5
@@ -268,6 +268,8 @@ if __name__ == "__main__":
         CLASSIFICATION_DATASET_PATH = "classification_dataset_rsicd"
     elif DATASET == Datasets.UCM.value:
         CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm"
+    elif DATASET == Datasets.SYDNEY.value:
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_sydney_caption"
     elif DATASET == Datasets.FLICKR8K.value:
         CLASSIFICATION_DATASET_PATH = "classification_dataset_flickr8k"
     else:
