@@ -269,7 +269,7 @@ if __name__ == "__main__":
     elif DATASET == Datasets.UCM.value:
         CLASSIFICATION_DATASET_PATH = "classification_dataset_ucm"
     elif DATASET == Datasets.SYDNEY.value:
-        CLASSIFICATION_DATASET_PATH = "classification_dataset_sydney_caption"
+        CLASSIFICATION_DATASET_PATH = "classification_dataset_sydney"
     elif DATASET == Datasets.FLICKR8K.value:
         CLASSIFICATION_DATASET_PATH = "classification_dataset_flickr8k"
     else:
