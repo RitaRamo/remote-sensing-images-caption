@@ -753,7 +753,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
                 # print("sorted values", scores)
 
                 # print("mmr", alpha*scores - (1-alpha)*scores_diversity)
-                sorted_scores, sorted_indices = torch.sort(alpha*scores - (1-alpha)*scores_diversity, descending=False, dim=-1)
+                sorted_scores, sorted_indices = torch.sort(alpha*scores + (1-alpha)*scores_diversity, descending=False, dim=-1)
                 #print("sorted ind mmr", sorted_indices)
                 #print(stop)
 
