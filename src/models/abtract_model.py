@@ -697,7 +697,7 @@ class AbstractEncoderDecoderModel(ABC):
 
     def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50):
         #Maximal Marginal Relevance
-        alpha=0.99
+        alpha=0.95
         with torch.no_grad():  # no need to track history
 
             decoder_sentence = []
