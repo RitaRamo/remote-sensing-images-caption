@@ -35,6 +35,7 @@ class ImageNetModelsPretrained(Enum):
     EFFICIENCENETB7_OONE_SEED_RSICD_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficientb7ooneseed_net_rsicd_caption_emb_glove_smoothl1"
     EFFICIENCENET_RSICD_CAPTION_FASTTEXT_EMBEDDINGS_SMOOTHL1 = "efficient_net_rsicd_caption_emb_fasttext_smoothl1"
     EFFICIENCENET_UCM_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficient_net_ucm_caption_emb_glove_smoothl1"
+    EFFICIENCENET_SIDNEY_CAPTION_GLOVE_EMBEDDINGS_SMOOTHL1 = "efficient_net_sidney_caption_emb_glove_smoothl1"
     EFFICIENCENET_EMBEDDINGS = "efficient_net_embeddings"
     EFFICIENCENET_UCM = "efficient_net_ucm"
     EFFICIENCENET_FLICKR8K = "efficient_net_flickr8k"
