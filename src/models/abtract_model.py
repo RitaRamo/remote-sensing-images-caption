@@ -812,19 +812,19 @@ class AbstractEncoderDecoderModel(ABC):
                 
                 pos = 0
                 current_output_index = sorted_indices.squeeze()[pos].item()
-                # if current_output_index == self.token_to_id[END_TOKEN] and i<=min_len:
-                #     pos += 1
-                #     current_output_index = sorted_indices.squeeze()[pos].item()
-                # no_repeat = repetition_window - 1
-                # while True:
-                #     if no_repeat <= 0: 
-                #         break
-                #     if (len(all_prev_tokens) > no_repeat) and (current_output_index == all_prev_tokens[-no_repeat]):
-                #         pos += 1
-                #         current_output_index = sorted_indices.squeeze()[pos].item()
-                #         no_repeat=repetition_window
-                #     else:
-                #         no_repeat -=1
+                if current_output_index == self.token_to_id[END_TOKEN] and i<=min_len:
+                    pos += 1
+                    current_output_index = sorted_indices.squeeze()[pos].item()
+                no_repeat = repetition_window - 1
+                while True:
+                    if no_repeat <= 0: 
+                        break
+                    if (len(all_prev_tokens) > no_repeat) and (current_output_index == all_prev_tokens[-no_repeat]):
+                        pos += 1
+                        current_output_index = sorted_indices.squeeze()[pos].item()
+                        no_repeat=repetition_window
+                    else:
+                        no_repeat -=1
                 current_output_token = self.id_to_token[current_output_index]
                 all_prev_token_embeddings = torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([current_output_index]))), 0)
                 all_prev_tokens.append(current_output_index)
