@@ -812,7 +812,7 @@ class AbstractEncoderDecoderModel(ABC):
                 
                 pos = 0
                 current_output_index = sorted_indices.squeeze()[pos].item()
-                if current_output_index == self.token_to_id[END_TOKEN] and i<=min_len:
+                if current_output_index == self.token_to_id[END_TOKEN] and i<min_len:
                     pos += 1
                     current_output_index = sorted_indices.squeeze()[pos].item()
                 no_repeat = repetition_window - 1
