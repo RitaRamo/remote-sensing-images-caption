@@ -1,5 +1,5 @@
 --file_name
-ntisidneyenc_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt
+ntisidneyenc40_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt
 --model_class_str
 ContinuousScaleProductAttention3CompGradNormModel
 --batch_size
