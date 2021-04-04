@@ -648,10 +648,10 @@ class AbstractEncoderDecoderModel(ABC):
 
         with torch.no_grad():
             # my_dict = {}
-
-            encoder_output = self.encoder(image)
-            encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            encoder_output = self.get_encoder_image(image)
             h, c = self.decoder.init_hidden_state(encoder_output)
+
+
 
             top_solutions = [([START_TOKEN], 0.0, h, c)]
 
