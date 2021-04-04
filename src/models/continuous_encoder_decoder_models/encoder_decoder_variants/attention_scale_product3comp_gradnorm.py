@@ -639,6 +639,97 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
         return current_output_index, h, c   
 
+    def inference_with_beamsearch(
+            self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
+
+        def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
+            # print("\nseed text", seed_text)
+            # print("current_text text", current_text)
+            # print("previous seed prob", seed_prob)
+            # print("now prob", sorted_scores[index].item())
+            # print("final prob", seed_prob + sorted_scores[index])
+            # print("final prob with item", seed_prob + sorted_scores[index].item())
+
+            # print(stop)
+            return (seed_prob * len(seed_text) + sorted_scores[index].item()) / (len(seed_text) + 1)
+        
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
+            last_token = seed_text[-1]
+
+            if last_token == END_TOKEN:
+                return [(seed_text, seed_prob, h, c)]
+
+            if len(seed_text) > max_len:
+                return [(seed_text, seed_prob, h, c)]
+
+            top_solutions = []
+            scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
+                torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
+
+            sorted_scores, sorted_indices = torch.sort(
+                scores.squeeze(), descending=False, dim=-1)
+
+            n = 0
+            index = 0
+            len_seed_text = len(seed_text)
+            # print("\n start candidates")
+            while n < n_solutions:
+                current_word = self.id_to_token[sorted_indices[index].item()]
+                if current_word == END_TOKEN:
+                    if len(seed_text) <= min_len:
+                        index += 1
+                        continue
+                elif current_word in seed_text[max(len_seed_text - repetition_window, 0):]:
+                    index += 1
+                    continue
+
+                text = seed_text + [current_word]
+                text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
+                top_solutions.append((text, text_score, h, c))
+                index += 1
+                n += 1
+
+            return top_solutions
+
+        def get_most_probable(candidates, n_solutions):
+            return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
+
+        with torch.no_grad():
+            my_dict = {}
+
+            encoder_output, encoder_attrs = self.encoder(image)
+            self.decoder.image_embedding = torch.nn.functional.normalize(encoder_attrs, p=2, dim=-1)
+
+            encoder_output = encoder_output.view(
+                1, -1, encoder_output.size()[-1])
+
+            # encoder_output = self.encoder(image.to(self.device))
+            # encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+            h, c = self.decoder.init_hidden_state(encoder_output)
+
+            top_solutions = [([START_TOKEN], 0.0, h, c)]
+
+            for time_step in range(self.max_len - 1):
+                # print("\nnew time step")
+                candidates = []
+                for sentence, prob, h, c in top_solutions:
+                    candidates.extend(generate_n_solutions(
+                        sentence, prob, encoder_output, h, c, n_solutions))
+
+                top_solutions = get_most_probable(candidates, n_solutions)
+
+
+            best_tokens, prob, h, c = top_solutions[0]
+
+            if best_tokens[0] == START_TOKEN:
+                best_tokens = best_tokens[1:]
+            if best_tokens[-1] == END_TOKEN:
+                best_tokens = best_tokens[:-1]
+            best_sentence = " ".join(best_tokens)
+
+            print("\nbeam decoded sentence:", best_sentence)
+            return best_sentence
+
     def inference_beam_without_refinement(
             self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
 
