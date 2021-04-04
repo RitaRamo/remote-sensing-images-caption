@@ -770,7 +770,7 @@ class AbstractEncoderDecoderModel(ABC):
             1, -1, encoder_output.size()[-1])
         return encoder_output
 
-    def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50, alpha_diversity=0.0, alpha_consistency=0.00):
+    def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50, alpha_diversity=0.0, alpha_consistency=0.05):
         #Maximal Marginal Relevance
         print("entrei aqui NO MMR SEM SER O 3")
         with torch.no_grad():  # no need to track history
