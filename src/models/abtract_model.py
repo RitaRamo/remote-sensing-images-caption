@@ -830,21 +830,6 @@ class AbstractEncoderDecoderModel(ABC):
                 all_prev_tokens.append(current_output_index)
                 decoder_sentence.append(current_output_token)
 
-
-                current_output_index = sorted_indices.squeeze()[0]
-                current_output_token = self.id_to_token[current_output_index.item(
-                )]
-
-                if current_output_token == END_TOKEN and i<min_len: #sentences with min len
-                    current_output_index = sorted_indices.squeeze()[1]
-                    current_output_token = self.id_to_token[current_output_index.item(
-                    )]
-
-                all_prev_tokens = torch.cat((all_prev_tokens, self.decoder.embedding(torch.tensor([current_output_index.item(
-                )]))), 0) 
-        
-                decoder_sentence.append(current_output_token)
-
                 if current_output_token == END_TOKEN:
                     # ignore end_token
                     decoder_sentence = decoder_sentence[:-1]
