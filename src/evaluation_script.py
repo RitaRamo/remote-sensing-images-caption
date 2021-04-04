@@ -13,29 +13,50 @@ for eval_file in [
 ]:
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=greedy_smoothl1_mmr", "--min_len=3"])
+                        "--decodying_type=greedy_smoothl1_mmr", "--rep_window=3"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=greedy_smoothl1_mmr", "--min_len=3"])
-
+                    "--decodying_type=greedy_smoothl1_mmr", "--rep_window=3"])
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
+                        "--decodying_type=greedy_smoothl1_mmr", "--rep_window=2"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
+                    "--decodying_type=greedy_smoothl1_mmr", "--rep_window=2"])
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=2"])
+                        "--decodying_type=greedy_smoothl1_mmr", "--rep_window=5"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=2"])
+                    "--decodying_type=greedy_smoothl1_mmr", "--rep_window=5"])
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=1"])
+                        "--decodying_type=greedy_smoothl1_mmr", "--rep_window=1"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=1"])
+                    "--decodying_type=greedy_smoothl1_mmr", "--rep_window=1"])
+
+
+
+
+
+    # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+    #                     "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
+
+    # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+    #                 "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
+
+    # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+    #                     "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=2"])
+
+    # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+    #                 "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=2"])
+
+    # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+    #                     "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=1"])
+
+    # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+    #                 "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=1"])
 
     # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
     #                     "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
