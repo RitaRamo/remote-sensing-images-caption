@@ -6,73 +6,42 @@ import subprocess
 #print("File that will be evaluated", eval_file)
 
 for eval_file in [
-    "nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
-    "nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
+    #"nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
+    #"nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
     "nti_fine_attenscaleprod_3compstaticw_effembcapglovesmoothl1_noaug.txt",
-    "nti_fine_attenscaleprod_1comp_effembcapglovesmoothl1_noaug.txt"
+    #"nti_fine_attenscaleprod_1comp_effembcapglovesmoothl1_noaug.txt"
 ]:
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=6"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=2"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=6"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=2"])
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=7"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=3"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=7"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=3"])
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=8"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=4"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=8"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=4"])
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=9"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--rep_window=2"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=9"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--rep_window=2"])    
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=10"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--rep_window=3"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=10"])
-
-
-    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam", "--n_beam=6"])
-
-    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam", "--n_beam=6"])
-
-    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam", "--n_beam=7"])
-
-    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam", "--n_beam=7"])
-
-    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam", "--n_beam=8"])
-
-    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam", "--n_beam=8"])
-
-    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam", "--n_beam=9"])
-
-    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam", "--n_beam=9"])
-
-    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam", "--n_beam=15"])
-
-    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam", "--n_beam=15"])
-
+                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--rep_window=3"])       
+                    
     # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
     #                     "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
 
