@@ -8,7 +8,7 @@ import subprocess
 for eval_file in [
     #"nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
     #"nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
-    "ucmti_fine_attenscaleprod_3compgnr1staticend_effembcapglovesmoothl1_noaug.txt",
+    "ucmti_fine_attenscaleprod_3compgnr1_ucmeffembcapglovesmoothl1_noaug.txt",
     #"nti_fine_attenscaleprod_1comp_effembcapglovesmoothl1_noaug.txt"
 ]:
 
@@ -19,6 +19,45 @@ for eval_file in [
                     "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=6", "--rep_window=2"])
 
 
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=1", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=1", "--rep_window=2"])
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=2", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=2", "--rep_window=2"])
+
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=3", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=3", "--rep_window=2"])
+    
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=4", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=4", "--rep_window=2"])
+    
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=5", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=5", "--rep_window=2"])
+    
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=3"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3"])
+    
+    
+    
     # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
     #                     "--decodying_type=greedy_smoothl1_mmr", "--min_len=3", "--rep_window=3"])
 
