@@ -8,8 +8,8 @@ import subprocess
 for eval_file in [
     #"nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
     #"nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
-    "ucmti_fine_attenscaleprod_3compgnr1_ucmeffembcapglovesmoothl1_noaug.txt",
-    #"nti_fine_attenscaleprod_1comp_effembcapglovesmoothl1_noaug.txt"
+    #"ucmti_fine_attenscaleprod_3compgnr1_ucmeffembcapglovesmoothl1_noaug.txt",
+    "ucmti_fine_attenscaleprod_1compr_effembcapglovesmoothl1_noaug.txt"
 ]:
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
