@@ -20,7 +20,6 @@ from definitions_datasets import PATH_TRAINED_MODELS, PATH_EVALUATION_SCORES
 import torch.nn.functional as F
 from nltk.translate.bleu_score import corpus_bleu
 
-
 class AbstractEncoderDecoderModel(ABC):
 
     # MODEL_DIRECTORY = "experiments/results/"
@@ -770,7 +769,7 @@ class AbstractEncoderDecoderModel(ABC):
             1, -1, encoder_output.size()[-1])
         return encoder_output
 
-    def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50, alpha_diversity=0.0, alpha_consistency=0.05):
+    def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50, alpha_diversity=0.0, alpha_consistency=0.25):
         #Maximal Marginal Relevance
         print("entrei aqui NO MMR SEM SER O 3")
         with torch.no_grad():  # no need to track history
@@ -802,13 +801,19 @@ class AbstractEncoderDecoderModel(ABC):
                                                                    input_word, encoder_output, h, c)
 
                 #embeddings against previous generated words -> to have a score of diversity
+                # scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
+                # for j in range(len(all_prev_token_embeddings)):
+                #     scores_second_part[:, j] = criteria(self.decoder.embedding.weight.data, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+                
+
                 scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
                 for j in range(len(all_prev_token_embeddings)):
-                    scores_second_part[:, j] = criteria(self.decoder.embedding.weight.data, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
-                
-                scores_diversity,_= torch.min(scores_second_part, dim=-1)
+                    scores_second_part[:, j] = criteria(self.decoder.image, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+
+                #scores_diversity,_= torch.min(scores_second_part, dim=-1)
                 scores_consistency= torch.mean(scores_second_part, dim=-1)
-                sorted_scores, sorted_indices = torch.sort( ( 1.0 - alpha_diversity - alpha_consistency) * scores + alpha_diversity * scores_diversity - alpha_consistency * scores_consistency, descending=False, dim=-1)
+                
+                sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_consistency, descending=False, dim=-1)
                 
                 pos = 0
                 current_output_index = sorted_indices.squeeze()[pos].item()
@@ -850,11 +855,89 @@ class AbstractEncoderDecoderModel(ABC):
 
 
 
+    # def inference_with_greedy_smoothl1_mmr(self, image, n_solutions=0, min_len=0, repetition_window=0, max_len=50, alpha_diversity=0.0, alpha_consistency=0.05):
+    #     #Maximal Marginal Relevance
+    #     print("entrei aqui NO MMR SEM SER O 3")
+    #     with torch.no_grad():  # no need to track history
 
+    #         decoder_sentence = []
 
+    #         input_word = torch.tensor([self.token_to_id[START_TOKEN]])
 
+    #         i = 1
 
+    #         # encoder_output = self.encoder(image)
+    #         # encoder_output = encoder_output.view(
+    #         #     1, -1, encoder_output.size()[-1])
 
+    #         encoder_output = self.get_encoder_image(image)
+
+    #         h, c = self.decoder.init_hidden_state(encoder_output)
+
+    #         criteria = torch.nn.SmoothL1Loss(reduction="none")
+
+    #         #all_prev_tokens=self.decoder.embedding(torch.tensor([self.token_to_id[START_TOKEN]]))
+    #         all_prev_tokens = [ self.token_to_id[START_TOKEN] ]
+    #         all_prev_token_embeddings = self.decoder.embedding( torch.tensor( all_prev_tokens ) )
+    #         #print("VAMOS TENTAR all prev tokens", all_prev_tokens)
+
+    #         while True:
+    #             #scores correspond to the score similarity between the predicted vs the target embeddings
+    #             scores, h, c = self.generate_output_index_smoothl1(criteria,
+    #                                                                input_word, encoder_output, h, c)
+
+    #             #embeddings against previous generated words -> to have a score of diversity
+    #             # scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
+    #             # for j in range(len(all_prev_token_embeddings)):
+    #             #     scores_second_part[:, j] = criteria(self.decoder.embedding.weight.data, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+                
+
+    #             scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
+    #             for j in range(len(all_prev_token_embeddings)):
+    #                 scores_second_part[:, j] = criteria(self.decoder.embedding.weight.data, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+
+    #             scores_diversity,_= torch.min(scores_second_part, dim=-1)
+    #             scores_consistency= torch.mean(scores_second_part, dim=-1)
+                
+    #             sorted_scores, sorted_indices = torch.sort( ( 1.0 - alpha_diversity - alpha_consistency) * scores + alpha_diversity * scores_diversity - alpha_consistency * scores_consistency, descending=False, dim=-1)
+                
+    #             pos = 0
+    #             current_output_index = sorted_indices.squeeze()[pos].item()
+    #             if current_output_index == self.token_to_id[END_TOKEN] and i<min_len:
+    #                 pos += 1
+    #                 current_output_index = sorted_indices.squeeze()[pos].item()
+    #             no_repeat = repetition_window - 1
+    #             while True:
+    #                 if no_repeat <= 0: 
+    #                     break
+    #                 if (len(all_prev_tokens) > no_repeat) and (current_output_index == all_prev_tokens[-no_repeat]):
+    #                     pos += 1
+    #                     current_output_index = sorted_indices.squeeze()[pos].item()
+    #                     no_repeat=repetition_window
+    #                 else:
+    #                     no_repeat -=1
+    #             current_output_token = self.id_to_token[current_output_index]
+    #             all_prev_token_embeddings = torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([current_output_index]))), 0)
+    #             all_prev_tokens.append(current_output_index)
+    #             decoder_sentence.append(current_output_token)
+
+    #             if current_output_token == END_TOKEN:
+    #                 # ignore end_token
+    #                 decoder_sentence = decoder_sentence[:-1]
+    #                 break
+
+    #             if i >= self.max_len - 1:  # until 35
+    #                 break
+
+    #             input_word[0] = current_output_index
+
+    #             i += 1
+
+    #         generated_sentence = " ".join(decoder_sentence)
+    #         # print("beam_t decoded sentence:", generated_sentence)
+    #         print("\ngenerated sentence:", generated_sentence)
+
+    #         return generated_sentence  # input_caption
 
     def inference_beam_without_refinement(
             self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
