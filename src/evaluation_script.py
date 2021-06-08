@@ -198,17 +198,17 @@ for eval_file in [
 
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=2", "--rep_window=2"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=5", "--rep_window=2"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=2", "--rep_window=2"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=5", "--rep_window=2"])
 
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=5", "--rep_window=2"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=6", "--rep_window=2"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=5", "--rep_window=2"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=6", "--min_len=6", "--rep_window=2"])
 
 
 
