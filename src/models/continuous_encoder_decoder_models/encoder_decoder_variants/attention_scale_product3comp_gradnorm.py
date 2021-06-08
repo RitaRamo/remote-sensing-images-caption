@@ -827,7 +827,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
 
     def inference_beam_without_refinement(
-            self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50, alpha_consistency=0.25):
+            self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50, alpha_consistency=0.20):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
             # print("\nseed text", seed_text)
