@@ -964,7 +964,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             # sorted_scores, sorted_indices = torch.sort(
             #     scores.squeeze(), descending=False, dim=-1)
 
-            scores_second_part = torch.zeros(scores)
+            scores_second_part = torch.zeros(scores.size())
             print("scores second part", scores_second_part.size())
             for j in range(len(scores)):
                 prevs_and_current_emb=torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j]))), 0)
