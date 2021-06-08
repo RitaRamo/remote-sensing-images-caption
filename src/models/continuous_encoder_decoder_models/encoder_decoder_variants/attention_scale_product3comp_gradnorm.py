@@ -922,7 +922,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
                 top_solutions = get_most_probable(candidates, n_solutions)
 
 
-            best_tokens, prob, h, c = top_solutions[0]
+            best_tokens, prob, h, c,_ = top_solutions[0]
 
             if best_tokens[0] == START_TOKEN:
                 best_tokens = best_tokens[1:]
