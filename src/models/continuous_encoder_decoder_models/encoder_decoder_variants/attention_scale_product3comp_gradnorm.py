@@ -990,9 +990,13 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             #["ola",adeus", "pois", este] 
             #mean disso deixando para cada 
 
+            sorted_scores_bef, sorted_indices_bef = torch.sort(
+                scores.squeeze(), descending=False, dim=-1)
 
+            print("sorte ind before", sorted_indices_bef)
             sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_image, descending=False, dim=-1)
-            
+            print("sorted_scores", sorted_indices)
+            print(stop)
 
             n = 0
             index = 0
