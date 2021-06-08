@@ -961,12 +961,21 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices = torch.sort(
-                scores.squeeze(), descending=False, dim=-1)
+            # sorted_scores, sorted_indices = torch.sort(
+            #     scores.squeeze(), descending=False, dim=-1)
 
-            print("all_prev_token_embeddings", all_prev_token_embeddings.size())
-            all_prev_token_embeddings.expand_as(self.decoder.embedding.weight.data)
-            print("all_prev_token_embeddings",  all_prev_token_embeddings.expand_as(self.decoder.embedding.weight.data).size())
+            scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
+            for j in range(len(scores)):
+                prevs_and_current_emb=torch.cat(all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j])))
+                print("prev and curr", prevs_and_current_emb)
+                mean_embs=prevs_and_current_emb.mean(1)
+                print("mean", mean_embs)
+
+                print("mean size", mean_embs.size())
+                scores_second_part[:, j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
+                print("value of ", criteria(self.decoder.image_embedding,mean_embs).size())
+                print("value of mena ", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
+
             print(stop)
             #, self.decoder.embedding(sorted_indices) 
             #"ola
