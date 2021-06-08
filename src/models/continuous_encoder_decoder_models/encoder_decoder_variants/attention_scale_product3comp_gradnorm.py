@@ -973,9 +973,10 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
     
                 mean_embs=prevs_and_current_emb.mean(0)
                 print("mean 0", mean_embs.size())
-                scores_second_part[:, j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
                 print("value of ", criteria(self.decoder.image_embedding,mean_embs).size())
                 print("value of mena ", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
+
+                scores_second_part[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
 
             print(stop)
             #, self.decoder.embedding(sorted_indices) 
