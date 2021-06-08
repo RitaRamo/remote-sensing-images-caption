@@ -167,17 +167,17 @@ import subprocess
 # CIDEr: 2.767
 
 
-0.02
-Bleu_1: 0.829
-Bleu_2: 0.753
-Bleu_3: 0.693
-Bleu_4: 0.636
-computing METEOR score...
-METEOR: 0.407
-computing Rouge score...
-ROUGE_L: 0.764
-computing CIDEr score...
-CIDEr: 3.040
+# 0.02
+# Bleu_1: 0.829
+# Bleu_2: 0.753
+# Bleu_3: 0.693
+# Bleu_4: 0.636
+# computing METEOR score...
+# METEOR: 0.407
+# computing Rouge score...
+# ROUGE_L: 0.764
+# computing CIDEr score...
+# CIDEr: 3.040
 
 
 
