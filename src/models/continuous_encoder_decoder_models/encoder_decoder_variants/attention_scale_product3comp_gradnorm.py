@@ -980,6 +980,9 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             print("prev and prevs_and_current_emb", prevs_and_current_emb.size())
             mean_embs=prevs_and_current_emb.mean(1)
             print("mean emb size", mean_embs.size())
+            mean_embs=prevs_and_current_emb.mean(0)
+            print("mean emb size", mean_embs.size())
+           
             print("cire 1", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
             print("cire 0", criteria(self.decoder.image_embedding,mean_embs).mean(0).size())
             print("cire -1", criteria(self.decoder.image_embedding,mean_embs).mean(-1).size())
