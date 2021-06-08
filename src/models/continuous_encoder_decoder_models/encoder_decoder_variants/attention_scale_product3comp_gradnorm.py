@@ -859,7 +859,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
             scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
             for j in range(len(all_prev_token_embeddings)):
-                scores_second_part[:, j] = criteria(self.decoder.image, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+                scores_second_part[:, j] = criteria(self.decoder.image_embedding, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
 
             #scores_diversity,_= torch.min(scores_second_part, dim=-1)
             scores_consistency= torch.mean(scores_second_part, dim=-1)
