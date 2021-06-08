@@ -167,6 +167,18 @@ import subprocess
 # CIDEr: 2.767
 
 
+0.02
+Bleu_1: 0.829
+Bleu_2: 0.753
+Bleu_3: 0.693
+Bleu_4: 0.636
+computing METEOR score...
+METEOR: 0.407
+computing Rouge score...
+ROUGE_L: 0.764
+computing CIDEr score...
+CIDEr: 3.040
+
 
 
 
@@ -190,6 +202,32 @@ for eval_file in [
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
                     "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=6", "--rep_window=2"])
+
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=5", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=5", "--rep_window=2"])
+
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=3", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=3", "--rep_window=2"])
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=6", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=6", "--rep_window=2"])
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=8", "--min_len=6", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=8", "--min_len=6", "--rep_window=2"])
 
 
     # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
