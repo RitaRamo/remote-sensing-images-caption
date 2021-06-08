@@ -961,31 +961,20 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            scores_image = torch.zeros(scores.size())
-            for j in range(len(scores)):
-                prevs_and_current_emb=torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j]))), 0)
-                mean_embs=prevs_and_current_emb.mean(0)
-                scores_image[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
+            # scores_image = torch.zeros(scores.size())
+            # for j in range(len(scores)):
+            #     prevs_and_current_emb=torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j]))), 0)
+            #     mean_embs=prevs_and_current_emb.mean(0)
+            #     scores_image[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
 
-
-
-            sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_image, descending=False, dim=-1)
 
             prev_emb_size=all_prev_token_embeddings.size()
             all_prevs_embs_repeated=all_prev_token_embeddings.expand(len(scores),prev_emb_size[0],prev_emb_size[1])
-            print("all_prev_token_embeddings", all_prevs_embs_repeated.size())
-            print("all_prev_token_embeddings", self.decoder.embedding.weight.data.unsqueeze(1).size())
-
             prevs_and_current_emb=torch.cat((all_prevs_embs_repeated, self.decoder.embedding.weight.data.unsqueeze(1)), 1)
-            print("prev and prevs_and_current_emb", prevs_and_current_emb.size())
-            mean_embs=prevs_and_current_emb.mean(1)
-            print("mean emb size", mean_embs.size())
-           
-            print("cire 1", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
-            print("cire 0", criteria(self.decoder.image_embedding,mean_embs).mean(0).size())
-            print("cire -1", criteria(self.decoder.image_embedding,mean_embs).mean(-1).size())
+            mean_embs=prevs_and_current_emb.mean(1)           
+            scores_image = criteria(self.decoder.image_embedding,mean_embs).mean(1)
+            sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_image, descending=False, dim=-1)
 
-            print(stop)
             n = 0
             index = 0
             len_seed_text = len(seed_text)
