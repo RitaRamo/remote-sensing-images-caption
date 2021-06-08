@@ -153,21 +153,6 @@ import subprocess
 # computing CIDEr score...
 # CIDEr: 2.778
 
-# 0.06
-# Bleu_1: 0.784
-# Bleu_2: 0.679
-# Bleu_3: 0.592
-# Bleu_4: 0.519
-# computing METEOR score...
-# METEOR: 0.371
-# computing Rouge score...
-# ROUGE_L: 0.681
-# computing CIDEr score...
-# CIDEr: 2.777
-
-# 0.07
-
-
 
 # 0.10
 # Bleu_1: 0.783
@@ -188,9 +173,9 @@ import subprocess
 for eval_file in [
     #"nti_fine_attenscaleprod_2comp_effembcapglovesmoothl1_noaug.txt",
     #"nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
-    "ucmti_fine_attenscaleprod_3compgnr1staticend_effembcapglovesmoothl1_noaug.txt"
-    "ucmti_fine_attenscaleprod_3compgnr1_ucmeffembcapglovesmoothl1_noaug.txt",
-    #"nti_fine_attenscaleprod_3compstaticw_effembcapglovesmoothl1_noaug.txt"
+    
+    "ucmti_fine_attenscaleprod_3compgnr1staticend_effembcapglovesmoothl1_noaug.txt",
+    "nti_fine_attenscaleprod_3compstaticw_effembcapglovesmoothl1_noaug.txt"
     #"ucmti_fine_attenscaleprod_1compr_effembcapglovesmoothl1_noaug.txt"
 ]:
 
