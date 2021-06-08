@@ -961,43 +961,14 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            # sorted_scores, sorted_indices = torch.sort(
-            #     scores.squeeze(), descending=False, dim=-1)
-
             scores_image = torch.zeros(scores.size())
-            print("scores second part", scores_image.size())
             for j in range(len(scores)):
                 prevs_and_current_emb=torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j]))), 0)
-                print("prevs_and_current_emb", prevs_and_current_emb.size())
-                print("prev and curr", prevs_and_current_emb)
-    
                 mean_embs=prevs_and_current_emb.mean(0)
-                print("mean 0", mean_embs.size())
-                print("value of ", criteria(self.decoder.image_embedding,mean_embs).size())
-                print("value of mena ", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
-
                 scores_image[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
 
-            print("scores_second_part", scores_image)
-            #, self.decoder.embedding(sorted_indices) 
-            #"ola
-            #adeus
-            #pois"
-
-
-
-            #["ola",adeus", pois, "novo"]
-            #["ola",adeus", "pois", este] 
-            #mean disso deixando para cada 
-
-            sorted_scores_bef, sorted_indices_bef = torch.sort(
-                scores.squeeze(), descending=False, dim=-1)
-
-            print("sorte ind before", sorted_indices_bef)
             sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_image, descending=False, dim=-1)
-            print("sorted_scores", sorted_indices)
-            print(stop)
-
+        
             n = 0
             index = 0
             len_seed_text = len(seed_text)
