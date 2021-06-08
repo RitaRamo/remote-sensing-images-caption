@@ -964,8 +964,8 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             # sorted_scores, sorted_indices = torch.sort(
             #     scores.squeeze(), descending=False, dim=-1)
 
-            scores_second_part = torch.zeros(scores.size())
-            print("scores second part", scores_second_part.size())
+            scores_image = torch.zeros(scores.size())
+            print("scores second part", scores_image.size())
             for j in range(len(scores)):
                 prevs_and_current_emb=torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j]))), 0)
                 print("prevs_and_current_emb", prevs_and_current_emb.size())
@@ -976,9 +976,9 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
                 print("value of ", criteria(self.decoder.image_embedding,mean_embs).size())
                 print("value of mena ", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
 
-                scores_second_part[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
+                scores_image[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
 
-            print(stop)
+            print("scores_second_part", scores_image)
             #, self.decoder.embedding(sorted_indices) 
             #"ola
             #adeus
@@ -991,16 +991,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             #mean disso deixando para cada 
 
 
-
-            scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
-            for j in range(len(all_prev_token_embeddings)):
-                scores_second_part[:, j] = criteria(self.decoder.image_embedding, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
-
-            #scores_diversity,_= torch.min(scores_second_part, dim=-1)
-            scores_consistency= torch.mean(scores_second_part, dim=-1)
-
-
-            sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_consistency, descending=False, dim=-1)
+            sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_image, descending=False, dim=-1)
             
 
             n = 0
