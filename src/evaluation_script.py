@@ -179,6 +179,44 @@ import subprocess
 # computing CIDEr score...
 # CIDEr: 3.040
 
+# 0.00
+# Bleu_1: 0.848
+# Bleu_2: 0.779
+# Bleu_3: 0.722
+# Bleu_4: 0.667
+# computing METEOR score...
+# METEOR: 0.432
+# computing Rouge score...
+# ROUGE_L: 0.788
+# computing CIDEr score...
+# CIDEr: 3.187
+
+# 0.01
+# Bleu_1: 0.841
+# Bleu_2: 0.770
+# Bleu_3: 0.710
+# Bleu_4: 0.654
+# computing METEOR score...
+# METEOR: 0.421
+# computing Rouge score...
+# ROUGE_L: 0.780
+# computing CIDEr score...
+# CIDEr: 3.138
+
+# 0.04
+# Bleu_1: 0.830
+# Bleu_2: 0.757
+# Bleu_3: 0.694
+# Bleu_4: 0.633
+# computing METEOR score...
+# METEOR: 0.408
+# computing Rouge score...
+# ROUGE_L: 0.761
+# computing CIDEr score...
+# CIDEr: 3.021
+
+
+
 
 
 
@@ -199,10 +237,10 @@ for eval_file in [
 
 
     subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
-                        "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=3", "--rep_window=2"])
+                        "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=4", "--rep_window=2"])
 
     subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
-                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=3", "--rep_window=2"])
+                    "--decodying_type=beam_wt_refinement", "--n_beam=3", "--min_len=4", "--rep_window=2"])
 
 
    
