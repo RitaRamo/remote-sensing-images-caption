@@ -973,8 +973,10 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
             prev_emb_size=all_prev_token_embeddings.size()
             all_prevs_embs_repeated=all_prev_token_embeddings.expand(len(scores),prev_emb_size[0],prev_emb_size[1])
-            print("all_prev_token_embeddings", all_prevs_embs_repeated)
-            prevs_and_current_emb=torch.cat((all_prevs_embs_repeated, self.decoder.embedding.weight.data), 1)
+            print("all_prev_token_embeddings", all_prevs_embs_repeated.size())
+            print("all_prev_token_embeddings", self.decoder.embedding.weight.data.size())
+
+            prevs_and_current_emb=torch.cat((all_prevs_embs_repeated, self.decoder.embedding.weight.data.unsqueze(0)), 1)
             print("prev and prevs_and_current_emb", prevs_and_current_emb.size())
             mean_embs=prevs_and_current_emb.mean(1)
             print("mean emb size", mean_embs.size())
