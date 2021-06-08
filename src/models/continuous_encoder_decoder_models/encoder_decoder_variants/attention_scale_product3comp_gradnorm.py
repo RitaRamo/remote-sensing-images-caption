@@ -966,7 +966,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
             scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
             for j in range(len(scores)):
-                prevs_and_current_emb=torch.cat(all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j])))
+                prevs_and_current_emb=torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([j]))), 0)
                 print("prev and curr", prevs_and_current_emb)
                 mean_embs=prevs_and_current_emb.mean(1)
                 print("mean", mean_embs)
