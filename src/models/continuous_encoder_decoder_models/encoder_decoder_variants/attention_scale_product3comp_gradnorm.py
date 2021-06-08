@@ -730,8 +730,104 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
 
+    # def inference_beam_without_refinement(
+    #         self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
+
+    #     def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
+    #         # print("\nseed text", seed_text)
+    #         # print("current_text text", current_text)
+    #         # print("previous seed prob", seed_prob)
+    #         # print("now prob", sorted_scores[index].item())
+    #         # print("final prob", seed_prob + sorted_scores[index])
+    #         # print("final prob with item", seed_prob + sorted_scores[index].item())
+
+    #         # print(stop)
+    #         return seed_prob + sorted_scores[index]  # .item()
+
+    #     def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
+    #         last_token = seed_text[-1]
+
+    #         if last_token == END_TOKEN:
+    #             return [(seed_text, seed_prob, h, c)]
+
+    #         if len(seed_text) > max_len:
+    #             return [(seed_text, seed_prob, h, c)]
+
+    #         top_solutions = []
+    #         scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
+    #             torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
+
+    #         sorted_scores, sorted_indices = torch.sort(
+    #             scores.squeeze(), descending=False, dim=-1)
+
+    #         n = 0
+    #         index = 0
+    #         len_seed_text = len(seed_text)
+    #         # print("\n start candidates")
+    #         while n < n_solutions:
+    #             current_word = self.id_to_token[sorted_indices[index].item()]
+    #             if current_word == END_TOKEN:
+    #                 if len(seed_text) <= min_len:
+    #                     index += 1
+    #                     continue
+    #             elif current_word in seed_text[max(len_seed_text - repetition_window, 0):]:
+    #                 index += 1
+    #                 continue
+
+    #             text = seed_text + [current_word]
+    #             text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
+    #             top_solutions.append((text, text_score, h, c))
+    #             index += 1
+    #             n += 1
+
+    #         return top_solutions
+
+    #     def get_most_probable(candidates, n_solutions):
+    #         return sorted(candidates, key=operator.itemgetter(1), reverse=False)[:n_solutions]
+
+    #     with torch.no_grad():
+    #         my_dict = {}
+
+    #         encoder_output, encoder_attrs = self.encoder(image)
+    #         self.decoder.image_embedding = torch.nn.functional.normalize(encoder_attrs, p=2, dim=-1)
+
+    #         encoder_output = encoder_output.view(
+    #             1, -1, encoder_output.size()[-1])
+
+    #         # encoder_output = self.encoder(image.to(self.device))
+    #         # encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
+    #         h, c = self.decoder.init_hidden_state(encoder_output)
+
+    #         top_solutions = [([START_TOKEN], 0.0, h, c)]
+
+    #         for time_step in range(self.max_len - 1):
+    #             # print("\nnew time step")
+    #             candidates = []
+    #             for sentence, prob, h, c in top_solutions:
+    #                 candidates.extend(generate_n_solutions(
+    #                     sentence, prob, encoder_output, h, c, n_solutions))
+
+    #             top_solutions = get_most_probable(candidates, n_solutions)
+
+
+    #         best_tokens, prob, h, c = top_solutions[0]
+
+    #         if best_tokens[0] == START_TOKEN:
+    #             best_tokens = best_tokens[1:]
+    #         if best_tokens[-1] == END_TOKEN:
+    #             best_tokens = best_tokens[:-1]
+    #         best_sentence = " ".join(best_tokens)
+
+    #         print("\nbeam decoded sentence:", best_sentence)
+    #         return best_sentence
+
+    def generate_output_index(self, input_word, encoder_out, h, c):
+        current_output_index, h, c = self.generate_output_index_smoothl1(self.decodying_criteria, input_word, encoder_out, h, c)
+        return current_output_index, h, c   
+
+
     def inference_beam_without_refinement(
-            self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50):
+            self, image, n_solutions=3, min_len=2, repetition_window=0, max_len=50, alpha_consistency=0.0):
 
         def compute_probability(seed_text, seed_prob, sorted_scores, index, current_text):
             # print("\nseed text", seed_text)
@@ -744,7 +840,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             # print(stop)
             return seed_prob + sorted_scores[index]  # .item()
 
-        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions):
+        def generate_n_solutions(seed_text, seed_prob, encoder_out, h, c, n_solutions, all_prev_token_embeddings, criteria):
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
@@ -757,8 +853,19 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
                 torch.tensor([self.token_to_id[last_token]]), encoder_out, h, c)
 
-            sorted_scores, sorted_indices = torch.sort(
-                scores.squeeze(), descending=False, dim=-1)
+            # sorted_scores, sorted_indices = torch.sort(
+            #     scores.squeeze(), descending=False, dim=-1)
+
+
+            scores_second_part = torch.zeros(len(scores), len(all_prev_token_embeddings))
+            for j in range(len(all_prev_token_embeddings)):
+                scores_second_part[:, j] = criteria(self.decoder.image, all_prev_token_embeddings[j].expand_as(self.decoder.embedding.weight.data)).mean(1)
+
+            #scores_diversity,_= torch.min(scores_second_part, dim=-1)
+            scores_consistency= torch.mean(scores_second_part, dim=-1)
+            
+            sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_consistency, descending=False, dim=-1)
+            
 
             n = 0
             index = 0
@@ -776,7 +883,9 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
                 text = seed_text + [current_word]
                 text_score = compute_probability(seed_text, seed_prob, sorted_scores, index, text)
-                top_solutions.append((text, text_score, h, c))
+                all_embeddings = torch.cat((all_prev_token_embeddings, self.decoder.embedding(torch.tensor([sorted_indices[index].item()]))), 0)
+
+                top_solutions.append((text, text_score, h, c, all_embeddings))
                 index += 1
                 n += 1
 
@@ -787,6 +896,7 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
         with torch.no_grad():
             my_dict = {}
+            criteria = torch.nn.SmoothL1Loss(reduction="none")
 
             encoder_output, encoder_attrs = self.encoder(image)
             self.decoder.image_embedding = torch.nn.functional.normalize(encoder_attrs, p=2, dim=-1)
@@ -798,14 +908,16 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             # encoder_output = encoder_output.view(1, -1, encoder_output.size()[-1])  # flatten encoder
             h, c = self.decoder.init_hidden_state(encoder_output)
 
-            top_solutions = [([START_TOKEN], 0.0, h, c)]
+            all_prev_embeddings = self.decoder.embedding(torch.tensor([ self.token_to_id[START_TOKEN]]))
+
+            top_solutions = [([START_TOKEN], 0.0, h, c, all_prev_embeddings)]
 
             for time_step in range(self.max_len - 1):
                 # print("\nnew time step")
                 candidates = []
-                for sentence, prob, h, c in top_solutions:
+                for sentence, prob, h, c, all_emb in top_solutions:
                     candidates.extend(generate_n_solutions(
-                        sentence, prob, encoder_output, h, c, n_solutions))
+                        sentence, prob, encoder_output, h, c, n_solutions, all_emb, criteria))
 
                 top_solutions = get_most_probable(candidates, n_solutions)
 
@@ -820,7 +932,3 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
 
             print("\nbeam decoded sentence:", best_sentence)
             return best_sentence
-
-    def generate_output_index(self, input_word, encoder_out, h, c):
-        current_output_index, h, c = self.generate_output_index_smoothl1(self.decodying_criteria, input_word, encoder_out, h, c)
-        return current_output_index, h, c   
