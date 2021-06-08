@@ -844,10 +844,10 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
             last_token = seed_text[-1]
 
             if last_token == END_TOKEN:
-                return [(seed_text, seed_prob, h, c)]
+                return [(seed_text, seed_prob, h, c, all_prev_token_embeddings)]
 
             if len(seed_text) > max_len:
-                return [(seed_text, seed_prob, h, c)]
+                return [(seed_text, seed_prob, h, c, all_prev_token_embeddings)]
 
             top_solutions = []
             scores, h, c = self.generate_output_index_smoothl1(self.decodying_criteria,
