@@ -967,8 +967,22 @@ class ContinuousScaleProductAttention3CompGradNormModel(ContinuousEncoderDecoder
                 mean_embs=prevs_and_current_emb.mean(0)
                 scores_image[j] = criteria(self.decoder.image_embedding,mean_embs).mean(1)
 
+
+
             sorted_scores, sorted_indices = torch.sort( ( 1.0 -  alpha_consistency) * scores +  alpha_consistency * scores_image, descending=False, dim=-1)
-        
+
+            prev_emb_size=all_prev_token_embeddings.size()
+            all_prevs_embs_repeated=all_prev_token_embeddings.expand(len(scores),prev_emb_size[0],prev_emb_size[1])
+            print("all_prev_token_embeddings", all_prevs_embs_repeated)
+            prevs_and_current_emb=torch.cat((all_prevs_embs_repeated, self.decoder.embedding.weight.data), 1)
+            print("prev and prevs_and_current_emb", prevs_and_current_emb.size())
+            mean_embs=prevs_and_current_emb.mean(1)
+            print("mean emb size", mean_embs.size())
+            print("cire 1", criteria(self.decoder.image_embedding,mean_embs).mean(1).size())
+            print("cire 0", criteria(self.decoder.image_embedding,mean_embs).mean(0).size())
+            print("cire -1", criteria(self.decoder.image_embedding,mean_embs).mean(-1).size())
+
+            print(stop)
             n = 0
             index = 0
             len_seed_text = len(seed_text)
