@@ -217,7 +217,56 @@ import subprocess
 
 
 
+#beam3, n_min4, alpha=0.1
+Bleu_1: 0.850
+Bleu_2: 0.780
+Bleu_3: 0.722
+Bleu_4: 0.666
+computing METEOR score...
+METEOR: 0.430
+computing Rouge score...
+ROUGE_L: 0.787
+computing CIDEr score...
+CIDEr: 3.199
 
+0.02
+Bleu_1: 0.852
+Bleu_2: 0.782
+Bleu_3: 0.723
+Bleu_4: 0.667
+computing METEOR score...
+METEOR: 0.431
+computing Rouge score...
+ROUGE_L: 0.787
+computing CIDEr score...
+CIDEr: 3.199
+
+
+0.03
+Bleu_1: 0.851
+Bleu_2: 0.781
+Bleu_3: 0.723
+Bleu_4: 0.667
+computing METEOR score...
+METEOR: 0.430
+computing Rouge score...
+ROUGE_L: 0.786
+computing CIDEr score...
+CIDEr: 3.201
+
+
+
+alpha 0.04
+Bleu_1: 0.848
+Bleu_2: 0.778
+Bleu_3: 0.721
+Bleu_4: 0.666
+computing METEOR score...
+METEOR: 0.429
+computing Rouge score...
+ROUGE_L: 0.786
+computing CIDEr score...
+CIDEr: 3.200
 
 
 for eval_file in [
@@ -225,7 +274,7 @@ for eval_file in [
     #"nti_fine_attenscaleprod_3comp_effembcapglovesmoothl1_noaug.txt",
     
     "ucmti_fine_attenscaleprod_3compgnr1staticend_effembcapglovesmoothl1_noaug.txt",
-    #"nti_fine_attenscaleprod_3compstaticw_effembcapglovesmoothl1_noaug.txt"
+    "nti_fine_attenscaleprod_3compstaticw_effembcapglovesmoothl1_noaug.txt"
 ]:
 
     # subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
@@ -233,6 +282,13 @@ for eval_file in [
 
     # subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
     #                 "--decodying_type=greedy_smoothl1_mmr"])
+
+    subprocess.run(["python3", "src/test_generate_sentences.py", "@experiments/conf_files/" + eval_file,
+                        "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=6", "--rep_window=2"])
+
+    subprocess.run(["python2", "src/test_scores_coco.py", "@experiments/conf_files/" + eval_file,
+                    "--decodying_type=beam_wt_refinement", "--n_beam=5", "--min_len=6", "--rep_window=2"])
+
 
 
 
