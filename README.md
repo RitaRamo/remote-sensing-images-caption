@@ -11,7 +11,7 @@ The source code provided in this repository alows one to reproduce the results d
 
 The pre-recorded talk corresponding to the ACM SIGSPATIAL poster paper is also [available online](https://youtu.be/yqFu0XhcBRA).
 
-A second paper, describing the method is more detail and presenting results both on the RSICD and UCM datasets is currently under revision:
+A second paper, describing the method is more detail and presenting results both on the [RSICD and UCM datasets](https://github.com/120343/modified) is currently under revision:
 
     @article{Santos2021b,
        author = {Rita Parada Ramos and Bruno Martins},
